@@ -1,0 +1,72 @@
+[
+  {
+    "id": "contact-001",
+    "firstName": "Anna",
+    "lastName": "Kowalska",
+    "emails": ["anna.kowalska@polskalogistyka.pl"],
+    "phones": ["+48 22 123 45 01"]
+  },
+  {
+    "id": "contact-002",
+    "firstName": "Piotr",
+    "lastName": "Nowak",
+    "emails": ["p.nowak@polskalogistyka.pl"],
+    "phones": ["+48 22 123 45 02"]
+  },
+  {
+    "id": "contact-003",
+    "firstName": "Maria",
+    "lastName": "Wiśniewska",
+    "emails": ["m.wisniewska@techventures.pl"],
+    "phones": []
+  },
+  {
+    "id": "contact-004",
+    "firstName": "Tomasz",
+    "lastName": "Zieliński",
+    "emails": ["t.zielinski@mazurchem.pl"],
+    "phones": ["+48 22 555 10 04"]
+  },
+  {
+    "id": "contact-005",
+    "firstName": "Katarzyna",
+    "lastName": "Lewandowska",
+    "emails": [],
+    "phones": ["+48 22 555 10 05"]
+  },
+  {
+    "id": "contact-006",
+    "firstName": "Michał",
+    "lastName": "Wójcik",
+    "emails": ["m.wojcik@balticfoods.pl"],
+    "phones": []
+  },
+  {
+    "id": "contact-007",
+    "firstName": "Ewa",
+    "lastName": "Kamińska",
+    "emails": ["ewa.kaminska@greenbuild.pl"],
+    "phones": ["+48 22 777 20 07"]
+  },
+  {
+    "id": "contact-008",
+    "firstName": "Jan",
+    "lastName": "Szymański",
+    "emails": ["jan.szymanski@cloudscale.pl"],
+    "phones": []
+  },
+  {
+    "id": "contact-009",
+    "firstName": "Agnieszka",
+    "lastName": "Dąbrowska",
+    "emails": ["a.dabrowska@fintech.pl", "kontakt@fintech.pl"],
+    "phones": ["+48 22 888 30 09"]
+  },
+  {
+    "id": "contact-010",
+    "firstName": "Robert",
+    "lastName": "Kozłowski",
+    "emails": ["robert.k@securenet.pl"],
+    "phones": []
+  }
+]

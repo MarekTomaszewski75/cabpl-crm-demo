@@ -1,0 +1,38 @@
+[
+  {
+    "id": "user-anna",
+    "displayName": "Anna Kowalska",
+    "email": "anna.kowalska@demo.cabpl",
+    "role": "advisor",
+    "roleLabelPl": "Doradca korporacyjny",
+    "regionId": "mazowsze",
+    "scopeDescriptionPl": "Własni klienci i szanse w regionie Mazowsze"
+  },
+  {
+    "id": "user-piotr",
+    "displayName": "Piotr Nowak",
+    "email": "piotr.nowak@demo.cabpl",
+    "role": "advisor",
+    "roleLabelPl": "Doradca korporacyjny",
+    "regionId": "mazowsze",
+    "scopeDescriptionPl": "Własni klienci i szanse w regionie Mazowsze"
+  },
+  {
+    "id": "user-marek",
+    "displayName": "Marek Wiśniewski",
+    "email": "marek.wisniewski@demo.cabpl",
+    "role": "regional_manager",
+    "roleLabelPl": "Regionalny menedżer",
+    "regionId": "mazowsze",
+    "scopeDescriptionPl": "Cały zespół i portfel regionu Mazowsze"
+  },
+  {
+    "id": "user-jan",
+    "displayName": "Jan Zarząd",
+    "email": "jan.zarzad@demo.cabpl",
+    "role": "executive",
+    "roleLabelPl": "Członek Zarządu",
+    "regionId": null,
+    "scopeDescriptionPl": "Widok bank-wide — wszystkie regiony"
+  }
+]

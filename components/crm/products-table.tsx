@@ -1,0 +1,470 @@
+"use client"
+
+import * as React from "react"
+import { useRouter } from "next/navigation"
+import {
+  BoxesIcon,
+  FolderIcon,
+  FolderTreeIcon,
+  PlusIcon,
+  Rows2Icon,
+  SearchIcon,
+} from "lucide-react"
+import { ProductFormDialog } from "@/components/crm/product-form-dialog"
+import {
+  buildProductTableRow,
+  createProductsColumns,
+  PRODUCT_GROUPING_OPTIONS,
+  type ProductTableRow,
+} from "@/components/crm/products-columns"
+import { DataTable } from "@/components/data-table/data-table"
+import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { useSession } from "@/lib/auth/demo-session"
+import {
+  filterProducts,
+  PRODUCT_ACTIVITY_ACTIVE,
+  PRODUCT_ACTIVITY_INACTIVE,
+  type ProductListFilters,
+} from "@/lib/crm/product-filters"
+import {
+  PRODUCT_AVAILABILITY_LABELS,
+  PRODUCT_CONDITION_LABELS,
+  PRODUCT_PRICE_KIND_LABELS,
+  PRODUCT_TYPE_LABELS,
+} from "@/lib/crm/product-labels"
+import { useDemoData } from "@/lib/data/demo-data-context"
+import { cn } from "@/lib/utils"
+import type {
+  ProductAvailability,
+  ProductCategory,
+  ProductCondition,
+  ProductPriceKind,
+  ProductType,
+} from "@/types/crm"
+
+type ProductsViewMode = "list" | "tree"
+
+function sortCategoriesForPanel(
+  categories: readonly ProductCategory[],
+): ProductCategory[] {
+  const roots = categories
+    .filter((category) => !category.parentId)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+  const result: ProductCategory[] = []
+  for (const root of roots) {
+    result.push(root)
+    const children = categories
+      .filter((category) => category.parentId === root.id)
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+    result.push(...children)
+  }
+  return result
+}
+
+export function ProductsTable() {
+  const router = useRouter()
+  const { isReady } = useSession()
+  const { products, productCategories } = useDemoData()
+  const [viewMode, setViewMode] = React.useState<ProductsViewMode>("list")
+  const [categoryFilters, setCategoryFilters] = React.useState<string[]>([])
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [activityFilters, setActivityFilters] = React.useState<string[]>([])
+  const [availabilityFilters, setAvailabilityFilters] = React.useState<string[]>(
+    [],
+  )
+  const [priceKindFilters, setPriceKindFilters] = React.useState<string[]>([])
+  const [productTypeFilters, setProductTypeFilters] = React.useState<string[]>(
+    [],
+  )
+  const [conditionFilters, setConditionFilters] = React.useState<string[]>([])
+  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(
+    () => new Set(),
+  )
+  const [createSheetOpen, setCreateSheetOpen] = React.useState(false)
+
+  const sortedCategories = React.useMemo(
+    () => sortCategoriesForPanel(productCategories),
+    [productCategories],
+  )
+
+  const listFilters = React.useMemo(
+    (): ProductListFilters => ({
+      categoryFilters,
+      searchQuery,
+      activityFilters,
+      availabilityFilters: availabilityFilters as ProductAvailability[],
+      priceKindFilters: priceKindFilters as ProductPriceKind[],
+      productTypeFilters: productTypeFilters as ProductType[],
+      conditionFilters: conditionFilters as ProductCondition[],
+    }),
+    [
+      categoryFilters,
+      searchQuery,
+      activityFilters,
+      availabilityFilters,
+      priceKindFilters,
+      productTypeFilters,
+      conditionFilters,
+    ],
+  )
+
+  const filteredProducts = React.useMemo(
+    () => filterProducts(products, listFilters),
+    [products, listFilters],
+  )
+
+  const categoryFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const product of products) {
+      counts.set(product.categoryId, (counts.get(product.categoryId) ?? 0) + 1)
+    }
+    return sortedCategories
+      .map((category) => ({
+        label: category.parentId ? `— ${category.name}` : category.name,
+        value: category.id,
+        count: counts.get(category.id) ?? 0,
+      }))
+      .filter((opt) => opt.count > 0)
+  }, [products, sortedCategories])
+
+  const activityFacetedOptions = React.useMemo(() => {
+    const counts = { active: 0, inactive: 0 }
+    for (const product of products) {
+      if (product.isActive) counts.active += 1
+      else counts.inactive += 1
+    }
+    return [
+      { label: "Aktywny", value: PRODUCT_ACTIVITY_ACTIVE, count: counts.active },
+      {
+        label: "Nieaktywny",
+        value: PRODUCT_ACTIVITY_INACTIVE,
+        count: counts.inactive,
+      },
+    ].filter((opt) => (opt.count ?? 0) > 0)
+  }, [products])
+
+  const availabilityFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const product of products) {
+      counts.set(
+        product.availability,
+        (counts.get(product.availability) ?? 0) + 1,
+      )
+    }
+    return (Object.keys(PRODUCT_AVAILABILITY_LABELS) as ProductAvailability[])
+      .map((value) => ({
+        label: PRODUCT_AVAILABILITY_LABELS[value],
+        value,
+        count: counts.get(value) ?? 0,
+      }))
+      .filter((opt) => opt.count > 0)
+  }, [products])
+
+  const priceKindFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const product of products) {
+      counts.set(product.priceKind, (counts.get(product.priceKind) ?? 0) + 1)
+    }
+    return (Object.keys(PRODUCT_PRICE_KIND_LABELS) as ProductPriceKind[])
+      .map((value) => ({
+        label: PRODUCT_PRICE_KIND_LABELS[value],
+        value,
+        count: counts.get(value) ?? 0,
+      }))
+      .filter((opt) => opt.count > 0)
+  }, [products])
+
+  const productTypeFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const product of products) {
+      counts.set(product.productType, (counts.get(product.productType) ?? 0) + 1)
+    }
+    return (Object.keys(PRODUCT_TYPE_LABELS) as ProductType[])
+      .map((value) => ({
+        label: PRODUCT_TYPE_LABELS[value],
+        value,
+        count: counts.get(value) ?? 0,
+      }))
+      .filter((opt) => opt.count > 0)
+  }, [products])
+
+  const conditionFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const product of products) {
+      counts.set(product.condition, (counts.get(product.condition) ?? 0) + 1)
+    }
+    return (Object.keys(PRODUCT_CONDITION_LABELS) as ProductCondition[])
+      .map((value) => ({
+        label: PRODUCT_CONDITION_LABELS[value],
+        value,
+        count: counts.get(value) ?? 0,
+      }))
+      .filter((opt) => opt.count > 0)
+  }, [products])
+
+  const tableData = React.useMemo(
+    (): ProductTableRow[] =>
+      filteredProducts.map((product) =>
+        buildProductTableRow(product, productCategories),
+      ),
+    [filteredProducts, productCategories],
+  )
+
+  const columns = React.useMemo(
+    () =>
+      createProductsColumns({
+        selectedIds,
+        onToggleRow: (id, checked) => {
+          setSelectedIds((prev) => {
+            const next = new Set(prev)
+            if (checked) next.add(id)
+            else next.delete(id)
+            return next
+          })
+        },
+      }),
+    [selectedIds],
+  )
+
+  const resultCountLabel = React.useMemo(() => {
+    const n = filteredProducts.length
+    if (n === 1) return "1 wynik"
+    if (n >= 2 && n <= 4) return `${n} wyniki`
+    return `${n} wyników`
+  }, [filteredProducts.length])
+
+  if (!isReady) {
+    return null
+  }
+
+  const categoryPanel = (
+    <aside className="flex w-full shrink-0 flex-col gap-2 rounded-md border border-border bg-card p-3 lg:w-64 xl:w-72">
+      <h2 className="px-1 text-sm font-semibold">Kategorie</h2>
+      <div className="flex flex-col gap-0.5">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "h-8 w-full justify-start gap-2 px-2 font-normal",
+            categoryFilters.length === 0 &&
+              "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground",
+          )}
+          onClick={() => setCategoryFilters([])}
+        >
+          <FolderIcon />
+          Wszystkie kategorie
+        </Button>
+        {sortedCategories.map((category) => (
+          <Button
+            key={category.id}
+            type="button"
+            variant="ghost"
+            size="sm"
+            className={cn(
+              "h-8 w-full justify-start gap-2 px-2 font-normal",
+              category.parentId && "pl-6",
+              categoryFilters.length === 1 &&
+                categoryFilters[0] === category.id &&
+                "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground",
+            )}
+            onClick={() => setCategoryFilters([category.id])}
+          >
+            <FolderIcon />
+            <span className="truncate">{category.name}</span>
+          </Button>
+        ))}
+      </div>
+    </aside>
+  )
+
+  const filterBar = (
+    <div className="flex flex-wrap items-center gap-2">
+      <DataTableFacetedFilter
+        title="Kategoria"
+        options={categoryFacetedOptions}
+        selectedValues={categoryFilters}
+        onSelectedValuesChange={setCategoryFilters}
+      />
+      <DataTableFacetedFilter
+        title="Aktywność"
+        options={activityFacetedOptions}
+        selectedValues={activityFilters}
+        onSelectedValuesChange={setActivityFilters}
+      />
+      <DataTableFacetedFilter
+        title="Dostępność"
+        options={availabilityFacetedOptions}
+        selectedValues={availabilityFilters}
+        onSelectedValuesChange={setAvailabilityFilters}
+      />
+      <DataTableFacetedFilter
+        title="Cena"
+        options={priceKindFacetedOptions}
+        selectedValues={priceKindFilters}
+        onSelectedValuesChange={setPriceKindFilters}
+      />
+      <DataTableFacetedFilter
+        title="Typ produktu"
+        options={productTypeFacetedOptions}
+        selectedValues={productTypeFilters}
+        onSelectedValuesChange={setProductTypeFilters}
+      />
+      <DataTableFacetedFilter
+        title="Stan"
+        options={conditionFacetedOptions}
+        selectedValues={conditionFilters}
+        onSelectedValuesChange={setConditionFilters}
+      />
+    </div>
+  )
+
+  const dataTable = (
+    <DataTable
+      columns={columns}
+      data={tableData}
+      emptyMessage="Brak wyników dla podanych filtrów."
+      pageSize={20}
+      showSearchInToolbar={false}
+      showToolbar={products.length > 0}
+      groupingOptions={[...PRODUCT_GROUPING_OPTIONS]}
+      onRowClick={(row) => router.push(`/products/${row.id}`)}
+    />
+  )
+
+  const filteredEmpty = (
+    <Empty className="border">
+      <EmptyHeader>
+        <EmptyTitle>Teraz jest tu pusto…</EmptyTitle>
+        <EmptyDescription>
+          Brak produktów dla wybranych filtrów. Zmień kryteria lub dodaj nowy
+          produkt.
+        </EmptyDescription>
+      </EmptyHeader>
+      <Button size="sm" onClick={() => setCreateSheetOpen(true)}>
+        <PlusIcon />
+        Dodaj produkt
+      </Button>
+    </Empty>
+  )
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Card size="sm" className="gap-3">
+        <CardHeader className="flex flex-col gap-2 pb-0">
+          <div className="flex w-full min-w-0 items-center gap-2">
+            <CardTitle className="shrink-0 text-xl">Produkty</CardTitle>
+            <div
+              className="flex shrink-0 items-center rounded-md border border-border p-0.5"
+              role="group"
+              aria-label="Widok katalogu produktów"
+            >
+              <Button
+                type="button"
+                variant={viewMode === "list" ? "secondary" : "ghost"}
+                size="icon-sm"
+                aria-label="Widok listy"
+                aria-pressed={viewMode === "list"}
+                onClick={() => setViewMode("list")}
+              >
+                <Rows2Icon />
+              </Button>
+              <Button
+                type="button"
+                variant={viewMode === "tree" ? "secondary" : "ghost"}
+                size="icon-sm"
+                aria-label="Widok drzewa kategorii"
+                aria-pressed={viewMode === "tree"}
+                onClick={() => setViewMode("tree")}
+              >
+                <FolderTreeIcon />
+              </Button>
+            </div>
+            <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">
+              <InputGroupInput
+                type="search"
+                placeholder="Szukaj"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Szukaj produktów"
+              />
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupAddon align="inline-end" className="tabular-nums">
+                {resultCountLabel}
+              </InputGroupAddon>
+            </InputGroup>
+            <div className="shrink-0">
+              <ProductFormDialog
+                open={createSheetOpen}
+                onOpenChange={setCreateSheetOpen}
+                trigger={
+                  <Button size="lg" onClick={() => setCreateSheetOpen(true)}>
+                    <PlusIcon />
+                    Dodaj
+                  </Button>
+                }
+              />
+            </div>
+          </div>
+
+          {filterBar}
+        </CardHeader>
+      </Card>
+
+      <Card size="sm" className="gap-3">
+        <CardContent className="pt-3">
+          {products.length === 0 ? (
+            <Empty className="border">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <BoxesIcon />
+                </EmptyMedia>
+                <EmptyTitle>Teraz jest tu pusto…</EmptyTitle>
+                <EmptyDescription>
+                  Dodaj pierwszy produkt do katalogu bankowych linii
+                  produktowych.
+                </EmptyDescription>
+              </EmptyHeader>
+              <Button size="sm" onClick={() => setCreateSheetOpen(true)}>
+                <PlusIcon />
+                Dodaj produkt
+              </Button>
+            </Empty>
+          ) : viewMode === "tree" ? (
+            <div className="flex flex-col gap-4 lg:flex-row">
+              {categoryPanel}
+              <div className="min-w-0 flex-1">
+                {filteredProducts.length === 0 ? filteredEmpty : dataTable}
+              </div>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            filteredEmpty
+          ) : (
+            dataTable
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

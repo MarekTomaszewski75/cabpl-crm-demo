@@ -1,0 +1,592 @@
+[
+  {
+    "id": "client-001",
+    "name": "Polska Logistyka S.A.",
+    "nip": "521-000-10-01",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "lastActivityAt": "2026-05-28T10:00:00.000Z",
+    "regionId": "mazowsze",
+    "phones": [],
+    "emails": [],
+    "contactIds": [
+      "contact-001",
+      "contact-002"
+    ],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 10, 00-100 Warszawa",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-002",
+    "name": "Baltic Foods Sp. z o.o.",
+    "nip": "521-000-10-02",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "lastActivityAt": "2026-05-20T14:30:00.000Z",
+    "regionId": "mazowsze",
+    "phones": [
+      "+48 22 101 201"
+    ],
+    "emails": [
+      "kontakt02@balticfoodss.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "potential_client",
+    "address": "",
+    "website": "https://www.baltic.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-003",
+    "name": "TechVentures Poland S.A.",
+    "nip": "521-000-10-03",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "lastActivityAt": "2026-05-25T09:15:00.000Z",
+    "regionId": "mazowsze",
+    "phones": [
+      "+48 22 102 202"
+    ],
+    "emails": [
+      "kontakt03@techventures.pl"
+    ],
+    "contactIds": [
+      "contact-003"
+    ],
+    "comments": "",
+    "source": "email",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 12, 00-102 Warszawa",
+    "website": "https://www.techventures.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-004",
+    "name": "GreenBuild Development",
+    "nip": "521-000-10-04",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "lastActivityAt": "2026-05-15T11:00:00.000Z",
+    "regionId": "mazowsze",
+    "phones": [
+      "+48 22 103 203"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "active_client",
+    "address": "",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-005",
+    "name": "MazurChem Sp. z o.o.",
+    "nip": "521-000-10-05",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "lastActivityAt": "2026-04-10T08:00:00.000Z",
+    "regionId": "mazowsze",
+    "phones": [],
+    "emails": [
+      "kontakt05@mazurchemspz.pl"
+    ],
+    "contactIds": [
+      "contact-004",
+      "contact-005"
+    ],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "contractor",
+    "address": "ul. Biznesowa 14, 00-104 Warszawa",
+    "website": "https://www.mazurchem.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-006",
+    "name": "TransEuropa Cargo Sp. z o.o.",
+    "nip": "521-000-10-06",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-30T11:00:00.000Z",
+    "phones": [
+      "+48 22 105 205"
+    ],
+    "emails": [
+      "kontakt06@transeuropac.pl"
+    ],
+    "contactIds": [],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "unknown",
+    "address": "",
+    "website": "https://www.transeuropa.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-007",
+    "name": "AgroNova Polska S.A.",
+    "nip": "521-000-10-07",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-22T16:00:00.000Z",
+    "phones": [
+      "+48 22 106 206"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 16, 00-106 Warszawa",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-008",
+    "name": "PackMaster Poland",
+    "nip": "521-000-10-08",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-18T09:45:00.000Z",
+    "phones": [
+      "+48 22 107 207"
+    ],
+    "emails": [
+      "kontakt08@packmasterpo.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "email",
+    "companyType": "potential_client",
+    "address": "",
+    "website": "https://www.packmaster.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-009",
+    "name": "FreshMarket Dystrybucja",
+    "nip": "521-000-10-09",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-12T13:20:00.000Z",
+    "phones": [],
+    "emails": [
+      "kontakt09@freshmarketd.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "former_client",
+    "address": "ul. Biznesowa 18, 00-108 Warszawa",
+    "website": "https://www.freshmarket.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-010",
+    "name": "SteelForm Mazowsze",
+    "nip": "521-000-10-10",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-29T08:30:00.000Z",
+    "phones": [
+      "+48 22 109 209"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "active_client",
+    "address": "",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-011",
+    "name": "EcoPaper Recycling",
+    "nip": "521-000-10-11",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-06T10:15:00.000Z",
+    "phones": [
+      "+48 22 110 210"
+    ],
+    "emails": [
+      "kontakt11@ecopaperrecy.pl"
+    ],
+    "contactIds": [],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "contractor",
+    "address": "ul. Biznesowa 20, 00-110 Warszawa",
+    "website": "https://www.ecopaper.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-012",
+    "name": "MedDevice Components",
+    "nip": "521-000-10-12",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-24T14:00:00.000Z",
+    "phones": [
+      "+48 22 111 211"
+    ],
+    "emails": [
+      "kontakt12@meddevicecom.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "active_client",
+    "address": "",
+    "website": "https://www.meddevice.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-013",
+    "name": "UrbanBud Development",
+    "nip": "521-000-10-13",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-15T11:30:00.000Z",
+    "phones": [],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "email",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 22, 00-112 Warszawa",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-014",
+    "name": "FastRetail Logistics",
+    "nip": "521-000-10-14",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-27T09:00:00.000Z",
+    "phones": [
+      "+48 22 113 213"
+    ],
+    "emails": [
+      "kontakt14@fastretaillo.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "potential_client",
+    "address": "",
+    "website": "https://www.fastretail.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-015",
+    "name": "ChemLab Polska",
+    "nip": "521-000-10-15",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-04-28T15:00:00.000Z",
+    "phones": [
+      "+48 22 114 214"
+    ],
+    "emails": [
+      "kontakt15@chemlabpolsk.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "former_client",
+    "address": "ul. Biznesowa 24, 00-114 Warszawa",
+    "website": "https://www.chemlab.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-016",
+    "name": "NovaPrint S.A.",
+    "nip": "521-000-10-16",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-31T12:00:00.000Z",
+    "phones": [
+      "+48 22 115 215"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "partner",
+    "address": "",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-017",
+    "name": "CloudScale Systems",
+    "nip": "521-000-20-17",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-29T10:30:00.000Z",
+    "phones": [],
+    "emails": [
+      "kontakt17@cloudscalesy.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 26, 00-116 Warszawa",
+    "website": "https://www.cloudscale.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-018",
+    "name": "FinTech Solutions PL",
+    "nip": "521-000-20-18",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-21T08:00:00.000Z",
+    "phones": [
+      "+48 22 117 217"
+    ],
+    "emails": [
+      "kontakt18@fintechsolut.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "email",
+    "companyType": "unknown",
+    "address": "",
+    "website": "https://www.fintech.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-019",
+    "name": "DataCenter East",
+    "nip": "521-000-20-19",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-10T16:45:00.000Z",
+    "phones": [
+      "+48 22 118 218"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 28, 00-118 Warszawa",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-020",
+    "name": "RoboAssembly Industries",
+    "nip": "521-000-20-20",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-26T11:20:00.000Z",
+    "phones": [
+      "+48 22 119 219"
+    ],
+    "emails": [
+      "kontakt20@roboassembly.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "potential_client",
+    "address": "",
+    "website": "https://www.roboassembly.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-021",
+    "name": "SolarGrid Energia",
+    "nip": "521-000-20-21",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-19T14:30:00.000Z",
+    "phones": [],
+    "emails": [
+      "kontakt21@solargridene.pl"
+    ],
+    "contactIds": [],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 30, 00-120 Warszawa",
+    "website": "https://www.solargrid.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-022",
+    "name": "PharmaPack Export",
+    "nip": "521-000-20-22",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-08T09:00:00.000Z",
+    "phones": [
+      "+48 22 121 221"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "partner",
+    "address": "",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-023",
+    "name": "AutoComponents Poland",
+    "nip": "521-000-20-23",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-30T13:00:00.000Z",
+    "phones": [
+      "+48 22 122 222"
+    ],
+    "emails": [
+      "kontakt23@autocomponen.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "email",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 32, 00-122 Warszawa",
+    "website": "https://www.autocomponents.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-024",
+    "name": "MediaStream Holdings",
+    "nip": "521-000-20-24",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-14T10:00:00.000Z",
+    "phones": [
+      "+48 22 123 223"
+    ],
+    "emails": [
+      "kontakt24@mediastreamh.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "unknown",
+    "address": "",
+    "website": "https://www.mediastream.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-025",
+    "name": "BioResearch Labs",
+    "nip": "521-000-20-25",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-04-20T08:30:00.000Z",
+    "phones": [],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "active_client",
+    "address": "ul. Biznesowa 34, 00-124 Warszawa",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-026",
+    "name": "HotelChain Central",
+    "nip": "521-000-20-26",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-23T17:00:00.000Z",
+    "phones": [
+      "+48 22 125 225"
+    ],
+    "emails": [
+      "kontakt26@hotelchaince.pl"
+    ],
+    "contactIds": [],
+    "comments": "Kluczowy klient strategiczny — priorytet Q2.",
+    "source": "phone_call",
+    "companyType": "active_client",
+    "address": "",
+    "website": "https://www.hotelchain.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-027",
+    "name": "AgriTech Innovations",
+    "nip": "521-000-20-27",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-17T12:45:00.000Z",
+    "phones": [
+      "+48 22 126 226"
+    ],
+    "emails": [
+      "kontakt27@agritechinno.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "former_client",
+    "address": "ul. Biznesowa 36, 00-126 Warszawa",
+    "website": "https://www.agritech.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-028",
+    "name": "SecureNet Cyber",
+    "nip": "521-000-20-28",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze",
+    "lastActivityAt": "2026-05-28T15:30:00.000Z",
+    "phones": [
+      "+48 22 127 227"
+    ],
+    "emails": [],
+    "contactIds": [],
+    "comments": "",
+    "source": "email",
+    "companyType": "partner",
+    "address": "",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
+  }
+]

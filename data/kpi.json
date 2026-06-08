@@ -1,0 +1,132 @@
+{
+  "planYtdPln": 45000000,
+  "actualYtdPln": 31200000,
+  "forecastYtdPln": 42800000,
+  "forecastOptimisticPln": 46500000,
+  "forecastPessimisticPln": 39500000,
+  "planQuarterPln": 13500000,
+  "actualQuarterPln": 10200000,
+  "forecastQuarterPln": 12800000,
+  "forecastOptimisticQuarterPln": 14200000,
+  "forecastPessimisticQuarterPln": 11800000,
+  "byRegion": [
+    {
+      "regionId": "mazowsze",
+      "regionName": "Mazowsze",
+      "planPln": 28000000,
+      "actualPln": 20500000,
+      "forecastPln": 26800000,
+      "planQuarterPln": 8400000,
+      "actualQuarterPln": 6800000,
+      "forecastQuarterPln": 8200000,
+      "forecastOptimisticQuarterPln": 9100000,
+      "forecastPessimisticQuarterPln": 7600000
+    },
+    {
+      "regionId": "malopolska",
+      "regionName": "Małopolska",
+      "planPln": 9000000,
+      "actualPln": 6200000,
+      "forecastPln": 8500000,
+      "planQuarterPln": 2700000,
+      "actualQuarterPln": 2100000,
+      "forecastQuarterPln": 2600000,
+      "forecastOptimisticQuarterPln": 2900000,
+      "forecastPessimisticQuarterPln": 2400000
+    },
+    {
+      "regionId": "pomorze",
+      "regionName": "Pomorze",
+      "planPln": 8000000,
+      "actualPln": 4500000,
+      "forecastPln": 7500000,
+      "planQuarterPln": 2400000,
+      "actualQuarterPln": 1300000,
+      "forecastQuarterPln": 2000000,
+      "forecastOptimisticQuarterPln": 2200000,
+      "forecastPessimisticQuarterPln": 1800000
+    }
+  ],
+  "bySegment": [
+    {
+      "segmentId": "sme",
+      "segmentName": "Średnie przedsiębiorstwo",
+      "planPln": 16000000,
+      "actualPln": 11800000,
+      "forecastPln": 15200000,
+      "planQuarterPln": 4800000,
+      "actualQuarterPln": 3900000,
+      "forecastQuarterPln": 4600000,
+      "forecastOptimisticQuarterPln": 5100000,
+      "forecastPessimisticQuarterPln": 4200000
+    },
+    {
+      "segmentId": "enterprise",
+      "segmentName": "Duże przedsiębiorstwo",
+      "planPln": 29000000,
+      "actualPln": 19400000,
+      "forecastPln": 27600000,
+      "planQuarterPln": 8700000,
+      "actualQuarterPln": 6300000,
+      "forecastQuarterPln": 8200000,
+      "forecastOptimisticQuarterPln": 9100000,
+      "forecastPessimisticQuarterPln": 7600000
+    }
+  ],
+  "monthlyTrend": [
+    {
+      "monthLabel": "Sty",
+      "quarter": 1,
+      "planPln": 7500000,
+      "actualPln": 4200000,
+      "forecastPln": 6800000,
+      "forecastOptimisticPln": 7400000,
+      "forecastPessimisticPln": 6200000
+    },
+    {
+      "monthLabel": "Lut",
+      "quarter": 1,
+      "planPln": 7500000,
+      "actualPln": 5100000,
+      "forecastPln": 7000000,
+      "forecastOptimisticPln": 7600000,
+      "forecastPessimisticPln": 6400000
+    },
+    {
+      "monthLabel": "Mar",
+      "quarter": 1,
+      "planPln": 7500000,
+      "actualPln": 5900000,
+      "forecastPln": 7200000,
+      "forecastOptimisticPln": 7800000,
+      "forecastPessimisticPln": 6600000
+    },
+    {
+      "monthLabel": "Kwi",
+      "quarter": 2,
+      "planPln": 4500000,
+      "actualPln": 3200000,
+      "forecastPln": 4100000,
+      "forecastOptimisticPln": 4500000,
+      "forecastPessimisticPln": 3800000
+    },
+    {
+      "monthLabel": "Maj",
+      "quarter": 2,
+      "planPln": 4500000,
+      "actualPln": 3400000,
+      "forecastPln": 4200000,
+      "forecastOptimisticPln": 4600000,
+      "forecastPessimisticPln": 3900000
+    },
+    {
+      "monthLabel": "Cze",
+      "quarter": 2,
+      "planPln": 4500000,
+      "actualPln": 3600000,
+      "forecastPln": 4500000,
+      "forecastOptimisticPln": 5100000,
+      "forecastPessimisticPln": 4100000
+    }
+  ]
+}

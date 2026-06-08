@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+    --color-ca-shell: var(--ca-shell);
+    --color-ca-shell-muted: var(--ca-shell-muted);
+    --color-ca-lime: var(--ca-lime);
+    --color-ca-link: var(--ca-link);
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-pipeline-lead: var(--pipeline-lead-bg);
+    --color-pipeline-lead-fg: var(--pipeline-lead-fg);
+    --color-pipeline-qualification: var(--pipeline-qualification-bg);
+    --color-pipeline-qualification-fg: var(--pipeline-qualification-fg);
+    --color-pipeline-offer: var(--pipeline-offer-bg);
+    --color-pipeline-offer-fg: var(--pipeline-offer-fg);
+    --color-pipeline-negotiation: var(--pipeline-negotiation-bg);
+    --color-pipeline-negotiation-fg: var(--pipeline-negotiation-fg);
+    --color-pipeline-won: var(--pipeline-won-bg);
+    --color-pipeline-won-fg: var(--pipeline-won-fg);
+    --color-pipeline-lost: var(--pipeline-lost-bg);
+    --color-pipeline-lost-fg: var(--pipeline-lost-fg);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    /* Credit Agricole brand — see .context/design-guide.md */
+    --ca-shell: #404b5a;
+    --ca-shell-muted: #4f5d6e;
+    --ca-lime: #99cc00;
+    --ca-lime-hover: #8ab800;
+    --ca-on-lime: #1f2937;
+    --ca-card: #ffffff;
+    --ca-foreground-on-shell: #ffffff;
+    --ca-foreground-muted-on-shell: #e2e8f0;
+    --ca-text: #1e293b;
+    --ca-text-muted: #64748b;
+    --ca-border: #e2e8f0;
+    --ca-border-focus: #99cc00;
+    --ca-link: #2563eb;
+    --ca-danger: #dc2626;
+    --ca-tab-inactive: #f1f5f9;
+
+    --background: #f8fafc;
+    --foreground: var(--ca-text);
+    --card: var(--ca-card);
+    --card-foreground: var(--ca-text);
+    --popover: var(--ca-card);
+    --popover-foreground: var(--ca-text);
+    --primary: var(--ca-lime);
+    --primary-foreground: var(--ca-on-lime);
+    --secondary: var(--ca-tab-inactive);
+    --secondary-foreground: var(--ca-text);
+    --muted: var(--ca-tab-inactive);
+    --muted-foreground: var(--ca-text-muted);
+    --accent: var(--ca-tab-inactive);
+    --accent-foreground: var(--ca-text);
+    --destructive: var(--ca-danger);
+    --border: var(--ca-border);
+    --input: var(--ca-border);
+    --ring: var(--ca-border-focus);
+    --chart-1: #b8e986;
+    --chart-2: #99cc00;
+    --chart-3: #7aa300;
+    --chart-4: #5c7a00;
+    --chart-5: #94a3b8;
+    /* Pipeline stage surfaces — pastele jak w CRM BK */
+    --pipeline-lead-bg: #e0f2fe;
+    --pipeline-lead-fg: #0c4a6e;
+    --pipeline-qualification-bg: #ede9fe;
+    --pipeline-qualification-fg: #5b21b6;
+    --pipeline-offer-bg: #ffedd5;
+    --pipeline-offer-fg: #9a3412;
+    --pipeline-negotiation-bg: #ffe4e6;
+    --pipeline-negotiation-fg: #9f1239;
+    --pipeline-won-bg: #ecfccb;
+    --pipeline-won-fg: #3f6212;
+    --pipeline-lost-bg: #f1f5f9;
+    --pipeline-lost-fg: #64748b;
+    --radius: 0.625rem;
+    --sidebar: var(--ca-shell);
+    --sidebar-foreground: var(--ca-foreground-on-shell);
+    --sidebar-primary: var(--ca-lime);
+    --sidebar-primary-foreground: var(--ca-on-lime);
+    --sidebar-accent: var(--ca-shell-muted);
+    --sidebar-accent-foreground: var(--ca-foreground-on-shell);
+    --sidebar-border: oklch(1 0 0 / 12%);
+    --sidebar-ring: var(--ca-border-focus);
+}
+
+.dark {
+    --background: var(--ca-shell);
+    --foreground: var(--ca-foreground-on-shell);
+    --card: var(--ca-shell-muted);
+    --card-foreground: var(--ca-foreground-on-shell);
+    --popover: var(--ca-shell-muted);
+    --popover-foreground: var(--ca-foreground-on-shell);
+    --primary: var(--ca-lime);
+    --primary-foreground: var(--ca-on-lime);
+    --secondary: var(--ca-shell-muted);
+    --secondary-foreground: var(--ca-foreground-on-shell);
+    --muted: var(--ca-shell-muted);
+    --muted-foreground: var(--ca-foreground-muted-on-shell);
+    --accent: var(--ca-shell-muted);
+    --accent-foreground: var(--ca-foreground-on-shell);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: var(--ca-border-focus);
+    --sidebar: var(--ca-shell);
+    --sidebar-foreground: var(--ca-foreground-on-shell);
+    --sidebar-primary: var(--ca-lime);
+    --sidebar-primary-foreground: var(--ca-on-lime);
+    --sidebar-accent: var(--ca-shell-muted);
+    --sidebar-accent-foreground: var(--ca-foreground-on-shell);
+    --sidebar-border: oklch(1 0 0 / 12%);
+    --sidebar-ring: var(--ca-border-focus);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  html {
+    @apply font-sans;
+  }
+}

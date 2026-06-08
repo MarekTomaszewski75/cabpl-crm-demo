@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pcat-credit",
+    "name": "Kredyty korporacyjne",
+    "parentId": null,
+    "sortOrder": 1
+  },
+  {
+    "id": "pcat-leasing",
+    "name": "Leasing i faktoring",
+    "parentId": null,
+    "sortOrder": 2
+  },
+  {
+    "id": "pcat-leasing-op",
+    "name": "Leasing operacyjny",
+    "parentId": "pcat-leasing",
+    "sortOrder": 1
+  },
+  {
+    "id": "pcat-factoring",
+    "name": "Faktoring",
+    "parentId": "pcat-leasing",
+    "sortOrder": 2
+  },
+  {
+    "id": "pcat-guarantees",
+    "name": "Gwarancje i akredytywy",
+    "parentId": null,
+    "sortOrder": 3
+  },
+  {
+    "id": "pcat-accounts",
+    "name": "Rachunki i płatności",
+    "parentId": null,
+    "sortOrder": 4
+  },
+  {
+    "id": "pcat-deposits",
+    "name": "Depozyty",
+    "parentId": null,
+    "sortOrder": 5
+  }
+]

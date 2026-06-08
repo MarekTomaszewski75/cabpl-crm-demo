@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.cursor
+.context
+context
+*.md
+.env*
+Dockerfile*
+docker-compose*

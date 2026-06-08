@@ -1,0 +1,22 @@
+[
+  {
+    "id": "dept-executive",
+    "name": "Zarząd",
+    "managerId": "emp-jan"
+  },
+  {
+    "id": "dept-corporate-sales",
+    "name": "Sprzedaż korporacyjna",
+    "managerId": "emp-marek"
+  },
+  {
+    "id": "dept-sales-support",
+    "name": "Wsparcie sprzedaży",
+    "managerId": "emp-katarzyna"
+  },
+  {
+    "id": "dept-risk",
+    "name": "Ryzyko i zgodność",
+    "managerId": "emp-tomasz"
+  }
+]

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "meeting-001",
+    "title": "Przegląd relacji — Polska Logistyka",
+    "clientId": "client-001",
+    "startsAt": "2026-06-03T09:00:00.000Z",
+    "endsAt": "2026-06-03T10:00:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-002",
+    "title": "Prezentacja produktu leasingowego",
+    "clientId": "client-003",
+    "startsAt": "2026-06-04T13:00:00.000Z",
+    "endsAt": "2026-06-04T14:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-003",
+    "title": "Spotkanie — TechVentures",
+    "clientId": "client-003",
+    "startsAt": "2026-06-05T11:00:00.000Z",
+    "endsAt": "2026-06-05T12:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-004",
+    "title": "Spotkanie — GreenBuild",
+    "clientId": "client-004",
+    "startsAt": "2026-06-06T12:00:00.000Z",
+    "endsAt": "2026-06-06T13:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-005",
+    "title": "Spotkanie — MazurChem",
+    "clientId": "client-005",
+    "startsAt": "2026-06-07T13:00:00.000Z",
+    "endsAt": "2026-06-07T14:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-006",
+    "title": "Spotkanie — TransEuropa",
+    "clientId": "client-006",
+    "startsAt": "2026-06-08T14:00:00.000Z",
+    "endsAt": "2026-06-08T15:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-007",
+    "title": "Spotkanie — AgroNova",
+    "clientId": "client-007",
+    "startsAt": "2026-06-09T09:00:00.000Z",
+    "endsAt": "2026-06-09T11:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-008",
+    "title": "Spotkanie — PackMaster",
+    "clientId": "client-008",
+    "startsAt": "2026-06-10T10:00:00.000Z",
+    "endsAt": "2026-06-10T12:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-009",
+    "title": "Spotkanie — FreshMarket",
+    "clientId": "client-009",
+    "startsAt": "2026-06-11T11:00:00.000Z",
+    "endsAt": "2026-06-11T13:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-010",
+    "title": "Spotkanie — SteelForm",
+    "clientId": "client-010",
+    "startsAt": "2026-06-12T12:00:00.000Z",
+    "endsAt": "2026-06-12T14:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-011",
+    "title": "Spotkanie — EcoPaper",
+    "clientId": "client-011",
+    "startsAt": "2026-06-13T13:00:00.000Z",
+    "endsAt": "2026-06-13T14:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-012",
+    "title": "Spotkanie — MedDevice",
+    "clientId": "client-012",
+    "startsAt": "2026-06-14T14:00:00.000Z",
+    "endsAt": "2026-06-14T15:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-013",
+    "title": "Spotkanie — UrbanBud",
+    "clientId": "client-013",
+    "startsAt": "2026-06-03T9:00:00.000Z",
+    "endsAt": "2026-06-03T12:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-014",
+    "title": "Spotkanie — FastRetail",
+    "clientId": "client-014",
+    "startsAt": "2026-06-04T10:00:00.000Z",
+    "endsAt": "2026-06-04T13:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-015",
+    "title": "Spotkanie — ChemLab",
+    "clientId": "client-015",
+    "startsAt": "2026-06-05T11:00:00.000Z",
+    "endsAt": "2026-06-05T14:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-016",
+    "title": "Spotkanie — NovaPrint",
+    "clientId": "client-016",
+    "startsAt": "2026-06-06T12:00:00.000Z",
+    "endsAt": "2026-06-06T13:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-017",
+    "title": "Spotkanie — CloudScale",
+    "clientId": "client-017",
+    "startsAt": "2026-06-07T13:00:00.000Z",
+    "endsAt": "2026-06-07T14:30:00.000Z",
+    "note": "Siedziba klienta, Warszawa",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-018",
+    "title": "Spotkanie — FinTech",
+    "clientId": "client-018",
+    "startsAt": "2026-06-08T14:00:00.000Z",
+    "endsAt": "2026-06-08T15:30:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  }
+]

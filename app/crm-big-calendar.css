@@ -1,0 +1,83 @@
+@import "react-big-calendar/lib/css/react-big-calendar.css";
+
+.crm-big-calendar .rbc-calendar {
+  font-family: inherit;
+}
+
+.crm-big-calendar .rbc-toolbar {
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.crm-big-calendar .rbc-toolbar button {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.crm-big-calendar .rbc-toolbar button:hover,
+.crm-big-calendar .rbc-toolbar button:focus {
+  background: var(--muted);
+}
+
+.crm-big-calendar .rbc-toolbar button.rbc-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.crm-big-calendar .rbc-toolbar-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.crm-big-calendar .rbc-header {
+  border-color: var(--border);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem 0.25rem;
+}
+
+.crm-big-calendar .rbc-time-view,
+.crm-big-calendar .rbc-time-header,
+.crm-big-calendar .rbc-time-content,
+.crm-big-calendar .rbc-time-gutter,
+.crm-big-calendar .rbc-day-slot,
+.crm-big-calendar .rbc-timeslot-group {
+  border-color: var(--border);
+}
+
+.crm-big-calendar .rbc-today {
+  background-color: color-mix(in oklab, var(--primary) 8%, transparent);
+}
+
+.crm-big-calendar .rbc-current-time-indicator {
+  background-color: var(--primary);
+}
+
+.crm-big-calendar .rbc-event {
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0;
+}
+
+.crm-big-calendar .rbc-event:focus,
+.crm-big-calendar .rbc-event.rbc-selected {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.crm-big-calendar .rbc-event-label {
+  display: none;
+}
+
+.crm-big-calendar .rbc-show-more {
+  color: var(--ca-link);
+  font-size: 0.75rem;
+}
