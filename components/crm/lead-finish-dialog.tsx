@@ -26,11 +26,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { DealProductCombobox } from "@/components/crm/deal-product-combobox"
 import { useSession } from "@/lib/auth/demo-session"
 import {
   LEAD_LOST_REASON_OPTIONS,
   canFinishLead,
 } from "@/lib/crm/lead-labels"
+import type { DealProductListItem } from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead, LeadLostReason } from "@/types/crm"
 
@@ -51,9 +53,11 @@ export function LeadFinishDialog({
 }: LeadFinishDialogProps) {
   const router = useRouter()
   const { user } = useSession()
-  const { clients, winLead, loseLead } = useDemoData()
+  const { clients, products, winLead, loseLead } = useDemoData()
   const [mode, setMode] = React.useState<FinishMode>("choose")
   const [createContact, setCreateContact] = React.useState(false)
+  const [selectedProduct, setSelectedProduct] =
+    React.useState<DealProductListItem | null>(null)
   const [lostReason, setLostReason] =
     React.useState<LeadLostReason>("other")
 
@@ -71,6 +75,7 @@ export function LeadFinishDialog({
       setMode("choose")
     }
     setCreateContact(!lead.contactId)
+    setSelectedProduct(null)
   }, [open, lead.name, lead.contactId, defaultTab])
 
   function handleOpenChange(next: boolean) {
@@ -80,7 +85,14 @@ export function LeadFinishDialog({
 
   function handleWinSubmit() {
     if (!user) return
+    if (!selectedProduct) {
+      toast.error("Wybierz produkt bankowy", {
+        description: "Deal musi być powiązany z produktem z katalogu.",
+      })
+      return
+    }
     const opportunity = winLead(lead.id, {
+      productId: selectedProduct.value,
       createContactFromLead: createContact && !lead.contactId,
       user,
     })
@@ -160,6 +172,16 @@ export function LeadFinishDialog({
               </DialogDescription>
             </DialogHeader>
             <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="win-lead-product">Produkt</FieldLabel>
+                <DealProductCombobox
+                  id="win-lead-product"
+                  products={products}
+                  value={selectedProduct}
+                  onValueChange={setSelectedProduct}
+                />
+              </Field>
+
               <Field>
                 <FieldLabel>Firma</FieldLabel>
                 <p className="text-sm text-muted-foreground">

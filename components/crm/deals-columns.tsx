@@ -6,22 +6,39 @@ import { DealStatusBadge } from "@/components/crm/deal-status-badge"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
   DEAL_SOURCE_LABELS,
-  DEAL_STATUS_LABELS,
   DEAL_TYPE_LABELS,
 } from "@/lib/crm/deal-labels"
 import { formatContactName } from "@/lib/crm/contact-display"
+import {
+  DEAL_PIPELINE_CATEGORY_LABELS,
+  getDealStatusLabel,
+} from "@/lib/crm/deal-pipeline-labels"
+import {
+  isPipelineCategoryId,
+  type PipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
 import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
-import type { Client, CrmContact, Deal, DemoUser } from "@/types/crm"
+import type { Client, CrmContact, Deal, DemoUser, Product } from "@/types/crm"
 
 export type DealTableRow = Deal & {
   ownerName: string
   clientName: string
   contactLabel: string | null
+  categoryName: string
+  productName: string
   _filter: string
 }
 
 type DealsColumnsContext = {
   showOwnerColumn: boolean
+}
+
+function resolvePipelineCategoryId(
+  pipelineCategoryId: string,
+): PipelineCategoryId | undefined {
+  return isPipelineCategoryId(pipelineCategoryId)
+    ? pipelineCategoryId
+    : undefined
 }
 
 export function createDealsColumns(
@@ -42,17 +59,58 @@ export function createDealsColumns(
       ),
     },
     {
+      accessorKey: "categoryName",
+      enableGrouping: true,
+      meta: { title: "Kategoria" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Kategoria" />
+      ),
+      cell: ({ row }) => (
+        <span className="max-w-48 truncate">{row.original.categoryName}</span>
+      ),
+      sortingFn: (a, b) =>
+        a.original.categoryName.localeCompare(b.original.categoryName, "pl"),
+    },
+    {
+      accessorKey: "productName",
+      enableGrouping: true,
+      meta: { title: "Produkt" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Produkt" />
+      ),
+      cell: ({ row }) => (
+        <span className="max-w-48 truncate">{row.original.productName}</span>
+      ),
+      sortingFn: (a, b) =>
+        a.original.productName.localeCompare(b.original.productName, "pl"),
+    },
+    {
       id: "status",
-      accessorFn: (row) => DEAL_STATUS_LABELS[row.status],
+      accessorFn: (row) =>
+        getDealStatusLabel(
+          row.status,
+          resolvePipelineCategoryId(row.pipelineCategoryId),
+        ),
       enableGrouping: true,
       meta: { title: "Status" },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Status" />
       ),
-      cell: ({ row }) => <DealStatusBadge status={row.original.status} />,
+      cell: ({ row }) => (
+        <DealStatusBadge
+          status={row.original.status}
+          pipelineCategoryId={row.original.pipelineCategoryId}
+        />
+      ),
       sortingFn: (a, b) =>
-        DEAL_STATUS_LABELS[a.original.status].localeCompare(
-          DEAL_STATUS_LABELS[b.original.status],
+        getDealStatusLabel(
+          a.original.status,
+          resolvePipelineCategoryId(a.original.pipelineCategoryId),
+        ).localeCompare(
+          getDealStatusLabel(
+            b.original.status,
+            resolvePipelineCategoryId(b.original.pipelineCategoryId),
+          ),
           "pl",
         ),
     },
@@ -141,6 +199,7 @@ export function buildDealTableRow(
   users: readonly DemoUser[],
   contacts: readonly CrmContact[],
   clients: readonly Client[] = [],
+  products: readonly Product[] = [],
 ): DealTableRow {
   const ownerName =
     users.find((u) => u.id === deal.ownerId)?.displayName ?? "—"
@@ -151,11 +210,18 @@ export function buildDealTableRow(
   const clientName = deal.clientId
     ? (clients.find((c) => c.id === deal.clientId)?.name ?? "")
     : ""
+  const productName =
+    products.find((product) => product.id === deal.productId)?.name ?? "—"
+  const categoryName = isPipelineCategoryId(deal.pipelineCategoryId)
+    ? DEAL_PIPELINE_CATEGORY_LABELS[deal.pipelineCategoryId]
+    : "—"
   return {
     ...deal,
     ownerName,
     clientName,
     contactLabel,
-    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName}`.toLowerCase(),
+    categoryName,
+    productName,
+    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName} ${categoryName} ${productName}`.toLowerCase(),
   }
 }

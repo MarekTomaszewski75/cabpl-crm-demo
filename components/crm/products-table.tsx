@@ -40,7 +40,9 @@ import {
 } from "@/components/ui/input-group"
 import { useSession } from "@/lib/auth/demo-session"
 import {
+  expandCategoryFilterIds,
   filterProducts,
+  getCategoryIdsForSelection,
   PRODUCT_ACTIVITY_ACTIVE,
   PRODUCT_ACTIVITY_INACTIVE,
   type ProductListFilters,
@@ -84,7 +86,10 @@ export function ProductsTable() {
   const router = useRouter()
   const { isReady } = useSession()
   const { products, productCategories } = useDemoData()
-  const [viewMode, setViewMode] = React.useState<ProductsViewMode>("list")
+  const [viewMode, setViewMode] = React.useState<ProductsViewMode>("tree")
+  const [selectedTreeCategoryId, setSelectedTreeCategoryId] = React.useState<
+    string | null
+  >(null)
   const [categoryFilters, setCategoryFilters] = React.useState<string[]>([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [activityFilters, setActivityFilters] = React.useState<string[]>([])
@@ -106,9 +111,29 @@ export function ProductsTable() {
     [productCategories],
   )
 
+  const expandedListCategoryIds = React.useMemo(
+    () => expandCategoryFilterIds(categoryFilters, productCategories),
+    [categoryFilters, productCategories],
+  )
+
+  const expandedTreeCategoryIds = React.useMemo(() => {
+    if (!selectedTreeCategoryId) return null
+    return getCategoryIdsForSelection(selectedTreeCategoryId, productCategories)
+  }, [selectedTreeCategoryId, productCategories])
+
+  const categoryScopedProducts = React.useMemo(() => {
+    if (viewMode !== "tree" || !expandedTreeCategoryIds) {
+      return [...products]
+    }
+    return products.filter((product) =>
+      expandedTreeCategoryIds.includes(product.categoryId),
+    )
+  }, [viewMode, products, expandedTreeCategoryIds])
+
   const listFilters = React.useMemo(
     (): ProductListFilters => ({
-      categoryFilters,
+      categoryFilters:
+        viewMode === "list" ? expandedListCategoryIds : [],
       searchQuery,
       activityFilters,
       availabilityFilters: availabilityFilters as ProductAvailability[],
@@ -117,7 +142,8 @@ export function ProductsTable() {
       conditionFilters: conditionFilters as ProductCondition[],
     }),
     [
-      categoryFilters,
+      viewMode,
+      expandedListCategoryIds,
       searchQuery,
       activityFilters,
       availabilityFilters,
@@ -128,27 +154,37 @@ export function ProductsTable() {
   )
 
   const filteredProducts = React.useMemo(
-    () => filterProducts(products, listFilters),
-    [products, listFilters],
+    () => filterProducts(categoryScopedProducts, listFilters),
+    [categoryScopedProducts, listFilters],
   )
 
-  const categoryFacetedOptions = React.useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const product of products) {
-      counts.set(product.categoryId, (counts.get(product.categoryId) ?? 0) + 1)
-    }
-    return sortedCategories
-      .map((category) => ({
-        label: category.parentId ? `— ${category.name}` : category.name,
-        value: category.id,
-        count: counts.get(category.id) ?? 0,
-      }))
-      .filter((opt) => opt.count > 0)
-  }, [products, sortedCategories])
+  const facetedCountBase =
+    viewMode === "tree" ? categoryScopedProducts : products
+
+  const categoryFacetedOptions = React.useMemo(
+    () =>
+      sortedCategories
+        .map((category) => {
+          const categoryIds = getCategoryIdsForSelection(
+            category.id,
+            productCategories,
+          )
+          const count = products.filter((product) =>
+            categoryIds.includes(product.categoryId),
+          ).length
+          return {
+            label: category.parentId ? `— ${category.name}` : category.name,
+            value: category.id,
+            count,
+          }
+        })
+        .filter((opt) => opt.count > 0),
+    [products, sortedCategories, productCategories],
+  )
 
   const activityFacetedOptions = React.useMemo(() => {
     const counts = { active: 0, inactive: 0 }
-    for (const product of products) {
+    for (const product of facetedCountBase) {
       if (product.isActive) counts.active += 1
       else counts.inactive += 1
     }
@@ -160,11 +196,11 @@ export function ProductsTable() {
         count: counts.inactive,
       },
     ].filter((opt) => (opt.count ?? 0) > 0)
-  }, [products])
+  }, [facetedCountBase])
 
   const availabilityFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const product of products) {
+    for (const product of facetedCountBase) {
       counts.set(
         product.availability,
         (counts.get(product.availability) ?? 0) + 1,
@@ -177,11 +213,11 @@ export function ProductsTable() {
         count: counts.get(value) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [products])
+  }, [facetedCountBase])
 
   const priceKindFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const product of products) {
+    for (const product of facetedCountBase) {
       counts.set(product.priceKind, (counts.get(product.priceKind) ?? 0) + 1)
     }
     return (Object.keys(PRODUCT_PRICE_KIND_LABELS) as ProductPriceKind[])
@@ -191,11 +227,11 @@ export function ProductsTable() {
         count: counts.get(value) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [products])
+  }, [facetedCountBase])
 
   const productTypeFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const product of products) {
+    for (const product of facetedCountBase) {
       counts.set(product.productType, (counts.get(product.productType) ?? 0) + 1)
     }
     return (Object.keys(PRODUCT_TYPE_LABELS) as ProductType[])
@@ -205,11 +241,11 @@ export function ProductsTable() {
         count: counts.get(value) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [products])
+  }, [facetedCountBase])
 
   const conditionFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const product of products) {
+    for (const product of facetedCountBase) {
       counts.set(product.condition, (counts.get(product.condition) ?? 0) + 1)
     }
     return (Object.keys(PRODUCT_CONDITION_LABELS) as ProductCondition[])
@@ -219,7 +255,7 @@ export function ProductsTable() {
         count: counts.get(value) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [products])
+  }, [facetedCountBase])
 
   const tableData = React.useMemo(
     (): ProductTableRow[] =>
@@ -233,6 +269,7 @@ export function ProductsTable() {
     () =>
       createProductsColumns({
         selectedIds,
+        showCategoryColumn: viewMode === "list",
         onToggleRow: (id, checked) => {
           setSelectedIds((prev) => {
             const next = new Set(prev)
@@ -242,7 +279,7 @@ export function ProductsTable() {
           })
         },
       }),
-    [selectedIds],
+    [selectedIds, viewMode],
   )
 
   const resultCountLabel = React.useMemo(() => {
@@ -266,10 +303,10 @@ export function ProductsTable() {
           size="sm"
           className={cn(
             "h-8 w-full justify-start gap-2 px-2 font-normal",
-            categoryFilters.length === 0 &&
+            selectedTreeCategoryId === null &&
               "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground",
           )}
-          onClick={() => setCategoryFilters([])}
+          onClick={() => setSelectedTreeCategoryId(null)}
         >
           <FolderIcon />
           Wszystkie kategorie
@@ -283,11 +320,10 @@ export function ProductsTable() {
             className={cn(
               "h-8 w-full justify-start gap-2 px-2 font-normal",
               category.parentId && "pl-6",
-              categoryFilters.length === 1 &&
-                categoryFilters[0] === category.id &&
+              selectedTreeCategoryId === category.id &&
                 "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground",
             )}
-            onClick={() => setCategoryFilters([category.id])}
+            onClick={() => setSelectedTreeCategoryId(category.id)}
           >
             <FolderIcon />
             <span className="truncate">{category.name}</span>
@@ -299,12 +335,14 @@ export function ProductsTable() {
 
   const filterBar = (
     <div className="flex flex-wrap items-center gap-2">
-      <DataTableFacetedFilter
-        title="Kategoria"
-        options={categoryFacetedOptions}
-        selectedValues={categoryFilters}
-        onSelectedValuesChange={setCategoryFilters}
-      />
+      {viewMode === "list" ? (
+        <DataTableFacetedFilter
+          title="Kategoria"
+          options={categoryFacetedOptions}
+          selectedValues={categoryFilters}
+          onSelectedValuesChange={setCategoryFilters}
+        />
+      ) : null}
       <DataTableFacetedFilter
         title="Aktywność"
         options={activityFacetedOptions}
@@ -380,16 +418,6 @@ export function ProductsTable() {
             >
               <Button
                 type="button"
-                variant={viewMode === "list" ? "secondary" : "ghost"}
-                size="icon-sm"
-                aria-label="Widok listy"
-                aria-pressed={viewMode === "list"}
-                onClick={() => setViewMode("list")}
-              >
-                <Rows2Icon />
-              </Button>
-              <Button
-                type="button"
                 variant={viewMode === "tree" ? "secondary" : "ghost"}
                 size="icon-sm"
                 aria-label="Widok drzewa kategorii"
@@ -397,6 +425,16 @@ export function ProductsTable() {
                 onClick={() => setViewMode("tree")}
               >
                 <FolderTreeIcon />
+              </Button>
+              <Button
+                type="button"
+                variant={viewMode === "list" ? "secondary" : "ghost"}
+                size="icon-sm"
+                aria-label="Widok listy"
+                aria-pressed={viewMode === "list"}
+                onClick={() => setViewMode("list")}
+              >
+                <Rows2Icon />
               </Button>
             </div>
             <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">

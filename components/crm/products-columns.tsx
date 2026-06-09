@@ -32,12 +32,13 @@ export const PRODUCT_GROUPING_OPTIONS = [
 type ProductsColumnsContext = {
   selectedIds: Set<string>
   onToggleRow: (id: string, checked: boolean) => void
+  showCategoryColumn?: boolean
 }
 
 export function createProductsColumns(
   ctx: ProductsColumnsContext,
 ): ColumnDef<ProductTableRow>[] {
-  return [
+  const columns: ColumnDef<ProductTableRow>[] = [
     {
       id: "select",
       meta: { title: "Zaznaczenie" },
@@ -56,7 +57,10 @@ export function createProductsColumns(
       enableHiding: false,
     },
     createFilterSearchColumn<ProductTableRow>(),
-    {
+  ]
+
+  if (ctx.showCategoryColumn) {
+    columns.push({
       accessorKey: "categoryName",
       meta: { title: "Kategoria" },
       enableGrouping: true,
@@ -66,7 +70,10 @@ export function createProductsColumns(
       cell: ({ row }) => (
         <span className="max-w-48 truncate">{row.original.categoryName}</span>
       ),
-    },
+    })
+  }
+
+  columns.push(
     {
       id: "goodsOrService",
       accessorFn: (row) =>
@@ -152,7 +159,9 @@ export function createProductsColumns(
         </Badge>
       ),
     },
-  ]
+  )
+
+  return columns
 }
 
 export function buildProductTableRow(

@@ -10,19 +10,28 @@ import {
   DEAL_STATUS_LABELS,
   isTerminalDealStatus,
 } from "@/lib/crm/deal-labels"
+import { getDealStatusLabel } from "@/lib/crm/deal-pipeline-labels"
+import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
 import type { DealStatus } from "@/types/crm"
 
 type DealStatusBadgeProps = {
   status: DealStatus
+  pipelineCategoryId: string
 }
 
-export function DealStatusBadge({ status }: DealStatusBadgeProps) {
+export function DealStatusBadge({
+  status,
+  pipelineCategoryId,
+}: DealStatusBadgeProps) {
   const showIndicator = !isTerminalDealStatus(status)
+  const statusLabel = isPipelineCategoryId(pipelineCategoryId)
+    ? getDealStatusLabel(status, pipelineCategoryId)
+    : DEAL_STATUS_LABELS[status]
 
   return (
-    <Status variant={dealStatusIndicatorVariant(status)}>
+    <Status variant={dealStatusIndicatorVariant(status, pipelineCategoryId)}>
       {showIndicator ? <StatusIndicator /> : null}
-      <StatusLabel>{DEAL_STATUS_LABELS[status]}</StatusLabel>
+      <StatusLabel>{statusLabel}</StatusLabel>
     </Status>
   )
 }

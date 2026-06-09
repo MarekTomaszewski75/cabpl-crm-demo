@@ -131,7 +131,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Pipeline summary:** `components/crm/today-pipeline-summary.tsx` — karty deali/leadów (max 5 + „Zobacz wszystkie”)
 - **Data demo:** `lib/crm/demo-today.ts` — `getDemoToday()`, `formatDemoTodayPl()`, `toLocalDateKey`
 - **Logika:** `lib/crm/today-dashboard.ts` — `getTasksDueOnDate`, `getNextUpcomingMeeting`, `getPrimaryNbaHighlight`
-- **Pipeline summary (US-21):** `lib/crm/today-pipeline-summary.ts` — `getDealsRequiringAttention`, `getLeadsRequiringAttention`, stałe `TODAY_PIPELINE_HORIZON_DAYS`, `DEAL_ATTENTION_STATUSES`
+- **Pipeline summary (US-21):** `lib/crm/today-pipeline-summary.ts` — `getDealsRequiringAttention`, `getLeadsRequiringAttention`, stałe `TODAY_PIPELINE_HORIZON_DAYS`; deale wymagające uwagi = ostatnie 2 kroki workflow lejka deala
 - **Redirect:** `getPostLoginPath` — `advisor` → `/today`, `executive` → `/dashboard`, `regional_manager` → `/pipeline`
 - **Nav:** `CRM_NAV_ITEMS` — pozycja `today` / „Dziś” (`roles: ["advisor"]`)
 
@@ -183,27 +183,31 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Mutacje:** `addLead`, `updateLead`, `addLeadActivity`, `addLeadChannelActivity`, `addLeadNote`, `winLead`, `loseLead` w `DemoDataContext`
 - **Composer (jak firma):** `lead-activity-panel.tsx` — zakładki Notatka / Aktywność / Pliki; `lead-activity-form.tsx` (reuse `company-activity-types`, `CompanyFilesUploadZone`, `activity-people-fields`)
 - **Etykiety:** `lib/crm/lead-labels.ts` — statusy, źródło, typ, przegrana; `canFinishLead`
-- **Wygrana:** `lib/crm/win-lead.ts` — `buildWinLeadResult`, `WIN_PIPELINE_OPTIONS`
+- **Wygrana:** `lib/crm/win-lead.ts` — `buildWinLeadResult` (wymaga `productId` + `products`); UI: `lead-finish-dialog.tsx` — `DealProductCombobox`
 - **Feed:** `lib/crm/lead-activity.ts`, `lib/crm/lead-activity-id.ts`
 - **Kontakt:** `ContactComboboxField` (pojedynczy: `value={[id]}` / `onChange` → `contactId`)
 - **ID:** `lib/crm/lead-id.ts`, `opportunity-id.ts`, `client-id.ts`
 
-### Products module (US-19)
-- **Lista:** `products-table.tsx` — wzorzec jak leady/deale: karta + `InputGroup` + przełącznik lista (`Rows2`) / drzewo (`FolderTree`), tag „Aktywne produkty”, 5 dropdownów filtrów, `ProductFormDialog` (Sheet)
-- **Widoki:** lista — `Select` „Wszystkie kategorie…”; drzewo — panel `aside` „Kategorie” (~264px) + ta sama tabela; wspólny stan `selectedCategoryId`
-- **Kolumny:** `products-columns.tsx` — Towar/Usługa, Artykuł (+ SKU), Cena, Dostępność, Stan; checkbox zaznaczenia (stan lokalny)
+### Products module (US-19, drzewo US-31)
+- **Lista:** `products-table.tsx` — wzorzec jak leady/deale: karta + `InputGroup` + przełącznik lista (`Rows2`) / drzewo (`FolderTree`, domyślnie), faceted filtry, `ProductFormDialog` (Sheet)
+- **Widoki:** **drzewo (domyślny)** — panel `aside` „Kategorie” (~264px) + tabela; kategoria z panelu (`selectedTreeCategoryId`), faceted bez Kategorii; korzeń grupy (`pcat-leasing`) agreguje dzieci via `getCategoryIdsForSelection`. **Lista** — pełna szerokość; faceted **Kategoria** (wielokrotny wybór, korzenie + liście); pozostałe faceted jak w drzewie
+- **Kolumny:** `products-columns.tsx` — Kategoria (tylko lista, `showCategoryColumn`), Towar/Usługa, Artykuł (+ SKU), Cena, Dostępność, Stan; checkbox zaznaczenia (stan lokalny)
 - **Nowy produkt:** `product-form-dialog.tsx` + `product-form.tsx` — Sheet; `addProduct(input)` + toast „Dodano produkt”; bez karty `/products/[id]`
 - **Dane:** `data/products.json`, `data/product-categories.json`; typy `Product`, `ProductCategory` w `types/crm.ts`
-- **Etykiety / filtry:** `lib/crm/product-labels.ts` (`formatProductPrice`, `PRODUCT_FILTER_DEFAULTS`); `lib/crm/product-filters.ts` (`filterProducts`)
+- **Etykiety / filtry:** `lib/crm/product-labels.ts` (`formatProductPrice`, `PRODUCT_FILTER_DEFAULTS`); `lib/crm/product-filters.ts` (`filterProducts`, `getCategoryIdsForSelection`, `expandCategoryFilterIds`)
 - **ID:** `lib/crm/product-id.ts` — `createNextProductId`
 - **RBAC:** bez `filterByScope` (wspólny katalog BK)
 
-### Deals module (US-18)
-- **Lista:** `deals-table.tsx` + `deals-columns.tsx` — wzorzec jak leady (przełącznik kanban domyślnie / tabela, zakładki statusu, faceted filters, grupowanie, `onRowClick` → `/pipeline/[id]`)
-- **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `deals-kanban-board.tsx`, `deal-kanban-card.tsx`, `lib/crm/deal-kanban.ts`, `lib/crm/deal-status-transition.ts` — 7 kolumn statusów; DnD → `updateDeal` + `deal_status_changed`; drag na Wygrany/Utracony → `deal-finish-dialog.tsx`
-- **Karta:** `deal-detail-view.tsx` — `deal-detail-header.tsx`, `deal-status-bar.tsx`, `deal-detail-sidebar.tsx`, `deal-activity-panel.tsx` + `deal-activity-feed.tsx`
+### Deals module (US-18, lejki US-27, lista US-30)
+- **Lista:** `deals-table.tsx` + `deals-columns.tsx` — przełącznik kanban domyślnie / tabela; **lista:** wszystkie kategorie naraz, kolumny `categoryName`/`productName`, faceted **Kategoria** + **Status** (bez tabs statusowych; etykiety statusu z `getAllDealStatusFilterOptions()`), Źródło/Typ/Opiekun; grupowanie po kategorii/produkcie; `onRowClick` → `/pipeline/[id]`; filtry listy nie wpływają na kanban
+- **Badge statusu:** `deal-status-badge.tsx` — `getDealStatusLabel(status, pipelineCategoryId)` + `dealStatusIndicatorVariant`; `pipelineCategoryId` wymagane
+- **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `deals-kanban-board.tsx`, `deal-kanban-card.tsx`, `lib/crm/deal-kanban.ts`, `lib/crm/deal-status-transition.ts` — kolumny z `getDealKanbanStatuses(pipelineCategoryId)` + motywy `getDealKanbanTheme`; DnD → `updateDeal` + `deal_status_changed`; drag na Wygrany/Utracony → `deal-finish-dialog.tsx`; **US-29:** `DealsTable` — `Select` „Kategoria produktu” (tylko kanban, domyślnie `pcat-credit`); filtr `pipelineCategoryId`; karta — nazwa produktu z `products`
+- **Karta:** `deal-detail-view.tsx` — `deal-detail-header.tsx` (+ `DealStatusBadge`), `deal-status-bar.tsx` (kroki z `getPipelineWorkflowSteps` + `getDealStatusLabel`), `deal-detail-sidebar.tsx` (sekcja Produkt/Kategoria; edycja produktu tylko gdy `status === 'new'`), `deal-activity-panel.tsx` + `deal-activity-feed.tsx`; bez zakładki stub „Produkty”
+- **Wybór produktu (US-32):** `lib/crm/deal-product-select.ts` — `buildDealProductListItems`, `isSelectableDealProduct`; `components/crm/deal-product-combobox.tsx` — Combobox aktywnych produktów (kategoria w drugiej linii); używany w `deal-form.tsx`, sidebarze i `lead-finish-dialog.tsx`
 - **Finalizacja:** `deal-finish-dialog.tsx` + mutacje `winDeal` / `loseDeal` w `DemoDataContext`
-- **Etykiety:** `lib/crm/deal-labels.ts` (`DEAL_STATUS_LABELS`, `DEAL_SOURCE_LABELS`, `DEAL_TYPE_LABELS`, `DEAL_LOST_REASON_LABELS`)
+- **Lejki per kategoria (US-27):** `lib/crm/deal-pipeline.ts` — `DEAL_PIPELINE_CATEGORY_IDS`, `getPipelineSteps`, `getPipelineWorkflowSteps`, `mapLegacyDealStatus`, `resolvePipelineCategoryId`, `dealStepProbability`; etykiety PL: `lib/crm/deal-pipeline-labels.ts` (`getDealStatusLabel`, `getAllDealStatusFilterOptions`); `Deal` ma `productId` + `pipelineCategoryId`; `AddDealInput` wymaga `productId`
+- **Seed dealów (US-28):** `data/opportunities.json` — każdy rekord ma `name`, `productId`, `pipelineCategoryId`, `status` (kody lejka §3.2); `normalizeDeals` w `seed.ts` — dev assert + legacy fallback (`title`/`stage` → `console.warn`); `addDeal` / `updateDeal` w `DemoDataContext` walidują produkt i status względem lejka; `/today` — `getDealsRequiringAttention` po ostatnim/przedostatnim kroku workflow
+- **Etykiety:** `lib/crm/deal-labels.ts` — delegacja statusów do `deal-pipeline-labels.ts`; `DEAL_SOURCE_LABELS`, `DEAL_TYPE_LABELS`, `DEAL_LOST_REASON_LABELS`; `canFinishDeal(status, pipelineCategoryId)`
 - **Aktywność:** `dealActivities` w seed/context + helpery `lib/crm/deal-activity.ts`; formularz kanału `deal-activity-form.tsx` + `addDealChannelActivity` (jak leady)
 
 ### Tasks module (US-09)

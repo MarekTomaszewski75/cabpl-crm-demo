@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
+import { DealProductCombobox } from "@/components/crm/deal-product-combobox"
 import { LeadEngagementIndicators } from "@/components/crm/lead-engagement-indicators"
 import { InlineEditableField } from "@/components/crm/inline-editable-field"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,6 +11,12 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from "@/components/ui/textarea"
 import { getDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
+import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
+import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
+import {
+  toDealProductListItem,
+  type DealProductListItem,
+} from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { formatDatePl } from "@/lib/format/pl"
 import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
@@ -17,9 +24,23 @@ import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 const DEAL_TYPE_NONE = "__none__"
 
 export function DealDetailSidebar({ deal }: { deal: Deal }) {
-  const { updateDeal, users, clients, tasks, meetings, dealDocuments } =
+  const { updateDeal, users, clients, tasks, meetings, dealDocuments, products } =
     useDemoData()
   const readOnly = deal.status === "won" || deal.status === "lost"
+  const productEditable = deal.status === "new"
+
+  const product = products.find((item) => item.id === deal.productId)
+  const productListItem = product ? toDealProductListItem(product) : null
+  const [selectedProduct, setSelectedProduct] =
+    React.useState<DealProductListItem | null>(productListItem)
+
+  React.useEffect(() => {
+    setSelectedProduct(product ? toDealProductListItem(product) : null)
+  }, [deal.productId, product])
+
+  const categoryLabel = isPipelineCategoryId(deal.pipelineCategoryId)
+    ? DEAL_PIPELINE_CATEGORY_LABELS[deal.pipelineCategoryId]
+    : "—"
 
   const engagementCounts = React.useMemo(
     () =>
@@ -32,8 +53,41 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
   )
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined
+
+  function handleProductChange(next: DealProductListItem | null) {
+    if (!next || !productEditable) return
+    setSelectedProduct(next)
+    updateDeal(deal.id, { productId: next.value })
+  }
+
   return (
     <div className="flex w-full max-w-sm shrink-0 flex-col gap-4">
+      <Card size="sm">
+        <CardHeader><CardTitle className="text-base">Produkt</CardTitle></CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Produkt</span>
+            {productEditable ? (
+              <DealProductCombobox
+                products={products}
+                value={selectedProduct}
+                onValueChange={handleProductChange}
+              />
+            ) : (
+              <div className="flex flex-col gap-0.5 text-sm">
+                <span>{product?.name ?? "—"}</span>
+                {product?.sku ? (
+                  <span className="text-muted-foreground">{product.sku}</span>
+                ) : null}
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Kategoria</span>
+            <Input readOnly value={categoryLabel} />
+          </div>
+        </CardContent>
+      </Card>
       <Card size="sm">
         <CardHeader><CardTitle className="text-base">O dealu</CardTitle></CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -64,4 +118,3 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
     </div>
   )
 }
-

@@ -37,14 +37,28 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { useSession } from "@/lib/auth/demo-session"
 import {
   DEAL_SOURCE_LABELS,
-  DEAL_STATUS_LABELS,
-  DEAL_STATUS_OPTIONS,
   DEAL_TYPE_LABELS,
 } from "@/lib/crm/deal-labels"
+import {
+  DEAL_PIPELINE_CATEGORY_LABELS,
+  getAllDealStatusFilterOptions,
+} from "@/lib/crm/deal-pipeline-labels"
+import {
+  DEFAULT_PIPELINE_CATEGORY_ID,
+  getPipelineCategoryIds,
+  type PipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { filterByScope } from "@/lib/rbac/scope"
 import type {
@@ -52,19 +66,20 @@ import type {
   CrmContact,
   Deal,
   DealSource,
-  DealStatus,
   DealType,
   DemoUser,
+  Product,
 } from "@/types/crm"
 
 type DealsViewMode = "table" | "kanban"
 
-const FILTER_ALL = "all"
 const DEAL_TYPE_NONE = "__none__"
 const DEAL_SOURCE_NONE = "__source_none__"
 
 function createDealGroupingOptions(showOwnerColumn: boolean) {
   const options = [
+    { columnId: "categoryName", label: "Kategoria" },
+    { columnId: "productName", label: "Produkt" },
     { columnId: "status", label: "Status" },
     { columnId: "source", label: "Źródło" },
     { columnId: "dealType", label: "Typ" },
@@ -76,19 +91,11 @@ function createDealGroupingOptions(showOwnerColumn: boolean) {
   return options
 }
 
-type StatusTabValue = typeof FILTER_ALL | DealStatus
-
-function filterByStatusTab(
-  deals: readonly Deal[],
-  statusTab: StatusTabValue,
-): Deal[] {
-  if (statusTab === FILTER_ALL) return [...deals]
-  return deals.filter((deal) => deal.status === statusTab)
-}
-
 function applyDealListFilters(
   deals: Deal[],
   filters: {
+    categoryFilters: string[]
+    statusFilters: string[]
     sourceFilters: string[]
     ownerFilters: string[]
     dealTypeFilters: string[]
@@ -96,11 +103,24 @@ function applyDealListFilters(
     users: readonly DemoUser[]
     contacts: readonly CrmContact[]
     clients: readonly Client[]
+    products: readonly Product[]
   },
 ): Deal[] {
   const searchNormalized = filters.searchQuery.trim().toLowerCase()
 
   return deals.filter((deal) => {
+    if (
+      filters.categoryFilters.length > 0 &&
+      !filters.categoryFilters.includes(deal.pipelineCategoryId)
+    ) {
+      return false
+    }
+    if (
+      filters.statusFilters.length > 0 &&
+      !filters.statusFilters.includes(deal.status)
+    ) {
+      return false
+    }
     if (filters.sourceFilters.length > 0) {
       const sourceKey = deal.source ?? DEAL_SOURCE_NONE
       if (!filters.sourceFilters.includes(sourceKey)) return false
@@ -121,6 +141,7 @@ function applyDealListFilters(
       filters.users,
       filters.contacts,
       filters.clients,
+      filters.products,
     )
     return row._filter.includes(searchNormalized)
   })
@@ -129,13 +150,16 @@ function applyDealListFilters(
 export function DealsTable() {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { deals, users, contacts, clients } = useDemoData()
-  const [statusTab, setStatusTab] = React.useState<StatusTabValue>(FILTER_ALL)
+  const { deals, users, contacts, clients, products } = useDemoData()
+  const [categoryFilters, setCategoryFilters] = React.useState<string[]>([])
+  const [statusFilters, setStatusFilters] = React.useState<string[]>([])
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
   const [dealTypeFilters, setDealTypeFilters] = React.useState<string[]>([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [viewMode, setViewMode] = React.useState<DealsViewMode>("kanban")
+  const [selectedPipelineCategoryId, setSelectedPipelineCategoryId] =
+    React.useState<PipelineCategoryId>(DEFAULT_PIPELINE_CATEGORY_ID)
   const [createSheetOpen, setCreateSheetOpen] = React.useState(false)
 
   const showOwnerColumn = user?.role !== "advisor"
@@ -155,29 +179,25 @@ export function DealsTable() {
     return filterByScope(deals, user)
   }, [deals, user])
 
-  const statusCounts = React.useMemo(() => {
-    const counts = Object.fromEntries(
-      DEAL_STATUS_OPTIONS.map((status) => [status, 0]),
-    ) as Record<DealStatus, number>
-    for (const deal of scopedDeals) {
-      counts[deal.status] += 1
-    }
-    return {
-      all: scopedDeals.length,
-      ...counts,
-    }
-  }, [scopedDeals])
-
-  const statusScopedDeals = React.useMemo(
+  const categoryScopedDeals = React.useMemo(
     () =>
-      viewMode === "table"
-        ? filterByStatusTab(scopedDeals, statusTab)
+      viewMode === "kanban"
+        ? scopedDeals.filter(
+            (deal) => deal.pipelineCategoryId === selectedPipelineCategoryId,
+          )
         : [...scopedDeals],
-    [scopedDeals, statusTab, viewMode],
+    [scopedDeals, selectedPipelineCategoryId, viewMode],
+  )
+
+  const baseDeals = React.useMemo(
+    () => (viewMode === "kanban" ? categoryScopedDeals : scopedDeals),
+    [viewMode, categoryScopedDeals, scopedDeals],
   )
 
   const filterInput = React.useMemo(
     () => ({
+      categoryFilters: viewMode === "table" ? categoryFilters : [],
+      statusFilters: viewMode === "table" ? statusFilters : [],
       sourceFilters,
       ownerFilters: showOwnerColumn ? ownerFilters : [],
       dealTypeFilters,
@@ -185,8 +205,12 @@ export function DealsTable() {
       users,
       contacts,
       clients,
+      products,
     }),
     [
+      viewMode,
+      categoryFilters,
+      statusFilters,
       sourceFilters,
       ownerFilters,
       dealTypeFilters,
@@ -194,14 +218,52 @@ export function DealsTable() {
       users,
       contacts,
       clients,
+      products,
       showOwnerColumn,
     ],
   )
 
   const filteredDeals = React.useMemo(
-    () => applyDealListFilters(statusScopedDeals, filterInput),
-    [statusScopedDeals, filterInput],
+    () => applyDealListFilters(baseDeals, filterInput),
+    [baseDeals, filterInput],
   )
+
+  const categoryFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const deal of scopedDeals) {
+      counts.set(
+        deal.pipelineCategoryId,
+        (counts.get(deal.pipelineCategoryId) ?? 0) + 1,
+      )
+    }
+    return getPipelineCategoryIds()
+      .map((categoryId) => ({
+        label: DEAL_PIPELINE_CATEGORY_LABELS[categoryId],
+        value: categoryId,
+        count: counts.get(categoryId) ?? 0,
+      }))
+      .filter((option) => option.count > 0)
+  }, [scopedDeals])
+
+  const statusFacetedOptions = React.useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const deal of scopedDeals) {
+      counts.set(deal.status, (counts.get(deal.status) ?? 0) + 1)
+    }
+    const labelByStatus = new Map<string, string>()
+    for (const option of getAllDealStatusFilterOptions()) {
+      if (!labelByStatus.has(option.value)) {
+        labelByStatus.set(option.value, option.label)
+      }
+    }
+    return [...counts.entries()]
+      .map(([status, count]) => ({
+        label: labelByStatus.get(status) ?? status,
+        value: status,
+        count,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label, "pl"))
+  }, [scopedDeals])
 
   const ownerNameById = React.useMemo(
     () => new Map(users.map((u) => [u.id, u.displayName])),
@@ -210,7 +272,7 @@ export function DealsTable() {
 
   const ownerFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const deal of statusScopedDeals) {
+    for (const deal of baseDeals) {
       counts.set(deal.ownerId, (counts.get(deal.ownerId) ?? 0) + 1)
     }
     return [...counts.entries()]
@@ -220,11 +282,11 @@ export function DealsTable() {
         count,
       }))
       .sort((a, b) => a.label.localeCompare(b.label, "pl"))
-  }, [statusScopedDeals, ownerNameById])
+  }, [baseDeals, ownerNameById])
 
   const sourceFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const deal of statusScopedDeals) {
+    for (const deal of baseDeals) {
       const key = deal.source ?? DEAL_SOURCE_NONE
       counts.set(key, (counts.get(key) ?? 0) + 1)
     }
@@ -247,11 +309,11 @@ export function DealsTable() {
       }
     }
     return options.sort((a, b) => a.label.localeCompare(b.label, "pl"))
-  }, [statusScopedDeals])
+  }, [baseDeals])
 
   const dealTypeFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
-    for (const deal of statusScopedDeals) {
+    for (const deal of baseDeals) {
       const key = deal.dealType ?? DEAL_TYPE_NONE
       counts.set(key, (counts.get(key) ?? 0) + 1)
     }
@@ -274,14 +336,14 @@ export function DealsTable() {
       }
     }
     return options.sort((a, b) => a.label.localeCompare(b.label, "pl"))
-  }, [statusScopedDeals])
+  }, [baseDeals])
 
   const tableData = React.useMemo(
     (): DealTableRow[] =>
       filteredDeals.map((deal) =>
-        buildDealTableRow(deal, users, contacts, clients),
+        buildDealTableRow(deal, users, contacts, clients, products),
       ),
-    [filteredDeals, users, contacts, clients],
+    [filteredDeals, users, contacts, clients, products],
   )
 
   const resultCountLabel = React.useMemo(() => {
@@ -359,29 +421,44 @@ export function DealsTable() {
 
           <div className="flex flex-wrap items-center gap-2">
             {viewMode === "table" ? (
-              <Tabs
-                value={statusTab}
+              <>
+                <DataTableFacetedFilter
+                  title="Kategoria"
+                  options={categoryFacetedOptions}
+                  selectedValues={categoryFilters}
+                  onSelectedValuesChange={setCategoryFilters}
+                />
+                <DataTableFacetedFilter
+                  title="Status"
+                  options={statusFacetedOptions}
+                  selectedValues={statusFilters}
+                  onSelectedValuesChange={setStatusFilters}
+                />
+              </>
+            ) : null}
+            {viewMode === "kanban" ? (
+              <Select
+                value={selectedPipelineCategoryId}
                 onValueChange={(value) =>
-                  setStatusTab(value as StatusTabValue)
+                  setSelectedPipelineCategoryId(value as PipelineCategoryId)
                 }
               >
-                <TabsList className="w-fit">
-                  <TabsTrigger value={FILTER_ALL}>
-                    Wszystkie
-                    <span className="text-muted-foreground tabular-nums">
-                      ({statusCounts.all})
-                    </span>
-                  </TabsTrigger>
-                  {DEAL_STATUS_OPTIONS.map((status) => (
-                    <TabsTrigger key={status} value={status}>
-                      {DEAL_STATUS_LABELS[status]}
-                      <span className="text-muted-foreground tabular-nums">
-                        ({statusCounts[status]})
-                      </span>
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
+                <SelectTrigger
+                  className="h-8 min-w-56"
+                  aria-label="Kategoria produktu"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {getPipelineCategoryIds().map((categoryId) => (
+                      <SelectItem key={categoryId} value={categoryId}>
+                        {DEAL_PIPELINE_CATEGORY_LABELS[categoryId]}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             ) : null}
             <DataTableFacetedFilter
               title="Źródło"
@@ -425,7 +502,7 @@ export function DealsTable() {
           </CardContent>
         </Card>
       ) : viewMode === "kanban" ? (
-        filteredDeals.length === 0 ? (
+        filteredDeals.length === 0 && categoryScopedDeals.length > 0 ? (
           <Empty className="rounded-xl border">
             <EmptyHeader>
               <EmptyTitle>Brak wyników</EmptyTitle>
@@ -437,6 +514,7 @@ export function DealsTable() {
         ) : (
           <DealsKanbanBoard
             deals={filteredDeals}
+            pipelineCategoryId={selectedPipelineCategoryId}
             onAddDeal={() => setCreateSheetOpen(true)}
           />
         )

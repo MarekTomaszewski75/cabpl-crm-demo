@@ -1,5 +1,10 @@
+import {
+  getPipelineWorkflowSteps,
+  isPipelineCategoryId,
+  isTerminalDealStatus,
+} from "@/lib/crm/deal-pipeline"
 import { toLocalDateKey } from "@/lib/crm/demo-today"
-import type { Client, Deal, DealStatus, Lead, LeadActivity } from "@/types/crm"
+import type { Client, Deal, Lead, LeadActivity } from "@/types/crm"
 
 /** Horyzont terminów deali na widoku „Dziś” (dni od daty demo). */
 export const TODAY_PIPELINE_HORIZON_DAYS = 7
@@ -10,10 +15,16 @@ export const TODAY_LEAD_STALE_DAYS = 7
 /** Lead „new” uwzględniany dopiero po tylu dniach od utworzenia. */
 const TODAY_LEAD_NEW_MIN_AGE_DAYS = 3
 
-export const DEAL_ATTENTION_STATUSES: DealStatus[] = [
-  "offer_submitted",
-  "negotiation_started",
-]
+function isDealLateWorkflowStatus(deal: Deal): boolean {
+  if (isTerminalDealStatus(deal.status)) return false
+  const categoryId = isPipelineCategoryId(deal.pipelineCategoryId)
+    ? deal.pipelineCategoryId
+    : "pcat-credit"
+  const workflow = getPipelineWorkflowSteps(categoryId)
+  const index = workflow.indexOf(deal.status)
+  if (index < 0) return false
+  return index >= workflow.length - 2
+}
 
 export type TodayDealSummary = {
   deal: Deal
@@ -94,7 +105,7 @@ export function getDealsRequiringAttention(
 
   return deals
     .filter((deal) => {
-      if (!DEAL_ATTENTION_STATUSES.includes(deal.status)) return false
+      if (!isDealLateWorkflowStatus(deal)) return false
       if (!deal.expectedCloseDate) return false
       const closeKey = toComparableDateKey(deal.expectedCloseDate)
       return closeKey >= asOfKey && closeKey <= horizonEndKey

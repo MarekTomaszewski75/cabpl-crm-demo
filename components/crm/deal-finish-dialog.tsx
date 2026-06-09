@@ -27,7 +27,7 @@ export function DealFinishDialog({
   const [step, setStep] = React.useState<"won" | "lost" | null>(null)
   const [reason, setReason] = React.useState<DealLostReason>("other")
   const mode: "choose" | "won" | "lost" = step ?? defaultMode ?? "choose"
-  if (!canFinishDeal(deal.status)) return null
+  if (!canFinishDeal(deal.status, deal.pipelineCategoryId)) return null
   return (
     <Dialog
       open={open}

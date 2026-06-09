@@ -10,10 +10,30 @@ export type OpportunityStage =
 
 export type DealStatus =
   | "new"
-  | "association_created"
-  | "meeting_scheduled"
-  | "offer_submitted"
-  | "negotiation_started"
+  | "credit_qualification"
+  | "credit_analysis"
+  | "credit_offer"
+  | "credit_committee"
+  | "leasing_needs"
+  | "leasing_offer"
+  | "leasing_risk"
+  | "leasing_negotiation"
+  | "factoring_buyers"
+  | "factoring_portfolio"
+  | "factoring_offer"
+  | "factoring_signing"
+  | "guarantee_contract"
+  | "guarantee_pricing"
+  | "guarantee_approval"
+  | "guarantee_issuance"
+  | "accounts_qualification"
+  | "accounts_proposal"
+  | "accounts_onboarding"
+  | "accounts_activation"
+  | "deposit_liquidity"
+  | "deposit_offer"
+  | "deposit_acceptance"
+  | "deposit_opening"
   | "won"
   | "lost"
 
@@ -216,6 +236,8 @@ export interface Deal extends ScopedEntity {
   name: string
   clientId: string | null
   contactId: string | null
+  productId: string
+  pipelineCategoryId: string
   comments: string
   source: DealSource | null
   dealType: DealType | null
@@ -229,6 +251,19 @@ export interface Deal extends ScopedEntity {
   createdAt: string
   probability?: number
   expectedCloseDate?: string
+}
+
+export type AddDealInput = {
+  name: string
+  amount: number | null
+  currency: DealCurrency
+  contactId: string | null
+  productId: string
+  comments: string
+  source: DealSource | null
+  dealType: DealType | null
+  ownerId: string
+  regionId: string
 }
 
 /** @deprecated US-18: use Deal */

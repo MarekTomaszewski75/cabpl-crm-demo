@@ -24,17 +24,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { DEAL_SOURCE_LABELS, isTerminalDealStatus } from "@/lib/crm/deal-labels"
-import { DEAL_KANBAN_THEME } from "@/lib/crm/deal-kanban"
+import { getDealKanbanThemeForStatus } from "@/lib/crm/deal-kanban"
 import type { DealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { formatCurrencyPln, formatDatePl, formatTimePl } from "@/lib/format/pl"
 import { cn } from "@/lib/utils"
-import type { Client, DemoUser, Deal, DealStatus } from "@/types/crm"
+import type { Client, DemoUser, Deal, DealStatus, Product } from "@/types/crm"
 
 type DealKanbanCardProps = {
   deal: Deal
   status: DealStatus
   owner?: DemoUser
   client?: Client
+  products: Product[]
   engagement: DealEngagementCounts
   isDragOverlay?: boolean
   onOpen?: () => void
@@ -45,12 +46,14 @@ export function DealKanbanCard({
   status,
   owner,
   client,
+  products,
   engagement,
   isDragOverlay = false,
   onOpen,
 }: DealKanbanCardProps) {
-  const theme = DEAL_KANBAN_THEME[status]
+  const theme = getDealKanbanThemeForStatus(deal.pipelineCategoryId, status)
   const dragDisabled = isDragOverlay || isTerminalDealStatus(deal.status)
+  const product = products.find((item) => item.id === deal.productId)
 
   function handleOpen() {
     if (isDragOverlay) return
@@ -115,6 +118,9 @@ export function DealKanbanCard({
               <span className="truncate">{client.name}</span>
             </span>
           ) : null}
+          <span className="truncate text-xs text-muted-foreground">
+            {product?.name ?? "—"}
+          </span>
         </div>
       </div>
 

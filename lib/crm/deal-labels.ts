@@ -1,3 +1,15 @@
+import {
+  getDealStepIndex,
+  getPipelineWorkflowSteps,
+  isDealWorkflowStatus,
+  isPipelineCategoryId,
+  isTerminalDealStatus,
+  type PipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
+import {
+  DEAL_STATUS_LABELS,
+  getDealStatusLabel,
+} from "@/lib/crm/deal-pipeline-labels"
 import type {
   DealCurrency,
   DealLostReason,
@@ -6,29 +18,16 @@ import type {
   DealType,
 } from "@/types/crm"
 
-export const DEAL_WORKFLOW_STATUSES: readonly DealStatus[] = [
-  "new",
-  "association_created",
-  "meeting_scheduled",
-  "offer_submitted",
-  "negotiation_started",
-] as const
+export { DEAL_STATUS_LABELS, getDealStatusLabel }
 
 export const DEAL_STATUS_OPTIONS: DealStatus[] = [
-  ...DEAL_WORKFLOW_STATUSES,
+  "new",
   "won",
   "lost",
+  ...(
+    Object.keys(DEAL_STATUS_LABELS) as DealStatus[]
+  ).filter((status) => status !== "new" && status !== "won" && status !== "lost"),
 ]
-
-export const DEAL_STATUS_LABELS: Record<DealStatus, string> = {
-  new: "Nowy",
-  association_created: "Powiązanie utworzone",
-  meeting_scheduled: "Spotkanie zaplanowane",
-  offer_submitted: "Oferta złożona",
-  negotiation_started: "Rozpoczęto negocjacje",
-  won: "Wygrany",
-  lost: "Utracony",
-}
 
 export const DEAL_CURRENCY_LABELS: Record<DealCurrency, string> = {
   PLN: "PLN",
@@ -80,46 +79,84 @@ export const DEAL_LOST_REASON_OPTIONS = (
   Object.entries(DEAL_LOST_REASON_LABELS) as [DealLostReason, string][]
 ).map(([value, label]) => ({ value, label }))
 
+function resolveCategory(
+  pipelineCategoryId?: string,
+): PipelineCategoryId | undefined {
+  if (pipelineCategoryId && isPipelineCategoryId(pipelineCategoryId)) {
+    return pipelineCategoryId
+  }
+  return undefined
+}
+
+function workflowStepRole(
+  stepIndex: number,
+  workflowLength: number,
+): "lead" | "qualification" | "offer" | "negotiation" {
+  if (stepIndex <= 0) return "lead"
+  if (stepIndex >= workflowLength - 1) return "negotiation"
+  if (stepIndex <= Math.ceil((workflowLength - 1) / 2)) return "qualification"
+  return "offer"
+}
+
 export function dealStatusBadgeVariant(
   status: DealStatus,
+  pipelineCategoryId?: string,
 ): "default" | "secondary" | "outline" | "destructive" {
-  switch (status) {
-    case "new":
-    case "association_created":
-    case "meeting_scheduled":
-    case "offer_submitted":
-    case "negotiation_started":
+  if (isTerminalDealStatus(status)) {
+    return status === "won" ? "outline" : "destructive"
+  }
+
+  const categoryId = resolveCategory(pipelineCategoryId)
+  if (!categoryId) return "secondary"
+
+  const stepIndex = getDealStepIndex(status, categoryId)
+  const role = workflowStepRole(
+    stepIndex,
+    getPipelineWorkflowSteps(categoryId).length,
+  )
+
+  switch (role) {
+    case "lead":
+    case "qualification":
+    case "offer":
+    case "negotiation":
       return "secondary"
-    case "won":
-      return "outline"
-    case "lost":
-      return "destructive"
   }
 }
 
 export function dealStatusIndicatorVariant(
   status: DealStatus,
+  pipelineCategoryId?: string,
 ): "default" | "success" | "error" | "warning" | "info" {
-  switch (status) {
-    case "new":
-    case "association_created":
-    case "meeting_scheduled":
+  if (status === "won") return "success"
+  if (status === "lost") return "error"
+
+  const categoryId = resolveCategory(pipelineCategoryId)
+  if (!categoryId) return "info"
+
+  const stepIndex = getDealStepIndex(status, categoryId)
+  const role = workflowStepRole(
+    stepIndex,
+    getPipelineWorkflowSteps(categoryId).length,
+  )
+
+  switch (role) {
+    case "lead":
+    case "qualification":
       return "info"
-    case "offer_submitted":
-    case "negotiation_started":
+    case "offer":
+    case "negotiation":
       return "warning"
-    case "won":
-      return "success"
-    case "lost":
-      return "error"
   }
 }
 
-export function canFinishDeal(status: DealStatus): boolean {
-  return DEAL_WORKFLOW_STATUSES.includes(status)
+export function canFinishDeal(
+  status: DealStatus,
+  pipelineCategoryId?: string,
+): boolean {
+  const categoryId = resolveCategory(pipelineCategoryId)
+  if (!categoryId) return status !== "won" && status !== "lost"
+  return isDealWorkflowStatus(status, categoryId)
 }
 
-export function isTerminalDealStatus(status: DealStatus): boolean {
-  return status === "won" || status === "lost"
-}
-
+export { isTerminalDealStatus }

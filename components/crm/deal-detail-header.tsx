@@ -8,6 +8,7 @@ import {
   XIcon,
 } from "lucide-react"
 import { CrmUserHoverCard } from "@/components/crm/crm-user-hover-card"
+import { DealStatusBadge } from "@/components/crm/deal-status-badge"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -32,7 +33,7 @@ export function DealDetailHeader({
   onWonClick,
   onLostClick,
 }: DealDetailHeaderProps) {
-  const canFinish = canFinishDeal(deal.status)
+  const canFinish = canFinishDeal(deal.status, deal.pipelineCategoryId)
 
   return (
     <div className="flex flex-col gap-3">
@@ -44,9 +45,15 @@ export function DealDetailHeader({
       </Button>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
-          <h1 className="truncate text-xl font-semibold tracking-tight">
-            {deal.name}
-          </h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="truncate text-xl font-semibold tracking-tight">
+              {deal.name}
+            </h1>
+            <DealStatusBadge
+              status={deal.status}
+              pipelineCategoryId={deal.pipelineCategoryId}
+            />
+          </div>
           {owner ? (
             <div className="flex flex-wrap items-center gap-2">
               <CrmUserHoverCard

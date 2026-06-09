@@ -1,11 +1,13 @@
 import { createNextClientId } from "@/lib/crm/client-id"
 import { createNextContactId } from "@/lib/crm/contact-id"
 import { createNextOpportunityId } from "@/lib/crm/opportunity-id"
+import { resolvePipelineCategoryId } from "@/lib/crm/deal-pipeline"
 import type {
   Client,
   CrmContact,
   Lead,
   Deal,
+  Product,
 } from "@/types/crm"
 
 export type WinLeadResult = {
@@ -63,16 +65,27 @@ function buildContactFromLead(
   }
 }
 
+function buildDealName(productName: string, leadName: string): string {
+  return `${productName} — ${leadName.trim()}`
+}
+
 export function buildWinLeadResult(
   lead: Lead,
   input: {
+    productId: string
     createContactFromLead?: boolean
     existingOpportunities: readonly Deal[]
     existingClients: readonly Client[]
     existingContacts: readonly CrmContact[]
+    products: readonly Product[]
     now?: Date
   },
 ): WinLeadResult {
+  const product = input.products.find((item) => item.id === input.productId)
+  if (!product) {
+    throw new Error(`Nieznany produkt: ${input.productId}`)
+  }
+
   const now = (input.now ?? new Date()).toISOString()
   let clientId = lead.clientId
   let newClient: Client | undefined
@@ -94,11 +107,15 @@ export function buildWinLeadResult(
     }
   }
 
+  const pipelineCategoryId = resolvePipelineCategoryId(product.categoryId)
+
   const opportunity: Deal = {
     id: createNextOpportunityId(input.existingOpportunities),
-    name: `Deal — ${lead.name.trim()}`,
+    name: buildDealName(product.name, lead.name),
     clientId: clientId!,
     contactId,
+    productId: product.id,
+    pipelineCategoryId,
     comments: lead.comments,
     source: lead.source,
     dealType: null,

@@ -46,16 +46,24 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 24 | [US-24 Hide Firma i ludzie nav](./US-24-hide-firma-i-ludzie-nav/story.md) | P0 | US-14, US-15 |
 | 25 | [US-25 Kanban Dice UI](./US-25-kanban-dice-ui/story.md) | P0 | US-17, US-18 |
 | 26 | [US-26 Mask Input forms](./US-26-mask-input-forms/story.md) | P1 | US-16, US-17, US-18 |
+| 27 | [US-27 Deal pipeline model](./US-27-deal-pipeline-model/story.md) | P0 | US-18, US-19 |
+| 28 | [US-28 Deals product seed](./US-28-deals-product-seed/story.md) | P0 | US-27 |
+| 29 | [US-29 Deals kanban by category](./US-29-deals-kanban-by-category/story.md) | P0 | US-27, US-28, US-25 |
+| 30 | [US-30 Deals list product filters](./US-30-deals-list-product-filters/story.md) | P0 | US-27, US-28, US-18 |
+| 31 | [US-31 Products tree default](./US-31-products-tree-default/story.md) | P0 | US-19, US-27 |
+| 32 | [US-32 Deal form product pipeline](./US-32-deal-form-product-pipeline/story.md) | P1 | US-27, US-28, US-29, US-30 |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
-**Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.
+**Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  
+**Produkty i lejki per kategoria (2026-06-09):** [`../products-deal-pipelines-spec.md`](../products-deal-pipelines-spec.md) → US-27 … US-32.
 
 ## Mapowanie na wymagania MUST HAVE
 
 | Wymaganie (requirements §3) | Story |
 |-----------------------------|--------|
 | Raportowanie zarządcze | US-07, US-20 |
-| Lejek sprzedażowy / deale | US-06, US-18 |
+| Lejek sprzedażowy / deale | US-06, US-18, US-27–US-30, US-32 |
+| Katalog produktów BK | US-19, US-27, US-31 |
 | Klienci i leady | US-08, US-11, US-17 |
 | Zadania, kalendarz, NBA, Dziś | US-09, US-10, US-11, US-13, US-21 |
 | Powiadomienia, banery | US-22, US-23 |

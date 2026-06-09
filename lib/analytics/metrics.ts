@@ -10,6 +10,7 @@ import {
   isDateInPeriod,
 } from "@/lib/analytics/filters"
 import { filterAnalyticsEntities } from "@/lib/analytics/scope"
+import { getPipelineSteps } from "@/lib/crm/deal-pipeline"
 import type { AnalyticsGlobalFilters } from "@/types/analytics"
 import type {
   Deal,
@@ -21,14 +22,10 @@ import type {
   TaskPriority,
 } from "@/types/crm"
 
-export const DEAL_FUNNEL_STAGES: readonly DealStatus[] = [
-  "new",
-  "association_created",
-  "meeting_scheduled",
-  "offer_submitted",
-  "negotiation_started",
-  "won",
-] as const
+/** US-28: lejek analityczny per kategoria — tymczasowo lejek kredytowy. */
+export const DEAL_FUNNEL_STAGES: readonly DealStatus[] = getPipelineSteps(
+  "pcat-credit",
+).filter((status) => status !== "lost") as readonly DealStatus[]
 
 export type DealFunnelRow = {
   stage: DealStatus

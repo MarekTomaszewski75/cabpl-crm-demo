@@ -13,7 +13,7 @@
   },
   {
     "id": "pcat-leasing-op",
-    "name": "Leasing operacyjny",
+    "name": "Leasing",
     "parentId": "pcat-leasing",
     "sortOrder": 1
   },

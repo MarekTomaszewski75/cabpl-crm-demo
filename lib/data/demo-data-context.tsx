@@ -16,8 +16,19 @@ import { createNextContactId } from "@/lib/crm/contact-id"
 import { createNextContactEventId } from "@/lib/crm/contact-event-id"
 import { createNextOpportunityId } from "@/lib/crm/opportunity-id"
 import { createNextProductId } from "@/lib/crm/product-id"
+import {
+  isDealWorkflowStatus,
+  isPipelineCategoryId,
+  isTerminalDealStatus,
+  resolvePipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
+import {
+  isDealWorkflowStatusChange,
+  requiresDealFinishDialog,
+} from "@/lib/crm/deal-status-transition"
 import type {
   AddClientInput,
+  AddDealInput,
   AddProductInput,
   AddCompanyActivityInput,
   AddCrmContactInput,
@@ -70,17 +81,7 @@ function buildCompanyCreatedEvent(
 
 type DemoDataContextValue = DemoDataState & {
   deals: Deal[]
-  addDeal: (input: {
-    name: string
-    amount: number | null
-    currency: Deal["currency"]
-    contactId: string | null
-    comments: string
-    source: Deal["source"]
-    dealType: Deal["dealType"]
-    ownerId: string
-    regionId: string
-  }) => Deal
+  addDeal: (input: AddDealInput) => Deal
   updateDeal: (id: string, patch: Partial<Deal>) => void
   winDeal: (id: string, user: DemoUser) => void
   loseDeal: (id: string, reason: DealLostReason, user: DemoUser) => void
@@ -130,6 +131,7 @@ type DemoDataContextValue = DemoDataState & {
   winLead: (
     leadId: string,
     params: {
+      productId: string
       createContactFromLead?: boolean
       user: DemoUser
     },
@@ -149,32 +151,71 @@ const DemoDataContext = React.createContext<DemoDataContextValue | null>(null)
 export function DemoDataProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = React.useState<DemoDataState>(() => loadSeedData())
 
-  const updateOpportunity = React.useCallback(
-    (id: string, patch: Partial<Deal>) => {
-      setState((prev) => ({
-        ...prev,
-        opportunities: prev.opportunities.map((opp) =>
-          opp.id === id ? { ...opp, ...patch } : opp,
-        ),
-      }))
+  const applyDealPatch = React.useCallback(
+    (deal: Deal, patch: Partial<Deal>, products: readonly Product[]): Partial<Deal> => {
+      const next: Partial<Deal> = { ...patch }
+
+      if ("productId" in patch && patch.productId !== deal.productId) {
+        if (deal.status !== "new") {
+          delete next.productId
+          delete next.pipelineCategoryId
+        } else if (patch.productId) {
+          const product = products.find((item) => item.id === patch.productId)
+          if (product) {
+            next.pipelineCategoryId = resolvePipelineCategoryId(
+              product.categoryId,
+            )
+          }
+        }
+      }
+
+      if ("status" in patch && patch.status && patch.status !== deal.status) {
+        const categoryId =
+          next.pipelineCategoryId ?? deal.pipelineCategoryId
+        const newStatus = patch.status
+        const categoryOk = isPipelineCategoryId(categoryId)
+        const allowed =
+          categoryOk &&
+          !isTerminalDealStatus(deal.status) &&
+          (isDealWorkflowStatusChange(deal.status, newStatus, categoryId) ||
+            (requiresDealFinishDialog(newStatus) &&
+              isDealWorkflowStatus(deal.status, categoryId)))
+        if (!allowed) {
+          delete next.status
+        }
+      }
+
+      return next
     },
     [],
   )
 
+  const updateOpportunity = React.useCallback(
+    (id: string, patch: Partial<Deal>) => {
+      setState((prev) => ({
+        ...prev,
+        opportunities: prev.opportunities.map((opp) => {
+          if (opp.id !== id) return opp
+          const safePatch = applyDealPatch(opp, patch, prev.products)
+          return { ...opp, ...safePatch }
+        }),
+      }))
+    },
+    [applyDealPatch],
+  )
+
   const addDeal = React.useCallback(
-    (input: {
-      name: string
-      amount: number | null
-      currency: Deal["currency"]
-      contactId: string | null
-      comments: string
-      source: Deal["source"]
-      dealType: Deal["dealType"]
-      ownerId: string
-      regionId: string
-    }) => {
+    (input: AddDealInput) => {
+      if (!input.productId?.trim()) {
+        throw new Error("addDeal wymaga productId (US-28).")
+      }
       let created: Deal | null = null
       setState((prev) => {
+        const product = prev.products.find((item) => item.id === input.productId)
+        if (!product) {
+          throw new Error(`Nieznany produkt: ${input.productId}`)
+        }
+        const pipelineCategoryId = resolvePipelineCategoryId(product.categoryId)
         const now = new Date().toISOString()
         const deal: Deal = {
           id: createNextOpportunityId(prev.opportunities),
@@ -182,6 +223,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           amount: input.amount,
           currency: input.currency,
           contactId: input.contactId,
+          productId: input.productId,
+          pipelineCategoryId,
           comments: input.comments.trim(),
           source: input.source,
           dealType: input.dealType,
@@ -234,10 +277,26 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const addOpportunity = React.useCallback((opportunity: Deal) => {
-    setState((prev) => ({
-      ...prev,
-      opportunities: [...prev.opportunities, opportunity],
-    }))
+    if (!opportunity.productId?.trim()) {
+      throw new Error("addOpportunity wymaga productId (US-28).")
+    }
+    setState((prev) => {
+      const product = prev.products.find(
+        (item) => item.id === opportunity.productId,
+      )
+      const pipelineCategoryId = product
+        ? resolvePipelineCategoryId(product.categoryId)
+        : opportunity.pipelineCategoryId
+      const deal: Deal = {
+        ...opportunity,
+        pipelineCategoryId,
+        status: opportunity.status ?? "new",
+      }
+      return {
+        ...prev,
+        opportunities: [...prev.opportunities, deal],
+      }
+    })
   }, [])
 
   const addClient = React.useCallback((input: AddClientInput, user: DemoUser) => {
@@ -646,6 +705,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     (
       leadId: string,
       params: {
+        productId: string
         createContactFromLead?: boolean
         user: DemoUser
       },
@@ -658,10 +718,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         }
         const { opportunity, leadPatch, newClient, newContact } =
           buildWinLeadResult(lead, {
+            productId: params.productId,
             createContactFromLead: params.createContactFromLead,
             existingOpportunities: prev.opportunities,
             existingClients: prev.clients,
             existingContacts: prev.contacts,
+            products: prev.products,
           })
         created = opportunity
         const now = new Date().toISOString()

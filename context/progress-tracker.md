@@ -25,36 +25,28 @@
 - **US-24** — **Done** — ukrycie grupy „Firma i ludzie” z sidebara i wyszukiwarki. [US-24](./stories/US-24-hide-firma-i-ludzie-nav/story.md).
 - **US-25** — **Done** — kanban Dice UI + domyślny widok leadów/deali. [US-25](./stories/US-25-kanban-dice-ui/story.md).
 - **US-26** — **Done** — mask input w formularzach (NIP, kwota PLN, telefon PL). [US-26](./stories/US-26-mask-input-forms/story.md).
+- **US-27** — **Done** — model lejków deali per kategoria produktu (`deal-pipeline.ts`, typy `Deal`, seed 18 produktów). [US-27](./stories/US-27-deal-pipeline-model/story.md).
+- **US-28** — **Done** — migracja seedu dealów (`productId`, `pipelineCategoryId`, statusy lejków); walidacja w `DemoDataContext`; reguły `/today`/banner/powiadomienia. [US-28](./stories/US-28-deals-product-seed/story.md).
+- **US-29** — **Done** — kanban deali: select kategorii + dynamiczne kolumny lejka + nazwa produktu na karcie. [US-29](./stories/US-29-deals-kanban-by-category/story.md).
+- **US-30** — **Done** — lista dealów: kolumny Kategoria/Produkt, faceted Kategoria+Status (bez tabs), badge z lejka. [US-30](./stories/US-30-deals-list-product-filters/story.md).
+- **US-31** — **Done** — produkty: domyślne drzewo, faceted per widok, agregacja kategorii grupujących. [US-31](./stories/US-31-products-tree-default/story.md).
+- **US-32** — **Done** — formularz deala + produkt/lejek na karcie. [US-32](./stories/US-32-deal-form-product-pipeline/story.md).
 
 ---
 
 ## Active work
 
-- — (brak aktywnego taska; wybierz następny story z [`stories/README.md`](./stories/README.md))
+- — (brak aktywnego taska)
 
 ---
 
 ## Recently completed
 
-- **US-26** (story **Done**) — `@diceui/mask-input` w `components/ui/mask-input.tsx`; wzorce `lib/crm/mask-patterns.ts`; maski w `company-form` (NIP), `deal-form` (kwota PLN), `lead-form` + `contact-combobox` (telefon). [US-26](./stories/US-26-mask-input-forms/story.md).
+- **US-32** (story **Done**) — `deal-form.tsx`: wymagany produkt + readonly kategoria/lejek; `deal-status-bar.tsx`: kroki per `pipelineCategoryId`; sidebar produkt/kategoria; `winLead` + `lead-finish-dialog`: wybór produktu; usunięty stub zakładki „Produkty”. [US-32](./stories/US-32-deal-form-product-pipeline/story.md).
 
-- **US-25** (story **Done**) — `@diceui/kanban` w `components/ui/kanban.tsx`; migracja `LeadsKanbanBoard` / `DealsKanbanBoard`; domyślny `viewMode="kanban"` na `/leads` i `/pipeline`. [US-25](./stories/US-25-kanban-dice-ui/story.md).
+- **US-31** (story **Done**) — `products-table.tsx`: domyślny `viewMode="tree"`, panel kategorii + faceted bez Kategorii; lista: faceted Kategoria + kolumna; `product-filters.ts`: `getCategoryIdsForSelection` / `expandCategoryFilterIds`. [US-31](./stories/US-31-products-tree-default/story.md).
 
-- **US-24** (story **Done**) — usunięcie grupy „Firma i ludzie” z `CRM_NAV_STRUCTURE`; `PRESENTATION_HIDDEN_NAV_IDS` + filtr w `global-search-items.ts`; trasy `/employees`, `/company-structure` bez zmian. [US-24](./stories/US-24-hide-firma-i-ludzie-nav/story.md).
-
-- **US-23** (story **Done**) — `@diceui/banner` w `CrmAppShell`, `lib/crm/banner-rules.ts`, `CrmBannerController` (systemowy + krytyczny deal ≥500k / 48h). [US-23](./stories/US-23-banner/story.md).
-
-- **US-22** (story **Done**) — `NotificationContext` + generator `lib/crm/notification-rules.ts`, seed `data/notifications.json`, dzwonek `CrmNotificationsBell`, karta `TodayNotificationsCard` na `/today`. [US-22](./stories/US-22-notifications/story.md).
-
-- **US-21** (story **Done**) — `/today`: karty „Deale wymagające uwagi” i „Leady do domknięcia”; logika `lib/crm/today-pipeline-summary.ts`, seed terminów + `lead-activities.json`. [US-21](./stories/US-21-today-pipeline-summary/story.md).
-
-- **US-20** (story **Done**) — `/dashboard` → `AnalyticsWorkspace`: presety „Sprzedaż i lejek” / „Zespół i zadania”, metryki `lib/analytics/*`, overlay restricted (średni czas deala, kwota wg źródła), Plan i cele = `ExecutiveDashboard` embedded. [US-20](./stories/US-20-analytics-workspace/story.md).
-
-- **US-19** (story **Done**) — `/products`: katalog BK (seed 13 produktów, 7 kategorii), widok lista/drzewo, 5 filtrów dropdown, tag „Aktywne produkty”, `addProduct` w `DemoDataContext`. [US-19](./stories/US-19-products-module-rebuild/story.md).
-
-- **US-17** (story **Done**) — `/leads` jak pracownicy, Sheet „Nowy lead”, karta 2 kolumny, pasek statusów, `winLead`/`loseLead`, feed aktywności. [US-17](./stories/US-17-leads-module-rebuild/story.md).
-
-- **US-18** (story **Done**) — `/pipeline` jako lista + karta deala (`/pipeline/[id]`), Sheet „Nowy deal”, pasek 6 segmentów, finalizacja `won/lost`, aktywności deala, integracja `winLead` -> deal. [US-18](./stories/US-18-deals-module-rebuild/story.md).
+- **US-30** (story **Done**) — `deals-columns.tsx`: kolumny Kategoria/Produkt + grupowanie; `deals-table.tsx`: faceted Kategoria/Status zamiast tabs (tylko lista); `DealStatusBadge`: etykieta z `getDealStatusLabel(status, pipelineCategoryId)`. [US-30](./stories/US-30-deals-list-product-filters/story.md).
 
 ---
 
@@ -88,3 +80,4 @@
 - Klienci: `filterByScope` / `canAccessEntity`; NBA w `lib/crm/nba-rules.ts`.
 - Firmy (US-16): `addClient` / `updateClient` / `addContact` / `addCompanyNote` w `DemoDataContext`; encja `CrmContact` ≠ `ContactEvent`.
 - Leady (US-17): `Lead` + `leadActivities`; `winLead` / `loseLead`; karta `/leads/[id]`; bez konwersji z listy.
+- Deale (US-27/28): 6 lejków per `pipelineCategoryId`; konfiguracja w `lib/crm/deal-pipeline.ts`; seed dealów w `data/opportunities.json` z `productId` + statusami lejka (US-28 Done).
