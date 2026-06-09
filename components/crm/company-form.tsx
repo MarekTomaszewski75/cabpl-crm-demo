@@ -13,6 +13,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { MaskInput } from "@/components/ui/mask-input"
+import { NIP_MASK } from "@/lib/crm/mask-patterns"
 import {
   Select,
   SelectContent,
@@ -34,10 +36,12 @@ const SOURCE_NONE = "__none__"
 
 type CompanyFormErrors = {
   name?: string
+  nip?: string
 }
 
 type CompanyFormState = {
   name: string
+  nip: string
   phones: string[]
   emails: string[]
   contactIds: string[]
@@ -50,6 +54,7 @@ type CompanyFormState = {
 function emptyFormState(): CompanyFormState {
   return {
     name: "",
+    nip: "",
     phones: [""],
     emails: [""],
     contactIds: [],
@@ -63,12 +68,16 @@ function emptyFormState(): CompanyFormState {
 function validateForm(state: CompanyFormState): CompanyFormErrors {
   const errors: CompanyFormErrors = {}
   if (!state.name.trim()) errors.name = "Nazwa firmy jest wymagana"
+  if (state.nip && state.nip.length > 0 && state.nip.length !== 10) {
+    errors.nip = "NIP musi mieć 10 cyfr"
+  }
   return errors
 }
 
 function buildInput(state: CompanyFormState): AddClientInput {
   return {
     name: state.name.trim(),
+    nip: state.nip,
     phones: state.phones,
     emails: state.emails,
     contactIds: state.contactIds,
@@ -146,6 +155,27 @@ export function CompanyForm({
           }}
         />
         <FieldError>{errors.name}</FieldError>
+      </Field>
+
+      <Field data-invalid={!!errors.nip}>
+        <FieldLabel htmlFor="company-nip">NIP</FieldLabel>
+        <MaskInput
+          id="company-nip"
+          mask={NIP_MASK}
+          maskPlaceholder="__________"
+          placeholder="10 cyfr"
+          value={form.nip}
+          aria-invalid={!!errors.nip}
+          onValueChange={(_masked, unmasked) => {
+            setErrors((p) => {
+              const next = { ...p }
+              delete next.nip
+              return next
+            })
+            setForm((p) => ({ ...p, nip: unmasked }))
+          }}
+        />
+        <FieldError>{errors.nip}</FieldError>
       </Field>
 
       <Field>

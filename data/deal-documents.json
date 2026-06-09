@@ -1,0 +1,98 @@
+[
+  {
+    "id": "deal-doc-001",
+    "dealId": "opp-001",
+    "name": "Warunki wstępne linii kredytowej.pdf",
+    "uploadedAt": "2026-05-20T10:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-002",
+    "dealId": "opp-002",
+    "name": "Oferta faktoringu — wersja robocza.pdf",
+    "uploadedAt": "2026-05-22T14:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-003",
+    "dealId": "opp-003",
+    "name": "Kalkulacja leasingu floty.xlsx",
+    "uploadedAt": "2026-05-18T09:30:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-004",
+    "dealId": "opp-003",
+    "name": "Specyfikacja pojazdów — załącznik.pdf",
+    "uploadedAt": "2026-05-19T11:15:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-005",
+    "dealId": "opp-004",
+    "name": "Business plan inwestycji hali.pdf",
+    "uploadedAt": "2026-05-15T08:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-006",
+    "dealId": "opp-005",
+    "name": "Umowa gwarancji bankowej.pdf",
+    "uploadedAt": "2026-04-28T16:45:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-007",
+    "dealId": "opp-007",
+    "name": "Model depozytu korporacyjnego.xlsx",
+    "uploadedAt": "2026-05-24T13:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-008",
+    "dealId": "opp-007",
+    "name": "Porównanie stawek rynkowych.pdf",
+    "uploadedAt": "2026-05-25T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-009",
+    "dealId": "opp-009",
+    "name": "Wycena pakietu transakcyjnego.pdf",
+    "uploadedAt": "2026-05-21T12:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-010",
+    "dealId": "opp-010",
+    "name": "Harmonogram wdrożenia POS.docx",
+    "uploadedAt": "2026-05-17T10:20:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-011",
+    "dealId": "opp-012",
+    "name": "Struktura refinansowania.pdf",
+    "uploadedAt": "2026-04-18T12:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-doc-012",
+    "dealId": "opp-012",
+    "name": "Załącznik — zabezpieczenia.pdf",
+    "uploadedAt": "2026-04-19T11:30:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  }
+]

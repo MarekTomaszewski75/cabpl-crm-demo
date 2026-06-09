@@ -71,6 +71,21 @@ export function leadStatusBadgeVariant(
   }
 }
 
+export function leadStatusIndicatorVariant(
+  status: LeadStatus,
+): "default" | "success" | "error" | "warning" | "info" {
+  switch (status) {
+    case "new":
+      return "info"
+    case "in_progress":
+      return "warning"
+    case "won":
+      return "success"
+    case "lost":
+      return "error"
+  }
+}
+
 export function canFinishLead(status: LeadStatus): boolean {
   return status === "new" || status === "in_progress"
 }

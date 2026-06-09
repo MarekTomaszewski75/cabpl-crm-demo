@@ -1,0 +1,106 @@
+[
+  {
+    "id": "lead-doc-001",
+    "leadId": "lead-001",
+    "name": "Oferta wstępna — karta flotowa.pdf",
+    "uploadedAt": "2026-05-23T10:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-002",
+    "leadId": "lead-004",
+    "name": "Business plan farmy PV.xlsx",
+    "uploadedAt": "2026-05-19T14:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-003",
+    "leadId": "lead-004",
+    "name": "Wstępna wycena inwestycji.pdf",
+    "uploadedAt": "2026-05-20T09:30:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-004",
+    "leadId": "lead-005",
+    "name": "Specyfikacja terminali POS.docx",
+    "uploadedAt": "2026-05-21T11:15:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-005",
+    "leadId": "lead-007",
+    "name": "Harmonogram budowy hali.pdf",
+    "uploadedAt": "2026-05-12T08:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-006",
+    "leadId": "lead-008",
+    "name": "Lista kontrahentów eksportowych.xlsx",
+    "uploadedAt": "2026-05-15T16:45:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-007",
+    "leadId": "lead-008",
+    "name": "Wzór akredytywy.pdf",
+    "uploadedAt": "2026-05-16T10:20:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-008",
+    "leadId": "lead-009",
+    "name": "Prognoza sprzedaży Q3.pdf",
+    "uploadedAt": "2026-05-24T13:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-009",
+    "leadId": "lead-003",
+    "name": "Struktura rozliczeń walutowych.pdf",
+    "uploadedAt": "2026-05-28T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-010",
+    "leadId": "lead-011",
+    "name": "Wycena refinansowania CNC.pdf",
+    "uploadedAt": "2026-04-18T12:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-011",
+    "leadId": "lead-012",
+    "name": "Umowa ramowa — pakiet korporacyjny.pdf",
+    "uploadedAt": "2026-04-05T10:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-012",
+    "leadId": "lead-012",
+    "name": "Cennik usług dodatkowych.pdf",
+    "uploadedAt": "2026-04-06T11:30:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-doc-013",
+    "leadId": "lead-012",
+    "name": "Lista placówek — załącznik.xlsx",
+    "uploadedAt": "2026-04-07T08:45:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  }
+]

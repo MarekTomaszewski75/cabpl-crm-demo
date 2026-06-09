@@ -2,12 +2,11 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
-import { Badge } from "@/components/ui/badge"
+import { LeadStatusBadge } from "@/components/crm/lead-status-badge"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
   LEAD_SOURCE_LABELS,
   LEAD_TYPE_LABELS,
-  leadStatusBadgeVariant,
   LEAD_STATUS_LABELS,
 } from "@/lib/crm/lead-labels"
 import { formatContactName } from "@/lib/crm/contact-display"
@@ -23,12 +22,13 @@ export type LeadTableRow = Lead & {
 type LeadsColumnsContext = {
   users: readonly DemoUser[]
   contacts: readonly CrmContact[]
+  showOwnerColumn: boolean
 }
 
 export function createLeadsColumns(
   ctx: LeadsColumnsContext,
 ): ColumnDef<LeadTableRow>[] {
-  return [
+  const columns: ColumnDef<LeadTableRow>[] = [
     createFilterSearchColumn<LeadTableRow>(),
     {
       accessorKey: "name",
@@ -51,9 +51,7 @@ export function createLeadsColumns(
         <DataTableColumnHeader column={column} title="Status" />
       ),
       cell: ({ row }) => (
-        <Badge variant={leadStatusBadgeVariant(row.original.status)}>
-          {LEAD_STATUS_LABELS[row.original.status]}
-        </Badge>
+        <LeadStatusBadge status={row.original.status} />
       ),
       sortingFn: (a, b) =>
         LEAD_STATUS_LABELS[a.original.status].localeCompare(
@@ -86,6 +84,24 @@ export function createLeadsColumns(
           : "—",
     },
     {
+      accessorKey: "companyName",
+      meta: { title: "Firma" },
+      enableGrouping: true,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Firma" />
+      ),
+      cell: ({ row }) => (
+        <span className="max-w-48 truncate">
+          {row.original.companyName.trim() || "—"}
+        </span>
+      ),
+      sortingFn: (a, b) =>
+        a.original.companyName.localeCompare(b.original.companyName, "pl"),
+    },
+  ]
+
+  if (ctx.showOwnerColumn) {
+    columns.push({
       accessorKey: "ownerName",
       meta: { title: "Opiekun" },
       enableGrouping: true,
@@ -95,19 +111,22 @@ export function createLeadsColumns(
       cell: ({ row }) => (
         <span className="truncate">{row.original.ownerName}</span>
       ),
-    },
-    {
-      accessorKey: "createdAt",
-      meta: { title: "Utworzono" },
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Utworzono" />
-      ),
-      cell: ({ row }) => formatDatePl(row.original.createdAt),
-      sortingFn: (a, b) =>
-        new Date(a.original.createdAt).getTime() -
-        new Date(b.original.createdAt).getTime(),
-    },
-  ]
+    })
+  }
+
+  columns.push({
+    accessorKey: "createdAt",
+    meta: { title: "Utworzono" },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Utworzono" />
+    ),
+    cell: ({ row }) => formatDatePl(row.original.createdAt),
+    sortingFn: (a, b) =>
+      new Date(a.original.createdAt).getTime() -
+      new Date(b.original.createdAt).getTime(),
+  })
+
+  return columns
 }
 
 export function buildLeadTableRow(

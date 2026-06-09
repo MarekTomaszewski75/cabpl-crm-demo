@@ -1,6 +1,9 @@
 /**
- * Ustalona data „dziś” w demo (czerwiec 2026) — spójna z seed przy prezentacji,
+ * Ustalona data „dziś” w demo — spójna z seed przy prezentacji,
  * niezależna od daty systemowej laptopa prezentera.
+ *
+ * Przed prezentacją: ustaw tę datę i przesuń terminy w seedzie
+ * (`meetings`, `tasks`, `opportunities`) tak, by obejmowały ≥ 30 dni do przodu.
  */
 export const DEMO_TODAY_DATE_KEY = "2026-06-03"
 

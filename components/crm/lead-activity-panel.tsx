@@ -25,6 +25,8 @@ import {
   filterLeadActivityFeed,
   type LeadActivityFilter,
 } from "@/lib/crm/lead-activity"
+import { getLeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
+import { formatDatePl } from "@/lib/format/pl"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead } from "@/types/crm"
@@ -48,7 +50,8 @@ const FEED_FILTERS: { id: LeadActivityFilter; label: string }[] = [
 
 export function LeadActivityPanel({ lead }: LeadActivityPanelProps) {
   const { user } = useSession()
-  const { leadActivities, users, addLeadNote } = useDemoData()
+  const { leadActivities, users, tasks, meetings, leadDocuments, addLeadNote } =
+    useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<LeadActivityFilter>("all")
@@ -68,16 +71,37 @@ export function LeadActivityPanel({ lead }: LeadActivityPanelProps) {
     [allItems, feedFilter],
   )
 
+  const engagementCounts = React.useMemo(
+    () =>
+      getLeadEngagementCounts(lead.id, {
+        tasks,
+        meetings,
+        leadDocuments,
+      }),
+    [lead.id, tasks, meetings, leadDocuments],
+  )
+
+  const leadFiles = React.useMemo(
+    () =>
+      leadDocuments
+        .filter((doc) => doc.leadId === lead.id)
+        .sort(
+          (a, b) =>
+            new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
+        ),
+    [lead.id, leadDocuments],
+  )
+
   const filterCounts = React.useMemo(() => {
     const counts: Record<LeadActivityFilter, number> = {
       all: allItems.length,
       activities: filterLeadActivityFeed(allItems, "activities").length,
       notes: filterLeadActivityFeed(allItems, "notes").length,
-      files: 0,
-      tasks: 0,
+      files: engagementCounts.documents,
+      tasks: engagementCounts.tasks,
     }
     return counts
-  }, [allItems])
+  }, [allItems, engagementCounts])
 
   function handleAddNote() {
     if (!user) return
@@ -129,7 +153,22 @@ export function LeadActivityPanel({ lead }: LeadActivityPanelProps) {
               <LeadActivityForm lead={lead} />
             </TabsContent>
 
-            <TabsContent value="files">
+            <TabsContent value="files" className="flex flex-col gap-3">
+              {leadFiles.length > 0 ? (
+                <ul className="flex flex-col gap-2">
+                  {leadFiles.map((file) => (
+                    <li
+                      key={file.id}
+                      className="rounded-md border border-border/80 px-3 py-2 text-sm"
+                    >
+                      <p className="font-medium">{file.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Dodano {formatDatePl(file.uploadedAt)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <CompanyFilesUploadZone />
             </TabsContent>
 

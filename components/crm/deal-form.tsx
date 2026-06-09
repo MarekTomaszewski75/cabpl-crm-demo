@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { SheetFooter } from "@/components/ui/sheet"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { MaskInput } from "@/components/ui/mask-input"
 import { InputGroup, InputGroupTextarea } from "@/components/ui/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSession } from "@/lib/auth/demo-session"
@@ -40,7 +41,9 @@ export function DealForm({
     if (!user?.regionId) return
     const next: Errors = {}
     if (!name.trim()) next.name = "Nazwa jest wymagana"
-    if (amount && (Number.isNaN(Number(amount)) || Number(amount) < 0)) next.amount = "Kwota musi być dodatnia"
+    if (amount && (Number.isNaN(Number(amount)) || Number(amount) < 0)) {
+      next.amount = "Kwota musi być dodatnia"
+    }
     setErrors(next)
     if (Object.keys(next).length > 0) return
     const created = addDeal({
@@ -71,7 +74,23 @@ export function DealForm({
       </Field>
       <Field data-invalid={errors.amount ? true : undefined}>
         <FieldLabel htmlFor="deal-amount">Kwota</FieldLabel>
-        <Input id="deal-amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} aria-invalid={errors.amount ? true : undefined} />
+        <MaskInput
+          id="deal-amount"
+          mask="currency"
+          locale="pl-PL"
+          currency="PLN"
+          placeholder="Kwota w PLN"
+          value={amount}
+          aria-invalid={errors.amount ? true : undefined}
+          onValueChange={(_masked, unmasked) => {
+            setErrors((p) => {
+              const next = { ...p }
+              delete next.amount
+              return next
+            })
+            setAmount(unmasked)
+          }}
+        />
         {errors.amount ? <FieldError>{errors.amount}</FieldError> : null}
       </Field>
       <Field>

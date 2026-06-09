@@ -3,8 +3,10 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { CrmBannerController } from "@/components/crm/crm-banner-controller"
 import { CreditAgricoleLogo } from "@/components/crm/credit-agricole-logo"
 import { CrmGlobalSearch } from "@/components/crm/crm-global-search"
+import { CrmNotificationsBell } from "@/components/crm/crm-notifications-bell"
 import { CrmSidebarNav } from "@/components/crm/crm-sidebar-nav"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -21,19 +23,14 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { Banners } from "@/components/ui/banner"
 import { useSession } from "@/lib/auth/demo-session"
 import {
-  canSeeNavItem,
   getNavItemByHref,
   getVisibleNavStructure,
 } from "@/lib/rbac/nav-structure"
@@ -106,8 +103,9 @@ function CrmAppHeader({ pathname }: { pathname: string }) {
           })}
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="flex shrink-0 items-center gap-3">
-        <CrmGlobalSearch />
+      <CrmGlobalSearch className="min-w-0 flex-1 sm:max-w-xs md:max-w-sm lg:max-w-md" />
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <CrmNotificationsBell />
         <Avatar size="sm">
           <AvatarFallback className="bg-primary/15 font-semibold text-foreground">
             {userInitials(user.displayName)}
@@ -147,8 +145,6 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
   if (!user) return null
 
   const navStructure = getVisibleNavStructure(user)
-  const showCalendar = canSeeNavItem("calendar", user)
-  const showCompliance = canSeeNavItem("compliance", user)
 
   return (
     <SidebarProvider className="h-svh max-h-svh overflow-hidden">
@@ -162,39 +158,7 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
         <SidebarContent>
           <CrmSidebarNav structure={navStructure} pathname={pathname} />
         </SidebarContent>
-        <SidebarFooter className="flex flex-col gap-3 p-4">
-          {(showCalendar || showCompliance) && (
-            <SidebarGroup className="p-0">
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {showCalendar ? (
-                    <SidebarMenuItem>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={pathname === "/calendar"}
-                      >
-                        <Link href="/calendar">
-                          <span className="text-xs">Kalendarz</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ) : null}
-                  {showCompliance ? (
-                    <SidebarMenuItem>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={pathname === "/compliance"}
-                      >
-                        <Link href="/compliance">
-                          <span className="text-xs">Zgodność i roadmapa</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ) : null}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          )}
+        <SidebarFooter className="p-4">
           <Badge variant="outline" className="w-fit">
             Demo
           </Badge>
@@ -202,9 +166,12 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
       </Sidebar>
       <SidebarInset className="flex h-svh max-h-svh min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <CrmAppHeader pathname={pathname} />
-        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-y-contain p-6">
-          {children}
-        </div>
+        <Banners side="top" maxVisible={2} strategy="static">
+          <CrmBannerController />
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-y-contain p-6">
+            {children}
+          </div>
+        </Banners>
       </SidebarInset>
     </SidebarProvider>
   )

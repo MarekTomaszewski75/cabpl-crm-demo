@@ -40,8 +40,15 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 18 | [US-18 Deals module rebuild](./US-18-deals-module-rebuild/story.md) | P0 | US-02, US-03, US-05, US-06, US-16, US-17 |
 | 19 | [US-19 Products module rebuild](./US-19-products-module-rebuild/story.md) | P0 | US-02, US-05, US-14, US-17, US-18 |
 | 20 | [US-20 Analytics workspace](./US-20-analytics-workspace/story.md) | P0 | US-02, US-03, US-05, US-07, US-09, US-17, US-18 |
+| 21 | [US-21 Today pipeline summary](./US-21-today-pipeline-summary/story.md) | P0 | US-13, US-17, US-18 |
+| 22 | [US-22 Notifications](./US-22-notifications/story.md) | P0 | US-02, US-05, US-13, US-21 |
+| 23 | [US-23 Banner (Dice UI)](./US-23-banner/story.md) | P0 | US-05, US-18 |
+| 24 | [US-24 Hide Firma i ludzie nav](./US-24-hide-firma-i-ludzie-nav/story.md) | P0 | US-14, US-15 |
+| 25 | [US-25 Kanban Dice UI](./US-25-kanban-dice-ui/story.md) | P0 | US-17, US-18 |
+| 26 | [US-26 Mask Input forms](./US-26-mask-input-forms/story.md) | P1 | US-16, US-17, US-18 |
 
-**Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.
+**Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
+**Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.
 
 ## Mapowanie na wymagania MUST HAVE
 
@@ -50,7 +57,8 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | Raportowanie zarządcze | US-07, US-20 |
 | Lejek sprzedażowy / deale | US-06, US-18 |
 | Klienci i leady | US-08, US-11, US-17 |
-| Zadania, kalendarz, NBA | US-09, US-10, US-11 |
+| Zadania, kalendarz, NBA, Dziś | US-09, US-10, US-11, US-13, US-21 |
+| Powiadomienia, banery | US-22, US-23 |
 | Historia kontaktów | US-08 |
 | RBAC / mock auth | US-03, US-04 |
 | KNF / roadmap | US-12 |

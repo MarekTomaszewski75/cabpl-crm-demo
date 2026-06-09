@@ -3,6 +3,7 @@
 import * as React from "react"
 import { PlusIcon, Trash2Icon } from "lucide-react"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
+import { LeadEngagementIndicators } from "@/components/crm/lead-engagement-indicators"
 import { InlineEditableField } from "@/components/crm/inline-editable-field"
 import { Button } from "@/components/ui/button"
 import {
@@ -26,6 +27,7 @@ import {
   LEAD_TYPE_OPTIONS,
   isTerminalLeadStatus,
 } from "@/lib/crm/lead-labels"
+import { getLeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead, LeadSource, LeadType } from "@/types/crm"
 
@@ -148,8 +150,18 @@ function StringListEditor({
 }
 
 export function LeadDetailSidebar({ lead }: LeadDetailSidebarProps) {
-  const { updateLead } = useDemoData()
+  const { updateLead, tasks, meetings, leadDocuments } = useDemoData()
   const readOnly = isTerminalLeadStatus(lead.status)
+
+  const engagementCounts = React.useMemo(
+    () =>
+      getLeadEngagementCounts(lead.id, {
+        tasks,
+        meetings,
+        leadDocuments,
+      }),
+    [lead.id, tasks, meetings, leadDocuments],
+  )
 
   function patch(partial: Partial<Lead>) {
     if (readOnly) return
@@ -163,6 +175,8 @@ export function LeadDetailSidebar({ lead }: LeadDetailSidebarProps) {
           <CardTitle className="text-base">O leadzie</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
+          <LeadEngagementIndicators counts={engagementCounts} />
+
           <InlineEditableField
             label="Nazwa"
             value={lead.name}

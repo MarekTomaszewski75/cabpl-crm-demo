@@ -4,6 +4,8 @@ import contactsSeed from "@/data/contacts.json"
 import kpiSeed from "@/data/kpi.json"
 import leadsSeed from "@/data/leads.json"
 import leadActivitiesSeed from "@/data/lead-activities.json"
+import leadDocumentsSeed from "@/data/lead-documents.json"
+import dealDocumentsSeed from "@/data/deal-documents.json"
 import dealActivitiesSeed from "@/data/deal-activities.json"
 import meetingsSeed from "@/data/meetings.json"
 import opportunitiesSeed from "@/data/opportunities.json"
@@ -23,6 +25,8 @@ import type {
   KpiSnapshot,
   Lead,
   LeadActivity,
+  LeadDocument,
+  DealDocument,
   Meeting,
   Deal,
   DealActivity,
@@ -95,6 +99,8 @@ export function loadSeedData() {
     dealActivities: dealActivitiesSeed as DealActivity[],
     leads: leadsSeed as Lead[],
     leadActivities: leadActivitiesSeed as LeadActivity[],
+    leadDocuments: leadDocumentsSeed as LeadDocument[],
+    dealDocuments: dealDocumentsSeed as DealDocument[],
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],

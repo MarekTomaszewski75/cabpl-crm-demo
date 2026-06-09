@@ -1,1 +1,90 @@
-[]
+[
+  {
+    "id": "lead-act-001",
+    "leadId": "lead-005",
+    "kind": "channel",
+    "type": "phone_call",
+    "occurredAt": "2026-05-20T10:00:00.000Z",
+    "titlePl": "Połączenie wychodzące",
+    "note": "Brak odpowiedzi — umówiono ponowny kontakt.",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-002",
+    "leadId": "lead-007",
+    "kind": "note",
+    "type": "lead_note",
+    "occurredAt": "2026-05-18T14:30:00.000Z",
+    "titlePl": "Notatka",
+    "note": "Czekamy na dokumenty finansowe od klienta.",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-003",
+    "leadId": "lead-001",
+    "kind": "channel",
+    "type": "email",
+    "occurredAt": "2026-05-22T09:15:00.000Z",
+    "titlePl": "E-mail wychodzący",
+    "note": "Wysłano ofertę wstępną — brak odpowiedzi.",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-004",
+    "leadId": "lead-009",
+    "kind": "channel",
+    "type": "phone_call",
+    "occurredAt": "2026-05-19T11:00:00.000Z",
+    "titlePl": "Połączenie wychodzące",
+    "note": "Kontakt z decydentem — prośba o callback za tydzień.",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-005",
+    "leadId": "lead-002",
+    "kind": "note",
+    "type": "lead_note",
+    "occurredAt": "2026-05-17T08:00:00.000Z",
+    "titlePl": "Notatka",
+    "note": "Klient prosi o przypomnienie w czerwcu.",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-006",
+    "leadId": "lead-004",
+    "kind": "channel",
+    "type": "phone_call",
+    "occurredAt": "2026-05-21T15:30:00.000Z",
+    "titlePl": "Połączenie wychodzące",
+    "note": "Umówiono spotkanie — potwierdzenie mailowe oczekuje.",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-007",
+    "leadId": "lead-008",
+    "kind": "channel",
+    "type": "email",
+    "occurredAt": "2026-05-16T12:00:00.000Z",
+    "titlePl": "E-mail wychodzący",
+    "note": "Wysłano ankietę potrzeb — bez zwrotu.",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "lead-act-008",
+    "leadId": "lead-010",
+    "kind": "note",
+    "type": "lead_note",
+    "occurredAt": "2026-05-15T10:00:00.000Z",
+    "titlePl": "Notatka",
+    "note": "Lead gorący — wymaga follow-up po weekendzie.",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  }
+]

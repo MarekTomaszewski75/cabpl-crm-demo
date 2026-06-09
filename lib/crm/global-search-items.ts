@@ -1,5 +1,8 @@
+import { PRESENTATION_HIDDEN_NAV_IDS } from "@/lib/rbac/nav-structure"
 import type { CrmNavItem } from "@/lib/rbac/nav-items"
 import type { Client, Deal, Lead, Task } from "@/types/crm"
+
+const HIDDEN_SEARCH_NAV_IDS = new Set(PRESENTATION_HIDDEN_NAV_IDS)
 
 export type GlobalSearchItem =
   | {
@@ -79,13 +82,15 @@ export function buildGlobalSearchItems(
   leads: readonly Lead[],
   tasks: readonly Task[],
 ): GlobalSearchItem[] {
-  const pages: GlobalSearchItem[] = navItems.map((item) => ({
-    kind: "page",
-    id: `page-${item.id}`,
-    label: item.labelPl,
-    keywords: `${item.labelPl} ${item.href} nawigacja moduł`,
-    href: item.href,
-  }))
+  const pages: GlobalSearchItem[] = navItems
+    .filter((item) => !HIDDEN_SEARCH_NAV_IDS.has(item.id))
+    .map((item) => ({
+      kind: "page",
+      id: `page-${item.id}`,
+      label: item.labelPl,
+      keywords: `${item.labelPl} ${item.href} nawigacja moduł`,
+      href: item.href,
+    }))
 
   const actions: GlobalSearchItem[] = ACTION_ITEMS.map((item) => ({
     kind: "action",

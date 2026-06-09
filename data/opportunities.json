@@ -6,7 +6,7 @@
     "stage": "negotiation",
     "amountPln": 2500000,
     "probability": 70,
-    "expectedCloseDate": "2026-06-30",
+    "expectedCloseDate": "2026-06-05",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -17,7 +17,7 @@
     "stage": "offer",
     "amountPln": 800000,
     "probability": 50,
-    "expectedCloseDate": "2026-07-15",
+    "expectedCloseDate": "2026-06-08",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -25,10 +25,10 @@
     "id": "opp-003",
     "title": "Leasing floty",
     "clientId": "client-003",
-    "stage": "qualification",
+    "stage": "offer",
     "amountPln": 4200000,
     "probability": 30,
-    "expectedCloseDate": "2026-08-01",
+    "expectedCloseDate": "2026-06-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -72,7 +72,7 @@
     "stage": "negotiation",
     "amountPln": 5000000,
     "probability": 60,
-    "expectedCloseDate": "2026-06-20",
+    "expectedCloseDate": "2026-06-10",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -105,7 +105,7 @@
     "stage": "negotiation",
     "amountPln": 2200000,
     "probability": 55,
-    "expectedCloseDate": "2026-07-20",
+    "expectedCloseDate": "2026-06-04",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -116,7 +116,7 @@
     "stage": "offer",
     "amountPln": 6800000,
     "probability": 40,
-    "expectedCloseDate": "2026-09-15",
+    "expectedCloseDate": "2026-06-06",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -215,7 +215,7 @@
     "stage": "offer",
     "amountPln": 1900000,
     "probability": 45,
-    "expectedCloseDate": "2026-07-01",
+    "expectedCloseDate": "2026-06-07",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -237,7 +237,7 @@
     "stage": "negotiation",
     "amountPln": 5000000,
     "probability": 60,
-    "expectedCloseDate": "2026-06-20",
+    "expectedCloseDate": "2026-06-09",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -325,7 +325,7 @@
     "stage": "negotiation",
     "amountPln": 2500000,
     "probability": 70,
-    "expectedCloseDate": "2026-06-30",
+    "expectedCloseDate": "2026-06-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -336,7 +336,7 @@
     "stage": "offer",
     "amountPln": 800000,
     "probability": 50,
-    "expectedCloseDate": "2026-07-15",
+    "expectedCloseDate": "2026-06-05",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -380,7 +380,7 @@
     "stage": "offer",
     "amountPln": 1900000,
     "probability": 45,
-    "expectedCloseDate": "2026-07-01",
+    "expectedCloseDate": "2026-06-06",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -402,7 +402,7 @@
     "stage": "negotiation",
     "amountPln": 5000000,
     "probability": 60,
-    "expectedCloseDate": "2026-06-20",
+    "expectedCloseDate": "2026-06-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "notif-anna-001",
+    "userId": "user-anna",
+    "type": "system",
+    "titlePl": "Witamy w CRM demo",
+    "bodyPl": "Sprawdź widok „Dziś” — podsumowanie pipeline’u i zadań na dziś.",
+    "createdAt": "2026-06-02T08:00:00.000Z",
+    "read": true,
+    "entityType": null,
+    "entityId": null,
+    "href": "/today"
+  },
+  {
+    "id": "notif-anna-002",
+    "userId": "user-anna",
+    "type": "deal_deadline",
+    "titlePl": "Zbliża się termin deala",
+    "bodyPl": "Linia kredytowa obrotowa — zamknięcie za 2 dni",
+    "createdAt": "2026-06-03T07:30:00.000Z",
+    "read": false,
+    "entityType": "deal",
+    "entityId": "opp-001",
+    "href": "/pipeline/opp-001"
+  },
+  {
+    "id": "notif-anna-003",
+    "userId": "user-anna",
+    "type": "task_deadline",
+    "titlePl": "Zadanie po terminie",
+    "bodyPl": "Przegląd limitów kredytowych — termin minął wczoraj",
+    "createdAt": "2026-06-03T06:00:00.000Z",
+    "read": false,
+    "entityType": "task",
+    "entityId": "task-016",
+    "href": "/tasks"
+  },
+  {
+    "id": "notif-piotr-001",
+    "userId": "user-piotr",
+    "type": "meeting_soon",
+    "titlePl": "Spotkanie jutro",
+    "bodyPl": "Prezentacja produktu leasingowego — za 1 dzień",
+    "createdAt": "2026-06-03T09:00:00.000Z",
+    "read": false,
+    "entityType": "meeting",
+    "entityId": "meeting-002",
+    "href": "/calendar"
+  },
+  {
+    "id": "notif-piotr-002",
+    "userId": "user-piotr",
+    "type": "task_deadline",
+    "titlePl": "Zadanie na dziś",
+    "bodyPl": "Spotkanie z zarządem TechVentures — termin dziś",
+    "createdAt": "2026-06-03T07:00:00.000Z",
+    "read": true,
+    "entityType": "task",
+    "entityId": "task-002",
+    "href": "/tasks"
+  },
+  {
+    "id": "notif-piotr-003",
+    "userId": "user-piotr",
+    "type": "lead_stale",
+    "titlePl": "Lead bez aktywności",
+    "bodyPl": "Brak kontaktu od 7 dni — sprawdź kartę leada",
+    "createdAt": "2026-06-02T14:00:00.000Z",
+    "read": false,
+    "entityType": "lead",
+    "entityId": "lead-003",
+    "href": "/leads/lead-003"
+  },
+  {
+    "id": "notif-marek-001",
+    "userId": "user-marek",
+    "type": "system",
+    "titlePl": "Widok regionalny",
+    "bodyPl": "Jako menedżer widzisz powiadomienia z całego regionu Mazowsze.",
+    "createdAt": "2026-06-01T10:00:00.000Z",
+    "read": true,
+    "entityType": null,
+    "entityId": null,
+    "href": "/pipeline"
+  },
+  {
+    "id": "notif-marek-002",
+    "userId": "user-marek",
+    "type": "deal_deadline",
+    "titlePl": "Termin deala w regionie",
+    "bodyPl": "Leasing floty — zamknięcie za 1 dzień (doradca: Piotr)",
+    "createdAt": "2026-06-03T08:00:00.000Z",
+    "read": false,
+    "entityType": "deal",
+    "entityId": "opp-003",
+    "href": "/pipeline/opp-003"
+  },
+  {
+    "id": "notif-jan-001",
+    "userId": "user-jan",
+    "type": "system",
+    "titlePl": "Widok bank-wide",
+    "bodyPl": "Powiadomienia operacyjne — pełny dostęp do portfela demo.",
+    "createdAt": "2026-06-01T09:00:00.000Z",
+    "read": true,
+    "entityType": null,
+    "entityId": null,
+    "href": "/dashboard"
+  },
+  {
+    "id": "notif-jan-002",
+    "userId": "user-jan",
+    "type": "deal_deadline",
+    "titlePl": "Zbliżające się terminy",
+    "bodyPl": "3 deale w regionie z terminem w ciągu 3 dni — przegląd analityki.",
+    "createdAt": "2026-06-03T07:00:00.000Z",
+    "read": false,
+    "entityType": null,
+    "entityId": null,
+    "href": "/dashboard"
+  }
+]

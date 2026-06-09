@@ -192,6 +192,7 @@ export interface Client extends ScopedEntity {
 
 export type AddClientInput = {
   name: string
+  nip?: string
   phones: string[]
   emails: string[]
   contactIds: string[]
@@ -297,6 +298,7 @@ export interface Task extends ScopedEntity {
   completed: boolean
   clientId: string | null
   opportunityId: string | null
+  leadId?: string | null
 }
 
 export interface Meeting extends ScopedEntity {
@@ -306,6 +308,22 @@ export interface Meeting extends ScopedEntity {
   startsAt: string
   endsAt: string
   note: string
+  leadId?: string | null
+  opportunityId?: string | null
+}
+
+export interface LeadDocument extends ScopedEntity {
+  id: string
+  leadId: string
+  name: string
+  uploadedAt: string
+}
+
+export interface DealDocument extends ScopedEntity {
+  id: string
+  dealId: string
+  name: string
+  uploadedAt: string
 }
 
 export interface ContactEvent extends ScopedEntity {
@@ -494,4 +512,24 @@ export type AddProductInput = {
   description: string
   ownerId?: string
   regionId?: string
+}
+
+export type NotificationType =
+  | "deal_deadline"
+  | "task_deadline"
+  | "lead_stale"
+  | "meeting_soon"
+  | "system"
+
+export interface Notification {
+  id: string
+  userId: string
+  type: NotificationType
+  titlePl: string
+  bodyPl: string
+  createdAt: string
+  read: boolean
+  entityType: "deal" | "lead" | "task" | "meeting" | null
+  entityId: string | null
+  href: string | null
 }

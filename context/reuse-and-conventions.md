@@ -106,7 +106,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### CrmAppShell
 - **Plik:** `components/crm/crm-app-shell.tsx`
 - **Użycie:** `app/(dashboard)/layout.tsx` wewnątrz `SessionAuthGuard` — shadcn `Sidebar` (shell), header (breadcrumb, avatar, wyloguj), `getVisibleNavStructure(sessionUser)` w menu (`CrmSidebarNav`)
-- **Nawigacja:** `lib/rbac/nav-structure.ts` — grupy FIRMA I LUDZIE / CRM I SPRZEDAŻ; footer: Kalendarz, Zgodność
+- **Nawigacja:** `lib/rbac/nav-structure.ts` — Dziś · Kalendarz · Zadania · grupa CRM I SPRZEDAŻ · Analityka; footer: tylko badge Demo
 - **Aktywna pozycja:** `bg-sidebar-primary` (limonka)
 
 ### CrmModulePlaceholder
@@ -125,11 +125,13 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Plik:** `components/crm/dashboard-home-redirect.tsx`
 - **Użycie:** `app/(dashboard)/page.tsx` — `router.replace(getPostLoginPath(user))`
 
-### Today (US-13)
+### Today (US-13, US-21)
 - **Strona:** `app/(dashboard)/today/page.tsx` — `TodayView` (tylko `advisor`)
-- **Komponent:** `components/crm/today-view.tsx` — zadania na `DEMO_TODAY_DATE_KEY`, najbliższe spotkanie, 1× NBA
-- **Data demo:** `lib/crm/demo-today.ts` — `getDemoToday()`, `formatDemoTodayPl()`
+- **Komponent:** `components/crm/today-view.tsx` — zadania na `DEMO_TODAY_DATE_KEY`, najbliższe spotkanie, pipeline summary, 1× NBA
+- **Pipeline summary:** `components/crm/today-pipeline-summary.tsx` — karty deali/leadów (max 5 + „Zobacz wszystkie”)
+- **Data demo:** `lib/crm/demo-today.ts` — `getDemoToday()`, `formatDemoTodayPl()`, `toLocalDateKey`
 - **Logika:** `lib/crm/today-dashboard.ts` — `getTasksDueOnDate`, `getNextUpcomingMeeting`, `getPrimaryNbaHighlight`
+- **Pipeline summary (US-21):** `lib/crm/today-pipeline-summary.ts` — `getDealsRequiringAttention`, `getLeadsRequiringAttention`, stałe `TODAY_PIPELINE_HORIZON_DAYS`, `DEAL_ATTENTION_STATUSES`
 - **Redirect:** `getPostLoginPath` — `advisor` → `/today`, `executive` → `/dashboard`, `regional_manager` → `/pipeline`
 - **Nav:** `CRM_NAV_ITEMS` — pozycja `today` / „Dziś” (`roles: ["advisor"]`)
 
@@ -171,8 +173,8 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Czas:** `formatTimePl` w `lib/format/pl.ts`
 
 ### Leads module (US-17, wzorzec US-15/US-16)
-- **Lista:** `leads-table.tsx` — karta + `InputGroup` + przełącznik widoku (`Rows2` tabela / `LayoutGrid` kanban) + `LeadFormDialog` (Sheet), `filterByScope`, `onRowClick` → `/leads/[id]`; bez kolumny Akcje / konwersji w wierszu
-- **Kanban:** `leads-kanban-board.tsx`, `lead-kanban-column.tsx`, `lead-kanban-card.tsx`, `lib/crm/lead-kanban.ts` — kolumny Nowy / W toku / Wygrano / Niepowodzenie, DnD (`@dnd-kit`) → `updateLead` + `lead_status_changed`
+- **Lista:** `leads-table.tsx` — karta + `InputGroup` + przełącznik widoku (`LayoutGrid` kanban domyślnie / `Rows2` tabela) + `LeadFormDialog` (Sheet), `filterByScope`, `onRowClick` → `/leads/[id]`; bez kolumny Akcje / konwersji w wierszu
+- **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `leads-kanban-board.tsx`, `lead-kanban-card.tsx`, `lib/crm/lead-kanban.ts` — domyślny styl `KanbanColumn`; DnD → `updateLead` + `lead_status_changed`; walidacja `lib/crm/lead-status-transition.ts`; widok kanban **poza** `Card` (toolbar w osobnej karcie)
 - **Kolumny:** `leads-columns.tsx` — `name`, status, źródło, typ, opiekun, utworzono
 - **Nowy lead:** `lead-form-dialog.tsx` + `lead-form.tsx` — Sheet; `addLead(lead, user)` + redirect `/leads/[id]`; wpis `lead_created`
 - **Karta:** `lead-detail-view.tsx` — `lead-detail-header.tsx`, `lead-status-bar.tsx`, `lead-detail-sidebar.tsx` (inline edit), `lead-activity-panel.tsx` + `lead-activity-feed.tsx`
@@ -197,8 +199,8 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **RBAC:** bez `filterByScope` (wspólny katalog BK)
 
 ### Deals module (US-18)
-- **Lista:** `deals-table.tsx` + `deals-columns.tsx` — wzorzec jak leady (przełącznik tabela/kanban, zakładki statusu, faceted filters, grupowanie, `onRowClick` → `/pipeline/[id]`)
-- **Kanban:** `deals-kanban-board.tsx`, `deal-kanban-column.tsx`, `deal-kanban-card.tsx`, `lib/crm/deal-kanban.ts`, `lib/crm/deal-status-transition.ts` — 7 kolumn statusów, DnD → `updateDeal` + `deal_status_changed`; drag na Wygrany/Utracony → `deal-finish-dialog.tsx`
+- **Lista:** `deals-table.tsx` + `deals-columns.tsx` — wzorzec jak leady (przełącznik kanban domyślnie / tabela, zakładki statusu, faceted filters, grupowanie, `onRowClick` → `/pipeline/[id]`)
+- **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `deals-kanban-board.tsx`, `deal-kanban-card.tsx`, `lib/crm/deal-kanban.ts`, `lib/crm/deal-status-transition.ts` — 7 kolumn statusów; DnD → `updateDeal` + `deal_status_changed`; drag na Wygrany/Utracony → `deal-finish-dialog.tsx`
 - **Karta:** `deal-detail-view.tsx` — `deal-detail-header.tsx`, `deal-status-bar.tsx`, `deal-detail-sidebar.tsx`, `deal-activity-panel.tsx` + `deal-activity-feed.tsx`
 - **Finalizacja:** `deal-finish-dialog.tsx` + mutacje `winDeal` / `loseDeal` w `DemoDataContext`
 - **Etykiety:** `lib/crm/deal-labels.ts` (`DEAL_STATUS_LABELS`, `DEAL_SOURCE_LABELS`, `DEAL_TYPE_LABELS`, `DEAL_LOST_REASON_LABELS`)
@@ -248,13 +250,61 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Konfiguracja:** `CRM_NAV_ITEMS` — `id`, `labelPl`, `href`, `roles: UserRole[]`
 - **Menu:** `getVisibleNavItems(sessionUser)` lub `canSeeNavItem("dashboard", sessionUser)`
 - **Analityka (`/dashboard`):** `executive` + `regional_manager`; pozostałe moduły — wg `roles` w `nav-structure.ts`
+- **Ukryte w prezentacji (US-24):** `PRESENTATION_HIDDEN_NAV_IDS` (`employees`, `companyStructure`) — poza `CRM_NAV_STRUCTURE`, ale w `CRM_NAV_ITEMS` (breadcrumb, dev URL); wykluczone z global search w `global-search-items.ts`
 
 ---
 
 ## Formatowanie PL
 
-### formatCurrencyPln / formatDatePl / formatTimePl
+### formatCurrencyPln / formatDatePl / formatTimePl / formatRelativeTimePl
 - **Plik:** `lib/format/pl.ts`
+- **`formatRelativeTimePl`** — czas względny PL w powiadomieniach (np. „2 godz. temu”, „za 3 dni”); baza demo: `getDemoToday()`.
+
+---
+
+## Powiadomienia in-app (US-22)
+
+### NotificationProvider / useNotifications
+- **Plik:** `lib/notifications/notification-context.tsx`
+- **Mount:** w `AppProviders` wewnątrz `SessionProvider` + `DemoDataProvider`.
+- **API:** `notifications`, `unreadCount`, `markAsRead(id)`, `markAllAsRead()`.
+- **Init:** seed `data/notifications.json` (filtrowany po `userId`) + generator przy mount; deduplikacja `type+entityType+entityId`.
+
+### generateNotificationsForUser
+- **Plik:** `lib/crm/notification-rules.ts`
+- **Reguły MVP:** deal `expectedCloseDate` ≤ 3 dni; zadanie termin ≤ 1 dzień lub po terminie; lead bez aktywności ≥ 7 dni (`getLeadsRequiringAttention`); spotkanie start < 24 h.
+- **RBAC:** `filterByScope` na encjach źródłowych; powiadomienia mają `userId` = zalogowany użytkownik.
+
+### UI
+- **Dzwonek:** `components/crm/crm-notifications-bell.tsx` — w `CrmAppHeader`, `Popover` + badge „9+”.
+- **Wiersz listy:** `components/crm/notification-list-item.tsx` — współdzielony z popoverem i kartą Dziś.
+- **Karta Dziś:** `components/crm/today-notifications-card.tsx` — tylko `advisor` na `/today`, 3–5 ostatnich nieprzeczytanych.
+
+---
+
+## Banner informacyjny (US-23)
+
+### Kanban (Dice UI, US-25)
+- **Komponent:** `components/ui/kanban.tsx` — `@diceui/kanban` (`Kanban`, `KanbanBoard`, `KanbanColumn`, `KanbanItem`, `KanbanOverlay`); kolumny `disabled` (bez drag kolumn).
+- **Boardy:** `leads-kanban-board.tsx`, `deals-kanban-board.tsx` — `<Kanban>` jako korzeń widoku; stan kolumn `Record<status, Lead[]|Deal[]>`, `onValueChange` + `onMove`; `KanbanItem asHandle` (bez `disabled` na kolumnie — blokuje `pointer-events`).
+- **Helper:** `lib/compose-refs.ts` — zależność CLI Dice UI.
+
+### Mask Input (Dice UI, US-26)
+- **Komponent:** `components/ui/mask-input.tsx` — `@diceui/mask-input`; `onValueChange={(masked, unmasked) => …}`.
+- **Wzorce:** `lib/crm/mask-patterns.ts` — `NIP_MASK` (10 cyfr), `PL_PHONE_MASK` (`+48 ### ### ###`), `PL_POSTAL_CODE_MASK` (`##-###`).
+- **Zapis do Context:** NIP i telefon → **unmasked** (cyfry); kwota deala → liczba z `unmasked` (`Number(unmasked)`).
+- **Formularze:** `company-form.tsx` (NIP), `deal-form.tsx` (`mask="currency"` `locale="pl-PL"` `currency="PLN"`), `lead-form.tsx` + `contact-combobox.tsx` (telefon PL).
+- **Poza zakresem tej iteracji:** `employee-form`, maskowanie dat (`Calendar` + `Popover` zostaje).
+
+### Banners / useBanners (Dice UI)
+- **Komponent:** `components/ui/banner.tsx` — `@diceui/banner`; warianty dopasowane do tokenów CA (nie domyślny purple Dice).
+- **Provider:** `CrmAppShell` — `<Banners side="top" maxVisible={2} strategy="static">` pod headerem, nad treścią main.
+- **API:** `useBanners()` → `onBannerAdd`, `onBannerRemove`, `onBannersClear`.
+
+### Reguły banerów
+- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**.
+- **Kontroler:** `components/crm/crm-banner-controller.tsx` — losuje 2 banery z puli wygenerowanej z `DemoDataContext`.
+- **Seed:** terminy spotkań/zadań/deali ≥ 30 dni od `DEMO_TODAY_DATE_KEY` (patrz komentarz w `demo-today.ts`).
 
 ---
 

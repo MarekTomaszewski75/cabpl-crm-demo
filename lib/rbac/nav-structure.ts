@@ -49,14 +49,21 @@ const today = defineNavItem({
   roles: ["advisor"],
 })
 
-const employees = defineNavItem({
+const calendar = defineNavItem({
+  id: "calendar",
+  labelPl: "Kalendarz",
+  href: "/calendar",
+  roles: ALL_ROLES,
+})
+
+defineNavItem({
   id: "employees",
   labelPl: "Pracownicy",
   href: "/employees",
   roles: ALL_ROLES,
 })
 
-const companyStructure = defineNavItem({
+defineNavItem({
   id: "companyStructure",
   labelPl: "Struktura firmy",
   href: "/company-structure",
@@ -113,27 +120,22 @@ const analytics = defineNavItem({
 })
 
 defineNavItem({
-  id: "calendar",
-  labelPl: "Kalendarz",
-  href: "/calendar",
-  roles: ALL_ROLES,
-})
-
-defineNavItem({
   id: "compliance",
   labelPl: "Zgodność i roadmapa",
   href: "/compliance",
   roles: ALL_ROLES,
 })
 
-/** Kolejność sidebara (EXP-001 + EXP-003). */
+/** Moduły poza widoczną nawigacją prezentacji (trasy i breadcrumb nadal działają). */
+export const PRESENTATION_HIDDEN_NAV_IDS: readonly NavItemId[] = [
+  "employees",
+  "companyStructure",
+]
+
+/** Kolejność sidebara (EXP-001; US-24: bez grupy „Firma i ludzie”). */
 export const CRM_NAV_STRUCTURE: readonly CrmNavEntry[] = [
   { type: "item", item: today },
-  {
-    type: "group",
-    labelPl: "Firma i ludzie",
-    items: [employees, companyStructure],
-  },
+  { type: "item", item: calendar },
   { type: "item", item: tasks },
   {
     type: "group",

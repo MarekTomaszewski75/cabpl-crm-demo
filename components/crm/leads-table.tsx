@@ -40,7 +40,6 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
 import {
-  canFinishLead,
   LEAD_SOURCE_LABELS,
   LEAD_STATUS_LABELS,
   LEAD_STATUS_OPTIONS,
@@ -62,14 +61,20 @@ type LeadsViewMode = "table" | "kanban"
 const FILTER_ALL = "all"
 const LEAD_TYPE_NONE = "__none__"
 
-const LEAD_GROUPING_OPTIONS = [
-  { columnId: "status", label: "Status" },
-  { columnId: "source", label: "Źródło" },
-  { columnId: "leadType", label: "Typ" },
-  { columnId: "ownerName", label: "Opiekun" },
-] as const
-
 type StatusTabValue = typeof FILTER_ALL | LeadStatus
+
+function createLeadGroupingOptions(showOwnerColumn: boolean) {
+  const options = [
+    { columnId: "status", label: "Status" },
+    { columnId: "source", label: "Źródło" },
+    { columnId: "leadType", label: "Typ" },
+    { columnId: "companyName", label: "Firma" },
+  ]
+  if (showOwnerColumn) {
+    options.push({ columnId: "ownerName", label: "Opiekun" })
+  }
+  return options
+}
 
 function filterByStatusTab(
   leads: readonly Lead[],
@@ -124,12 +129,19 @@ export function LeadsTable() {
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
   const [leadTypeFilters, setLeadTypeFilters] = React.useState<string[]>([])
   const [searchQuery, setSearchQuery] = React.useState("")
-  const [viewMode, setViewMode] = React.useState<LeadsViewMode>("table")
+  const [viewMode, setViewMode] = React.useState<LeadsViewMode>("kanban")
   const [createSheetOpen, setCreateSheetOpen] = React.useState(false)
 
+  const showOwnerColumn = user?.role !== "advisor"
+
   const columns = React.useMemo(
-    () => createLeadsColumns({ users, contacts }),
-    [users, contacts],
+    () => createLeadsColumns({ users, contacts, showOwnerColumn }),
+    [users, contacts, showOwnerColumn],
+  )
+
+  const leadGroupingOptions = React.useMemo(
+    () => createLeadGroupingOptions(showOwnerColumn),
+    [showOwnerColumn],
   )
 
   const scopedLeads = React.useMemo(() => {
@@ -164,7 +176,7 @@ export function LeadsTable() {
   const filterInput = React.useMemo(
     () => ({
       sourceFilters,
-      ownerFilters,
+      ownerFilters: showOwnerColumn ? ownerFilters : [],
       leadTypeFilters,
       searchQuery,
       users,
@@ -177,6 +189,7 @@ export function LeadsTable() {
       searchQuery,
       users,
       contacts,
+      showOwnerColumn,
     ],
   )
 
@@ -251,10 +264,6 @@ export function LeadsTable() {
     [filteredLeads, users, contacts],
   )
 
-  const openCount = scopedLeads.filter((lead) =>
-    canFinishLead(lead.status),
-  ).length
-
   const resultCountLabel = React.useMemo(() => {
     const n = filteredLeads.length
     if (n === 1) return "1 wynik"
@@ -269,7 +278,7 @@ export function LeadsTable() {
   return (
     <div className="flex flex-col gap-4">
       <Card size="sm" className="gap-3">
-        <CardHeader className="flex flex-col gap-2 pb-0">
+        <CardHeader className="flex flex-col gap-2 pb-3">
           <div className="flex w-full min-w-0 items-center gap-2">
             <CardTitle className="shrink-0 text-xl">Leady</CardTitle>
             <div
@@ -279,16 +288,6 @@ export function LeadsTable() {
             >
               <Button
                 type="button"
-                variant={viewMode === "table" ? "secondary" : "ghost"}
-                size="icon-sm"
-                aria-label="Widok tabeli"
-                aria-pressed={viewMode === "table"}
-                onClick={() => setViewMode("table")}
-              >
-                <Rows2Icon />
-              </Button>
-              <Button
-                type="button"
                 variant={viewMode === "kanban" ? "secondary" : "ghost"}
                 size="icon-sm"
                 aria-label="Widok kanban"
@@ -296,6 +295,16 @@ export function LeadsTable() {
                 onClick={() => setViewMode("kanban")}
               >
                 <LayoutGridIcon />
+              </Button>
+              <Button
+                type="button"
+                variant={viewMode === "table" ? "secondary" : "ghost"}
+                size="icon-sm"
+                aria-label="Widok tabeli"
+                aria-pressed={viewMode === "table"}
+                onClick={() => setViewMode("table")}
+              >
+                <Rows2Icon />
               </Button>
             </div>
             <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">
@@ -359,12 +368,14 @@ export function LeadsTable() {
               selectedValues={sourceFilters}
               onSelectedValuesChange={setSourceFilters}
             />
-            <DataTableFacetedFilter
-              title="Opiekun"
-              options={ownerFacetedOptions}
-              selectedValues={ownerFilters}
-              onSelectedValuesChange={setOwnerFilters}
-            />
+            {showOwnerColumn ? (
+              <DataTableFacetedFilter
+                title="Opiekun"
+                options={ownerFacetedOptions}
+                selectedValues={ownerFilters}
+                onSelectedValuesChange={setOwnerFilters}
+              />
+            ) : null}
             <DataTableFacetedFilter
               title="Typ leada"
               options={leadTypeFacetedOptions}
@@ -372,17 +383,12 @@ export function LeadsTable() {
               onSelectedValuesChange={setLeadTypeFilters}
             />
           </div>
-
-          <p className="text-sm text-muted-foreground">
-            {openCount} w toku przetwarzania · {scopedLeads.length}{" "}
-            {scopedLeads.length === 1 ? "lead" : "leadów"} w Twoim zakresie
-          </p>
         </CardHeader>
       </Card>
 
-      <Card size="sm" className="gap-3">
-        <CardContent className="pt-3">
-          {scopedLeads.length === 0 ? (
+      {scopedLeads.length === 0 ? (
+        <Card size="sm" className="gap-3">
+          <CardContent className="pt-3">
             <Empty className="border">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
@@ -394,7 +400,27 @@ export function LeadsTable() {
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
-          ) : viewMode === "table" ? (
+          </CardContent>
+        </Card>
+      ) : viewMode === "kanban" ? (
+        filteredLeads.length === 0 ? (
+          <Empty className="rounded-xl border">
+            <EmptyHeader>
+              <EmptyTitle>Brak wyników</EmptyTitle>
+              <EmptyDescription>
+                Zmień filtry lub wyszukiwanie, aby zobaczyć leady na tablicy.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <LeadsKanbanBoard
+            leads={filteredLeads}
+            onAddLead={() => setCreateSheetOpen(true)}
+          />
+        )
+      ) : (
+        <Card size="sm" className="gap-3">
+          <CardContent className="pt-3">
             <DataTable
               columns={columns}
               data={tableData}
@@ -402,27 +428,12 @@ export function LeadsTable() {
               initialSorting={[{ id: "createdAt", desc: true }]}
               showSearchInToolbar={false}
               showToolbar={scopedLeads.length > 0}
-              groupingOptions={[...LEAD_GROUPING_OPTIONS]}
+              groupingOptions={leadGroupingOptions}
               onRowClick={(row) => router.push(`/leads/${row.id}`)}
             />
-          ) : filteredLeads.length === 0 ? (
-            <Empty className="border">
-              <EmptyHeader>
-                <EmptyTitle>Brak wyników</EmptyTitle>
-                <EmptyDescription>
-                  Zmień filtry lub wyszukiwanie, aby zobaczyć leady na
-                  tablicy.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
-          ) : (
-            <LeadsKanbanBoard
-              leads={filteredLeads}
-              onAddLead={() => setCreateSheetOpen(true)}
-            />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 [
   {
     "id": "lead-001",
-    "name": "AutoParts Mazowsze",
+    "name": "Zwiększenie limitu karty flotowej",
     "status": "new",
     "contactId": null,
     "comments": "",
@@ -21,7 +21,7 @@
   },
   {
     "id": "lead-002",
-    "name": "MediCare Clinics",
+    "name": "Finansowanie aparatury diagnostycznej",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -41,7 +41,7 @@
   },
   {
     "id": "lead-003",
-    "name": "ProLogistics Hub",
+    "name": "Konto walutowe — rozliczenia w UE",
     "status": "new",
     "contactId": null,
     "comments": "",
@@ -61,7 +61,7 @@
   },
   {
     "id": "lead-004",
-    "name": "GreenEnergy Farms",
+    "name": "Kredyt inwestycyjny na farmy PV",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -81,7 +81,7 @@
   },
   {
     "id": "lead-005",
-    "name": "RetailChain Express",
+    "name": "Terminale płatnicze — 40 sklepów",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -101,7 +101,7 @@
   },
   {
     "id": "lead-006",
-    "name": "AI Robotics Lab",
+    "name": "Leasing linii montażowej R&D",
     "status": "new",
     "contactId": null,
     "comments": "",
@@ -121,7 +121,7 @@
   },
   {
     "id": "lead-007",
-    "name": "BudMax Generalny",
+    "name": "Gwarancje bankowe — hala magazynowa",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -141,7 +141,7 @@
   },
   {
     "id": "lead-008",
-    "name": "OceanFish Export",
+    "name": "Akredytywa eksportowa — ryby mrożone",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -161,7 +161,7 @@
   },
   {
     "id": "lead-009",
-    "name": "SmartHome Devices",
+    "name": "Faktoring przy ekspansji e-commerce",
     "status": "new",
     "contactId": null,
     "comments": "",
@@ -181,7 +181,7 @@
   },
   {
     "id": "lead-010",
-    "name": "CloudOps SaaS",
+    "name": "Kredyt obrotowy na skalowanie SaaS",
     "status": "in_progress",
     "contactId": null,
     "comments": "",
@@ -201,7 +201,7 @@
   },
   {
     "id": "lead-011",
-    "name": "MetalWorks Precision",
+    "name": "Refinansowanie parku maszyn CNC",
     "status": "lost",
     "contactId": null,
     "comments": "",
@@ -221,7 +221,7 @@
   },
   {
     "id": "lead-012",
-    "name": "HealthPlus Clinics",
+    "name": "Pakiet korporacyjny — sieć klinik",
     "status": "won",
     "contactId": null,
     "comments": "",

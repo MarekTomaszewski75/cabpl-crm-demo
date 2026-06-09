@@ -252,7 +252,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       const client: Client = {
         id: createNextClientId(prev.clients),
         name: input.name.trim(),
-        nip: "",
+        nip: (input.nip ?? "").trim(),
         segment: "",
         phones: trimNonEmpty(input.phones),
         emails: trimNonEmpty(input.emails),

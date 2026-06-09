@@ -13,6 +13,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { MaskInput } from "@/components/ui/mask-input"
+import { PL_PHONE_MASK } from "@/lib/crm/mask-patterns"
 import {
   InputGroup,
   InputGroupTextarea,
@@ -42,6 +44,7 @@ type LeadFormErrors = {
 
 type LeadFormState = {
   name: string
+  phone: string
   contactId: string | null
   comments: string
   source: LeadSource
@@ -51,6 +54,7 @@ type LeadFormState = {
 function emptyFormState(): LeadFormState {
   return {
     name: "",
+    phone: "",
     contactId: null,
     comments: "",
     source: "recommendation",
@@ -129,6 +133,7 @@ export function LeadForm({ onSuccess, layout = "sheet" }: LeadFormProps) {
       ownerId: user.id,
       regionId: user.regionId,
       ...emptyLeadFields(),
+      phones: form.phone ? [form.phone] : [],
     }
 
     addLead(newLead, user)
@@ -152,6 +157,20 @@ export function LeadForm({ onSuccess, layout = "sheet" }: LeadFormProps) {
           placeholder="np. AutoParts Mazowsze"
         />
         {errors.name ? <FieldError>{errors.name}</FieldError> : null}
+      </Field>
+
+      <Field>
+        <FieldLabel htmlFor="lead-phone">Telefon</FieldLabel>
+        <MaskInput
+          id="lead-phone"
+          mask={PL_PHONE_MASK}
+          maskPlaceholder="+48 ___ ___ ___"
+          placeholder="Numer telefonu"
+          value={form.phone}
+          onValueChange={(_masked, unmasked) =>
+            setForm((p) => ({ ...p, phone: unmasked }))
+          }
+        />
       </Field>
 
       <Field>

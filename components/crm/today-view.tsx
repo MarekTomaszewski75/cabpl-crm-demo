@@ -40,6 +40,8 @@ import {
   isMeetingOnDate,
   startOfDemoDay,
 } from "@/lib/crm/today-dashboard"
+import { TodayNotificationsCard } from "@/components/crm/today-notifications-card"
+import { TodayPipelineSummary } from "@/components/crm/today-pipeline-summary"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { formatDatePl, formatTimePl } from "@/lib/format/pl"
 import { filterByScope } from "@/lib/rbac/scope"
@@ -61,7 +63,7 @@ function priorityBadgeVariant(
 export function TodayView() {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { tasks, meetings, clients, opportunities, contactEvents } =
+  const { tasks, meetings, clients, opportunities, leads, leadActivities, contactEvents } =
     useDemoData()
 
   const demoToday = getDemoToday()
@@ -88,6 +90,14 @@ export function TodayView() {
   const scopedOpportunities = React.useMemo(
     () => (user ? filterByScope(opportunities, user) : []),
     [opportunities, user],
+  )
+  const scopedLeads = React.useMemo(
+    () => (user ? filterByScope(leads, user) : []),
+    [leads, user],
+  )
+  const scopedLeadActivities = React.useMemo(
+    () => (user ? filterByScope(leadActivities, user) : []),
+    [leadActivities, user],
   )
   const scopedContactEvents = React.useMemo(
     () => (user ? filterByScope(contactEvents, user) : []),
@@ -127,7 +137,7 @@ export function TodayView() {
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold tracking-tight">Dziś</h1>
             <p className="text-sm text-muted-foreground">
-              {formatDemoTodayPl()} — {user.scopeDescriptionPl}
+              {formatDemoTodayPl()}
             </p>
           </div>
         </div>
@@ -245,15 +255,22 @@ export function TodayView() {
         </Card>
       </div>
 
+      <TodayNotificationsCard />
+
+      <TodayPipelineSummary
+        deals={scopedOpportunities}
+        leads={scopedLeads}
+        leadActivities={scopedLeadActivities}
+        clients={scopedClients}
+        demoToday={demoToday}
+      />
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <LightbulbIcon className="text-primary" />
             Następny krok (NBA)
           </CardTitle>
-          <CardDescription>
-            Jedna priorytetowa sugestia na podstawie reguł Etapu 1
-          </CardDescription>
         </CardHeader>
         <CardContent>
           {!nbaHighlight ? (

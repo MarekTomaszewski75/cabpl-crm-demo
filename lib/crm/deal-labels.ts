@@ -97,6 +97,24 @@ export function dealStatusBadgeVariant(
   }
 }
 
+export function dealStatusIndicatorVariant(
+  status: DealStatus,
+): "default" | "success" | "error" | "warning" | "info" {
+  switch (status) {
+    case "new":
+    case "association_created":
+    case "meeting_scheduled":
+      return "info"
+    case "offer_submitted":
+    case "negotiation_started":
+      return "warning"
+    case "won":
+      return "success"
+    case "lost":
+      return "error"
+  }
+}
+
 export function canFinishDeal(status: DealStatus): boolean {
   return DEAL_WORKFLOW_STATUSES.includes(status)
 }

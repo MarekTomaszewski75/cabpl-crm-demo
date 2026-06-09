@@ -127,9 +127,11 @@ Pokazać, że rozumiemy **pilną potrzebę szybkiego efektu** i że w **3–6 mi
 
 1. **Logowanie jako Członek Zarządu** (2 min) — dashboard, plan vs wykonanie, forecast  
 2. **Przełączenie na Regionalnego Menedżera** (4 min) — lejek zespołu, weighted pipeline, luka do planu  
-3. **Przełączenie na Doradcę** (5 min) — moje deale (`/pipeline` lista), karta deala ze zmianą statusu i finalizacją, zadanie, spotkanie w kalendarzu  
+3. **Przełączenie na Doradcę** (5 min) — widok **Dziś** z podsumowaniem deali i leadów wymagających uwagi, moje deale (`/pipeline` **kanban** — domyślny widok), drag & drop między etapami, karta deala ze zmianą statusu i finalizacją, zadanie, spotkanie w kalendarzu  
 4. **Karta klienta** (3 min) — historia kontaktów, next best action, nowa szansa z leada  
 5. **Compliance + roadmap** (3 min) — KNF, wariant A vs B, ścieżka do Etapu 2 (360°, cases)  
+
+> **Poza ścieżką prezentacji:** moduły administracyjne **Pracownicy** i **Struktura firmy** są ukryte z sidebara i wyszukiwarki (US-24); dane pozostają w tle (opiekun, dział w formularzach). Trasy `/employees`, `/company-structure` działają po bezpośrednim URL (dev).
 
 ---
 

@@ -2,20 +2,19 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import {
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  closestCenter,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type DragStartEvent,
-} from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core"
+import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import { DealFinishDialog } from "@/components/crm/deal-finish-dialog"
 import { DealKanbanCard } from "@/components/crm/deal-kanban-card"
-import { DealKanbanColumn } from "@/components/crm/deal-kanban-column"
+import { Button } from "@/components/ui/button"
+import {
+  Kanban,
+  KanbanBoard,
+  KanbanColumn,
+  KanbanItem,
+  KanbanOverlay,
+} from "@/components/ui/kanban"
 import { DEAL_STATUS_LABELS } from "@/lib/crm/deal-labels"
 import {
   DEAL_KANBAN_COLUMN_LABELS,
@@ -25,6 +24,7 @@ import {
   isDealWorkflowStatusChange,
   requiresDealFinishDialog,
 } from "@/lib/crm/deal-status-transition"
+import { buildDealEngagementCountMap } from "@/lib/crm/deal-engagement-counts"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Client, Deal, DealStatus, DemoUser } from "@/types/crm"
@@ -34,22 +34,60 @@ type DealsKanbanBoardProps = {
   onAddDeal?: () => void
 }
 
+function buildDealColumns(deals: Deal[]): Record<DealStatus, Deal[]> {
+  const grouped = new Map<DealStatus, Deal[]>()
+  for (const status of DEAL_KANBAN_STATUSES) {
+    grouped.set(status, [])
+  }
+  for (const deal of deals) {
+    grouped.get(deal.status)?.push(deal)
+  }
+  for (const status of DEAL_KANBAN_STATUSES) {
+    const list = grouped.get(status) ?? []
+    list.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+  }
+  return Object.fromEntries(
+    DEAL_KANBAN_STATUSES.map((status) => [status, grouped.get(status) ?? []]),
+  ) as Record<DealStatus, Deal[]>
+}
+
+function findDealColumn(
+  dealId: string,
+  columns: Record<DealStatus, Deal[]>,
+): DealStatus | null {
+  for (const status of DEAL_KANBAN_STATUSES) {
+    if (columns[status]?.some((deal) => deal.id === dealId)) {
+      return status
+    }
+  }
+  return null
+}
+
 export function DealsKanbanBoard({ deals, onAddDeal }: DealsKanbanBoardProps) {
   const router = useRouter()
   const { user } = useSession()
-  const { deals: allDeals, users, clients, updateDeal, addDealActivity } =
-    useDemoData()
-  const [activeId, setActiveId] = React.useState<string | null>(null)
+  const {
+    deals: allDeals,
+    users,
+    clients,
+    tasks,
+    meetings,
+    dealDocuments,
+    updateDeal,
+    addDealActivity,
+  } = useDemoData()
+  const [columns, setColumns] = React.useState(() => buildDealColumns(deals))
   const [finishDealId, setFinishDealId] = React.useState<string | null>(null)
   const [finishMode, setFinishMode] = React.useState<"won" | "lost" | undefined>(
     undefined,
   )
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 8 },
-    }),
-  )
+  React.useEffect(() => {
+    setColumns(buildDealColumns(deals))
+  }, [deals])
 
   const ownerById = React.useMemo(
     () => new Map(users.map((u: DemoUser) => [u.id, u])),
@@ -61,75 +99,71 @@ export function DealsKanbanBoard({ deals, onAddDeal }: DealsKanbanBoardProps) {
     [clients],
   )
 
-  const dealsByStatus = React.useMemo(() => {
-    const grouped = new Map<DealStatus, Deal[]>()
-    for (const status of DEAL_KANBAN_STATUSES) {
-      grouped.set(status, [])
-    }
-    for (const deal of deals) {
-      grouped.get(deal.status)?.push(deal)
-    }
-    for (const status of DEAL_KANBAN_STATUSES) {
-      const list = grouped.get(status) ?? []
-      list.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )
-    }
-    return grouped
-  }, [deals])
+  const dealById = React.useMemo(
+    () => new Map(deals.map((deal) => [deal.id, deal])),
+    [deals],
+  )
 
-  const activeDeal = activeId
-    ? deals.find((deal) => deal.id === activeId)
-    : undefined
+  const engagementByDealId = React.useMemo(
+    () =>
+      buildDealEngagementCountMap(
+        deals.map((deal) => deal.id),
+        { tasks, meetings, dealDocuments },
+      ),
+    [deals, tasks, meetings, dealDocuments],
+  )
 
   const finishDeal = finishDealId
     ? allDeals.find((deal) => deal.id === finishDealId)
     : undefined
 
-  function handleDragStart(event: DragStartEvent) {
-    setActiveId(String(event.active.id))
-  }
+  const handleMove = React.useCallback(
+    (event: DragEndEvent & { activeIndex: number; overIndex: number }) => {
+      if (!user) {
+        setColumns(buildDealColumns(deals))
+        return
+      }
 
-  function handleDragEnd(event: DragEndEvent) {
-    setActiveId(null)
-    const { active, over } = event
-    if (!over || !user) return
+      const dealId = String(event.active.id)
+      const deal = dealById.get(dealId)
+      if (!deal) {
+        setColumns(buildDealColumns(deals))
+        return
+      }
 
-    const newStatus = String(over.id) as DealStatus
-    if (!DEAL_KANBAN_STATUSES.includes(newStatus)) return
+      setColumns((currentColumns) => {
+        const newStatus = findDealColumn(dealId, currentColumns)
+        if (!newStatus || newStatus === deal.status) {
+          return buildDealColumns(deals)
+        }
 
-    const dealId = String(active.id)
-    const deal = deals.find((item) => item.id === dealId)
-    if (!deal || deal.status === newStatus) return
+        if (requiresDealFinishDialog(newStatus, deal.status)) {
+          setFinishDealId(dealId)
+          setFinishMode(newStatus)
+          return buildDealColumns(deals)
+        }
 
-    if (requiresDealFinishDialog(newStatus, deal.status)) {
-      setFinishDealId(dealId)
-      setFinishMode(newStatus)
-      return
-    }
+        if (isDealWorkflowStatusChange(newStatus, deal.status)) {
+          const previousStatus = deal.status
+          updateDeal(dealId, { status: newStatus })
+          addDealActivity(dealId, "deal_status_changed", user, {
+            note: `${DEAL_STATUS_LABELS[previousStatus]} → ${DEAL_STATUS_LABELS[newStatus]}`,
+          })
+          toast.success(
+            `Przeniesiono do „${DEAL_KANBAN_COLUMN_LABELS[newStatus]}”`,
+          )
+          return currentColumns
+        }
 
-    if (isDealWorkflowStatusChange(newStatus, deal.status)) {
-      const previousStatus = deal.status
-      updateDeal(dealId, { status: newStatus })
-      addDealActivity(dealId, "deal_status_changed", user, {
-        note: `${DEAL_STATUS_LABELS[previousStatus]} → ${DEAL_STATUS_LABELS[newStatus]}`,
+        toast.message("Nie można zmienić statusu", {
+          description:
+            "Deale zakończone (Wygrany / Utracony) nie mogą wrócić do wcześniejszego etapu w demo.",
+        })
+        return buildDealColumns(deals)
       })
-      toast.success(
-        `Przeniesiono do „${DEAL_KANBAN_COLUMN_LABELS[newStatus]}”`,
-      )
-      return
-    }
-
-    toast.message("Nie można zmienić statusu", {
-      description:
-        "Deale zakończone (Wygrany / Utracony) nie mogą wrócić do wcześniejszego etapu w demo.",
-    })
-  }
-
-  function handleDragCancel() {
-    setActiveId(null)
-  }
+    },
+    [user, dealById, deals, updateDeal, addDealActivity],
+  )
 
   function handleFinishOpenChange(open: boolean) {
     if (!open) {
@@ -139,46 +173,103 @@ export function DealsKanbanBoard({ deals, onAddDeal }: DealsKanbanBoardProps) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragCancel={handleDragCancel}
+    <>
+      <Kanban
+        value={columns}
+        getItemValue={(deal) => deal.id}
+        onValueChange={setColumns}
+        onMove={handleMove}
+        orientation="horizontal"
       >
-        <div className="min-w-0 overflow-x-auto overscroll-x-contain rounded-xl bg-muted/30 p-3 ring-1 ring-border/50">
-          <div className="flex w-max items-stretch gap-0 pb-1">
-            {DEAL_KANBAN_STATUSES.map((status) => (
-              <DealKanbanColumn
+        <KanbanBoard className="min-w-0 overflow-x-auto">
+          {DEAL_KANBAN_STATUSES.map((status) => {
+            const columnDeals = columns[status] ?? []
+            return (
+              <KanbanColumn
                 key={status}
-                status={status}
-                deals={dealsByStatus.get(status) ?? []}
-                ownerById={ownerById}
-                clientById={clientById}
-                onAddDeal={status === "new" ? onAddDeal : undefined}
-                onOpenDeal={(deal) => router.push(`/pipeline/${deal.id}`)}
-              />
-            ))}
-          </div>
-        </div>
+                value={status}
+                className="w-72 shrink-0"
+              >
+                <div className="flex items-center justify-between gap-2 text-sm font-medium">
+                  <span>{DEAL_KANBAN_COLUMN_LABELS[status]}</span>
+                  <span className="text-muted-foreground tabular-nums">
+                    {columnDeals.length}
+                  </span>
+                </div>
 
-        <DragOverlay dropAnimation={null}>
-          {activeDeal ? (
-            <DealKanbanCard
-              deal={activeDeal}
-              status={activeDeal.status}
-              owner={ownerById.get(activeDeal.ownerId)}
-              client={
-                activeDeal.clientId
-                  ? clientById.get(activeDeal.clientId)
-                  : undefined
-              }
-              isDragOverlay
-            />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+                {columnDeals.length === 0 ? (
+                  <p className="py-4 text-center text-xs text-muted-foreground">
+                    Upuść deal tutaj
+                  </p>
+                ) : (
+                  columnDeals.map((deal) => (
+                    <KanbanItem key={deal.id} value={deal.id}>
+                      <DealKanbanCard
+                        deal={deal}
+                        status={status}
+                        owner={ownerById.get(deal.ownerId)}
+                        client={
+                          deal.clientId
+                            ? clientById.get(deal.clientId)
+                            : undefined
+                        }
+                        engagement={
+                          engagementByDealId.get(deal.id) ?? {
+                            tasks: 0,
+                            meetings: 0,
+                            documents: 0,
+                          }
+                        }
+                        onOpen={() => router.push(`/pipeline/${deal.id}`)}
+                      />
+                    </KanbanItem>
+                  ))
+                )}
+
+                {onAddDeal && status === "new" ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={onAddDeal}
+                  >
+                    <PlusIcon data-icon="inline-start" />
+                    Dodaj
+                  </Button>
+                ) : null}
+              </KanbanColumn>
+            )
+          })}
+        </KanbanBoard>
+
+        <KanbanOverlay>
+          {({ value }) => {
+            const deal = dealById.get(String(value))
+            if (!deal) return null
+            const overlayStatus =
+              findDealColumn(deal.id, columns) ?? deal.status
+            return (
+              <DealKanbanCard
+                deal={deal}
+                status={overlayStatus}
+                owner={ownerById.get(deal.ownerId)}
+                client={
+                  deal.clientId ? clientById.get(deal.clientId) : undefined
+                }
+                engagement={
+                  engagementByDealId.get(deal.id) ?? {
+                    tasks: 0,
+                    meetings: 0,
+                    documents: 0,
+                  }
+                }
+                isDragOverlay
+              />
+            )
+          }}
+        </KanbanOverlay>
+      </Kanban>
 
       {finishDeal ? (
         <DealFinishDialog
@@ -188,6 +279,6 @@ export function DealsKanbanBoard({ deals, onAddDeal }: DealsKanbanBoardProps) {
           defaultMode={finishMode}
         />
       ) : null}
-    </div>
+    </>
   )
 }

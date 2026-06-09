@@ -28,6 +28,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { MaskInput } from "@/components/ui/mask-input"
+import { PL_PHONE_MASK } from "@/lib/crm/mask-patterns"
 import {
   formatContactName,
   formatContactOptionLabel,
@@ -119,7 +121,7 @@ export function ContactComboboxField({
       firstName: createForm.firstName,
       lastName: createForm.lastName,
       emails: createForm.email.trim() ? [createForm.email] : [],
-      phones: createForm.phone.trim() ? [createForm.phone] : [],
+      phones: createForm.phone ? [createForm.phone] : [],
     })
     onChange([...value, created.id])
     toast.success(`Dodano kontakt: ${formatContactName(created)}`)
@@ -259,13 +261,14 @@ export function ContactComboboxField({
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="contact-phone">Telefon</FieldLabel>
-                  <Input
+                  <MaskInput
                     id="contact-phone"
-                    type="tel"
-                    placeholder="+48 …"
+                    mask={PL_PHONE_MASK}
+                    maskPlaceholder="+48 ___ ___ ___"
+                    placeholder="Numer telefonu"
                     value={createForm.phone}
-                    onChange={(e) =>
-                      setCreateForm((p) => ({ ...p, phone: e.target.value }))
+                    onValueChange={(_masked, unmasked) =>
+                      setCreateForm((p) => ({ ...p, phone: unmasked }))
                     }
                   />
                 </Field>

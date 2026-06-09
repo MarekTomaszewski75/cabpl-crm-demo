@@ -6,6 +6,7 @@ import {
   type ColumnFiltersState,
   type ExpandedState,
   type GroupingState,
+  type PaginationState,
   type Row,
   type SortingState,
   type VisibilityState,
@@ -81,6 +82,14 @@ export function DataTable<TData, TValue>({
     })
   const [grouping, setGrouping] = React.useState<GroupingState>([])
   const [expanded, setExpanded] = React.useState<ExpandedState>(true)
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize,
+  })
+
+  React.useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+  }, [data, columnFilters, sorting, grouping])
 
   const columnVisibilityWithGrouping = React.useMemo(() => {
     const visibility: VisibilityState = { ...columnVisibility, _filter: false }
@@ -101,6 +110,8 @@ export function DataTable<TData, TValue>({
       setExpanded(true)
     },
     onExpandedChange: setExpanded,
+    onPaginationChange: setPagination,
+    autoResetPageIndex: false,
     getCoreRowModel: getCoreRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
@@ -108,7 +119,6 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     initialState: {
-      pagination: { pageSize },
       expanded: true,
     },
     state: {
@@ -117,6 +127,7 @@ export function DataTable<TData, TValue>({
       columnVisibility: columnVisibilityWithGrouping,
       grouping,
       expanded,
+      pagination,
     },
   })
 

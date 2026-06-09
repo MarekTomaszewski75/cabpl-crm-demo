@@ -1,11 +1,14 @@
 "use client"
 
+import * as React from "react"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
+import { LeadEngagementIndicators } from "@/components/crm/lead-engagement-indicators"
 import { InlineEditableField } from "@/components/crm/inline-editable-field"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { getDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { formatDatePl } from "@/lib/format/pl"
@@ -14,8 +17,19 @@ import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 const DEAL_TYPE_NONE = "__none__"
 
 export function DealDetailSidebar({ deal }: { deal: Deal }) {
-  const { updateDeal, users, clients } = useDemoData()
+  const { updateDeal, users, clients, tasks, meetings, dealDocuments } =
+    useDemoData()
   const readOnly = deal.status === "won" || deal.status === "lost"
+
+  const engagementCounts = React.useMemo(
+    () =>
+      getDealEngagementCounts(deal.id, {
+        tasks,
+        meetings,
+        dealDocuments,
+      }),
+    [deal.id, tasks, meetings, dealDocuments],
+  )
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined
   return (
@@ -23,6 +37,8 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
       <Card size="sm">
         <CardHeader><CardTitle className="text-base">O dealu</CardTitle></CardHeader>
         <CardContent className="flex flex-col gap-4">
+          <LeadEngagementIndicators counts={engagementCounts} />
+
           <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Kontakty</span><ContactComboboxField value={deal.contactId ? [deal.contactId] : []} onChange={(ids) => updateDeal(deal.id, { contactId: ids[0] ?? null })} disabled={readOnly} /></div>

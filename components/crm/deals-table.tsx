@@ -40,7 +40,6 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
 import {
-  canFinishDeal,
   DEAL_SOURCE_LABELS,
   DEAL_STATUS_LABELS,
   DEAL_STATUS_OPTIONS,
@@ -64,12 +63,18 @@ const FILTER_ALL = "all"
 const DEAL_TYPE_NONE = "__none__"
 const DEAL_SOURCE_NONE = "__source_none__"
 
-const DEAL_GROUPING_OPTIONS = [
-  { columnId: "status", label: "Status" },
-  { columnId: "source", label: "Źródło" },
-  { columnId: "dealType", label: "Typ" },
-  { columnId: "ownerName", label: "Opiekun" },
-] as const
+function createDealGroupingOptions(showOwnerColumn: boolean) {
+  const options = [
+    { columnId: "status", label: "Status" },
+    { columnId: "source", label: "Źródło" },
+    { columnId: "dealType", label: "Typ" },
+    { columnId: "clientName", label: "Firma" },
+  ]
+  if (showOwnerColumn) {
+    options.push({ columnId: "ownerName", label: "Opiekun" })
+  }
+  return options
+}
 
 type StatusTabValue = typeof FILTER_ALL | DealStatus
 
@@ -130,10 +135,20 @@ export function DealsTable() {
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
   const [dealTypeFilters, setDealTypeFilters] = React.useState<string[]>([])
   const [searchQuery, setSearchQuery] = React.useState("")
-  const [viewMode, setViewMode] = React.useState<DealsViewMode>("table")
+  const [viewMode, setViewMode] = React.useState<DealsViewMode>("kanban")
   const [createSheetOpen, setCreateSheetOpen] = React.useState(false)
 
-  const columns = React.useMemo(() => createDealsColumns(), [])
+  const showOwnerColumn = user?.role !== "advisor"
+
+  const columns = React.useMemo(
+    () => createDealsColumns({ showOwnerColumn }),
+    [showOwnerColumn],
+  )
+
+  const dealGroupingOptions = React.useMemo(
+    () => createDealGroupingOptions(showOwnerColumn),
+    [showOwnerColumn],
+  )
 
   const scopedDeals = React.useMemo(() => {
     if (!user) return []
@@ -164,7 +179,7 @@ export function DealsTable() {
   const filterInput = React.useMemo(
     () => ({
       sourceFilters,
-      ownerFilters,
+      ownerFilters: showOwnerColumn ? ownerFilters : [],
       dealTypeFilters,
       searchQuery,
       users,
@@ -179,6 +194,7 @@ export function DealsTable() {
       users,
       contacts,
       clients,
+      showOwnerColumn,
     ],
   )
 
@@ -268,10 +284,6 @@ export function DealsTable() {
     [filteredDeals, users, contacts, clients],
   )
 
-  const openCount = scopedDeals.filter((deal) =>
-    canFinishDeal(deal.status),
-  ).length
-
   const resultCountLabel = React.useMemo(() => {
     const n = filteredDeals.length
     if (n === 1) return "1 wynik"
@@ -286,7 +298,7 @@ export function DealsTable() {
   return (
     <div className="flex flex-col gap-4">
       <Card size="sm" className="gap-3">
-        <CardHeader className="flex flex-col gap-2 pb-0">
+        <CardHeader className="flex flex-col gap-2 pb-3">
           <div className="flex w-full min-w-0 items-center gap-2">
             <CardTitle className="shrink-0 text-xl">Deale</CardTitle>
             <div
@@ -296,16 +308,6 @@ export function DealsTable() {
             >
               <Button
                 type="button"
-                variant={viewMode === "table" ? "secondary" : "ghost"}
-                size="icon-sm"
-                aria-label="Widok tabeli"
-                aria-pressed={viewMode === "table"}
-                onClick={() => setViewMode("table")}
-              >
-                <Rows2Icon />
-              </Button>
-              <Button
-                type="button"
                 variant={viewMode === "kanban" ? "secondary" : "ghost"}
                 size="icon-sm"
                 aria-label="Widok kanban"
@@ -313,6 +315,16 @@ export function DealsTable() {
                 onClick={() => setViewMode("kanban")}
               >
                 <LayoutGridIcon />
+              </Button>
+              <Button
+                type="button"
+                variant={viewMode === "table" ? "secondary" : "ghost"}
+                size="icon-sm"
+                aria-label="Widok tabeli"
+                aria-pressed={viewMode === "table"}
+                onClick={() => setViewMode("table")}
+              >
+                <Rows2Icon />
               </Button>
             </div>
             <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">
@@ -377,12 +389,14 @@ export function DealsTable() {
               selectedValues={sourceFilters}
               onSelectedValuesChange={setSourceFilters}
             />
-            <DataTableFacetedFilter
-              title="Opiekun"
-              options={ownerFacetedOptions}
-              selectedValues={ownerFilters}
-              onSelectedValuesChange={setOwnerFilters}
-            />
+            {showOwnerColumn ? (
+              <DataTableFacetedFilter
+                title="Opiekun"
+                options={ownerFacetedOptions}
+                selectedValues={ownerFilters}
+                onSelectedValuesChange={setOwnerFilters}
+              />
+            ) : null}
             <DataTableFacetedFilter
               title="Typ deala"
               options={dealTypeFacetedOptions}
@@ -391,16 +405,12 @@ export function DealsTable() {
             />
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            {openCount} w toku przetwarzania · {scopedDeals.length}{" "}
-            {scopedDeals.length === 1 ? "deal" : "deali"} w Twoim zakresie
-          </p>
         </CardHeader>
       </Card>
 
-      <Card size="sm" className="gap-3">
-        <CardContent className="pt-3">
-          {scopedDeals.length === 0 ? (
+      {scopedDeals.length === 0 ? (
+        <Card size="sm" className="gap-3">
+          <CardContent className="pt-3">
             <Empty className="border">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
@@ -412,7 +422,27 @@ export function DealsTable() {
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
-          ) : viewMode === "table" ? (
+          </CardContent>
+        </Card>
+      ) : viewMode === "kanban" ? (
+        filteredDeals.length === 0 ? (
+          <Empty className="rounded-xl border">
+            <EmptyHeader>
+              <EmptyTitle>Brak wyników</EmptyTitle>
+              <EmptyDescription>
+                Zmień filtry lub wyszukiwanie, aby zobaczyć deale na tablicy.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <DealsKanbanBoard
+            deals={filteredDeals}
+            onAddDeal={() => setCreateSheetOpen(true)}
+          />
+        )
+      ) : (
+        <Card size="sm" className="gap-3">
+          <CardContent className="pt-3">
             <DataTable
               columns={columns}
               data={tableData}
@@ -420,27 +450,12 @@ export function DealsTable() {
               initialSorting={[{ id: "createdAt", desc: true }]}
               showSearchInToolbar={false}
               showToolbar={scopedDeals.length > 0}
-              groupingOptions={[...DEAL_GROUPING_OPTIONS]}
+              groupingOptions={dealGroupingOptions}
               onRowClick={(row) => router.push(`/pipeline/${row.id}`)}
             />
-          ) : filteredDeals.length === 0 ? (
-            <Empty className="border">
-              <EmptyHeader>
-                <EmptyTitle>Brak wyników</EmptyTitle>
-                <EmptyDescription>
-                  Zmień filtry lub wyszukiwanie, aby zobaczyć deale na
-                  tablicy.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
-          ) : (
-            <DealsKanbanBoard
-              deals={filteredDeals}
-              onAddDeal={() => setCreateSheetOpen(true)}
-            />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

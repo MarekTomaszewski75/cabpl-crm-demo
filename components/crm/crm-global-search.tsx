@@ -19,8 +19,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandShortcut,
 } from "@/components/ui/command"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+} from "@/components/ui/input-group"
+import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import {
@@ -42,7 +47,11 @@ const KIND_ICONS: Record<GlobalSearchItem["kind"], LucideIcon> = {
   task: CheckSquareIcon,
 }
 
-export function CrmGlobalSearch() {
+type CrmGlobalSearchProps = {
+  className?: string
+}
+
+export function CrmGlobalSearch({ className }: CrmGlobalSearchProps) {
   const router = useRouter()
   const { user } = useSession()
   const { clients, opportunities, leads, tasks } = useDemoData()
@@ -94,20 +103,30 @@ export function CrmGlobalSearch() {
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="sm"
-        className="hidden gap-2 sm:inline-flex"
+      <button
+        type="button"
         onClick={() => setOpen(true)}
+        aria-label="Otwórz wyszukiwarkę globalną"
+        className={cn("hidden w-full min-w-0 sm:block", className)}
       >
-        <SearchIcon data-icon="inline-start" />
-        Szukaj…
-        <CommandShortcut className="hidden lg:inline">⌘K</CommandShortcut>
-      </Button>
+        <InputGroup className="h-9 min-h-9 cursor-pointer bg-background transition-colors hover:bg-muted/30">
+          <InputGroupAddon align="inline-start">
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupText className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
+            Szukaj stron, klientów, deali…
+          </InputGroupText>
+          <InputGroupAddon align="inline-end" className="hidden lg:flex">
+            <kbd className="pointer-events-none rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+              ⌘K
+            </kbd>
+          </InputGroupAddon>
+        </InputGroup>
+      </button>
       <Button
         variant="outline"
-        size="icon-sm"
-        className="sm:hidden"
+        size="icon"
+        className="size-9 shrink-0 sm:hidden"
         aria-label="Szukaj"
         onClick={() => setOpen(true)}
       >
@@ -119,9 +138,13 @@ export function CrmGlobalSearch() {
         onOpenChange={setOpen}
         title="Wyszukiwarka globalna"
         description="Nawigacja po stronach, akcjach i rekordach w Twoim zakresie"
+        className="sm:max-w-xl"
       >
         <Command shouldFilter>
-          <CommandInput placeholder="Strona, akcja, klient, szansa…" />
+          <CommandInput
+            placeholder="Szukaj stron, klientów, deali, leadów, zadań…"
+            className="text-sm"
+          />
           <CommandList>
             <CommandEmpty>Brak wyników.</CommandEmpty>
             {GLOBAL_SEARCH_GROUP_ORDER.map((kind) => {

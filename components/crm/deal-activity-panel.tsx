@@ -25,6 +25,8 @@ import {
   filterDealActivityFeed,
   type DealActivityFilter,
 } from "@/lib/crm/deal-activity"
+import { getDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
+import { formatDatePl } from "@/lib/format/pl"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Deal } from "@/types/crm"
@@ -48,7 +50,8 @@ const FEED_FILTERS: { id: DealActivityFilter; label: string }[] = [
 
 export function DealActivityPanel({ deal }: DealActivityPanelProps) {
   const { user } = useSession()
-  const { dealActivities, users, addDealNote } = useDemoData()
+  const { dealActivities, users, tasks, meetings, dealDocuments, addDealNote } =
+    useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<DealActivityFilter>("all")
@@ -68,16 +71,37 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
     [allItems, feedFilter],
   )
 
+  const engagementCounts = React.useMemo(
+    () =>
+      getDealEngagementCounts(deal.id, {
+        tasks,
+        meetings,
+        dealDocuments,
+      }),
+    [deal.id, tasks, meetings, dealDocuments],
+  )
+
+  const dealFiles = React.useMemo(
+    () =>
+      dealDocuments
+        .filter((doc) => doc.dealId === deal.id)
+        .sort(
+          (a, b) =>
+            new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
+        ),
+    [deal.id, dealDocuments],
+  )
+
   const filterCounts = React.useMemo(() => {
     const counts: Record<DealActivityFilter, number> = {
       all: allItems.length,
       activities: filterDealActivityFeed(allItems, "activities").length,
       notes: filterDealActivityFeed(allItems, "notes").length,
-      files: 0,
-      tasks: 0,
+      files: engagementCounts.documents,
+      tasks: engagementCounts.tasks,
     }
     return counts
-  }, [allItems])
+  }, [allItems, engagementCounts])
 
   function handleAddNote() {
     if (!user) return
@@ -129,7 +153,22 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
               <DealActivityForm deal={deal} />
             </TabsContent>
 
-            <TabsContent value="files">
+            <TabsContent value="files" className="flex flex-col gap-3">
+              {dealFiles.length > 0 ? (
+                <ul className="flex flex-col gap-2">
+                  {dealFiles.map((file) => (
+                    <li
+                      key={file.id}
+                      className="rounded-md border border-border/80 px-3 py-2 text-sm"
+                    >
+                      <p className="font-medium">{file.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Dodano {formatDatePl(file.uploadedAt)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <CompanyFilesUploadZone />
             </TabsContent>
 
