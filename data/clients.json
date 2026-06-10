@@ -588,5 +588,209 @@
     "address": "",
     "website": "",
     "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-029",
+    "name": "TatraSteel Kraków Sp. z o.o.",
+    "nip": "678-000-30-01",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska",
+    "lastActivityAt": "2026-05-26T10:00:00.000Z",
+    "phones": [
+      "+48 12 301 401"
+    ],
+    "emails": [
+      "kontakt@tatrasteel.pl"
+    ],
+    "contactIds": [],
+    "comments": "Producent komponentów automotive — ekspansja linii montażowej.",
+    "source": "partner",
+    "companyType": "active_client",
+    "address": "ul. Przemysłowa 12, 30-001 Kraków",
+    "website": "https://www.tatrasteel.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-030",
+    "name": "Beskid Logistics S.A.",
+    "nip": "678-000-30-02",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska",
+    "lastActivityAt": "2026-05-22T14:30:00.000Z",
+    "phones": [
+      "+48 12 302 402"
+    ],
+    "emails": [
+      "biuro@beskidlogistics.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "phone_call",
+    "companyType": "potential_client",
+    "address": "ul. Magazynowa 5, 32-020 Wieliczka",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-031",
+    "name": "Zakopane Resorts Group",
+    "nip": "678-000-30-03",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska",
+    "lastActivityAt": "2026-05-29T09:15:00.000Z",
+    "phones": [
+      "+48 18 303 403"
+    ],
+    "emails": [
+      "finanse@zakopaneresorts.pl"
+    ],
+    "contactIds": [],
+    "comments": "Sieć hoteli górskich — modernizacja obiektów Q2.",
+    "source": "recommendation",
+    "companyType": "active_client",
+    "address": "ul. Krupówki 20, 34-500 Zakopane",
+    "website": "https://www.zakopaneresorts.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-032",
+    "name": "Baltic Shipyard Gdańsk S.A.",
+    "nip": "583-000-40-01",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze",
+    "lastActivityAt": "2026-05-27T11:00:00.000Z",
+    "phones": [
+      "+48 58 401 501"
+    ],
+    "emails": [
+      "kontakt@balticshipyard.pl"
+    ],
+    "contactIds": [],
+    "comments": "Stocznia remontowa — kontrakt na jednostki offshore.",
+    "source": "partner",
+    "companyType": "active_client",
+    "address": "ul. Stoczniowa 1, 80-001 Gdańsk",
+    "website": "https://www.balticshipyard.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-033",
+    "name": "Tri-City Marine Export Sp. z o.o.",
+    "nip": "583-000-40-02",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze",
+    "lastActivityAt": "2026-05-24T16:00:00.000Z",
+    "phones": [
+      "+48 58 402 502"
+    ],
+    "emails": [
+      "eksport@tricitymarine.pl"
+    ],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "potential_client",
+    "address": "ul. Portowa 8, 81-001 Gdynia",
+    "website": "https://www.tricitymarine.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-035",
+    "name": "Podhale Meble Sp. z o.o.",
+    "nip": "678-000-30-04",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska",
+    "lastActivityAt": "2026-05-21T11:00:00.000Z",
+    "phones": ["+48 12 304 404"],
+    "emails": ["biuro@podhalemeble.pl"],
+    "contactIds": [],
+    "comments": "",
+    "source": "link",
+    "companyType": "potential_client",
+    "address": "ul. Fabryczna 2, 34-400 Nowy Targ",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-036",
+    "name": "Carpathia Chemicals S.A.",
+    "nip": "678-000-30-05",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska",
+    "lastActivityAt": "2026-05-25T15:00:00.000Z",
+    "phones": ["+48 12 305 405"],
+    "emails": ["kontakt@carpathiachem.pl"],
+    "contactIds": [],
+    "comments": "",
+    "source": "partner",
+    "companyType": "active_client",
+    "address": "ul. Chemiczna 7, 31-870 Kraków",
+    "website": "https://www.carpathiachem.pl",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-037",
+    "name": "Port Handlowy Kołobrzeg Sp. z o.o.",
+    "nip": "583-000-40-04",
+    "segment": "Średnie przedsiębiorstwo",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze",
+    "lastActivityAt": "2026-05-19T09:30:00.000Z",
+    "phones": ["+48 94 404 504"],
+    "emails": ["logistyka@porthandlowy.pl"],
+    "contactIds": [],
+    "comments": "",
+    "source": "phone_call",
+    "companyType": "potential_client",
+    "address": "ul. Portowa 15, 78-100 Kołobrzeg",
+    "website": "",
+    "socialMedia": ""
+  },
+  {
+    "id": "client-038",
+    "name": "Offshore Service Sopot S.A.",
+    "nip": "583-000-40-05",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze",
+    "lastActivityAt": "2026-05-27T14:00:00.000Z",
+    "phones": ["+48 58 405 505"],
+    "emails": ["projekty@offshoreservice.pl"],
+    "contactIds": [],
+    "comments": "",
+    "source": "recommendation",
+    "companyType": "active_client",
+    "address": "ul. Hestii 4, 81-731 Sopot",
+    "website": "https://www.offshoreservice.pl",
+    "socialMedia": "linkedin.com/company/demo"
+  },
+  {
+    "id": "client-034",
+    "name": "Pomorskie Wind Energy S.A.",
+    "nip": "583-000-40-03",
+    "segment": "Duże przedsiębiorstwo",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze",
+    "lastActivityAt": "2026-05-30T08:45:00.000Z",
+    "phones": [
+      "+48 58 403 503"
+    ],
+    "emails": [
+      "projekty@pomorskiewind.pl"
+    ],
+    "contactIds": [],
+    "comments": "Farmy wiatrowe na Bałtyku — faza due diligence.",
+    "source": "recommendation",
+    "companyType": "active_client",
+    "address": "ul. Energetyczna 3, 80-244 Gdańsk",
+    "website": "",
+    "socialMedia": "linkedin.com/company/demo"
   }
 ]

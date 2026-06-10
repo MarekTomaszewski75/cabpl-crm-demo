@@ -1,15 +1,15 @@
 # Progress tracker
 
-**For agents:** Ten plik ma być **krótki**. Czytaj go najpierw, żeby wiedzieć *gdzie jesteśmy* i *czego nie duplikować*. Szczegóły w plikach **story/task** oraz w [`reuse-and-conventions.md`](./reuse-and-conventions.md).
+**For agents:** Ten plik ma być **krótki**. Czytaj go najpierw, żeby wiedzieć _gdzie jesteśmy_ i _czego nie duplikować_. Szczegóły w plikach **story/task** oraz w [`reuse-and-conventions.md`](./reuse-and-conventions.md).
 
-| Quick links | |
-|-------------|---|
-| Wymagania | [`requirements.md`](./requirements.md) |
-| User stories | [`stories/README.md`](./stories/README.md) |
-| Reuse / don’t rebuild | [`reuse-and-conventions.md`](./reuse-and-conventions.md) |
-| Architektura | [`architecture-context.md`](./architecture-context.md) |
-| UI | [`ui-context.md`](./ui-context.md), [`design-guide.md`](./design-guide.md) |
-| Praca agenta | [`ai-workflow-rules.md`](./ai-workflow-rules.md) |
+| Quick links           |                                                                            |
+| --------------------- | -------------------------------------------------------------------------- |
+| Wymagania             | [`requirements.md`](./requirements.md)                                     |
+| User stories          | [`stories/README.md`](./stories/README.md)                                 |
+| Reuse / don’t rebuild | [`reuse-and-conventions.md`](./reuse-and-conventions.md)                   |
+| Architektura          | [`architecture-context.md`](./architecture-context.md)                     |
+| UI                    | [`ui-context.md`](./ui-context.md), [`design-guide.md`](./design-guide.md) |
+| Praca agenta          | [`ai-workflow-rules.md`](./ai-workflow-rules.md)                           |
 
 ---
 
@@ -34,16 +34,31 @@
 - **US-33** — **Done** — przebudowa karty leada (layout, Zdarzenia/Timeline, usuń, dokumenty, engagement). [US-33](./stories/US-33-lead-detail-rebuild/story.md).
 - **US-34** — **Done** — przebudowa karty deala (parity z US-33). [US-34](./stories/US-34-deal-detail-rebuild/story.md).
 - **US-35** — **Done** — przebudowa karty firmy (layout, Zdarzenia, dokumenty, 6 wskaźników powiązań). [US-35](./stories/US-35-company-detail-rebuild/story.md).
+- **US-36** — **Done** — analityka per rola: presety menedżer/zarząd, filtry role-aware, hero KPI + Radial, Plan i cele z locked region. [US-36](./stories/US-36-analytics-role-aware-shell/story.md).
+- **US-37** — **Done** — panel menedżera: preset Mój zespół (8 widżetów), wykresy Bar/Area/Radar/Line, ranking z klikiem → filtr doradcy, 3 presety. [US-37](./stories/US-37-analytics-regional-manager/story.md).
+- **US-38** — **Done** — panel zarządu: preset **Portfel banku** (10 widżetów), wykresy Area/Bar/Pie/Line/Radar, scorecard z drill-down regionu, presety Regiony i Produkty i lejki. [US-38](./stories/US-38-analytics-executive/story.md).
+- **US-39** — **Done** — biblioteka wykresów shadcn: Radial, Area, Line, Pie (donut), Radar w `components/crm/analytics/charts/`; użycie w widżetach US-36–US-38. [US-39](./stories/US-39-analytics-shadcn-charts/story.md).
+- **US-40** — **Done** — seed multi-region: doradcy `user-kasia` / `user-tomek`, klienci/deale/leady/zadania/spotkania w Małopolskie i Pomorze. [US-40](./stories/US-40-analytics-multi-region-seed/story.md).
 
 ---
 
 ## Active work
 
-- — (brak aktywnego taska — wybierz następny z [`stories/README.md`](./stories/README.md))
+- — (brak aktywnego taska — wybierz następny story z [`stories/README.md`](./stories/README.md))
 
 ---
 
 ## Recently completed
+
+- **US-40** (story **Done**) — seed multi-region: 2 doradców (`malopolska`, `pomorze`), 6 klientów, 8 dealów, 8 leadów, 12 zadań, 6 spotkań; spójne `ownerId`/`regionId`; RBAC bez zmian. [US-40](./stories/US-40-analytics-multi-region-seed/story.md).
+
+- **US-39** (story **Done**) — 5 komponentów wykresów shadcn w `analytics/charts/`: Radial (hero KPI), Area (multi/stacked), Line, Pie (donut), Radar; `ChartContainer` + tokeny `--chart-*`, empty state przez `AnalyticsWidgetEmpty`. [US-39](./stories/US-39-analytics-shadcn-charts/story.md).
+
+- **US-38** (story **Done**) — panel zarządu: 10 widżetów w presecie **Portfel banku**, `AnalyticsPieChart`, agregacje executive w `metrics.ts`, klik scorecard/pie → filtr region/segment. [US-38](./stories/US-38-analytics-executive/story.md).
+
+- **US-37** (story **Done**) — panel menedżera: `advisor-won-amount`, `team-activity-area`, `advisor-radar`, `advisor-ranking`, `lead-conversion-line`; komponenty `AnalyticsAreaChart` / `LineChart` / `RadarChart`; agregacje w `metrics.ts`; preset **Mój zespół** (8 widżetów). [US-37](./stories/US-37-analytics-regional-manager/story.md).
+
+- **US-36** (story **Done**) — shell analityki per rola: `MANAGER_PANEL_PRESETS` / `EXECUTIVE_PANEL_PRESETS`, filtry Doradca vs Region/Segment, hero KPI + `AnalyticsRadialChart`, podtytuł roli, Plan i cele z `lockedRegionId` + tabela segmentów. [US-36](./stories/US-36-analytics-role-aware-shell/story.md).
 
 - **US-35** (story **Done**) — karta firmy: layout 2 kolumny bez zakładek; sekcja **Zdarzenia** (Timeline); `deleteClient` + `AlertDialog`; `ClientDocument` + zakładka Dokumenty; 6 wskaźników engagement + listy powiązań; `+ Lead` w nagłówku; composer bez Poczty. [US-35](./stories/US-35-company-detail-rebuild/story.md).
 
@@ -53,7 +68,7 @@
 
 ## Next up
 
-- Kolejna story z [`stories/README.md`](./stories/README.md) (jeśli zdefiniowana).
+1. — (sprawdź [`stories/README.md`](./stories/README.md) — US-01…US-40 zamknięte)
 
 ---
 
@@ -66,8 +81,8 @@
 ## Open questions
 
 | Temat | Plik |
-|-------|------|
-| — | — |
+| ----- | ---- |
+| —     | —    |
 
 ---
 

@@ -464,5 +464,141 @@
     "opportunityId": "opp-001",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
+  },
+  {
+    "id": "task-mal-001",
+    "title": "Przygotować model finansowy linii produkcyjnej",
+    "dueDate": "2026-06-02",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-029",
+    "opportunityId": "opp-051",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-mal-002",
+    "title": "Uzgodnić warunki leasingu floty",
+    "dueDate": "2026-06-04",
+    "priority": "medium",
+    "completed": false,
+    "clientId": "client-030",
+    "opportunityId": "opp-052",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-mal-003",
+    "title": "Follow-up po komitecie kredytowym",
+    "dueDate": "2026-06-06",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-029",
+    "opportunityId": "opp-051",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-mal-004",
+    "title": "Weryfikacja KYC — Zakopane Resorts",
+    "dueDate": "2026-06-08",
+    "priority": "low",
+    "completed": false,
+    "clientId": "client-031",
+    "opportunityId": "opp-053",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-lead-013",
+    "title": "Przygotować ofertę modernizacji hotelu",
+    "dueDate": "2026-06-05",
+    "priority": "medium",
+    "completed": false,
+    "clientId": "client-031",
+    "opportunityId": null,
+    "leadId": "lead-013",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-lead-015",
+    "title": "Analiza zabezpieczeń fabryki automotive",
+    "dueDate": "2026-06-07",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-029",
+    "opportunityId": null,
+    "leadId": "lead-015",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "task-pom-001",
+    "title": "Zebrać dokumenty do kredytu stoczniowego",
+    "dueDate": "2026-06-01",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-032",
+    "opportunityId": "opp-055",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "task-pom-002",
+    "title": "Uzgodnić harmonogram remontu doku",
+    "dueDate": "2026-06-03",
+    "priority": "medium",
+    "completed": false,
+    "clientId": "client-032",
+    "opportunityId": "opp-055",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "task-pom-003",
+    "title": "Prezentacja depozytu korporacyjnego",
+    "dueDate": "2026-06-07",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-034",
+    "opportunityId": "opp-058",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "task-pom-004",
+    "title": "Weryfikacja kontrahentów faktoringowych",
+    "dueDate": "2026-06-09",
+    "priority": "medium",
+    "completed": true,
+    "clientId": "client-033",
+    "opportunityId": "opp-057",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "task-lead-017",
+    "title": "Spotkanie z działem technicznym stoczni",
+    "dueDate": "2026-06-04",
+    "priority": "high",
+    "completed": false,
+    "clientId": "client-032",
+    "opportunityId": null,
+    "leadId": "lead-017",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "task-lead-019",
+    "title": "Przygotować ofertę gwarancji przetargowej",
+    "dueDate": "2026-06-06",
+    "priority": "medium",
+    "completed": false,
+    "clientId": null,
+    "opportunityId": null,
+    "leadId": "lead-019",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
   }
 ]

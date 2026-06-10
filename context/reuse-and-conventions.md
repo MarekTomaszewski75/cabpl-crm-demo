@@ -228,15 +228,21 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Treść:** statyczna PL — `Card` + `Alert`, tabela wariantów A/B (`Table`), oś faz bez animacji
 - **Strona:** `app/(dashboard)/compliance/page.tsx` — import `ComplianceView`
 
-### Analityka — przestrzeń widżetów (US-20)
+### Analityka — przestrzeń widżetów (US-20, US-36)
 - **Strona:** `app/(dashboard)/dashboard/page.tsx` — `AnalyticsRoleGuard` → `AnalyticsWorkspace`
-- **Shell:** `analytics-workspace.tsx`, `analytics-filters-bar.tsx`, `analytics-panel-grid.tsx` (DnD `@dnd-kit/core`)
-- **Widżet:** `analytics-widget.tsx` + `analytics-domain-badge.tsx` + `analytics-widget-restricted.tsx`
+- **Shell:** `analytics-workspace.tsx`, `analytics-filters-bar.tsx`, `analytics-panel-grid.tsx` (DnD `@dnd-kit/core`); hero KPI: `analytics/analytics-hero-kpi-row.tsx`
+- **Widżet:** `analytics-widget.tsx` + `analytics-domain-badge.tsx`
 - **Renderer:** `components/crm/analytics/widgets/widget-renderer.tsx` — mapuje `kind` → KPI / wykres / lejek
-- **Konfiguracja:** `types/analytics.ts`, `lib/analytics/widget-registry.ts` (10 widżetów, 2 presety)
-- **Metryki operacyjne:** `lib/analytics/metrics.ts` + `filters.ts` + `scope.ts` — dane z `leads` / `deals` / `tasks`, `filterByScope` + filtr opiekuna
-- **RBAC widżetów:** `lib/analytics/widget-access.ts` — `canViewAnalyticsWidget`; restricted: `avg-deal-duration` (menedżer, doradca), `won-amount-by-source` (menedżer)
-- **Plan i cele:** zakładka osadza `ExecutiveDashboard` z `embedded` (US-07 bez regresji)
+- **Konfiguracja:** `types/analytics.ts`, `lib/analytics/widget-registry.ts` — `MANAGER_PANEL_PRESETS` / `EXECUTIVE_PANEL_PRESETS`, `getAnalyticsPresetsForRole`, `getDefaultPresetForRole`
+- **Metryki operacyjne:** `lib/analytics/metrics.ts` + `filters.ts` + `scope.ts` — dane z `leads` / `deals` / `tasks` / `clients` / `kpi`; filtry opiekun / region / segment
+- **RBAC widżetów:** `lib/analytics/widget-access.ts` — `isWidgetAvailableForRole`; widżety spoza roli nie renderują się
+- **Wykresy shadcn (reuse):** `analytics/charts/analytics-radial-chart.tsx`, `analytics-area-chart.tsx`, `analytics-line-chart.tsx`, `analytics-radar-chart.tsx`, `analytics-pie-chart.tsx` — props `data` + `series` / `entities`; kolory `--chart-*`
+- **Widżety menedżera (US-37):** `advisor-won-amount-widget`, `team-activity-area-widget`, `advisor-radar-widget`, `advisor-ranking-table-widget` (klik → `onAdvisorSelect`), `lead-conversion-line-widget`
+- **Widżety zarządu (US-38):** `plan-actual-area-widget`, `region-realization-bar-widget`, `segment-share-pie-widget` (klik → `onSegmentSelect`), `forecast-scenarios-line-widget`, `region-radar-widget`, `region-scorecard-table-widget` (klik → `onRegionSelect`), `product-category-won-widget`, `leads-vs-won-line-widget`, `top-open-deals-table-widget`, `region-plan-radial-widget`
+- **Presety executive:** `EXECUTIVE_PANEL_PRESETS` — Portfel banku (10 widżetów), Regiony, Produkty i lejki
+- **Radial (hero KPI):** `components/crm/analytics/charts/analytics-radial-chart.tsx`
+- **Podtytuł roli:** `lib/analytics/workspace-subtitle.ts`
+- **Plan i cele:** `ExecutiveDashboard` (`embedded`, `lockedRegionId`, `showSegmentTable`); tabela segmentów: `analytics/plan-segment-table.tsx`
 - **Nawigacja:** `lib/rbac/nav-structure.ts` — Analityka: `executive` + `regional_manager`; `advisor` — brak w menu + toast przy wejściu na `/dashboard`
 
 ### Executive dashboard / Plan i cele (US-07, zakładka US-20)

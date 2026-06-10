@@ -21,6 +21,7 @@ const WIDGET_SIZE_CLASSES: Record<AnalyticsWidgetSize, string> = {
   "2x1": "col-span-1 md:col-span-2",
   "1x2": "col-span-1 row-span-2",
   "2x2": "col-span-1 md:col-span-2 row-span-2",
+  "4x2": "col-span-1 md:col-span-2 xl:col-span-4 row-span-2",
 }
 
 export type AnalyticsWidgetDragHandleProps = {
@@ -53,7 +54,6 @@ export function AnalyticsWidget({
     <Card
       className={cn(
         "relative overflow-hidden rounded-xl shadow-sm ring-foreground/8",
-        getAnalyticsWidgetGridClass(definition.size),
         className,
       )}
     >

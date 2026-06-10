@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
+import { PlanSegmentTable } from "@/components/crm/analytics/plan-segment-table"
 import { KpiCard, KpiPlanActualCard } from "@/components/crm/kpi-card"
 import {
   Card,
@@ -78,15 +79,29 @@ function formatAxisPln(value: number) {
 type ExecutiveDashboardProps = {
   /** Ukrywa nagłówek modułu — używane w zakładce Plan i cele (US-20). */
   embedded?: boolean
+  /** Wymusza region i ukrywa select (menedżer regionalny). */
+  lockedRegionId?: string
+  /** Tabela segmentów pod wykresem — tylko zarząd. */
+  showSegmentTable?: boolean
 }
 
-export function ExecutiveDashboard({ embedded = false }: ExecutiveDashboardProps) {
+export function ExecutiveDashboard({
+  embedded = false,
+  lockedRegionId,
+  showSegmentTable = false,
+}: ExecutiveDashboardProps) {
   const { kpi } = useDemoData()
   const [filters, setFilters] = React.useState<ExecutiveDashboardFilters>({
     timePeriod: "ytd",
-    regionId: EXECUTIVE_FILTER_ALL,
+    regionId: lockedRegionId ?? EXECUTIVE_FILTER_ALL,
     segmentId: EXECUTIVE_FILTER_ALL,
   })
+
+  React.useEffect(() => {
+    if (lockedRegionId) {
+      setFilters((prev) => ({ ...prev, regionId: lockedRegionId }))
+    }
+  }, [lockedRegionId])
 
   const totals = React.useMemo(
     () => getExecutiveTotals(kpi, filters),
@@ -97,6 +112,10 @@ export function ExecutiveDashboard({ embedded = false }: ExecutiveDashboardProps
     [kpi, filters]
   )
   const timeLabel = getExecutiveTimePeriodLabel(filters.timePeriod)
+  const lockedRegionName = lockedRegionId
+    ? kpi.byRegion.find((region) => region.regionId === lockedRegionId)
+        ?.regionName
+    : null
 
   const setTimePeriod = (timePeriod: ExecutiveTimePeriod) => {
     setFilters((prev) => ({ ...prev, timePeriod }))
@@ -110,7 +129,9 @@ export function ExecutiveDashboard({ embedded = false }: ExecutiveDashboardProps
             Plan i realizacja
           </h2>
           <p className="text-sm text-muted-foreground">
-            Plan vs realizacja, forecast i podziały — widok bank-wide (demo).
+            {lockedRegionName
+              ? `Plan vs realizacja regionu ${lockedRegionName} — widok menedżera (demo).`
+              : "Plan vs realizacja, forecast i podziały — widok bank-wide (demo)."}
           </p>
         </div>
       ) : (
@@ -136,28 +157,30 @@ export function ExecutiveDashboard({ embedded = false }: ExecutiveDashboardProps
         </Tabs>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Select
-            value={filters.regionId}
-            onValueChange={(regionId) =>
-              setFilters((prev) => ({ ...prev, regionId }))
-            }
-          >
-            <SelectTrigger className="w-full min-w-44 sm:w-48">
-              <SelectValue placeholder="Region" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value={EXECUTIVE_FILTER_ALL}>
-                  Wszystkie regiony
-                </SelectItem>
-                {kpi.byRegion.map((region) => (
-                  <SelectItem key={region.regionId} value={region.regionId}>
-                    {region.regionName}
+          {!lockedRegionId ? (
+            <Select
+              value={filters.regionId}
+              onValueChange={(regionId) =>
+                setFilters((prev) => ({ ...prev, regionId }))
+              }
+            >
+              <SelectTrigger className="w-full min-w-44 sm:w-48">
+                <SelectValue placeholder="Region" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value={EXECUTIVE_FILTER_ALL}>
+                    Wszystkie regiony
                   </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+                  {kpi.byRegion.map((region) => (
+                    <SelectItem key={region.regionId} value={region.regionId}>
+                      {region.regionName}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : null}
 
           <Select
             value={filters.segmentId}
@@ -287,6 +310,23 @@ export function ExecutiveDashboard({ embedded = false }: ExecutiveDashboardProps
           </ChartContainer>
         </CardContent>
       </Card>
+
+      {showSegmentTable ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h3 className="font-heading text-base font-semibold tracking-tight">
+              Realizacja wg segmentu
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Plan · realizacja · forecast per segment ({timeLabel.toLowerCase()})
+            </p>
+          </div>
+          <PlanSegmentTable
+            segments={kpi.bySegment}
+            timePeriod={filters.timePeriod}
+          />
+        </section>
+      ) : null}
     </div>
   )
 }

@@ -14,10 +14,13 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core"
 import { CSS } from "@dnd-kit/utilities"
-import { AnalyticsWidget } from "@/components/crm/analytics-widget"
+import {
+  AnalyticsWidget,
+  getAnalyticsWidgetGridClass,
+} from "@/components/crm/analytics-widget"
 import { WidgetRenderer } from "@/components/crm/analytics/widgets/widget-renderer"
 import { getAnalyticsWidgetById } from "@/lib/analytics/widget-registry"
-import { isAnalyticsWidgetRestricted } from "@/lib/analytics/widget-access"
+import { isWidgetAvailableForRole } from "@/lib/analytics/widget-access"
 import { cn } from "@/lib/utils"
 import type { AnalyticsGlobalFilters } from "@/types/analytics"
 import type { Deal, DemoUser, Lead, Task } from "@/types/crm"
@@ -31,9 +34,15 @@ type AnalyticsPanelGridProps = {
     leads: readonly Lead[]
     deals: readonly Deal[]
     tasks: readonly Task[]
+    meetings?: readonly import("@/types/crm").Meeting[]
     users: readonly DemoUser[]
+    clients?: readonly import("@/types/crm").Client[]
+    kpi?: import("@/types/crm").KpiSnapshot
   }
   onReorder: (widgetIds: string[]) => void
+  onAdvisorSelect?: (ownerId: string) => void
+  onRegionSelect?: (regionId: string) => void
+  onSegmentSelect?: (segmentId: string) => void
 }
 
 function reorderWidgets(
@@ -56,6 +65,9 @@ type SortableAnalyticsWidgetProps = {
   user: DemoUser
   isLoading?: boolean
   data: AnalyticsPanelGridProps["data"]
+  onAdvisorSelect?: (ownerId: string) => void
+  onRegionSelect?: (regionId: string) => void
+  onSegmentSelect?: (segmentId: string) => void
 }
 
 function SortableAnalyticsWidget({
@@ -64,6 +76,9 @@ function SortableAnalyticsWidget({
   user,
   isLoading,
   data,
+  onAdvisorSelect,
+  onRegionSelect,
+  onSegmentSelect,
 }: SortableAnalyticsWidgetProps) {
   const definition = getAnalyticsWidgetById(widgetId)
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -71,6 +86,7 @@ function SortableAnalyticsWidget({
   const { setNodeRef: setDropRef } = useDroppable({ id: widgetId })
 
   if (!definition) return null
+  if (!isWidgetAvailableForRole(definition, user.role)) return null
 
   const setRefs = (node: HTMLDivElement | null) => {
     setNodeRef(node)
@@ -85,11 +101,14 @@ function SortableAnalyticsWidget({
     <div
       ref={setRefs}
       style={style}
-      className={cn(isDragging && "opacity-50")}
+      className={cn(
+        getAnalyticsWidgetGridClass(definition.size),
+        isDragging && "opacity-50",
+      )}
     >
       <AnalyticsWidget
         definition={definition}
-        isRestricted={isAnalyticsWidgetRestricted(definition, user)}
+        isRestricted={false}
         isLoading={isLoading}
         dragHandleProps={{ attributes, listeners }}
       >
@@ -98,6 +117,9 @@ function SortableAnalyticsWidget({
           filters={filters}
           user={user}
           data={data}
+          onAdvisorSelect={onAdvisorSelect}
+          onRegionSelect={onRegionSelect}
+          onSegmentSelect={onSegmentSelect}
         />
       </AnalyticsWidget>
     </div>
@@ -111,6 +133,9 @@ export function AnalyticsPanelGrid({
   isLoading = false,
   data,
   onReorder,
+  onAdvisorSelect,
+  onRegionSelect,
+  onSegmentSelect,
 }: AnalyticsPanelGridProps) {
   const [activeId, setActiveId] = React.useState<string | null>(null)
 
@@ -143,7 +168,12 @@ export function AnalyticsPanelGrid({
       onDragEnd={handleDragEnd}
     >
       <div className="grid auto-rows-min grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {widgetIds.map((widgetId) => (
+        {widgetIds
+          .filter((widgetId) => {
+            const definition = getAnalyticsWidgetById(widgetId)
+            return definition && isWidgetAvailableForRole(definition, user.role)
+          })
+          .map((widgetId) => (
           <SortableAnalyticsWidget
             key={widgetId}
             widgetId={widgetId}
@@ -151,15 +181,19 @@ export function AnalyticsPanelGrid({
             user={user}
             isLoading={isLoading}
             data={data}
+            onAdvisorSelect={onAdvisorSelect}
+            onRegionSelect={onRegionSelect}
+            onSegmentSelect={onSegmentSelect}
           />
         ))}
       </div>
 
       <DragOverlay>
-        {activeDefinition ? (
+        {activeDefinition &&
+        isWidgetAvailableForRole(activeDefinition, user.role) ? (
           <AnalyticsWidget
             definition={activeDefinition}
-            isRestricted={isAnalyticsWidgetRestricted(activeDefinition, user)}
+            isRestricted={false}
             className="shadow-lg"
           >
             <div className="min-h-24" />

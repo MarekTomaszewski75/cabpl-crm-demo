@@ -412,5 +412,71 @@
     "note": "Biuro klienta",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-mal-001",
+    "title": "Przegląd relacji — TatraSteel Kraków",
+    "clientId": "client-029",
+    "opportunityId": "opp-051",
+    "startsAt": "2026-06-04T09:00:00.000Z",
+    "endsAt": "2026-06-04T10:30:00.000Z",
+    "note": "Siedziba klienta, Kraków",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "meeting-mal-002",
+    "title": "Prezentacja leasingu — Beskid Logistics",
+    "clientId": "client-030",
+    "opportunityId": "opp-052",
+    "startsAt": "2026-06-06T11:00:00.000Z",
+    "endsAt": "2026-06-06T12:00:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "meeting-mal-003",
+    "title": "Spotkanie inwestycyjne — Zakopane Resorts",
+    "clientId": "client-031",
+    "leadId": "lead-013",
+    "startsAt": "2026-06-05T13:00:00.000Z",
+    "endsAt": "2026-06-05T14:30:00.000Z",
+    "note": "Hotel centralny, Zakopane",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "meeting-pom-001",
+    "title": "Omówienie kredytu stoczniowego — Baltic Shipyard",
+    "clientId": "client-032",
+    "opportunityId": "opp-055",
+    "startsAt": "2026-06-03T10:00:00.000Z",
+    "endsAt": "2026-06-03T11:30:00.000Z",
+    "note": "Siedziba stoczni, Gdańsk",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "meeting-pom-002",
+    "title": "Akredytywa eksportowa — Tri-City Marine",
+    "clientId": "client-033",
+    "opportunityId": "opp-057",
+    "startsAt": "2026-06-05T12:00:00.000Z",
+    "endsAt": "2026-06-05T13:00:00.000Z",
+    "note": "Online Teams",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "meeting-pom-003",
+    "title": "Due diligence — Pomorskie Wind Energy",
+    "clientId": "client-034",
+    "opportunityId": "opp-058",
+    "startsAt": "2026-06-07T09:00:00.000Z",
+    "endsAt": "2026-06-07T10:30:00.000Z",
+    "note": "Biuro projektowe, Gdańsk",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
   }
 ]

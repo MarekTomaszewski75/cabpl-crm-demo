@@ -34,5 +34,23 @@
     "roleLabelPl": "Członek Zarządu",
     "regionId": null,
     "scopeDescriptionPl": "Widok bank-wide — wszystkie regiony"
+  },
+  {
+    "id": "user-kasia",
+    "displayName": "Katarzyna Malicka",
+    "email": "katarzyna.malicka@demo.cabpl",
+    "role": "advisor",
+    "roleLabelPl": "Doradca korporacyjny",
+    "regionId": "malopolska",
+    "scopeDescriptionPl": "Własni klienci i szanse w regionie Małopolska"
+  },
+  {
+    "id": "user-tomek",
+    "displayName": "Tomasz Lewandowski",
+    "email": "tomasz.lewandowski@demo.cabpl",
+    "role": "advisor",
+    "roleLabelPl": "Doradca korporacyjny",
+    "regionId": "pomorze",
+    "scopeDescriptionPl": "Własni klienci i szanse w regionie Pomorze"
   }
 ]
