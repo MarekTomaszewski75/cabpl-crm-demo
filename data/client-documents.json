@@ -1,0 +1,26 @@
+[
+  {
+    "id": "client-doc-001",
+    "clientId": "client-001",
+    "name": "Umowa ramowa — Polska Logistyka.pdf",
+    "uploadedAt": "2026-05-15T10:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-doc-002",
+    "clientId": "client-001",
+    "name": "Analiza ryzyka kredytowego Q2.xlsx",
+    "uploadedAt": "2026-05-22T14:30:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-doc-003",
+    "clientId": "client-003",
+    "name": "Wyciąg z KRS — Baltic Foods.pdf",
+    "uploadedAt": "2026-05-10T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  }
+]

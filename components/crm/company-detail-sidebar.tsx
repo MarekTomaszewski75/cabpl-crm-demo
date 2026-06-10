@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { PlusIcon, Trash2Icon } from "lucide-react"
+import { CompanyEngagementIndicators } from "@/components/crm/company-engagement-indicators"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
 import { InlineEditableField } from "@/components/crm/inline-editable-field"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,8 @@ import {
   COMPANY_SOURCE_OPTIONS,
   COMPANY_TYPE_OPTIONS,
 } from "@/lib/crm/company-labels"
+import { useSession } from "@/lib/auth/demo-session"
+import { getScopedCompanyEngagementCounts } from "@/lib/crm/company-engagement-counts"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Client, CompanySource, CompanyType } from "@/types/crm"
 
@@ -32,6 +35,12 @@ const SOURCE_NONE = "__none__"
 
 type CompanyDetailSidebarProps = {
   client: Client
+  onTasksClick?: () => void
+  onMeetingsClick?: () => void
+  onDocumentsClick?: () => void
+  onDealsClick?: () => void
+  onLeadsClick?: () => void
+  onContactsClick?: () => void
 }
 
 function StringListEditor({
@@ -134,8 +143,43 @@ function StringListEditor({
   )
 }
 
-export function CompanyDetailSidebar({ client }: CompanyDetailSidebarProps) {
-  const { updateClient } = useDemoData()
+export function CompanyDetailSidebar({
+  client,
+  onTasksClick,
+  onMeetingsClick,
+  onDocumentsClick,
+  onDealsClick,
+  onLeadsClick,
+  onContactsClick,
+}: CompanyDetailSidebarProps) {
+  const { user } = useSession()
+  const {
+    updateClient,
+    tasks,
+    meetings,
+    clientDocuments,
+    deals,
+    leads,
+    contacts,
+  } = useDemoData()
+
+  const engagementCounts = React.useMemo(() => {
+    if (!user) {
+      return {
+        tasks: 0,
+        meetings: 0,
+        documents: 0,
+        deals: 0,
+        leads: 0,
+        contacts: 0,
+      }
+    }
+    return getScopedCompanyEngagementCounts(
+      client,
+      { tasks, meetings, clientDocuments, deals, leads, contacts },
+      user,
+    )
+  }, [client, user, tasks, meetings, clientDocuments, deals, leads, contacts])
 
   function patch(partial: Partial<Client>) {
     updateClient(client.id, partial)
@@ -144,8 +188,17 @@ export function CompanyDetailSidebar({ client }: CompanyDetailSidebarProps) {
   return (
     <div className="flex w-full max-w-sm shrink-0 flex-col gap-4">
       <Card size="sm">
-        <CardHeader>
+        <CardHeader className="flex flex-col gap-2">
           <CardTitle className="text-base">O firmie</CardTitle>
+          <CompanyEngagementIndicators
+            counts={engagementCounts}
+            onTasksClick={onTasksClick}
+            onMeetingsClick={onMeetingsClick}
+            onDocumentsClick={onDocumentsClick}
+            onDealsClick={onDealsClick}
+            onLeadsClick={onLeadsClick}
+            onContactsClick={onContactsClick}
+          />
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <InlineEditableField

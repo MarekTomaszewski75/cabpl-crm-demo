@@ -2,14 +2,11 @@
 
 import * as React from "react"
 import {
-  Building2Icon,
   CalendarIcon,
   ChevronDownIcon,
   MailIcon,
   MessageSquareIcon,
   PhoneIcon,
-  UserIcon,
-  XIcon,
   ZapIcon,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -75,31 +72,6 @@ function ActivityOutlinedField({
   )
 }
 
-function ActivityEntityChip({
-  label,
-  onRemove,
-  icon: Icon = UserIcon,
-}: {
-  label: string
-  onRemove: () => void
-  icon?: LucideIcon
-}) {
-  return (
-    <span className="inline-flex max-w-full items-center gap-1 rounded-sm bg-primary/15 py-0.5 pr-0.5 pl-1.5 text-xs font-medium text-foreground">
-      <Icon className="size-3.5 shrink-0 text-primary" aria-hidden />
-      <span className="truncate">{label}</span>
-      <button
-        type="button"
-        className="rounded-sm p-0.5 text-muted-foreground hover:bg-background/80 hover:text-foreground"
-        onClick={onRemove}
-        aria-label={`Usuń ${label}`}
-      >
-        <XIcon className="size-3" aria-hidden />
-      </button>
-    </span>
-  )
-}
-
 function ActivityCollapsibleSection({
   title,
   count,
@@ -151,7 +123,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
   )
   const [peopleOpen, setPeopleOpen] = React.useState(true)
   const [linksOpen, setLinksOpen] = React.useState(true)
-  const [companyLinked, setCompanyLinked] = React.useState(true)
   const [leadDealQuery, setLeadDealQuery] = React.useState("")
   const [contactQuery, setContactQuery] = React.useState("")
 
@@ -165,7 +136,7 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
     (state.responsibleUserId ? 1 : 0) +
     state.participantUserIds.length +
     state.participantContactIds.length
-  const linksCount = companyLinked ? 1 : 0
+  const linksCount = 0
 
   function patch(partial: Partial<CompanyActivityFormState>) {
     setState((prev) => ({ ...prev, ...partial }))
@@ -175,7 +146,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
     setState(emptyActivityFormState(user?.id ?? null))
     setPeopleOpen(true)
     setLinksOpen(true)
-    setCompanyLinked(true)
     setLeadDealQuery("")
     setContactQuery("")
   }
@@ -354,24 +324,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
                 placeholder="Nazwa kontaktu"
                 className="h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
               />
-            </ActivityOutlinedField>
-
-            <ActivityOutlinedField label="Firma">
-              <div className="flex min-h-6 flex-wrap items-center gap-1 pt-0.5">
-                {companyLinked ? (
-                  <ActivityEntityChip
-                    label={client.name}
-                    icon={Building2Icon}
-                    onRemove={() => setCompanyLinked(false)}
-                  />
-                ) : null}
-                <Input
-                  placeholder="Zacznij wprowadzać nazwę firmy"
-                  className="h-7 min-w-[12rem] flex-1 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-                  disabled={companyLinked}
-                  aria-disabled={companyLinked}
-                />
-              </div>
             </ActivityOutlinedField>
           </div>
         </ActivityCollapsibleSection>

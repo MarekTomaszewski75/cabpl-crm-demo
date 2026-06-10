@@ -2,15 +2,11 @@
 
 import * as React from "react"
 import {
-  BriefcaseIcon,
-  Building2Icon,
   CalendarIcon,
   ChevronDownIcon,
   MailIcon,
   MessageSquareIcon,
   PhoneIcon,
-  UserIcon,
-  XIcon,
   ZapIcon,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -37,7 +33,6 @@ import {
   toAddCompanyActivityInput,
   type CompanyActivityFormState,
 } from "@/lib/crm/company-activity-types"
-import { formatContactName } from "@/lib/crm/contact-display"
 import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
@@ -74,33 +69,6 @@ function ActivityOutlinedField({
         {children}
       </div>
     </div>
-  )
-}
-
-function ActivityEntityChip({
-  label,
-  onRemove,
-  icon: Icon = UserIcon,
-}: {
-  label: string
-  onRemove?: () => void
-  icon?: LucideIcon
-}) {
-  return (
-    <span className="inline-flex max-w-full items-center gap-1 rounded-sm bg-primary/15 py-0.5 pr-0.5 pl-1.5 text-xs font-medium text-foreground">
-      <Icon className="size-3.5 shrink-0 text-primary" aria-hidden />
-      <span className="truncate">{label}</span>
-      {onRemove ? (
-        <button
-          type="button"
-          className="rounded-sm p-0.5 text-muted-foreground hover:bg-background/80 hover:text-foreground"
-          onClick={onRemove}
-          aria-label={`Usuń ${label}`}
-        >
-          <XIcon className="size-3" aria-hidden />
-        </button>
-      ) : null}
-    </span>
   )
 }
 
@@ -149,26 +117,11 @@ function ActivityCollapsibleSection({
 
 export function DealActivityForm({ deal }: DealActivityFormProps) {
   const { user } = useSession()
-  const { users, contacts, clients, addDealChannelActivity } = useDemoData()
+  const { users, contacts, addDealChannelActivity } = useDemoData()
   const [state, setState] = React.useState<CompanyActivityFormState>(() =>
     emptyActivityFormState(user?.id ?? null),
   )
   const [peopleOpen, setPeopleOpen] = React.useState(true)
-  const [linksOpen, setLinksOpen] = React.useState(true)
-  const [dealLinked] = React.useState(true)
-  const [companyLinked, setCompanyLinked] = React.useState(
-    () => Boolean(deal.clientId),
-  )
-  const [contactLinked, setContactLinked] = React.useState(
-    () => Boolean(deal.contactId),
-  )
-
-  const linkedClient = deal.clientId
-    ? clients.find((c) => c.id === deal.clientId)
-    : undefined
-  const linkedContact = deal.contactId
-    ? contacts.find((c) => c.id === deal.contactId)
-    : undefined
 
   React.useEffect(() => {
     if (user && !state.responsibleUserId) {
@@ -182,10 +135,6 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
     (state.responsibleUserId ? 1 : 0) +
     state.participantUserIds.length +
     state.participantContactIds.length
-  const linksCount =
-    (dealLinked ? 1 : 0) +
-    (companyLinked && linkedClient ? 1 : 0) +
-    (contactLinked && linkedContact ? 1 : 0)
 
   function patch(partial: Partial<CompanyActivityFormState>) {
     setState((prev) => ({ ...prev, ...partial }))
@@ -194,9 +143,6 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
   function handleReset() {
     setState(emptyActivityFormState(user?.id ?? null))
     setPeopleOpen(true)
-    setLinksOpen(true)
-    setCompanyLinked(Boolean(deal.clientId))
-    setContactLinked(Boolean(deal.contactId))
   }
 
   function handleSave() {
@@ -350,57 +296,6 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
                   patch({ participantUserIds, participantContactIds })
                 }
               />
-            </ActivityOutlinedField>
-          </div>
-        </ActivityCollapsibleSection>
-
-        <ActivityCollapsibleSection
-          title="Powiązania z CRM"
-          count={linksCount}
-          open={linksOpen}
-          onOpenChange={setLinksOpen}
-        >
-          <div className="flex flex-col gap-3">
-            <ActivityOutlinedField label="Deal">
-              <div className="flex min-h-6 flex-wrap items-center gap-1 pt-0.5">
-                {dealLinked ? (
-                  <ActivityEntityChip
-                    label={deal.name}
-                    icon={BriefcaseIcon}
-                  />
-                ) : null}
-              </div>
-            </ActivityOutlinedField>
-
-            <ActivityOutlinedField label="Firma">
-              <div className="flex min-h-6 flex-wrap items-center gap-1 pt-0.5">
-                {companyLinked && linkedClient ? (
-                  <ActivityEntityChip
-                    label={linkedClient.name}
-                    icon={Building2Icon}
-                    onRemove={() => setCompanyLinked(false)}
-                  />
-                ) : (
-                  <span className="text-sm text-muted-foreground">
-                    Brak powiązanej firmy
-                  </span>
-                )}
-              </div>
-            </ActivityOutlinedField>
-
-            <ActivityOutlinedField label="Kontakt">
-              <div className="flex min-h-6 flex-wrap items-center gap-1 pt-0.5">
-                {contactLinked && linkedContact ? (
-                  <ActivityEntityChip
-                    label={formatContactName(linkedContact)}
-                    onRemove={() => setContactLinked(false)}
-                  />
-                ) : (
-                  <span className="text-sm text-muted-foreground">
-                    Brak powiązanego kontaktu
-                  </span>
-                )}
-              </div>
             </ActivityOutlinedField>
           </div>
         </ActivityCollapsibleSection>

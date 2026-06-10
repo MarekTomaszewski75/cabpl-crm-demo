@@ -1,5 +1,6 @@
 "use client"
 
+import { CrmUserHoverCard } from "@/components/crm/crm-user-hover-card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   Card,
@@ -13,19 +14,60 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { displayInitials } from "@/lib/pipeline/stage-theme"
-import { formatDatePl, formatTimePl } from "@/lib/format/pl"
+import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDescription,
+  TimelineDot,
+  TimelineHeader,
+  TimelineItem,
+  TimelineTime,
+  TimelineTitle,
+} from "@/components/ui/timeline"
 import type { LeadActivityItem } from "@/lib/crm/lead-activity"
+import { useDemoData } from "@/lib/data/demo-data-context"
+import { formatDatePl, formatTimePl } from "@/lib/format/pl"
+import { displayInitials } from "@/lib/pipeline/stage-theme"
 
 type LeadActivityFeedProps = {
   items: LeadActivityItem[]
+}
+
+function EventAuthorAvatar({ item }: { item: LeadActivityItem }) {
+  const { users } = useDemoData()
+  const author = item.authorId
+    ? users.find((user) => user.id === item.authorId)
+    : undefined
+
+  if (author) {
+    return (
+      <CrmUserHoverCard
+        user={author}
+        avatarClassName="size-6"
+        fallbackClassName="text-[10px]"
+      />
+    )
+  }
+
+  if (!item.authorName) {
+    return null
+  }
+
+  return (
+    <Avatar className="size-6">
+      <AvatarFallback className="bg-primary/15 text-[10px] font-semibold">
+        {displayInitials(item.authorName)}
+      </AvatarFallback>
+    </Avatar>
+  )
 }
 
 export function LeadActivityFeed({ items }: LeadActivityFeedProps) {
   return (
     <Card size="sm" className="flex min-h-0 flex-1 flex-col">
       <CardHeader className="pb-2">
-        <CardTitle className="text-base">Aktywność</CardTitle>
+        <CardTitle className="text-base">Zdarzenia</CardTitle>
       </CardHeader>
       <CardContent className="min-h-0 flex-1">
         {items.length === 0 ? (
@@ -38,38 +80,29 @@ export function LeadActivityFeed({ items }: LeadActivityFeedProps) {
             </EmptyHeader>
           </Empty>
         ) : (
-          <ol className="relative flex flex-col gap-0 border-l border-border pl-4">
+          <Timeline orientation="vertical">
             {items.map((item) => (
-              <li key={item.id} className="relative pb-6 last:pb-0">
-                <span
-                  className="absolute top-1 -left-[1.3125rem] flex size-2.5 rounded-full bg-primary"
-                  aria-hidden
-                />
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {item.authorName ? (
-                      <Avatar className="size-6">
-                        <AvatarFallback className="bg-primary/15 text-[10px] font-semibold">
-                          {displayInitials(item.authorName)}
-                        </AvatarFallback>
-                      </Avatar>
-                    ) : null}
-                    <span className="text-sm font-medium">{item.title}</span>
-                    <time
-                      className="text-xs text-muted-foreground tabular-nums"
-                      dateTime={item.occurredAt}
-                    >
-                      {formatDatePl(item.occurredAt)}{" "}
-                      {formatTimePl(item.occurredAt)}
-                    </time>
-                  </div>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+              <TimelineItem key={item.id}>
+                <TimelineDot />
+                <TimelineConnector />
+                <TimelineContent>
+                  <TimelineHeader>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <EventAuthorAvatar item={item} />
+                      <TimelineTitle>{item.title}</TimelineTitle>
+                      <TimelineTime dateTime={item.occurredAt}>
+                        {formatDatePl(item.occurredAt)}{" "}
+                        {formatTimePl(item.occurredAt)}
+                      </TimelineTime>
+                    </div>
+                  </TimelineHeader>
+                  <TimelineDescription className="whitespace-pre-wrap">
                     {item.body}
-                  </p>
-                </div>
-              </li>
+                  </TimelineDescription>
+                </TimelineContent>
+              </TimelineItem>
             ))}
-          </ol>
+          </Timeline>
         )}
       </CardContent>
     </Card>

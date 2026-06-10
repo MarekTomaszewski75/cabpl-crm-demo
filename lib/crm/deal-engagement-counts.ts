@@ -1,4 +1,5 @@
-import type { DealDocument, Meeting, Task } from "@/types/crm"
+import { filterByScope } from "@/lib/rbac/scope"
+import type { DealDocument, DemoUser, Meeting, Task } from "@/types/crm"
 import type { LeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
 
 export type DealEngagementCounts = LeadEngagementCounts
@@ -7,6 +8,41 @@ export type DealEngagementData = {
   tasks: readonly Task[]
   meetings: readonly Meeting[]
   dealDocuments: readonly DealDocument[]
+}
+
+export function getDealTasksForDeal(
+  dealId: string,
+  data: DealEngagementData,
+  user: DemoUser,
+): Task[] {
+  return filterByScope(data.tasks, user)
+    .filter((task) => task.opportunityId === dealId)
+    .sort(
+      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
+    )
+}
+
+export function getDealMeetingsForDeal(
+  dealId: string,
+  data: DealEngagementData,
+  user: DemoUser,
+): Meeting[] {
+  return filterByScope(data.meetings, user).filter(
+    (meeting) => meeting.opportunityId === dealId,
+  )
+}
+
+export function getDealDocumentsForDeal(
+  dealId: string,
+  data: DealEngagementData,
+  user: DemoUser,
+): DealDocument[] {
+  return filterByScope(data.dealDocuments, user)
+    .filter((doc) => doc.dealId === dealId)
+    .sort(
+      (a, b) =>
+        new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
+    )
 }
 
 export function getDealEngagementCounts(
@@ -19,6 +55,18 @@ export function getDealEngagementCounts(
       (meeting) => meeting.opportunityId === dealId,
     ).length,
     documents: data.dealDocuments.filter((doc) => doc.dealId === dealId).length,
+  }
+}
+
+export function getScopedDealEngagementCounts(
+  dealId: string,
+  data: DealEngagementData,
+  user: DemoUser,
+): DealEngagementCounts {
+  return {
+    tasks: getDealTasksForDeal(dealId, data, user).length,
+    meetings: getDealMeetingsForDeal(dealId, data, user).length,
+    documents: getDealDocumentsForDeal(dealId, data, user).length,
   }
 }
 

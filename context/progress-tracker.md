@@ -31,28 +31,29 @@
 - **US-30** — **Done** — lista dealów: kolumny Kategoria/Produkt, faceted Kategoria+Status (bez tabs), badge z lejka. [US-30](./stories/US-30-deals-list-product-filters/story.md).
 - **US-31** — **Done** — produkty: domyślne drzewo, faceted per widok, agregacja kategorii grupujących. [US-31](./stories/US-31-products-tree-default/story.md).
 - **US-32** — **Done** — formularz deala + produkt/lejek na karcie. [US-32](./stories/US-32-deal-form-product-pipeline/story.md).
+- **US-33** — **Done** — przebudowa karty leada (layout, Zdarzenia/Timeline, usuń, dokumenty, engagement). [US-33](./stories/US-33-lead-detail-rebuild/story.md).
+- **US-34** — **Done** — przebudowa karty deala (parity z US-33). [US-34](./stories/US-34-deal-detail-rebuild/story.md).
+- **US-35** — **Done** — przebudowa karty firmy (layout, Zdarzenia, dokumenty, 6 wskaźników powiązań). [US-35](./stories/US-35-company-detail-rebuild/story.md).
 
 ---
 
 ## Active work
 
-- — (brak aktywnego taska)
+- — (brak aktywnego taska — wybierz następny z [`stories/README.md`](./stories/README.md))
 
 ---
 
 ## Recently completed
 
-- **US-32** (story **Done**) — `deal-form.tsx`: wymagany produkt + readonly kategoria/lejek; `deal-status-bar.tsx`: kroki per `pipelineCategoryId`; sidebar produkt/kategoria; `winLead` + `lead-finish-dialog`: wybór produktu; usunięty stub zakładki „Produkty”. [US-32](./stories/US-32-deal-form-product-pipeline/story.md).
+- **US-35** (story **Done**) — karta firmy: layout 2 kolumny bez zakładek; sekcja **Zdarzenia** (Timeline); `deleteClient` + `AlertDialog`; `ClientDocument` + zakładka Dokumenty; 6 wskaźników engagement + listy powiązań; `+ Lead` w nagłówku; composer bez Poczty. [US-35](./stories/US-35-company-detail-rebuild/story.md).
 
-- **US-31** (story **Done**) — `products-table.tsx`: domyślny `viewMode="tree"`, panel kategorii + faceted bez Kategorii; lista: faceted Kategoria + kolumna; `product-filters.ts`: `getCategoryIdsForSelection` / `expandCategoryFilterIds`. [US-31](./stories/US-31-products-tree-default/story.md).
-
-- **US-30** (story **Done**) — `deals-columns.tsx`: kolumny Kategoria/Produkt + grupowanie; `deals-table.tsx`: faceted Kategoria/Status zamiast tabs (tylko lista); `DealStatusBadge`: etykieta z `getDealStatusLabel(status, pipelineCategoryId)`. [US-30](./stories/US-30-deals-list-product-filters/story.md).
+- **US-34** (story **Done**) — karta deala: layout 2 kolumny; Produkt w **O dealu**; sekcja **Zdarzenia** (Timeline); `deleteDeal` + `AlertDialog`; dokumenty + zakładka Zadania w composerze; engagement klikalny; `scripts/sync-deal-timeline-seed.mjs`. [US-34](./stories/US-34-deal-detail-rebuild/story.md).
 
 ---
 
 ## Next up
 
-- — (kolejne story wg [`stories/README.md`](./stories/README.md))
+- Kolejna story z [`stories/README.md`](./stories/README.md) (jeśli zdefiniowana).
 
 ---
 
@@ -78,6 +79,6 @@
 - `(dashboard)/layout.tsx`: `SessionAuthGuard` → `CrmAppShell`.
 - Lejek leadów/deali: Dice UI `@diceui/kanban` (`components/ui/kanban.tsx`); mutacje `updateLead` / `updateDeal` w sesji dev.
 - Klienci: `filterByScope` / `canAccessEntity`; NBA w `lib/crm/nba-rules.ts`.
-- Firmy (US-16): `addClient` / `updateClient` / `addContact` / `addCompanyNote` w `DemoDataContext`; encja `CrmContact` ≠ `ContactEvent`.
-- Leady (US-17): `Lead` + `leadActivities`; `winLead` / `loseLead`; karta `/leads/[id]`; bez konwersji z listy.
+- Firmy (US-16/35): `addClient` / `updateClient` / `deleteClient` / `addClientDocument` / `addContact` / `addCompanyNote` w `DemoDataContext`; encja `CrmContact` ≠ `ContactEvent`; karta `/clients/[id]` z Timeline Zdarzenia + 6 wskaźników engagement.
+- Leady (US-17/33): `Lead` + `leadActivities`; `winLead` / `loseLead` / `deleteLead`; karta `/leads/[id]` z Timeline Zdarzenia + engagement; bez konwersji z listy.
 - Deale (US-27/28): 6 lejków per `pipelineCategoryId`; konfiguracja w `lib/crm/deal-pipeline.ts`; seed dealów w `data/opportunities.json` z `productId` + statusami lejka (US-28 Done).

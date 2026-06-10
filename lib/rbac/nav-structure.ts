@@ -91,7 +91,7 @@ const pipeline = defineNavItem({
   roles: ALL_ROLES,
 })
 
-const contacts = defineNavItem({
+defineNavItem({
   id: "contacts",
   labelPl: "Kontakty",
   href: "/contacts",
@@ -140,7 +140,7 @@ export const CRM_NAV_STRUCTURE: readonly CrmNavEntry[] = [
   {
     type: "group",
     labelPl: "CRM i sprzedaż",
-    items: [leads, pipeline, contacts, clients, products],
+    items: [leads, pipeline, clients, products],
   },
   { type: "item", item: analytics },
 ]

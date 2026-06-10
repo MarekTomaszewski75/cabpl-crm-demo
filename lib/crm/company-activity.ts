@@ -16,6 +16,7 @@ export type CompanyActivityItem = {
   body: string
   kind: "system" | "channel" | "note" | "task"
   filterTags: CompanyActivityFilter[]
+  authorId?: string
   authorName?: string
 }
 
@@ -68,6 +69,7 @@ export function buildCompanyActivityFeed(input: {
       body,
       kind: getContactEventKind(event) as CompanyActivityItem["kind"],
       filterTags: eventFilterTags(event),
+      authorId: event.ownerId,
       authorName: userNameById.get(event.ownerId),
     }
     })
@@ -81,6 +83,7 @@ export function buildCompanyActivityFeed(input: {
       body: task.title,
       kind: "task" as const,
       filterTags: ["all", "tasks"] as CompanyActivityFilter[],
+      authorId: task.ownerId,
       authorName: userNameById.get(task.ownerId),
     }))
 

@@ -3,6 +3,9 @@
 import * as React from "react"
 import { loadSeedData, type DemoDataState } from "@/lib/data/seed"
 import { createNextLeadActivityId } from "@/lib/crm/lead-activity-id"
+import { createNextLeadDocumentId } from "@/lib/crm/lead-document-id"
+import { createNextDealDocumentId } from "@/lib/crm/deal-document-id"
+import { createNextClientDocumentId } from "@/lib/crm/client-document-id"
 import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
@@ -40,7 +43,13 @@ import type {
   Employee,
   AddDealActivityInput,
   AddLeadActivityInput,
+  AddLeadDocumentInput,
+  AddDealDocumentInput,
+  AddClientDocumentInput,
   Lead,
+  LeadDocument,
+  DealDocument,
+  ClientDocument,
   LeadActivity,
   LeadSystemActivityType,
   LeadLostReason,
@@ -102,11 +111,16 @@ type DemoDataContextValue = DemoDataState & {
     patch: Partial<Deal>,
   ) => void
   addTask: (task: Task) => void
-  updateTask: (id: string, patch: Partial<Task>) => void
+  updateTask: (
+    id: string,
+    patch: Partial<Task>,
+    actingUser?: DemoUser,
+  ) => void
   addMeeting: (meeting: Meeting) => void
   addOpportunity: (opportunity: Deal) => void
   addClient: (input: AddClientInput, user: DemoUser) => Client
   updateClient: (id: string, patch: Partial<Client>) => void
+  deleteClient: (id: string) => void
   addContact: (input: AddCrmContactInput) => CrmContact
   addCompanyNote: (clientId: string, note: string, user: DemoUser) => void
   addCompanyActivity: (
@@ -116,6 +130,23 @@ type DemoDataContextValue = DemoDataState & {
   ) => void
   addLead: (lead: Lead, creator?: DemoUser) => void
   updateLead: (id: string, patch: Partial<Lead>) => void
+  deleteLead: (id: string) => void
+  deleteDeal: (id: string) => void
+  addLeadDocument: (
+    leadId: string,
+    input: AddLeadDocumentInput,
+    user: DemoUser,
+  ) => LeadDocument | null
+  addDealDocument: (
+    dealId: string,
+    input: AddDealDocumentInput,
+    user: DemoUser,
+  ) => DealDocument | null
+  addClientDocument: (
+    clientId: string,
+    input: AddClientDocumentInput,
+    user: DemoUser,
+  ) => ClientDocument | null
   addLeadActivity: (
     leadId: string,
     type: LeadSystemActivityType,
@@ -229,7 +260,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           source: input.source,
           dealType: input.dealType,
           status: "new",
-          clientId: null,
+          clientId: input.clientId ?? null,
           lostReason: null,
           finishedByUserId: null,
           finishedAt: null,
@@ -257,15 +288,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     setState((prev) => ({
       ...prev,
       tasks: [...prev.tasks, task],
-    }))
-  }, [])
-
-  const updateTask = React.useCallback((id: string, patch: Partial<Task>) => {
-    setState((prev) => ({
-      ...prev,
-      tasks: prev.tasks.map((task) =>
-        task.id === id ? { ...task, ...patch } : task,
-      ),
     }))
   }, [])
 
@@ -505,6 +527,60 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const updateTask = React.useCallback(
+    (id: string, patch: Partial<Task>, actingUser?: DemoUser) => {
+      setState((prev) => {
+        const task = prev.tasks.find((item) => item.id === id)
+        if (!task) return prev
+
+        const nextTask = { ...task, ...patch }
+        let leadActivities = prev.leadActivities
+        let dealActivities = prev.dealActivities
+
+        if (
+          patch.completed === true &&
+          !task.completed &&
+          actingUser?.regionId
+        ) {
+          if (nextTask.leadId) {
+            const activity = appendLeadActivity(
+              prev,
+              nextTask.leadId,
+              actingUser,
+              "lead_task_completed",
+              "Zadanie wykonane",
+              nextTask.title,
+              new Date().toISOString(),
+            )
+            leadActivities = [...leadActivities, activity]
+          }
+          if (nextTask.opportunityId) {
+            const activity = appendDealActivity(
+              prev,
+              nextTask.opportunityId,
+              actingUser,
+              "deal_task_completed",
+              "Zadanie wykonane",
+              nextTask.title,
+              new Date().toISOString(),
+            )
+            dealActivities = [...dealActivities, activity]
+          }
+        }
+
+        return {
+          ...prev,
+          tasks: prev.tasks.map((item) =>
+            item.id === id ? nextTask : item,
+          ),
+          leadActivities,
+          dealActivities,
+        }
+      })
+    },
+    [appendLeadActivity, appendDealActivity],
+  )
+
   const addDealActivity = React.useCallback(
     (
       dealId: string,
@@ -518,6 +594,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         deal_won: "Deal wygrany",
         deal_lost: "Deal utracony",
         deal_note: "Notatka",
+        deal_document_added: "Dodano dokument",
+        deal_task_created: "Utworzono zadanie",
+        deal_task_completed: "Zadanie wykonane",
       }
       const now = options?.occurredAt ?? new Date().toISOString()
       setState((prev) => {
@@ -632,6 +711,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         lead_won: "Lead wygrany",
         lead_lost: "Lead utracony",
         lead_note: "Notatka",
+        lead_document_added: "Dodano dokument",
+        lead_task_created: "Utworzono zadanie",
+        lead_task_completed: "Zadanie wykonane",
       }
       const now = options?.occurredAt ?? new Date().toISOString()
       setState((prev) => {
@@ -700,6 +782,158 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       }),
     }))
   }, [])
+
+  const deleteLead = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      leads: prev.leads.filter((lead) => lead.id !== id),
+      leadActivities: prev.leadActivities.filter(
+        (activity) => activity.leadId !== id,
+      ),
+      leadDocuments: prev.leadDocuments.filter((doc) => doc.leadId !== id),
+      tasks: prev.tasks.map((task) =>
+        task.leadId === id ? { ...task, leadId: null } : task,
+      ),
+      meetings: prev.meetings.map((meeting) =>
+        meeting.leadId === id ? { ...meeting, leadId: null } : meeting,
+      ),
+    }))
+  }, [])
+
+  const deleteDeal = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      opportunities: prev.opportunities.filter((deal) => deal.id !== id),
+      dealActivities: prev.dealActivities.filter(
+        (activity) => activity.dealId !== id,
+      ),
+      dealDocuments: prev.dealDocuments.filter((doc) => doc.dealId !== id),
+      tasks: prev.tasks.map((task) =>
+        task.opportunityId === id ? { ...task, opportunityId: null } : task,
+      ),
+      meetings: prev.meetings.map((meeting) =>
+        meeting.opportunityId === id
+          ? { ...meeting, opportunityId: null }
+          : meeting,
+      ),
+    }))
+  }, [])
+
+  const deleteClient = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      clients: prev.clients.filter((client) => client.id !== id),
+      contactEvents: prev.contactEvents.filter(
+        (event) => event.clientId !== id,
+      ),
+      clientDocuments: prev.clientDocuments.filter(
+        (doc) => doc.clientId !== id,
+      ),
+      opportunities: prev.opportunities.map((deal) =>
+        deal.clientId === id ? { ...deal, clientId: null } : deal,
+      ),
+      leads: prev.leads.map((lead) =>
+        lead.clientId === id ? { ...lead, clientId: null } : lead,
+      ),
+      tasks: prev.tasks.map((task) =>
+        task.clientId === id ? { ...task, clientId: null } : task,
+      ),
+      meetings: prev.meetings.filter((meeting) => meeting.clientId !== id),
+    }))
+  }, [])
+
+  const addLeadDocument = React.useCallback(
+    (
+      leadId: string,
+      input: AddLeadDocumentInput,
+      user: DemoUser,
+    ): LeadDocument | null => {
+      const name = input.name.trim()
+      const regionId = user.regionId
+      if (!name || !regionId) return null
+
+      let created: LeadDocument | null = null
+      setState((prev) => {
+        const doc: LeadDocument = {
+          id: createNextLeadDocumentId(prev.leadDocuments),
+          leadId,
+          name,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = doc
+        return {
+          ...prev,
+          leadDocuments: [...prev.leadDocuments, doc],
+        }
+      })
+      return created
+    },
+    [],
+  )
+
+  const addDealDocument = React.useCallback(
+    (
+      dealId: string,
+      input: AddDealDocumentInput,
+      user: DemoUser,
+    ): DealDocument | null => {
+      const name = input.name.trim()
+      const regionId = user.regionId
+      if (!name || !regionId) return null
+
+      let created: DealDocument | null = null
+      setState((prev) => {
+        const doc: DealDocument = {
+          id: createNextDealDocumentId(prev.dealDocuments),
+          dealId,
+          name,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = doc
+        return {
+          ...prev,
+          dealDocuments: [...prev.dealDocuments, doc],
+        }
+      })
+      return created
+    },
+    [],
+  )
+
+  const addClientDocument = React.useCallback(
+    (
+      clientId: string,
+      input: AddClientDocumentInput,
+      user: DemoUser,
+    ): ClientDocument | null => {
+      const name = input.name.trim()
+      const regionId = user.regionId
+      if (!name || !regionId) return null
+
+      let created: ClientDocument | null = null
+      setState((prev) => {
+        const doc: ClientDocument = {
+          id: createNextClientDocumentId(prev.clientDocuments),
+          clientId,
+          name,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = doc
+        return {
+          ...prev,
+          clientDocuments: [...prev.clientDocuments, doc],
+        }
+      })
+      return created
+    },
+    [],
+  )
 
   const winLead = React.useCallback(
     (
@@ -986,11 +1220,17 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addOpportunity,
       addClient,
       updateClient,
+      deleteClient,
       addContact,
       addCompanyNote,
       addCompanyActivity,
       addLead,
       updateLead,
+      deleteLead,
+      deleteDeal,
+      addLeadDocument,
+      addDealDocument,
+      addClientDocument,
       addLeadActivity,
       addLeadChannelActivity,
       addLeadNote,
@@ -1020,11 +1260,17 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addOpportunity,
       addClient,
       updateClient,
+      deleteClient,
       addContact,
       addCompanyNote,
       addCompanyActivity,
       addLead,
       updateLead,
+      deleteLead,
+      deleteDeal,
+      addLeadDocument,
+      addDealDocument,
+      addClientDocument,
       addLeadActivity,
       addLeadChannelActivity,
       addLeadNote,

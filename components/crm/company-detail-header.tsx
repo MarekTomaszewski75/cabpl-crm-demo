@@ -1,7 +1,26 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
-import { ArrowLeftIcon, Building2Icon, MoreHorizontalIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
+import {
+  ArrowLeftIcon,
+  Building2Icon,
+  MoreHorizontalIcon,
+  Trash2Icon,
+} from "lucide-react"
+import { toast } from "sonner"
+import { DealFormDialog } from "@/components/crm/deal-form-dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -12,6 +31,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useDemoData } from "@/lib/data/demo-data-context"
 import { displayInitials } from "@/lib/pipeline/stage-theme"
 import type { Client, DemoUser } from "@/types/crm"
 
@@ -24,6 +44,22 @@ export function CompanyDetailHeader({
   client,
   owner,
 }: CompanyDetailHeaderProps) {
+  const router = useRouter()
+  const { deleteClient, deals, tasks } = useDemoData()
+  const [deleteOpen, setDeleteOpen] = React.useState(false)
+  const [dealOpen, setDealOpen] = React.useState(false)
+
+  const relatedDeals = deals.filter((deal) => deal.clientId === client.id)
+  const openTasks = tasks.filter(
+    (task) => task.clientId === client.id && !task.completed,
+  )
+
+  function handleDelete() {
+    deleteClient(client.id)
+    toast.success("Firma została usunięta")
+    router.push("/clients")
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <Button variant="ghost" size="sm" className="w-fit px-2" asChild>
@@ -56,20 +92,68 @@ export function CompanyDetailHeader({
             ) : null}
           </div>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon-sm" aria-label="Menu firmy">
-              <MoreHorizontalIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuGroup>
-              <DropdownMenuItem disabled>Edytuj (w przygotowaniu)</DropdownMenuItem>
-              <DropdownMenuItem disabled>Usuń (w przygotowaniu)</DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setDealOpen(true)}
+          >
+            + Deal
+          </Button>
+          <DealFormDialog
+            open={dealOpen}
+            onOpenChange={setDealOpen}
+            defaultClientId={client.id}
+            defaultContactId={client.contactIds[0] ?? null}
+            onSuccess={(deal) => {
+              router.push(`/pipeline/${deal.id}`)
+            }}
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon-sm" aria-label="Menu firmy">
+                <MoreHorizontalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={() => setDeleteOpen(true)}
+                >
+                  <Trash2Icon />
+                  Usuń
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Usunąć firmę?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Firma „{client.name}” zostanie trwale usunięta.
+              {relatedDeals.length > 0
+                ? ` Powiązane deale (${relatedDeals.length}) pozostaną w pipeline — zostaną odłączone od firmy.`
+                : null}
+              {openTasks.length > 0
+                ? ` Otwarte zadania (${openTasks.length}) pozostaną bez przypisania do firmy.`
+                : null}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Anuluj</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleDelete}>
+              <Trash2Icon data-icon="inline-start" />
+              Usuń
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

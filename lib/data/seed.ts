@@ -6,6 +6,7 @@ import leadsSeed from "@/data/leads.json"
 import leadActivitiesSeed from "@/data/lead-activities.json"
 import leadDocumentsSeed from "@/data/lead-documents.json"
 import dealDocumentsSeed from "@/data/deal-documents.json"
+import clientDocumentsSeed from "@/data/client-documents.json"
 import dealActivitiesSeed from "@/data/deal-activities.json"
 import meetingsSeed from "@/data/meetings.json"
 import opportunitiesSeed from "@/data/opportunities.json"
@@ -36,6 +37,7 @@ import type {
   LeadActivity,
   LeadDocument,
   DealDocument,
+  ClientDocument,
   Meeting,
   Deal,
   DealActivity,
@@ -201,6 +203,7 @@ export function loadSeedData() {
     leadActivities: leadActivitiesSeed as LeadActivity[],
     leadDocuments: leadDocumentsSeed as LeadDocument[],
     dealDocuments: dealDocumentsSeed as DealDocument[],
+    clientDocuments: clientDocumentsSeed as ClientDocument[],
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],

@@ -32,12 +32,13 @@ export function TasksTable() {
 
   const handleCompletedChange = React.useCallback(
     (task: Task, checked: boolean) => {
-      updateTask(task.id, { completed: checked })
+      if (!user) return
+      updateTask(task.id, { completed: checked }, user)
       toast.success(
         checked ? "Zadanie oznaczone jako wykonane" : "Zadanie przywrócone",
       )
     },
-    [updateTask],
+    [updateTask, user],
   )
 
   const columns = React.useMemo(

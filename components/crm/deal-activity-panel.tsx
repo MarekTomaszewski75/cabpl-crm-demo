@@ -4,8 +4,11 @@ import * as React from "react"
 import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
+import type { DealEngagementSection } from "@/components/crm/deal-detail-view"
 import { DealActivityFeed } from "@/components/crm/deal-activity-feed"
 import { DealActivityForm } from "@/components/crm/deal-activity-form"
+import { DealMeetingsList } from "@/components/crm/deal-meetings-list"
+import { DealTasksList } from "@/components/crm/deal-tasks-list"
 import { CompanyFilesUploadZone } from "@/components/crm/company-files-upload-zone"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,27 +21,43 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import { useSession } from "@/lib/auth/demo-session"
 import {
   buildDealActivityFeed,
   filterDealActivityFeed,
   type DealActivityFilter,
 } from "@/lib/crm/deal-activity"
-import { getDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
+import {
+  getDealDocumentsForDeal,
+  getDealMeetingsForDeal,
+  getDealTasksForDeal,
+} from "@/lib/crm/deal-engagement-counts"
 import { formatDatePl } from "@/lib/format/pl"
-import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Deal } from "@/types/crm"
 
+export type DealComposerTab =
+  | "note"
+  | "activity"
+  | "files"
+  | "documents"
+  | "tasks"
+
 type DealActivityPanelProps = {
   deal: Deal
+  composerTab: DealComposerTab
+  onComposerTabChange: (tab: DealComposerTab) => void
+  engagementSection: DealEngagementSection
+  onEngagementSectionChange: (section: DealEngagementSection) => void
 }
-
-const COMPOSER_STUB_TABS = [
-  { id: "documents", label: "Dokumenty" },
-  { id: "mail", label: "Poczta" },
-] as const
 
 const FEED_FILTERS: { id: DealActivityFilter; label: string }[] = [
   { id: "all", label: "Wszystkie" },
@@ -48,22 +67,53 @@ const FEED_FILTERS: { id: DealActivityFilter; label: string }[] = [
   { id: "tasks", label: "Zadania" },
 ]
 
-export function DealActivityPanel({ deal }: DealActivityPanelProps) {
+export function DealActivityPanel({
+  deal,
+  composerTab,
+  onComposerTabChange,
+  engagementSection,
+  onEngagementSectionChange,
+}: DealActivityPanelProps) {
   const { user } = useSession()
-  const { dealActivities, users, tasks, meetings, dealDocuments, addDealNote } =
-    useDemoData()
+  const {
+    dealActivities,
+    users,
+    tasks,
+    meetings,
+    dealDocuments,
+    addDealNote,
+    addDealDocument,
+  } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
+  const [documentName, setDocumentName] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<DealActivityFilter>("all")
+
+  const meetingsSectionRef = React.useRef<HTMLDivElement>(null)
+
+  const engagementData = React.useMemo(
+    () => ({ tasks, meetings, dealDocuments }),
+    [tasks, meetings, dealDocuments],
+  )
 
   const allItems = React.useMemo(
     () =>
       buildDealActivityFeed({
         dealId: deal.id,
+        dealCreatedAt: deal.createdAt,
         dealActivities,
+        dealDocuments,
+        tasks,
         users,
       }),
-    [deal.id, dealActivities, users],
+    [
+      deal.id,
+      deal.createdAt,
+      dealActivities,
+      dealDocuments,
+      tasks,
+      users,
+    ],
   )
 
   const filteredItems = React.useMemo(
@@ -71,37 +121,40 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
     [allItems, feedFilter],
   )
 
-  const engagementCounts = React.useMemo(
-    () =>
-      getDealEngagementCounts(deal.id, {
-        tasks,
-        meetings,
-        dealDocuments,
-      }),
-    [deal.id, tasks, meetings, dealDocuments],
-  )
+  const dealTasks = React.useMemo(() => {
+    if (!user) return []
+    return getDealTasksForDeal(deal.id, engagementData, user)
+  }, [deal.id, engagementData, user])
 
-  const dealFiles = React.useMemo(
-    () =>
-      dealDocuments
-        .filter((doc) => doc.dealId === deal.id)
-        .sort(
-          (a, b) =>
-            new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime(),
-        ),
-    [deal.id, dealDocuments],
-  )
+  const dealMeetings = React.useMemo(() => {
+    if (!user) return []
+    return getDealMeetingsForDeal(deal.id, engagementData, user)
+  }, [deal.id, engagementData, user])
+
+  const dealDocs = React.useMemo(() => {
+    if (!user) return []
+    return getDealDocumentsForDeal(deal.id, engagementData, user)
+  }, [deal.id, engagementData, user])
 
   const filterCounts = React.useMemo(() => {
     const counts: Record<DealActivityFilter, number> = {
       all: allItems.length,
       activities: filterDealActivityFeed(allItems, "activities").length,
       notes: filterDealActivityFeed(allItems, "notes").length,
-      files: engagementCounts.documents,
-      tasks: engagementCounts.tasks,
+      files: filterDealActivityFeed(allItems, "files").length,
+      tasks: filterDealActivityFeed(allItems, "tasks").length,
     }
     return counts
-  }, [allItems, engagementCounts])
+  }, [allItems])
+
+  React.useEffect(() => {
+    if (engagementSection === "meetings" && meetingsSectionRef.current) {
+      meetingsSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      })
+    }
+  }, [engagementSection])
 
   function handleAddNote() {
     if (!user) return
@@ -112,29 +165,34 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
     toast.success("Notatka została dodana")
   }
 
+  function handleAddDocument() {
+    if (!user) return
+    const trimmed = documentName.trim()
+    if (!trimmed) return
+    const created = addDealDocument(deal.id, { name: trimmed }, user)
+    if (!created) return
+    setDocumentName("")
+    toast.success("Dokument został dodany")
+  }
+
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-4">
       <Card size="sm">
         <CardHeader className="pb-2">
-          <Tabs defaultValue="note" className="w-full min-w-0 gap-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <TabsList className="h-auto flex-wrap justify-start">
-                <TabsTrigger value="note">Notatka</TabsTrigger>
-                <TabsTrigger value="activity">Aktywność</TabsTrigger>
-                <TabsTrigger value="files">Pliki</TabsTrigger>
-                {COMPOSER_STUB_TABS.map((tab) => (
-                  <TabsTrigger key={tab.id} value={tab.id}>
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              <Button variant="outline" size="sm" asChild className="shrink-0">
-                <Link href="/tasks">
-                  <PlusIcon data-icon="inline-start" />
-                  Nowe zadanie
-                </Link>
-              </Button>
-            </div>
+          <Tabs
+            value={composerTab}
+            onValueChange={(value) =>
+              onComposerTabChange(value as DealComposerTab)
+            }
+            className="w-full min-w-0 gap-3"
+          >
+            <TabsList className="h-auto flex-wrap justify-start">
+              <TabsTrigger value="note">Notatka</TabsTrigger>
+              <TabsTrigger value="activity">Aktywność</TabsTrigger>
+              <TabsTrigger value="files">Pliki</TabsTrigger>
+              <TabsTrigger value="documents">Dokumenty</TabsTrigger>
+              <TabsTrigger value="tasks">Zadania</TabsTrigger>
+            </TabsList>
 
             <TabsContent value="note" className="flex flex-col gap-3">
               <Textarea
@@ -154,9 +212,9 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
             </TabsContent>
 
             <TabsContent value="files" className="flex flex-col gap-3">
-              {dealFiles.length > 0 ? (
+              {dealDocs.length > 0 ? (
                 <ul className="flex flex-col gap-2">
-                  {dealFiles.map((file) => (
+                  {dealDocs.map((file) => (
                     <li
                       key={file.id}
                       className="rounded-md border border-border/80 px-3 py-2 text-sm"
@@ -172,38 +230,101 @@ export function DealActivityPanel({ deal }: DealActivityPanelProps) {
               <CompanyFilesUploadZone />
             </TabsContent>
 
-            {COMPOSER_STUB_TABS.map((tab) => (
-              <TabsContent key={tab.id} value={tab.id}>
+            <TabsContent value="documents" className="flex flex-col gap-3">
+              {dealDocs.length === 0 ? (
                 <Empty className="border py-6">
                   <EmptyHeader>
-                    <EmptyTitle>{tab.label}</EmptyTitle>
+                    <EmptyTitle>Brak dokumentów</EmptyTitle>
                     <EmptyDescription>
-                      Integracja w Etapie 2 — moduł {tab.label.toLowerCase()}.
+                      Dodaj nazwany dokument przypisany do tego deala.
                     </EmptyDescription>
                   </EmptyHeader>
                 </Empty>
-              </TabsContent>
-            ))}
+              ) : (
+                <ul className="flex flex-col gap-2">
+                  {dealDocs.map((doc) => {
+                    const author = users.find((u) => u.id === doc.ownerId)
+                    return (
+                      <li
+                        key={doc.id}
+                        className="rounded-md border border-border/80 px-3 py-2 text-sm"
+                      >
+                        <p className="font-medium">{doc.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Dodano {formatDatePl(doc.uploadedAt)}
+                          {author ? ` · ${author.displayName}` : null}
+                        </p>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="deal-document-name">
+                    Nazwa dokumentu
+                  </FieldLabel>
+                  <Input
+                    id="deal-document-name"
+                    placeholder="np. Umowa ramowa.pdf"
+                    value={documentName}
+                    onChange={(e) => setDocumentName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddDocument()
+                    }}
+                  />
+                </Field>
+              </FieldGroup>
+              <div className="flex flex-wrap justify-end gap-2">
+                <Button type="button" onClick={handleAddDocument}>
+                  Dodaj dokument
+                </Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="tasks">
+              <DealTasksList tasks={dealTasks} embedded />
+            </TabsContent>
           </Tabs>
         </CardHeader>
       </Card>
 
-      <div className="flex flex-wrap items-center gap-2">
-        {FEED_FILTERS.map((f) => (
-          <Button
-            key={f.id}
-            type="button"
-            variant={feedFilter === f.id ? "default" : "outline"}
-            size="sm"
-            onClick={() => setFeedFilter(f.id)}
-          >
-            {f.label}
-            <span className="text-muted-foreground tabular-nums">
-              ({filterCounts[f.id]})
-            </span>
-          </Button>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {FEED_FILTERS.map((f) => (
+            <Button
+              key={f.id}
+              type="button"
+              variant={feedFilter === f.id ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setFeedFilter(f.id)
+                if (f.id === "tasks") {
+                  onComposerTabChange("tasks")
+                  onEngagementSectionChange(null)
+                }
+              }}
+            >
+              {f.label}
+              <span className="text-muted-foreground tabular-nums">
+                ({filterCounts[f.id]})
+              </span>
+            </Button>
+          ))}
+        </div>
+        <Button variant="outline" size="sm" asChild className="shrink-0">
+          <Link href="/tasks">
+            <PlusIcon data-icon="inline-start" />
+            Nowe zadanie
+          </Link>
+        </Button>
       </div>
+
+      {engagementSection === "meetings" && (
+        <div ref={meetingsSectionRef}>
+          <DealMeetingsList meetings={dealMeetings} />
+        </div>
+      )}
 
       <DealActivityFeed items={filteredItems} />
     </div>

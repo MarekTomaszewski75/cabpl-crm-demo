@@ -94,6 +94,9 @@ export type LeadSystemActivityType =
   | "lead_won"
   | "lead_lost"
   | "lead_note"
+  | "lead_document_added"
+  | "lead_task_created"
+  | "lead_task_completed"
 
 export type LeadActivityType = LeadSystemActivityType | ChannelContactEventType
 
@@ -258,6 +261,7 @@ export type AddDealInput = {
   amount: number | null
   currency: DealCurrency
   contactId: string | null
+  clientId?: string | null
   productId: string
   comments: string
   source: DealSource | null
@@ -296,6 +300,9 @@ export type DealSystemActivityType =
   | "deal_won"
   | "deal_lost"
   | "deal_note"
+  | "deal_document_added"
+  | "deal_task_created"
+  | "deal_task_completed"
 
 export type DealActivityType = DealSystemActivityType | ChannelContactEventType
 
@@ -354,11 +361,30 @@ export interface LeadDocument extends ScopedEntity {
   uploadedAt: string
 }
 
+export type AddLeadDocumentInput = {
+  name: string
+}
+
 export interface DealDocument extends ScopedEntity {
   id: string
   dealId: string
   name: string
   uploadedAt: string
+}
+
+export type AddDealDocumentInput = {
+  name: string
+}
+
+export interface ClientDocument extends ScopedEntity {
+  id: string
+  clientId: string
+  name: string
+  uploadedAt: string
+}
+
+export type AddClientDocumentInput = {
+  name: string
 }
 
 export interface ContactEvent extends ScopedEntity {

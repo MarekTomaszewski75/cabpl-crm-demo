@@ -14,7 +14,7 @@
     "socialMedia": "",
     "lostReason": null,
     "opportunityId": null,
-    "clientId": null,
+    "clientId": "client-001",
     "createdAt": "2026-05-27T08:00:00.000Z",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -34,7 +34,7 @@
     "socialMedia": "",
     "lostReason": null,
     "opportunityId": null,
-    "clientId": null,
+    "clientId": "client-001",
     "createdAt": "2026-05-10T12:00:00.000Z",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -54,7 +54,7 @@
     "socialMedia": "",
     "lostReason": null,
     "opportunityId": null,
-    "clientId": null,
+    "clientId": "client-001",
     "createdAt": "2026-05-29T09:00:00.000Z",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -74,7 +74,7 @@
     "socialMedia": "",
     "lostReason": null,
     "opportunityId": null,
-    "clientId": null,
+    "clientId": "client-003",
     "createdAt": "2026-05-18T14:00:00.000Z",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"

@@ -158,8 +158,9 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kolumny / etykiety:** `clients-columns.tsx`, `lib/crm/company-labels.ts` (`COMPANY_SOURCE_OPTIONS`, `COMPANY_TYPE_OPTIONS`)
 - **Nowa firma:** `company-form-dialog.tsx` + `company-form.tsx` — Sheet; `addClient(input, user)` ustawia `ownerId` / `regionId`; redirect → karta
 - **Kontakty CRM:** `data/contacts.json`, `CrmContact`, `contact-combobox.tsx` (`addContact` in-place), `lib/crm/contact-display.ts`, `contact-id.ts`
-- **Karta:** `company-detail-view.tsx` — 2 kolumny (Ogólne): `company-detail-sidebar.tsx` (inline edit), `company-activity-panel.tsx` + `company-activity-feed.tsx`; composer: `company-activity-form.tsx` (bez zagnieżdżonego `<form>`), `company-files-upload-zone.tsx` (zakładka Pliki + załączniki); typy: `lib/crm/company-activity-types.ts`; ludzie: `activity-people-fields.tsx` + `lib/crm/activity-participants.ts`; mutacja `addCompanyActivity`; feed: `lib/crm/company-activity.ts`
+- **Karta (US-35):** `company-detail-view.tsx` — layout 2 kolumny bez zakładek; `company-detail-header.tsx` (`+ Lead`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / Pliki / Dokumenty; `company-activity-form.tsx` (Powiązania z CRM bez pola Firma); `addClientDocument` + `data/client-documents.json`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-list.tsx`; liczniki: `lib/crm/company-engagement-counts.ts`
 - **Zdarzenia:** `ContactEvent` + `kind` (`channel` | `system` | `note`); utworzenie firmy → `company_created`; notatki → `addCompanyNote`
+- **Mutacje karty:** `deleteClient`, `addClientDocument`; ID dokumentów: `lib/crm/client-document-id.ts`
 - **NBA / szanse:** `client-active-opportunities.tsx`, `client-nba-panel.tsx`, `lib/crm/nba-rules.ts` (kanały tylko `kind=channel`)
 - **RBAC:** `canAccessEntity` w `CompanyDetailView`
 
@@ -177,14 +178,16 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `leads-kanban-board.tsx`, `lead-kanban-card.tsx`, `lib/crm/lead-kanban.ts` — domyślny styl `KanbanColumn`; DnD → `updateLead` + `lead_status_changed`; walidacja `lib/crm/lead-status-transition.ts`; widok kanban **poza** `Card` (toolbar w osobnej karcie)
 - **Kolumny:** `leads-columns.tsx` — `name`, status, źródło, typ, opiekun, utworzono
 - **Nowy lead:** `lead-form-dialog.tsx` + `lead-form.tsx` — Sheet; `addLead(lead, user)` + redirect `/leads/[id]`; wpis `lead_created`
-- **Karta:** `lead-detail-view.tsx` — `lead-detail-header.tsx`, `lead-status-bar.tsx`, `lead-detail-sidebar.tsx` (inline edit), `lead-activity-panel.tsx` + `lead-activity-feed.tsx`
+- **Karta:** `lead-detail-view.tsx` — `lead-detail-header.tsx` (usuń lead → `AlertDialog` + `deleteLead`), `lead-status-bar.tsx`, `lead-detail-sidebar.tsx` (inline edit + `LeadEngagementIndicators` klikalne), `lead-activity-panel.tsx` + `lead-activity-feed.tsx` (sekcja **Zdarzenia**, Dice UI `Timeline`)
 - **Finalizacja:** `lead-finish-dialog.tsx` — Wygrano (`winLead` + lejek → `Opportunity.stage`) / Niepowodzenie (`loseLead` + `LeadLostReason`)
 - **Dane:** `data/leads.json`, `data/lead-activities.json`; typy `Lead`, `LeadActivity` w `types/crm.ts`
 - **Mutacje:** `addLead`, `updateLead`, `addLeadActivity`, `addLeadChannelActivity`, `addLeadNote`, `winLead`, `loseLead` w `DemoDataContext`
-- **Composer (jak firma):** `lead-activity-panel.tsx` — zakładki Notatka / Aktywność / Pliki; `lead-activity-form.tsx` (reuse `company-activity-types`, `CompanyFilesUploadZone`, `activity-people-fields`)
+- **Composer (US-33):** `lead-activity-panel.tsx` — zakładki Notatka / Aktywność / Pliki / Dokumenty (bez Poczty); `+ Nowe zadanie` w rzędzie filtrów historii; `lead-activity-form.tsx` (bez „Powiązania z CRM”); `addLeadDocument` + lista dokumentów
+- **Engagement na karcie:** `lead-engagement-counts.ts` — `getScopedLeadEngagementCounts`, `getLeadTasksForLead` / `getLeadMeetingsForLead` / `getLeadDocumentsForLead`; `lead-tasks-list.tsx`, `lead-meetings-list.tsx`
 - **Etykiety:** `lib/crm/lead-labels.ts` — statusy, źródło, typ, przegrana; `canFinishLead`
 - **Wygrana:** `lib/crm/win-lead.ts` — `buildWinLeadResult` (wymaga `productId` + `products`); UI: `lead-finish-dialog.tsx` — `DealProductCombobox`
-- **Feed:** `lib/crm/lead-activity.ts`, `lib/crm/lead-activity-id.ts`
+- **Feed / Zdarzenia:** `lib/crm/lead-activity.ts`, `lib/crm/lead-activity-id.ts`; UI: `components/ui/timeline.tsx` (Dice UI) w `lead-activity-feed.tsx`
+- **Mutacje karty:** `deleteLead`, `addLeadDocument` w `DemoDataContext`; `lib/crm/lead-document-id.ts`
 - **Kontakt:** `ContactComboboxField` (pojedynczy: `value={[id]}` / `onChange` → `contactId`)
 - **ID:** `lib/crm/lead-id.ts`, `opportunity-id.ts`, `client-id.ts`
 
@@ -202,7 +205,11 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Lista:** `deals-table.tsx` + `deals-columns.tsx` — przełącznik kanban domyślnie / tabela; **lista:** wszystkie kategorie naraz, kolumny `categoryName`/`productName`, faceted **Kategoria** + **Status** (bez tabs statusowych; etykiety statusu z `getAllDealStatusFilterOptions()`), Źródło/Typ/Opiekun; grupowanie po kategorii/produkcie; `onRowClick` → `/pipeline/[id]`; filtry listy nie wpływają na kanban
 - **Badge statusu:** `deal-status-badge.tsx` — `getDealStatusLabel(status, pipelineCategoryId)` + `dealStatusIndicatorVariant`; `pipelineCategoryId` wymagane
 - **Kanban:** `components/ui/kanban.tsx` (Dice UI) + `deals-kanban-board.tsx`, `deal-kanban-card.tsx`, `lib/crm/deal-kanban.ts`, `lib/crm/deal-status-transition.ts` — kolumny z `getDealKanbanStatuses(pipelineCategoryId)` + motywy `getDealKanbanTheme`; DnD → `updateDeal` + `deal_status_changed`; drag na Wygrany/Utracony → `deal-finish-dialog.tsx`; **US-29:** `DealsTable` — `Select` „Kategoria produktu” (tylko kanban, domyślnie `pcat-credit`); filtr `pipelineCategoryId`; karta — nazwa produktu z `products`
-- **Karta:** `deal-detail-view.tsx` — `deal-detail-header.tsx` (+ `DealStatusBadge`), `deal-status-bar.tsx` (kroki z `getPipelineWorkflowSteps` + `getDealStatusLabel`), `deal-detail-sidebar.tsx` (sekcja Produkt/Kategoria; edycja produktu tylko gdy `status === 'new'`), `deal-activity-panel.tsx` + `deal-activity-feed.tsx`; bez zakładki stub „Produkty”
+- **Karta (US-34):** `deal-detail-view.tsx` — layout 2 kolumny bez „Ogólne”/„Historia”; `deal-detail-header.tsx` (usuń deal → `AlertDialog` + `deleteDeal`), `deal-status-bar.tsx`, `deal-detail-sidebar.tsx` (Produkt + kategoria w **O dealu**; `LeadEngagementIndicators` klikalne), `deal-activity-panel.tsx` + `deal-activity-feed.tsx` (sekcja **Zdarzenia**, Dice UI `Timeline`)
+- **Composer (US-34):** `deal-activity-panel.tsx` — Notatka / Aktywność / Pliki / Dokumenty / Zadania (bez Poczty); `+ Nowe zadanie` w rzędzie filtrów; `deal-activity-form.tsx` (bez „Powiązania z CRM”); `addDealDocument` + lista dokumentów
+- **Engagement na karcie deala:** `deal-engagement-counts.ts` — `getScopedDealEngagementCounts`, `getDealTasksForDeal` / `getDealMeetingsForDeal` / `getDealDocumentsForDeal`; `deal-tasks-list.tsx`, `deal-meetings-list.tsx`
+- **Feed / Zdarzenia:** `lib/crm/deal-activity.ts` (`buildDealActivityFeed`, synteza dokumentów + zadań, clamp względem `deal.createdAt`); `lib/crm/deal-document-id.ts`; seed sync: `scripts/sync-deal-timeline-seed.mjs`
+- **Mutacje karty:** `deleteDeal`, `addDealDocument` w `DemoDataContext`; `updateTask` → `deal_task_completed` gdy `opportunityId`
 - **Wybór produktu (US-32):** `lib/crm/deal-product-select.ts` — `buildDealProductListItems`, `isSelectableDealProduct`; `components/crm/deal-product-combobox.tsx` — Combobox aktywnych produktów (kategoria w drugiej linii); używany w `deal-form.tsx`, sidebarze i `lead-finish-dialog.tsx`
 - **Finalizacja:** `deal-finish-dialog.tsx` + mutacje `winDeal` / `loseDeal` w `DemoDataContext`
 - **Lejki per kategoria (US-27):** `lib/crm/deal-pipeline.ts` — `DEAL_PIPELINE_CATEGORY_IDS`, `getPipelineSteps`, `getPipelineWorkflowSteps`, `mapLegacyDealStatus`, `resolvePipelineCategoryId`, `dealStepProbability`; etykiety PL: `lib/crm/deal-pipeline-labels.ts` (`getDealStatusLabel`, `getAllDealStatusFilterOptions`); `Deal` ma `productId` + `pipelineCategoryId`; `AddDealInput` wymaga `productId`

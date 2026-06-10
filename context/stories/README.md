@@ -52,10 +52,14 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 30 | [US-30 Deals list product filters](./US-30-deals-list-product-filters/story.md) | P0 | US-27, US-28, US-18 |
 | 31 | [US-31 Products tree default](./US-31-products-tree-default/story.md) | P0 | US-19, US-27 |
 | 32 | [US-32 Deal form product pipeline](./US-32-deal-form-product-pipeline/story.md) | P1 | US-27, US-28, US-29, US-30 |
+| 33 | [US-33 Lead detail rebuild](./US-33-lead-detail-rebuild/story.md) | P0 | US-17, US-25 |
+| 34 | [US-34 Deal detail rebuild](./US-34-deal-detail-rebuild/story.md) | P0 | US-18, US-32, US-33 |
+| 35 | [US-35 Company detail rebuild](./US-35-company-detail-rebuild/story.md) | P0 | US-16, US-33 |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  
-**Produkty i lejki per kategoria (2026-06-09):** [`../products-deal-pipelines-spec.md`](../products-deal-pipelines-spec.md) → US-27 … US-32.
+**Produkty i lejki per kategoria (2026-06-09):** [`../products-deal-pipelines-spec.md`](../products-deal-pipelines-spec.md) → US-27 … US-32.  
+**Przebudowa kart lead/deal/firma (2026-06-10):** [`../lead-detail-rebuild-spec.md`](../lead-detail-rebuild-spec.md) → US-33; [`../deal-detail-rebuild-spec.md`](../deal-detail-rebuild-spec.md) → US-34; [`../company-detail-rebuild-spec.md`](../company-detail-rebuild-spec.md) → US-35.
 
 ## Mapowanie na wymagania MUST HAVE
 

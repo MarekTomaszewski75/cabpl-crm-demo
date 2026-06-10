@@ -49,9 +49,13 @@ function suggestDealName(productName: string, contact?: CrmContact | null): stri
 export function DealForm({
   onSuccess,
   layout = "sheet",
+  defaultClientId = null,
+  defaultContactId = null,
 }: {
   onSuccess: (deal: Deal) => void
   layout?: "page" | "sheet"
+  defaultClientId?: string | null
+  defaultContactId?: string | null
 }) {
   const { user } = useSession()
   const { addDeal, addDealActivity, products, contacts } = useDemoData()
@@ -61,7 +65,9 @@ export function DealForm({
   const [nameManuallyEdited, setNameManuallyEdited] = React.useState(false)
   const [amount, setAmount] = React.useState("")
   const [currency, setCurrency] = React.useState<DealCurrency>("PLN")
-  const [contactId, setContactId] = React.useState<string | null>(null)
+  const [contactId, setContactId] = React.useState<string | null>(
+    defaultContactId,
+  )
   const [comments, setComments] = React.useState("")
   const [source, setSource] = React.useState<DealSource>("recommendation")
   const [dealType, setDealType] = React.useState<DealType | null>(null)
@@ -128,6 +134,7 @@ export function DealForm({
       amount: amount ? Number(amount) : null,
       currency,
       contactId,
+      clientId: defaultClientId,
       productId: selectedProduct!.value,
       comments,
       source,

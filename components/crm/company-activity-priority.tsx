@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select"
 import {
   COMPANY_ACTIVITY_PRIORITY_OPTIONS,
-  getCompanyActivityPriorityOption,
   type CompanyActivityPriorityOption,
 } from "@/lib/crm/company-activity-types"
 import { cn } from "@/lib/utils"
@@ -80,8 +79,6 @@ export function CompanyActivityPrioritySelect({
   value,
   onValueChange,
 }: CompanyActivityPrioritySelectProps) {
-  const selected = getCompanyActivityPriorityOption(value)
-
   return (
     <div className="flex flex-wrap items-center gap-2">
       <label
@@ -97,11 +94,7 @@ export function CompanyActivityPrioritySelect({
         }
       >
         <SelectTrigger id={id} className="w-full sm:max-w-xs">
-          <SelectValue asChild>
-            <span className="flex items-center gap-2">
-              <ActivityPriorityLabel option={selected} />
-            </span>
-          </SelectValue>
+          <SelectValue />
         </SelectTrigger>
         <SelectContent align="start">
           {COMPANY_ACTIVITY_PRIORITY_OPTIONS.map((option) => (

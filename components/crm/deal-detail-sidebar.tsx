@@ -9,7 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { getDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
+import { useSession } from "@/lib/auth/demo-session"
+import { getScopedDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
@@ -23,7 +24,20 @@ import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
 const DEAL_TYPE_NONE = "__none__"
 
-export function DealDetailSidebar({ deal }: { deal: Deal }) {
+type DealDetailSidebarProps = {
+  deal: Deal
+  onTasksClick?: () => void
+  onMeetingsClick?: () => void
+  onDocumentsClick?: () => void
+}
+
+export function DealDetailSidebar({
+  deal,
+  onTasksClick,
+  onMeetingsClick,
+  onDocumentsClick,
+}: DealDetailSidebarProps) {
+  const { user } = useSession()
   const { updateDeal, users, clients, tasks, meetings, dealDocuments, products } =
     useDemoData()
   const readOnly = deal.status === "won" || deal.status === "lost"
@@ -42,15 +56,17 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
     ? DEAL_PIPELINE_CATEGORY_LABELS[deal.pipelineCategoryId]
     : "—"
 
-  const engagementCounts = React.useMemo(
-    () =>
-      getDealEngagementCounts(deal.id, {
-        tasks,
-        meetings,
-        dealDocuments,
-      }),
-    [deal.id, tasks, meetings, dealDocuments],
-  )
+  const engagementCounts = React.useMemo(() => {
+    if (!user) {
+      return { tasks: 0, meetings: 0, documents: 0 }
+    }
+    return getScopedDealEngagementCounts(
+      deal.id,
+      { tasks, meetings, dealDocuments },
+      user,
+    )
+  }, [deal.id, tasks, meetings, dealDocuments, user])
+
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined
 
@@ -63,7 +79,9 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
   return (
     <div className="flex w-full max-w-sm shrink-0 flex-col gap-4">
       <Card size="sm">
-        <CardHeader><CardTitle className="text-base">Produkt</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">O dealu</CardTitle>
+        </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <span className="text-xs text-muted-foreground">Produkt</span>
@@ -86,12 +104,13 @@ export function DealDetailSidebar({ deal }: { deal: Deal }) {
             <span className="text-xs text-muted-foreground">Kategoria</span>
             <Input readOnly value={categoryLabel} />
           </div>
-        </CardContent>
-      </Card>
-      <Card size="sm">
-        <CardHeader><CardTitle className="text-base">O dealu</CardTitle></CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <LeadEngagementIndicators counts={engagementCounts} />
+
+          <LeadEngagementIndicators
+            counts={engagementCounts}
+            onTasksClick={onTasksClick}
+            onMeetingsClick={onMeetingsClick}
+            onDocumentsClick={onDocumentsClick}
+          />
 
           <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>

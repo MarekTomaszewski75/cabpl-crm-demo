@@ -22,12 +22,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useSession } from "@/lib/auth/demo-session"
 import {
   LEAD_SOURCE_OPTIONS,
   LEAD_TYPE_OPTIONS,
   isTerminalLeadStatus,
 } from "@/lib/crm/lead-labels"
-import { getLeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
+import { getScopedLeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead, LeadSource, LeadType } from "@/types/crm"
 
@@ -35,6 +36,9 @@ const LEAD_TYPE_NONE = "__none__"
 
 type LeadDetailSidebarProps = {
   lead: Lead
+  onTasksClick?: () => void
+  onMeetingsClick?: () => void
+  onDocumentsClick?: () => void
 }
 
 function StringListEditor({
@@ -149,19 +153,26 @@ function StringListEditor({
   )
 }
 
-export function LeadDetailSidebar({ lead }: LeadDetailSidebarProps) {
+export function LeadDetailSidebar({
+  lead,
+  onTasksClick,
+  onMeetingsClick,
+  onDocumentsClick,
+}: LeadDetailSidebarProps) {
+  const { user } = useSession()
   const { updateLead, tasks, meetings, leadDocuments } = useDemoData()
   const readOnly = isTerminalLeadStatus(lead.status)
 
-  const engagementCounts = React.useMemo(
-    () =>
-      getLeadEngagementCounts(lead.id, {
-        tasks,
-        meetings,
-        leadDocuments,
-      }),
-    [lead.id, tasks, meetings, leadDocuments],
-  )
+  const engagementCounts = React.useMemo(() => {
+    if (!user) {
+      return { tasks: 0, meetings: 0, documents: 0 }
+    }
+    return getScopedLeadEngagementCounts(
+      lead.id,
+      { tasks, meetings, leadDocuments },
+      user,
+    )
+  }, [lead.id, tasks, meetings, leadDocuments, user])
 
   function patch(partial: Partial<Lead>) {
     if (readOnly) return
@@ -175,7 +186,12 @@ export function LeadDetailSidebar({ lead }: LeadDetailSidebarProps) {
           <CardTitle className="text-base">O leadzie</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <LeadEngagementIndicators counts={engagementCounts} />
+          <LeadEngagementIndicators
+            counts={engagementCounts}
+            onTasksClick={onTasksClick}
+            onMeetingsClick={onMeetingsClick}
+            onDocumentsClick={onDocumentsClick}
+          />
 
           <InlineEditableField
             label="Nazwa"
