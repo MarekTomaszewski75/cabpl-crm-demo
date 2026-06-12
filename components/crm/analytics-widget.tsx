@@ -2,16 +2,10 @@
 
 import type { DraggableAttributes } from "@dnd-kit/core"
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities"
-import { GripVerticalIcon, MoreHorizontalIcon } from "lucide-react"
+import { GripVerticalIcon } from "lucide-react"
 import { AnalyticsDomainBadge } from "@/components/crm/analytics-domain-badge"
 import { AnalyticsWidgetRestricted } from "@/components/crm/analytics-widget-restricted"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import type { AnalyticsWidgetDefinition, AnalyticsWidgetSize } from "@/types/analytics"
@@ -84,20 +78,6 @@ export function AnalyticsWidget({
           </span>
           <AnalyticsDomainBadge domain={definition.domainTag} />
         </div>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              disabled
-              aria-label="Opcje widżetu"
-            >
-              <MoreHorizontalIcon aria-hidden />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Etap 1</TooltipContent>
-        </Tooltip>
       </CardHeader>
       <CardContent className="relative min-h-36 pt-4">
         {isLoading ? (

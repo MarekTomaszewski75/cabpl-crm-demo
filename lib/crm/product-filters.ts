@@ -3,7 +3,6 @@ import type {
   ProductAvailability,
   ProductCategory,
   ProductCondition,
-  ProductPriceKind,
   ProductType,
 } from "@/types/crm"
 
@@ -15,7 +14,6 @@ export type ProductListFilters = {
   searchQuery: string
   activityFilters: string[]
   availabilityFilters: ProductAvailability[]
-  priceKindFilters: ProductPriceKind[]
   productTypeFilters: ProductType[]
   conditionFilters: ProductCondition[]
 }
@@ -76,12 +74,6 @@ export function filterProducts(
     if (
       filters.availabilityFilters.length > 0 &&
       !filters.availabilityFilters.includes(product.availability)
-    ) {
-      return false
-    }
-    if (
-      filters.priceKindFilters.length > 0 &&
-      !filters.priceKindFilters.includes(product.priceKind)
     ) {
       return false
     }

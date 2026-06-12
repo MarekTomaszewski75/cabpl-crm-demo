@@ -9,7 +9,7 @@ import { LeadActivityFeed } from "@/components/crm/lead-activity-feed"
 import { LeadActivityForm } from "@/components/crm/lead-activity-form"
 import { LeadMeetingsList } from "@/components/crm/lead-meetings-list"
 import { LeadTasksList } from "@/components/crm/lead-tasks-list"
-import { CompanyFilesUploadZone } from "@/components/crm/company-files-upload-zone"
+import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -40,6 +40,7 @@ import {
   getLeadMeetingsForLead,
   getLeadTasksForLead,
 } from "@/lib/crm/lead-engagement-counts"
+import { getLeadFilesForLead } from "@/lib/crm/entity-files"
 import { formatDatePl } from "@/lib/format/pl"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead } from "@/types/crm"
@@ -81,8 +82,11 @@ export function LeadActivityPanel({
     tasks,
     meetings,
     leadDocuments,
+    leadFiles,
     addLeadNote,
     addLeadDocument,
+    addLeadFile,
+    removeLeadFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
   const [documentName, setDocumentName] = React.useState("")
@@ -129,16 +133,21 @@ export function LeadActivityPanel({
     return getLeadDocumentsForLead(lead.id, engagementData, user)
   }, [lead.id, engagementData, user])
 
+  const leadUploadedFiles = React.useMemo(() => {
+    if (!user) return []
+    return getLeadFilesForLead(lead.id, leadFiles, user)
+  }, [lead.id, leadFiles, user])
+
   const filterCounts = React.useMemo(() => {
     const counts: Record<LeadActivityFilter, number> = {
       all: allItems.length,
       activities: filterLeadActivityFeed(allItems, "activities").length,
       notes: filterLeadActivityFeed(allItems, "notes").length,
-      files: filterLeadActivityFeed(allItems, "files").length,
+      files: leadUploadedFiles.length,
       tasks: filterLeadActivityFeed(allItems, "tasks").length,
     }
     return counts
-  }, [allItems])
+  }, [allItems, leadUploadedFiles.length])
 
   React.useEffect(() => {
     if (engagementSection === "meetings" && meetingsSectionRef.current) {
@@ -166,6 +175,23 @@ export function LeadActivityPanel({
     if (!created) return
     setDocumentName("")
     toast.success("Dokument został dodany")
+  }
+
+  function handleUploadFile(file: File) {
+    if (!user) return false
+    const created = addLeadFile(
+      lead.id,
+      {
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type || "application/octet-stream",
+      },
+      user,
+    )
+    if (created) {
+      toast.success("Plik został dodany")
+    }
+    return created !== null
   }
 
   return (
@@ -204,23 +230,14 @@ export function LeadActivityPanel({
               <LeadActivityForm lead={lead} />
             </TabsContent>
 
-            <TabsContent value="files" className="flex flex-col gap-3">
-              {leadDocs.length > 0 ? (
-                <ul className="flex flex-col gap-2">
-                  {leadDocs.map((file) => (
-                    <li
-                      key={file.id}
-                      className="rounded-md border border-border/80 px-3 py-2 text-sm"
-                    >
-                      <p className="font-medium">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Dodano {formatDatePl(file.uploadedAt)}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <CompanyFilesUploadZone />
+            <TabsContent value="files">
+              <CrmFileUploadPanel
+                files={leadUploadedFiles}
+                users={users}
+                onUpload={handleUploadFile}
+                onRemove={removeLeadFile}
+                disabled={!user}
+              />
             </TabsContent>
 
             <TabsContent value="documents" className="flex flex-col gap-3">

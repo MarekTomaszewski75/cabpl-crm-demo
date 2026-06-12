@@ -39,16 +39,37 @@
 - **US-38** — **Done** — panel zarządu: preset **Portfel banku** (10 widżetów), wykresy Area/Bar/Pie/Line/Radar, scorecard z drill-down regionu, presety Regiony i Produkty i lejki. [US-38](./stories/US-38-analytics-executive/story.md).
 - **US-39** — **Done** — biblioteka wykresów shadcn: Radial, Area, Line, Pie (donut), Radar w `components/crm/analytics/charts/`; użycie w widżetach US-36–US-38. [US-39](./stories/US-39-analytics-shadcn-charts/story.md).
 - **US-40** — **Done** — seed multi-region: doradcy `user-kasia` / `user-tomek`, klienci/deale/leady/zadania/spotkania w Małopolskie i Pomorze. [US-40](./stories/US-40-analytics-multi-region-seed/story.md).
+- **US-41** — **Done** — planowana data zamknięcia deala: formularz, sidebar, timeline, lista, kanban + ikony pilności. [US-41](./stories/US-41-deal-expected-close-date/story.md).
+- **US-42** — **Done** — upload plików Dice UI + naprawa dokumentów (`regionId` z encji). [US-42](./stories/US-42-file-upload-dice-ui/story.md).
+- **US-43** — **Done** — produkty read-only: brak CRUD, bez ceny/checkboxa, podgląd `/products/[id]`, notyfikacja sync katalogu (~30%/sesja). [US-43](./stories/US-43-products-read-only/story.md).
+- **US-44** — **Done** — analityka: filtr kategorii produktowej + usunięcie menu „…” z widżetów. [US-44](./stories/US-44-analytics-category-filter/story.md).
+- **US-45** — **Done** — karta firmy: zakładka **Sprzedaż i relacje** (Leady · Deale · Zadania), `TaskFormDialog` z `defaultClientId`, klik wskaźnika Zadania → podzakładka Zadania. [US-45](./stories/US-45-company-tab-and-tasks/story.md).
+- **US-46** — **Done** — stepper statusu leada/deala (`@diceui/stepper`); `lead-status-bar.tsx` + `deal-status-bar.tsx`. [US-46](./stories/US-46-lead-deal-stepper/story.md).
+- **US-47** — **Done** — zadania: kolumna i formularz „Deal” zamiast „Szansa”. [US-47](./stories/US-47-tasks-deal-column-rename/story.md).
 
 ---
 
 ## Active work
 
-- — (brak aktywnego taska — wybierz następny story z [`stories/README.md`](./stories/README.md))
+- — (sprawdź [`stories/README.md`](./stories/README.md) — kolejna story z iteracji 2).
 
 ---
 
 ## Recently completed
+
+- **US-47** (story **Done**) — `tasks-columns.tsx`: nagłówek **Deal** + tooltip; `task-form-dialog.tsx`: etykieta **Deal**, copy bez słowa „szansa”; `Task.opportunityId` bez zmian. [US-47](./stories/US-47-tasks-deal-column-rename/story.md).
+
+- **US-46** (story **Done**) — `@diceui/stepper` w `components/ui/stepper.tsx`; `LeadStatusBar` i `DealStatusBar` — poziomy stepper workflow, `Badge` dla `won`/`lost`, przycisk finalizacji bez regresji; deal: `onValidate` → `isDealWorkflowStatusChange`. [US-46](./stories/US-46-lead-deal-stepper/story.md).
+
+- **US-45** (story **Done**) — zakładka **Sprzedaż i relacje** na karcie firmy; podzakładka **Zadania** (`getCompanyTasks` + `CompanyTasksList`); `TaskFormDialog.defaultClientId`; wskaźnik Zadania w sidebarze → podzakładka Zadania. [US-45](./stories/US-45-company-tab-and-tasks/story.md).
+
+- **US-44** (story **Done**) — `AnalyticsGlobalFilters.pipelineCategoryId`; `applyPipelineCategoryFilter` w `scopedDeals`/sparkline; Select kategorii w `AnalyticsFiltersBar` (menedżer/zarząd); usunięto `MoreHorizontalIcon` z `analytics-widget.tsx`. [US-44](./stories/US-44-analytics-category-filter/story.md).
+
+- **US-43** (story **Done**) — katalog produktów read-only: usunięty CRUD i kolumna Cena/checkbox; `ProductDetailFields` na `/products/[id]`; baner sync katalogu (`ProductsCatalogSyncBanner`, ~30%/sesja). [US-43](./stories/US-43-products-read-only/story.md).
+
+- **US-42** (story **Done**) — `@diceui/file-upload`; `CrmFileUploadPanel` + typy `*File` w Context; zakładka Pliki na firmie/leadzie/dealu; naprawa `add*Document` (`regionId` z encji, `toast.error`). [US-42](./stories/US-42-file-upload-dice-ui/story.md).
+
+- **US-41** (story **Done**) — `expectedCloseDate` w formularzu i sidebarze; helper `deal-close-date-urgency.ts` + `DealCloseDateUrgencyIcon`; kolumna na liście; kanban z datą zamknięcia; aktywność `deal_expected_close_changed`. [US-41](./stories/US-41-deal-expected-close-date/story.md).
 
 - **US-40** (story **Done**) — seed multi-region: 2 doradców (`malopolska`, `pomorze`), 6 klientów, 8 dealów, 8 leadów, 12 zadań, 6 spotkań; spójne `ownerId`/`regionId`; RBAC bez zmian. [US-40](./stories/US-40-analytics-multi-region-seed/story.md).
 
@@ -68,7 +89,7 @@
 
 ## Next up
 
-1. — (sprawdź [`stories/README.md`](./stories/README.md) — US-01…US-40 zamknięte)
+1. — (kolejna story z [`demo-feedback-iteration-2-spec.md`](./demo-feedback-iteration-2-spec.md))
 
 ---
 

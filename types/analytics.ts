@@ -35,6 +35,8 @@ export type AnalyticsGlobalFilters = {
   regionId: string | null
   /** null = wszystkie segmenty (tylko executive). */
   segmentId: string | null
+  /** null = wszystkie kategorie produktowe (menedżer / zarząd). */
+  pipelineCategoryId: string | null
 }
 
 export interface AnalyticsWidgetDefinition {

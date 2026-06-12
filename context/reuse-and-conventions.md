@@ -88,7 +88,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### DemoDataProvider / useDemoData
 - **Plik:** `lib/data/demo-data-context.tsx`, seed: `lib/data/seed.ts`
 - **Użycie:** `const { clients, opportunities, updateOpportunity } = useDemoData()`
-- **Mutacje:** `updateOpportunity`, `addTask`, `updateTask`, `addMeeting`, `addOpportunity`, `addClient`, `updateClient`, `addContact`, `addCompanyNote`, `addCompanyActivity`, `addLead`, `updateLead`, `addLeadActivity`, `addLeadNote`, `winLead`, `loseLead`, `addEmployee`, `updateEmployee`, `addDepartment`, `updateDepartment`, `removeDepartment`, `addProduct`, `updateProduct` (stan w pamięci, reset przy restarcie dev)
+- **Mutacje:** `updateOpportunity`, `addTask`, `updateTask`, `addMeeting`, `addOpportunity`, `addClient`, `updateClient`, `addContact`, `addCompanyNote`, `addCompanyActivity`, `addLead`, `updateLead`, `addLeadActivity`, `addLeadNote`, `winLead`, `loseLead`, `addEmployee`, `updateEmployee`, `addDepartment`, `updateDepartment`, `removeDepartment` (stan w pamięci, reset przy restarcie dev)
 
 ---
 
@@ -127,9 +127,9 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ### Today (US-13, US-21)
 - **Strona:** `app/(dashboard)/today/page.tsx` — `TodayView` (tylko `advisor`)
-- **Komponent:** `components/crm/today-view.tsx` — zadania na `DEMO_TODAY_DATE_KEY`, najbliższe spotkanie, pipeline summary, 1× NBA
+- **Komponent:** `components/crm/today-view.tsx` — zadania na dziś (`getTodayDateKey()`), najbliższe spotkanie, pipeline summary, 1× NBA
 - **Pipeline summary:** `components/crm/today-pipeline-summary.tsx` — karty deali/leadów (max 5 + „Zobacz wszystkie”)
-- **Data demo:** `lib/crm/demo-today.ts` — `getDemoToday()`, `formatDemoTodayPl()`, `toLocalDateKey`
+- **Data kalendarzowa:** `lib/crm/local-date.ts` — `getToday()`, `getTodayDateKey()`, `formatTodayPl()`, `toLocalDateKey`, `startOfDay`
 - **Logika:** `lib/crm/today-dashboard.ts` — `getTasksDueOnDate`, `getNextUpcomingMeeting`, `getPrimaryNbaHighlight`
 - **Pipeline summary (US-21):** `lib/crm/today-pipeline-summary.ts` — `getDealsRequiringAttention`, `getLeadsRequiringAttention`, stałe `TODAY_PIPELINE_HORIZON_DAYS`; deale wymagające uwagi = ostatnie 2 kroki workflow lejka deala
 - **Redirect:** `getPostLoginPath` — `advisor` → `/today`, `executive` → `/dashboard`, `regional_manager` → `/pipeline`
@@ -158,7 +158,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kolumny / etykiety:** `clients-columns.tsx`, `lib/crm/company-labels.ts` (`COMPANY_SOURCE_OPTIONS`, `COMPANY_TYPE_OPTIONS`)
 - **Nowa firma:** `company-form-dialog.tsx` + `company-form.tsx` — Sheet; `addClient(input, user)` ustawia `ownerId` / `regionId`; redirect → karta
 - **Kontakty CRM:** `data/contacts.json`, `CrmContact`, `contact-combobox.tsx` (`addContact` in-place), `lib/crm/contact-display.ts`, `contact-id.ts`
-- **Karta (US-35):** `company-detail-view.tsx` — layout 2 kolumny bez zakładek; `company-detail-header.tsx` (`+ Lead`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / Pliki / Dokumenty; `company-activity-form.tsx` (Powiązania z CRM bez pola Firma); `addClientDocument` + `data/client-documents.json`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-list.tsx`; liczniki: `lib/crm/company-engagement-counts.ts`
+- **Karta (US-35/45):** `company-detail-view.tsx` — zakładki **Ogólne** | **Sprzedaż i relacje** (podzakładki Leady · Deale · Zadania); wskaźnik Zadania w sidebarze → podzakładka Zadania; `TaskFormDialog` z `defaultClientId` na podzakładce Zadania; `company-detail-header.tsx` (`+ Deal`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / Pliki / Dokumenty; `company-activity-form.tsx` (Powiązania z CRM bez pola Firma); `addClientDocument` + `data/client-documents.json`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-list.tsx`; liczniki i filtry RBAC: `lib/crm/company-engagement-counts.ts` (`getCompanyTasks`, …)
 - **Zdarzenia:** `ContactEvent` + `kind` (`channel` | `system` | `note`); utworzenie firmy → `company_created`; notatki → `addCompanyNote`
 - **Mutacje karty:** `deleteClient`, `addClientDocument`; ID dokumentów: `lib/crm/client-document-id.ts`
 - **NBA / szanse:** `client-active-opportunities.tsx`, `client-nba-panel.tsx`, `lib/crm/nba-rules.ts` (kanały tylko `kind=channel`)
@@ -191,14 +191,14 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kontakt:** `ContactComboboxField` (pojedynczy: `value={[id]}` / `onChange` → `contactId`)
 - **ID:** `lib/crm/lead-id.ts`, `opportunity-id.ts`, `client-id.ts`
 
-### Products module (US-19, drzewo US-31)
-- **Lista:** `products-table.tsx` — wzorzec jak leady/deale: karta + `InputGroup` + przełącznik lista (`Rows2`) / drzewo (`FolderTree`, domyślnie), faceted filtry, `ProductFormDialog` (Sheet)
+### Products module (US-19, drzewo US-31, read-only US-43)
+- **Lista:** `products-table.tsx` — wzorzec jak leady/deale: karta + `InputGroup` + przełącznik lista (`Rows2`) / drzewo (`FolderTree`, domyślnie), faceted filtry; **bez CRUD** (katalog tylko do odczytu)
 - **Widoki:** **drzewo (domyślny)** — panel `aside` „Kategorie” (~264px) + tabela; kategoria z panelu (`selectedTreeCategoryId`), faceted bez Kategorii; korzeń grupy (`pcat-leasing`) agreguje dzieci via `getCategoryIdsForSelection`. **Lista** — pełna szerokość; faceted **Kategoria** (wielokrotny wybór, korzenie + liście); pozostałe faceted jak w drzewie
-- **Kolumny:** `products-columns.tsx` — Kategoria (tylko lista, `showCategoryColumn`), Towar/Usługa, Artykuł (+ SKU), Cena, Dostępność, Stan; checkbox zaznaczenia (stan lokalny)
-- **Nowy produkt:** `product-form-dialog.tsx` + `product-form.tsx` — Sheet; `addProduct(input)` + toast „Dodano produkt”; bez karty `/products/[id]`
+- **Kolumny:** `products-columns.tsx` — Kategoria (tylko lista, `showCategoryColumn`), Towar/Usługa, Artykuł (+ SKU), Typ produktu, Dostępność, Stan; bez ceny i bez checkboxa wiersza
+- **Karta:** `product-detail-view.tsx` + `product-detail-fields.tsx` — podgląd read-only na `/products/[id]`; `onRowClick` z listy
+- **Sync demo:** `products-catalog-sync-banner.tsx` na `/products` — ~30% szans na baner `createProductCatalogSyncBanner` (`banner-rules.ts`, klucz `sessionStorage` `products-sync-notified`)
 - **Dane:** `data/products.json`, `data/product-categories.json`; typy `Product`, `ProductCategory` w `types/crm.ts`
-- **Etykiety / filtry:** `lib/crm/product-labels.ts` (`formatProductPrice`, `PRODUCT_FILTER_DEFAULTS`); `lib/crm/product-filters.ts` (`filterProducts`, `getCategoryIdsForSelection`, `expandCategoryFilterIds`)
-- **ID:** `lib/crm/product-id.ts` — `createNextProductId`
+- **Etykiety / filtry:** `lib/crm/product-labels.ts` (`PRODUCT_FILTER_DEFAULTS`); `lib/crm/product-filters.ts` (`filterProducts`, `getCategoryIdsForSelection`, `expandCategoryFilterIds`)
 - **RBAC:** bez `filterByScope` (wspólny katalog BK)
 
 ### Deals module (US-18, lejki US-27, lista US-30)
@@ -214,6 +214,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Finalizacja:** `deal-finish-dialog.tsx` + mutacje `winDeal` / `loseDeal` w `DemoDataContext`
 - **Lejki per kategoria (US-27):** `lib/crm/deal-pipeline.ts` — `DEAL_PIPELINE_CATEGORY_IDS`, `getPipelineSteps`, `getPipelineWorkflowSteps`, `mapLegacyDealStatus`, `resolvePipelineCategoryId`, `dealStepProbability`; etykiety PL: `lib/crm/deal-pipeline-labels.ts` (`getDealStatusLabel`, `getAllDealStatusFilterOptions`); `Deal` ma `productId` + `pipelineCategoryId`; `AddDealInput` wymaga `productId`
 - **Seed dealów (US-28):** `data/opportunities.json` — każdy rekord ma `name`, `productId`, `pipelineCategoryId`, `status` (kody lejka §3.2); `normalizeDeals` w `seed.ts` — dev assert + legacy fallback (`title`/`stage` → `console.warn`); `addDeal` / `updateDeal` w `DemoDataContext` walidują produkt i status względem lejka; `/today` — `getDealsRequiringAttention` po ostatnim/przedostatnim kroku workflow
+- **Planowana data zamknięcia (US-41):** `lib/crm/deal-close-date-urgency.ts` — `getDealCloseDateUrgency`, `getDealCloseDateUrgencyTooltip`, `DEAL_EXPECTED_CLOSE_DATE_LABEL`; `components/crm/deal-close-date-urgency-icon.tsx` — ikona + tooltip na liście i kanbanie; `deal-form.tsx` + `deal-detail-sidebar.tsx` (edycja); `updateDeal(id, patch, actingUser?)` → aktywność `deal_expected_close_changed`; kolumna w `deals-columns.tsx`; kanban — `expectedCloseDate` zamiast `createdAt` na karcie; filtr zakresu dat: `lib/crm/deal-close-date-filter.ts` + `DataTableDateRangeFilter` w `deals-table.tsx` (lista i kanban)
 - **Etykiety:** `lib/crm/deal-labels.ts` — delegacja statusów do `deal-pipeline-labels.ts`; `DEAL_SOURCE_LABELS`, `DEAL_TYPE_LABELS`, `DEAL_LOST_REASON_LABELS`; `canFinishDeal(status, pipelineCategoryId)`
 - **Aktywność:** `dealActivities` w seed/context + helpery `lib/crm/deal-activity.ts`; formularz kanału `deal-activity-form.tsx` + `addDealChannelActivity` (jak leady)
 
@@ -234,7 +235,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Widżet:** `analytics-widget.tsx` + `analytics-domain-badge.tsx`
 - **Renderer:** `components/crm/analytics/widgets/widget-renderer.tsx` — mapuje `kind` → KPI / wykres / lejek
 - **Konfiguracja:** `types/analytics.ts`, `lib/analytics/widget-registry.ts` — `MANAGER_PANEL_PRESETS` / `EXECUTIVE_PANEL_PRESETS`, `getAnalyticsPresetsForRole`, `getDefaultPresetForRole`
-- **Metryki operacyjne:** `lib/analytics/metrics.ts` + `filters.ts` + `scope.ts` — dane z `leads` / `deals` / `tasks` / `clients` / `kpi`; filtry opiekun / region / segment
+- **Metryki operacyjne:** `lib/analytics/metrics.ts` + `filters.ts` + `scope.ts` — dane z `leads` / `deals` / `tasks` / `clients` / `kpi`; filtry opiekun / region / segment / kategoria produktowa (`pipelineCategoryId` → `applyPipelineCategoryFilter`, tylko deale)
 - **RBAC widżetów:** `lib/analytics/widget-access.ts` — `isWidgetAvailableForRole`; widżety spoza roli nie renderują się
 - **Wykresy shadcn (reuse):** `analytics/charts/analytics-radial-chart.tsx`, `analytics-area-chart.tsx`, `analytics-line-chart.tsx`, `analytics-radar-chart.tsx`, `analytics-pie-chart.tsx` — props `data` + `series` / `entities`; kolory `--chart-*`
 - **Widżety menedżera (US-37):** `advisor-won-amount-widget`, `team-activity-area-widget`, `advisor-radar-widget`, `advisor-ranking-table-widget` (klik → `onAdvisorSelect`), `lead-conversion-line-widget`
@@ -275,7 +276,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ### formatCurrencyPln / formatDatePl / formatTimePl / formatRelativeTimePl
 - **Plik:** `lib/format/pl.ts`
-- **`formatRelativeTimePl`** — czas względny PL w powiadomieniach (np. „2 godz. temu”, „za 3 dni”); baza demo: `getDemoToday()`.
+- **`formatRelativeTimePl`** — czas względny PL w powiadomieniach (np. „2 godz. temu”, „za 3 dni”); baza: `getToday()`.
 
 ---
 
@@ -301,6 +302,16 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ## Banner informacyjny (US-23)
 
+### File Upload (Dice UI, US-42)
+- **Komponent:** `components/ui/file-upload.tsx` — `@diceui/file-upload` ([docs](https://www.diceui.com/docs/components/radix/file-upload)); import: `FileUpload`, `FileUploadDropzone`, `FileUploadList`, `FileUploadItem`, … + `useFileUpload`.
+- **Wrapper CRM:** `components/crm/crm-file-upload-panel.tsx` — symulacja progress (`onUpload` ~300–800 ms), lista zapisanych plików, walidacja PL (`lib/crm/file-upload-validation.ts`).
+- **Typy / Context:** `ClientFile`, `LeadFile`, `DealFile` w `types/crm.ts`; seed `data/*-files.json`; `add*File` / `remove*File` w `DemoDataContext`; `regionId = user.regionId ?? entity.regionId`.
+- **Helpery:** `lib/crm/entity-files.ts` — `getClientFilesForClient`, `getLeadFilesForLead`, `getDealFilesForDeal` (+ `filterByScope`).
+
+### Stepper (Dice UI, US-46)
+- **Komponent:** `components/ui/stepper.tsx` — `@diceui/stepper` ([docs](https://www.diceui.com/docs/components/radix/stepper)); import: `Stepper`, `StepperList`, `StepperItem`, `StepperTrigger`, `StepperIndicator`, `StepperSeparator`, `StepperTitle`.
+- **Karty lead/deal:** `lead-status-bar.tsx`, `deal-status-bar.tsx` — poziomy stepper workflow (`activationMode="manual"`); terminalne `won`/`lost` → `Badge`; przycisk **Zakończ przetwarzanie** obok steppera; deal: `onValidate` → `isDealWorkflowStatusChange`.
+
 ### Kanban (Dice UI, US-25)
 - **Komponent:** `components/ui/kanban.tsx` — `@diceui/kanban` (`Kanban`, `KanbanBoard`, `KanbanColumn`, `KanbanItem`, `KanbanOverlay`); kolumny `disabled` (bez drag kolumn).
 - **Boardy:** `leads-kanban-board.tsx`, `deals-kanban-board.tsx` — `<Kanban>` jako korzeń widoku; stan kolumn `Record<status, Lead[]|Deal[]>`, `onValueChange` + `onMove`; `KanbanItem asHandle` (bez `disabled` na kolumnie — blokuje `pointer-events`).
@@ -319,9 +330,10 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **API:** `useBanners()` → `onBannerAdd`, `onBannerRemove`, `onBannersClear`.
 
 ### Reguły banerów
-- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**.
+- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
+- **Treść banera:** `components/crm/crm-banner-payload-content.tsx` — współdzielony layout tytułu/opisu/akcji.
 - **Kontroler:** `components/crm/crm-banner-controller.tsx` — losuje 2 banery z puli wygenerowanej z `DemoDataContext`.
-- **Seed:** terminy spotkań/zadań/deali ≥ 30 dni od `DEMO_TODAY_DATE_KEY` (patrz komentarz w `demo-today.ts`).
+- **Seed:** terminy spotkań/zadań/deali rozłożone względem bieżącej daty (prezentacja na żywo — bez zamrożonej daty demo).
 
 ---
 

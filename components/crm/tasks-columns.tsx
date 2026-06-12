@@ -6,6 +6,11 @@ import { TaskEditButton } from "@/components/crm/task-form-dialog"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import { TASK_PRIORITY_LABELS } from "@/lib/crm/task-labels"
 import { formatDatePl } from "@/lib/format/pl"
@@ -139,9 +144,18 @@ export function createTasksColumns(
     },
     {
       accessorKey: "opportunityTitle",
-      meta: { title: "Szansa" },
+      meta: { title: "Deal" },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Szansa" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="w-fit">
+              <DataTableColumnHeader column={column} title="Deal" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            Deal sprzedażowy powiązany z zadaniem
+          </TooltipContent>
+        </Tooltip>
       ),
       cell: ({ row }) => (
         <span className="max-w-48 truncate">

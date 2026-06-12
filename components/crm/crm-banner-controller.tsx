@@ -1,21 +1,8 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-import {
-  AlertTriangleIcon,
-  InfoIcon,
-} from "lucide-react"
-import {
-  BannerActions,
-  BannerClose,
-  BannerContent,
-  BannerDescription,
-  BannerIcon,
-  BannerTitle,
-  useBanners,
-} from "@/components/ui/banner"
-import { Button } from "@/components/ui/button"
+import { CrmBannerPayloadContent } from "@/components/crm/crm-banner-payload-content"
+import { useBanners } from "@/components/ui/banner"
 import { useSession } from "@/lib/auth/demo-session"
 import {
   AUTO_CRITICAL_DEAL_BANNER,
@@ -26,33 +13,8 @@ import {
   pickRandomDemoBanners,
   type BannerPayload,
 } from "@/lib/crm/banner-rules"
-import { getDemoToday } from "@/lib/crm/demo-today"
+import { getToday } from "@/lib/crm/local-date"
 import { useDemoData } from "@/lib/data/demo-data-context"
-
-function BannerPayloadContent({ payload }: { payload: BannerPayload }) {
-  const Icon =
-    payload.variant === "info" ? InfoIcon : AlertTriangleIcon
-
-  return (
-    <>
-      <BannerIcon>
-        <Icon />
-      </BannerIcon>
-      <BannerContent>
-        <BannerTitle>{payload.titlePl}</BannerTitle>
-        <BannerDescription>{payload.descriptionPl}</BannerDescription>
-      </BannerContent>
-      {payload.href && payload.actionLabelPl ? (
-        <BannerActions>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={payload.href}>{payload.actionLabelPl}</Link>
-          </Button>
-        </BannerActions>
-      ) : null}
-      {payload.dismissible ? <BannerClose /> : null}
-    </>
-  )
-}
 
 function scheduleBanner(
   payload: BannerPayload,
@@ -61,7 +23,7 @@ function scheduleBanner(
 ): ReturnType<typeof setTimeout> {
   return setTimeout(() => {
     onBannerAdd({
-      content: <BannerPayloadContent payload={payload} />,
+      content: <CrmBannerPayloadContent payload={payload} />,
       variant: payload.variant,
       priority: payload.priority,
       dismissible: payload.dismissible,
@@ -80,7 +42,7 @@ export function CrmBannerController() {
     onBannersClear()
 
     const timeouts: ReturnType<typeof setTimeout>[] = []
-    const asOfDate = getDemoToday()
+    const asOfDate = getToday()
 
     const pool = generateDemoBannersForUser(
       user,

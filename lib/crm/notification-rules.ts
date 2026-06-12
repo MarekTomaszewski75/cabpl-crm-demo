@@ -1,4 +1,4 @@
-import { toLocalDateKey } from "@/lib/crm/demo-today"
+import { toLocalDateKey } from "@/lib/crm/local-date"
 import { getLeadsRequiringAttention } from "@/lib/crm/today-pipeline-summary"
 import { filterByScope } from "@/lib/rbac/scope"
 import type {

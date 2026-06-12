@@ -1,4 +1,4 @@
-import { getDemoToday, toLocalDateKey } from "@/lib/crm/demo-today"
+import { getToday, toLocalDateKey } from "@/lib/crm/local-date"
 import {
   getDealsRequiringAttention,
   TODAY_PIPELINE_HORIZON_DAYS,
@@ -27,7 +27,7 @@ export const BANNER_INITIAL_DELAY_MS = 4_000
 /** Drugi baner (inny losowy) — pokazuje kolejkowanie. */
 export const BANNER_FOLLOW_UP_DELAY_MS = 11_000
 
-/** Horyzont spotkań w banerze — zgodny z seedem (≥ 30 dni od `DEMO_TODAY_DATE_KEY`). */
+/** Horyzont spotkań w banerze (dni od dziś). */
 export const BANNER_MEETING_HORIZON_DAYS = 30
 
 export type BannerVariant = "info" | "warning"
@@ -329,7 +329,7 @@ function buildKycTasksBanner(
 export function generateDemoBannersForUser(
   user: DemoUser,
   data: BannerDataInput,
-  asOfDate: Date = getDemoToday(),
+  asOfDate: Date = getToday(),
 ): BannerPayload[] {
   const banners: BannerPayload[] = []
 
@@ -402,10 +402,33 @@ function buildCriticalDealPayload(deal: Deal, asOfDate: Date): BannerPayload {
   }
 }
 
+export const PRODUCTS_SYNC_SESSION_KEY = "products-sync-notified"
+
+export const PRODUCTS_SYNC_BANNER_CHANCE = 0.3
+
+export function createProductCatalogSyncBanner(): BannerPayload {
+  return {
+    id: "sync-products",
+    variant: "info",
+    priority: SYSTEM_DEMO_BANNER_PRIORITY,
+    dismissible: true,
+    titlePl: "Katalog produktów zaktualizowany",
+    descriptionPl: "Pobrano zmiany z systemu produktowego banku.",
+  }
+}
+
+/** Los ~30% przy pierwszym wejściu na `/products` w sesji przeglądarki. */
+export function shouldShowProductCatalogSyncBanner(): boolean {
+  if (typeof sessionStorage === "undefined") return false
+  if (sessionStorage.getItem(PRODUCTS_SYNC_SESSION_KEY)) return false
+  sessionStorage.setItem(PRODUCTS_SYNC_SESSION_KEY, "1")
+  return Math.random() < PRODUCTS_SYNC_BANNER_CHANCE
+}
+
 export function getCriticalDealBanner(
   deals: readonly Deal[],
   user: DemoUser,
-  asOfDate: Date = getDemoToday(),
+  asOfDate: Date = getToday(),
 ): BannerPayload | null {
   const criticalDeals = deals
     .filter((deal) => isCriticalDeal(deal, user, asOfDate))

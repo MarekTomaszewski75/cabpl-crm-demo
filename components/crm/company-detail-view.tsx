@@ -11,12 +11,15 @@ import { CompanyDealsList } from "@/components/crm/company-deals-list"
 import { CompanyDetailHeader } from "@/components/crm/company-detail-header"
 import { CompanyDetailSidebar } from "@/components/crm/company-detail-sidebar"
 import { CompanyLeadsList } from "@/components/crm/company-leads-list"
+import { CompanyTasksList } from "@/components/crm/company-tasks-list"
+import { TaskFormDialog } from "@/components/crm/task-form-dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
 import {
   getCompanyDeals,
   getCompanyLeads,
+  getCompanyTasks,
 } from "@/lib/crm/company-engagement-counts"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { canAccessEntity } from "@/lib/rbac/scope"
@@ -32,7 +35,7 @@ export type CompanyEngagementSection =
   | null
 
 type CompanyMainTab = "general" | "related"
-type CompanyRelatedTab = "leady" | "deale"
+type CompanyRelatedTab = "leady" | "deale" | "zadania"
 
 export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const router = useRouter()
@@ -69,6 +72,11 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const clientDeals = React.useMemo(() => {
     if (!user || !client) return []
     return getCompanyDeals(client.id, engagementData, user)
+  }, [client, engagementData, user])
+
+  const clientTasks = React.useMemo(() => {
+    if (!user || !client) return []
+    return getCompanyTasks(client.id, engagementData, user)
   }, [client, engagementData, user])
 
   React.useEffect(() => {
@@ -115,7 +123,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
       >
         <TabsList>
           <TabsTrigger value="general">Ogólne</TabsTrigger>
-          <TabsTrigger value="related">Powiązane jednostki</TabsTrigger>
+          <TabsTrigger value="related">Sprzedaż i relacje</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general" className="mt-4">
@@ -123,9 +131,9 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
             <CompanyDetailSidebar
               client={client}
               onTasksClick={() => {
-                setEngagementSection("tasks")
-                setComposerTab("note")
-                setMainTab("general")
+                setEngagementSection(null)
+                setMainTab("related")
+                setRelatedTab("zadania")
               }}
               onMeetingsClick={() => {
                 setEngagementSection("meetings")
@@ -168,15 +176,24 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
             value={relatedTab}
             onValueChange={(value) => setRelatedTab(value as CompanyRelatedTab)}
           >
-            <TabsList>
-              <TabsTrigger value="leady">Leady</TabsTrigger>
-              <TabsTrigger value="deale">Deale</TabsTrigger>
-            </TabsList>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <TabsList>
+                <TabsTrigger value="leady">Leady</TabsTrigger>
+                <TabsTrigger value="deale">Deale</TabsTrigger>
+                <TabsTrigger value="zadania">Zadania</TabsTrigger>
+              </TabsList>
+              {relatedTab === "zadania" ? (
+                <TaskFormDialog user={user} defaultClientId={client.id} />
+              ) : null}
+            </div>
             <TabsContent value="leady" className="mt-4">
               <CompanyLeadsList leads={clientLeads} />
             </TabsContent>
             <TabsContent value="deale" className="mt-4">
               <CompanyDealsList deals={clientDeals} />
+            </TabsContent>
+            <TabsContent value="zadania" className="mt-4">
+              <CompanyTasksList tasks={clientTasks} clientId={client.id} />
             </TabsContent>
           </Tabs>
         </TabsContent>

@@ -28,17 +28,17 @@ import {
 import { getPostLoginPath } from "@/lib/auth/post-login-path"
 import { useSession } from "@/lib/auth/demo-session"
 import {
-  DEMO_TODAY_DATE_KEY,
-  formatDemoTodayPl,
-  getDemoToday,
-} from "@/lib/crm/demo-today"
+  formatTodayPl,
+  getToday,
+  getTodayDateKey,
+  startOfDay,
+} from "@/lib/crm/local-date"
 import { TASK_PRIORITY_LABELS } from "@/lib/crm/task-labels"
 import {
   getNextUpcomingMeeting,
   getPrimaryNbaHighlight,
   getTasksDueOnDate,
   isMeetingOnDate,
-  startOfDemoDay,
 } from "@/lib/crm/today-dashboard"
 import { TodayNotificationsCard } from "@/components/crm/today-notifications-card"
 import { TodayPipelineSummary } from "@/components/crm/today-pipeline-summary"
@@ -66,7 +66,8 @@ export function TodayView() {
   const { tasks, meetings, clients, opportunities, leads, leadActivities, contactEvents } =
     useDemoData()
 
-  const demoToday = getDemoToday()
+  const today = getToday()
+  const todayDateKey = getTodayDateKey()
 
   React.useEffect(() => {
     if (!isReady || !user) return
@@ -109,16 +110,16 @@ export function TodayView() {
     [scopedClients],
   )
 
-  const tasksToday = getTasksDueOnDate(scopedTasks, DEMO_TODAY_DATE_KEY)
+  const tasksToday = getTasksDueOnDate(scopedTasks, todayDateKey)
   const nextMeeting = getNextUpcomingMeeting(
     scopedMeetings,
-    startOfDemoDay(demoToday),
+    startOfDay(today),
   )
   const nbaHighlight = getPrimaryNbaHighlight(
     scopedClients,
     scopedOpportunities,
     scopedContactEvents,
-    demoToday,
+    today,
   )
 
   if (!isReady || !user || user.role !== "advisor") {
@@ -137,7 +138,7 @@ export function TodayView() {
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-semibold tracking-tight">Dziś</h1>
             <p className="text-sm text-muted-foreground">
-              {formatDemoTodayPl()}
+              {formatTodayPl()}
             </p>
           </div>
         </div>
@@ -154,7 +155,7 @@ export function TodayView() {
               Zadania na dziś
             </CardTitle>
             <CardDescription>
-              Termin {formatDatePl(DEMO_TODAY_DATE_KEY)} —{" "}
+              Termin {formatDatePl(todayDateKey)} —{" "}
               {tasksToday.length}{" "}
               {tasksToday.length === 1 ? "otwarte zadanie" : "otwartych zadań"}
             </CardDescription>
@@ -235,7 +236,7 @@ export function TodayView() {
                   {formatDatePl(nextMeeting.startsAt)},{" "}
                   {formatTimePl(nextMeeting.startsAt)}–
                   {formatTimePl(nextMeeting.endsAt)}
-                  {isMeetingOnDate(nextMeeting, DEMO_TODAY_DATE_KEY) ? (
+                  {isMeetingOnDate(nextMeeting, todayDateKey) ? (
                     <Badge variant="secondary" className="ml-2">
                       Dziś
                     </Badge>
@@ -262,7 +263,7 @@ export function TodayView() {
         leads={scopedLeads}
         leadActivities={scopedLeadActivities}
         clients={scopedClients}
-        demoToday={demoToday}
+        today={today}
       />
 
       <Card>

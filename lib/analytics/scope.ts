@@ -38,3 +38,11 @@ export function filterAnalyticsEntities<T extends ScopedEntity>(
   }
   return result
 }
+
+/** Filtr kategorii lejka — tylko deale (`scopedDeals`, sparkline dealowych). Leady bez zmian. */
+export function applyPipelineCategoryFilter<
+  T extends { pipelineCategoryId: string },
+>(items: readonly T[], pipelineCategoryId: string | null | undefined): T[] {
+  if (!pipelineCategoryId) return [...items]
+  return items.filter((item) => item.pipelineCategoryId === pipelineCategoryId)
+}

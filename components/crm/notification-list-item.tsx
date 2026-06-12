@@ -10,7 +10,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { formatRelativeTimePl } from "@/lib/format/pl"
-import { getDemoToday } from "@/lib/crm/demo-today"
+import { getToday } from "@/lib/crm/local-date"
 import type { Notification, NotificationType } from "@/types/crm"
 
 function notificationTypeIcon(type: NotificationType) {
@@ -75,7 +75,7 @@ export function NotificationListItem({
           {notification.bodyPl}
         </p>
         <span className="text-xs text-muted-foreground">
-          {formatRelativeTimePl(createdAt, getDemoToday())}
+          {formatRelativeTimePl(createdAt, getToday())}
         </span>
       </div>
     </button>

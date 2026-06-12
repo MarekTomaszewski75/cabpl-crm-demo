@@ -1,4 +1,4 @@
-import { toLocalDateKey } from "@/lib/crm/demo-today"
+import { toLocalDateKey } from "@/lib/crm/local-date"
 import {
   getClientNbaSuggestions,
   type NbaSuggestion,
@@ -68,11 +68,6 @@ export function getPrimaryNbaHighlight(
   }
 
   return best
-}
-
-/** Początek dnia demo (lokalnie) — do filtrowania spotkań „od dziś”. */
-export function startOfDemoDay(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0)
 }
 
 export function isMeetingOnDate(meeting: Meeting, dateKey: string): boolean {

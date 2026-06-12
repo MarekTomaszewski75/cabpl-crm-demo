@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import notificationsSeed from "@/data/notifications.json"
-import { getDemoToday } from "@/lib/crm/demo-today"
+import { getToday } from "@/lib/crm/local-date"
 import {
   generateNotificationsForUser,
   mergeSeedAndGeneratedNotifications,
@@ -51,7 +51,7 @@ export function NotificationProvider({
         leadActivities,
         meetings,
       },
-      getDemoToday(),
+      getToday(),
     )
 
     setNotifications(mergeSeedAndGeneratedNotifications(seed, generated))

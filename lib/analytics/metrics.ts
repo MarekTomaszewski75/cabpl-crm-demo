@@ -18,7 +18,10 @@ import {
 } from "@/lib/analytics/filters"
 import { getSparklineBuckets } from "@/lib/analytics/sparkline"
 import type { SparklinePoint } from "@/lib/analytics/sparkline"
-import { filterAnalyticsEntities } from "@/lib/analytics/scope"
+import {
+  applyPipelineCategoryFilter,
+  filterAnalyticsEntities,
+} from "@/lib/analytics/scope"
 import { getPipelineSteps } from "@/lib/crm/deal-pipeline"
 import type { AnalyticsGlobalFilters } from "@/types/analytics"
 import type {
@@ -352,11 +355,14 @@ function scopedLeads(data: AnalyticsData, user: DemoUser, filters: AnalyticsGlob
 }
 
 function scopedDeals(data: AnalyticsData, user: DemoUser, filters: AnalyticsGlobalFilters) {
-  return filterAnalyticsEntities(data.deals, user, filters, {
-    ...getScopeContext(data),
-    segmentNameForFilter: getSegmentNameForFilter(data, filters.segmentId),
-    getClientId: (item) => (item as Deal).clientId,
-  })
+  return applyPipelineCategoryFilter(
+    filterAnalyticsEntities(data.deals, user, filters, {
+      ...getScopeContext(data),
+      segmentNameForFilter: getSegmentNameForFilter(data, filters.segmentId),
+      getClientId: (item) => (item as Deal).clientId,
+    }),
+    filters.pipelineCategoryId,
+  )
 }
 
 function scopedTasks(data: AnalyticsData, user: DemoUser, filters: AnalyticsGlobalFilters) {
@@ -727,15 +733,14 @@ export function getBankWideKpiTotals(
 function getRegionActualTrend(
   data: AnalyticsData,
   user: DemoUser,
+  filters: AnalyticsGlobalFilters,
   regionId: string,
 ): SparklinePoint[] {
   const weeklyBuckets = getLastWeeklyBuckets(6)
   const regionFilters: AnalyticsGlobalFilters = {
+    ...filters,
     timePeriod: "ytd",
-    ownerIds: [],
-    panelPresetId: "bank-portfolio",
     regionId,
-    segmentId: null,
   }
   const deals = scopedDeals(data, user, regionFilters)
 
@@ -780,7 +785,7 @@ export function getRegionScorecardRows(
         (sum, deal) => sum + getDealAmountPln(deal),
         0,
       ),
-      actualTrend: getRegionActualTrend(data, user, region.regionId),
+      actualTrend: getRegionActualTrend(data, user, filters, region.regionId),
     }
   })
 }

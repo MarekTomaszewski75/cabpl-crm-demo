@@ -14,6 +14,7 @@ export function resolveDealActivityKind(
   if (
     type === "deal_created" ||
     type === "deal_status_changed" ||
+    type === "deal_expected_close_changed" ||
     type === "deal_won" ||
     type === "deal_lost" ||
     type === "deal_document_added" ||

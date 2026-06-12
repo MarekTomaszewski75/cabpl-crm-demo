@@ -41,6 +41,7 @@ const LINK_NONE = "__none__"
 type TaskFormDialogProps = {
   user: DemoUser
   task?: Task
+  defaultClientId?: string | null
   open?: boolean
   onOpenChange?: (open: boolean) => void
   trigger?: React.ReactNode
@@ -82,6 +83,7 @@ function taskToFormState(task: Task) {
 export function TaskFormDialog({
   user,
   task,
+  defaultClientId = null,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   trigger,
@@ -127,13 +129,13 @@ export function TaskFormDialog({
     } else {
       resetForm()
     }
-  }, [open, task])
+  }, [open, task, defaultClientId])
 
   function resetForm() {
     setTitle("")
     setDueDate("")
     setPriority("medium")
-    setClientId(LINK_NONE)
+    setClientId(defaultClientId ?? LINK_NONE)
     setOpportunityId(LINK_NONE)
   }
 
@@ -226,8 +228,8 @@ export function TaskFormDialog({
           <DialogTitle>{isEdit ? "Edytuj zadanie" : "Nowe zadanie"}</DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Zmień tytuł, termin, priorytet lub powiązania z klientem i szansą."
-              : "Tytuł, termin, priorytet i opcjonalne powiązanie z klientem lub szansą."}
+              ? "Zmień tytuł, termin, priorytet lub powiązania z klientem i dealem."
+              : "Tytuł, termin, priorytet i opcjonalne powiązanie z klientem lub dealem."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -291,7 +293,7 @@ export function TaskFormDialog({
               </Select>
             </Field>
             <Field>
-              <FieldLabel htmlFor="task-opportunity">Szansa</FieldLabel>
+              <FieldLabel htmlFor="task-opportunity">Deal</FieldLabel>
               <Select
                 value={opportunityId}
                 onValueChange={setOpportunityId}

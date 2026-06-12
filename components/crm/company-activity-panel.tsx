@@ -10,7 +10,7 @@ import { CompanyActivityForm } from "@/components/crm/company-activity-form"
 import { CompanyContactsList } from "@/components/crm/company-contacts-list"
 import { CompanyMeetingsList } from "@/components/crm/company-meetings-list"
 import { CompanyTasksList } from "@/components/crm/company-tasks-list"
-import { CompanyFilesUploadZone } from "@/components/crm/company-files-upload-zone"
+import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -41,6 +41,7 @@ import {
   getCompanyMeetings,
   getCompanyTasks,
 } from "@/lib/crm/company-engagement-counts"
+import { getClientFilesForClient } from "@/lib/crm/entity-files"
 import { formatDatePl } from "@/lib/format/pl"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
@@ -77,12 +78,15 @@ export function CompanyActivityPanel({
     tasks,
     meetings,
     clientDocuments,
+    clientFiles,
     deals,
     leads,
     contacts,
     users,
     addCompanyNote,
     addClientDocument,
+    addClientFile,
+    removeClientFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
   const [documentName, setDocumentName] = React.useState("")
@@ -134,6 +138,11 @@ export function CompanyActivityPanel({
     return getCompanyDocuments(client.id, engagementData, user)
   }, [client.id, engagementData, user])
 
+  const clientUploadedFiles = React.useMemo(() => {
+    if (!user) return []
+    return getClientFilesForClient(client.id, clientFiles, user)
+  }, [client.id, clientFiles, user])
+
   const clientContacts = React.useMemo(
     () => getCompanyContacts(client, engagementData),
     [client, engagementData],
@@ -144,11 +153,11 @@ export function CompanyActivityPanel({
       all: allItems.length,
       activities: filterCompanyActivityFeed(allItems, "activities").length,
       notes: filterCompanyActivityFeed(allItems, "notes").length,
-      files: 0,
+      files: clientUploadedFiles.length,
       tasks: filterCompanyActivityFeed(allItems, "tasks").length,
     }
     return counts
-  }, [allItems])
+  }, [allItems, clientUploadedFiles.length])
 
   React.useEffect(() => {
     if (engagementSection && engagementSectionRef.current) {
@@ -176,6 +185,23 @@ export function CompanyActivityPanel({
     if (!created) return
     setDocumentName("")
     toast.success("Dokument został dodany")
+  }
+
+  function handleUploadFile(file: File) {
+    if (!user) return false
+    const created = addClientFile(
+      client.id,
+      {
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type || "application/octet-stream",
+      },
+      user,
+    )
+    if (created) {
+      toast.success("Plik został dodany")
+    }
+    return created !== null
   }
 
   return (
@@ -214,7 +240,13 @@ export function CompanyActivityPanel({
             </TabsContent>
 
             <TabsContent value="files">
-              <CompanyFilesUploadZone />
+              <CrmFileUploadPanel
+                files={clientUploadedFiles}
+                users={users}
+                onUpload={handleUploadFile}
+                onRemove={removeClientFile}
+                disabled={!user}
+              />
             </TabsContent>
 
             <TabsContent value="documents" className="flex flex-col gap-3">

@@ -60,20 +60,28 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 38  | [US-38 Analytics executive](./US-38-analytics-executive/story.md)                         | P0        | US-36, US-39, US-40                             |
 | 39  | [US-39 Analytics shadcn charts](./US-39-analytics-shadcn-charts/story.md)                 | P0        | US-20                                           |
 | 40  | [US-40 Analytics multi-region seed](./US-40-analytics-multi-region-seed/story.md)       | P1        | US-20, US-28                                    |
+| 41  | [US-41 Deal expected close date](./US-41-deal-expected-close-date/story.md)             | P0        | US-18, US-21, US-29, US-34                      |
+| 42  | [US-42 File upload Dice UI](./US-42-file-upload-dice-ui/story.md)                       | P0        | US-33, US-34, US-35, US-25                      |
+| 43  | [US-43 Products read-only](./US-43-products-read-only/story.md)                       | P0        | US-19, US-31, US-22                             |
+| 44  | [US-44 Analytics category filter](./US-44-analytics-category-filter/story.md)           | P0        | US-36, US-37, US-38, US-27                      |
+| 45  | [US-45 Company tab and tasks](./US-45-company-tab-and-tasks/story.md)                   | P1        | US-35, US-09                                    |
+| 46  | [US-46 Lead deal stepper](./US-46-lead-deal-stepper/story.md)                           | P1        | US-33, US-34, US-25                             |
+| 47  | [US-47 Tasks deal column rename](./US-47-tasks-deal-column-rename/story.md)             | P2        | US-09, US-18                                    |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  
 **Produkty i lejki per kategoria (2026-06-09):** [`../products-deal-pipelines-spec.md`](../products-deal-pipelines-spec.md) → US-27 … US-32.  
 **Przebudowa kart lead/deal/firma (2026-06-10):** [`../lead-detail-rebuild-spec.md`](../lead-detail-rebuild-spec.md) → US-33; [`../deal-detail-rebuild-spec.md`](../deal-detail-rebuild-spec.md) → US-34; [`../company-detail-rebuild-spec.md`](../company-detail-rebuild-spec.md) → US-35.  
-**Analityka per rola (2026-06-10):** [`../analytics-roles-rebuild-spec.md`](../analytics-roles-rebuild-spec.md) → US-36 … US-40.
+**Analityka per rola (2026-06-10):** [`../analytics-roles-rebuild-spec.md`](../analytics-roles-rebuild-spec.md) → US-36 … US-40.  
+**Feedback iteracja 2 (2026-06-12):** [`../demo-feedback-iteration-2-spec.md`](../demo-feedback-iteration-2-spec.md) → US-41 … US-47.
 
 ## Mapowanie na wymagania MUST HAVE
 
 | Wymaganie (requirements §3)   | Story                             |
 | ----------------------------- | --------------------------------- |
 | Raportowanie zarządcze        | US-07, US-20, US-36–US-40       |
-| Lejek sprzedażowy / deale     | US-06, US-18, US-27–US-30, US-32  |
-| Katalog produktów BK          | US-19, US-27, US-31               |
+| Lejek sprzedażowy / deale     | US-06, US-18, US-27–US-30, US-32, US-41, US-46 |
+| Katalog produktów BK          | US-19, US-27, US-31, US-43       |
 | Klienci i leady               | US-08, US-11, US-17               |
 | Zadania, kalendarz, NBA, Dziś | US-09, US-10, US-11, US-13, US-21 |
 | Powiadomienia, banery         | US-22, US-23                      |

@@ -14,7 +14,7 @@ import {
   ActivityParticipantsField,
   ActivityResponsibleUserField,
 } from "@/components/crm/activity-people-fields"
-import { CompanyFilesUploadZone } from "@/components/crm/company-files-upload-zone"
+import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { CompanyActivityPrioritySelect } from "@/components/crm/company-activity-priority"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -271,7 +271,7 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
 
         <div className="flex flex-col gap-2">
           <FieldLabel>Załączniki</FieldLabel>
-          <CompanyFilesUploadZone />
+          <CrmFileUploadPanel files={[]} onUpload={() => true} />
         </div>
 
         <ActivityCollapsibleSection

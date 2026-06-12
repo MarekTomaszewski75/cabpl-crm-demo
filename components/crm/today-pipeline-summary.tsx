@@ -34,7 +34,7 @@ type TodayPipelineSummaryProps = {
   leads: readonly Lead[]
   leadActivities: readonly LeadActivity[]
   clients: readonly Client[]
-  demoToday: Date
+  today: Date
 }
 
 export function TodayPipelineSummary({
@@ -42,13 +42,13 @@ export function TodayPipelineSummary({
   leads,
   leadActivities,
   clients,
-  demoToday,
+  today,
 }: TodayPipelineSummaryProps) {
-  const dealsAttention = getDealsRequiringAttention(deals, clients, demoToday)
+  const dealsAttention = getDealsRequiringAttention(deals, clients, today)
   const leadsAttention = getLeadsRequiringAttention(
     leads,
     leadActivities,
-    demoToday,
+    today,
   )
 
   const dealsPreview = dealsAttention.slice(0, MAX_ITEMS)

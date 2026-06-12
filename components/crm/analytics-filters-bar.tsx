@@ -1,11 +1,14 @@
 "use client"
 
 import {
+  ANALYTICS_CATEGORY_ALL,
   ANALYTICS_OWNER_ALL,
   ANALYTICS_REGION_ALL,
   ANALYTICS_SEGMENT_ALL,
   ANALYTICS_TIME_PERIOD_LABELS,
 } from "@/lib/analytics/analytics-labels"
+import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
+import { getPipelineCategoryIds } from "@/lib/crm/deal-pipeline"
 import {
   getAnalyticsPresetsForRole,
 } from "@/lib/analytics/widget-registry"
@@ -40,8 +43,10 @@ export function AnalyticsFiltersBar({
     filters.ownerIds.length === 1 ? filters.ownerIds[0] : ANALYTICS_OWNER_ALL
   const regionValue = filters.regionId ?? ANALYTICS_REGION_ALL
   const segmentValue = filters.segmentId ?? ANALYTICS_SEGMENT_ALL
+  const categoryValue = filters.pipelineCategoryId ?? ANALYTICS_CATEGORY_ALL
   const isManager = userRole === "regional_manager"
   const isExecutive = userRole === "executive"
+  const showCategoryFilter = isManager || isExecutive
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-border bg-muted/30 p-4 sm:flex-row sm:flex-wrap sm:items-center">
@@ -92,6 +97,35 @@ export function AnalyticsFiltersBar({
           </SelectGroup>
         </SelectContent>
       </Select>
+
+      {showCategoryFilter ? (
+        <Select
+          value={categoryValue}
+          onValueChange={(value) =>
+            onChange({
+              ...filters,
+              pipelineCategoryId:
+                value === ANALYTICS_CATEGORY_ALL ? null : value,
+            })
+          }
+        >
+          <SelectTrigger className="w-full min-w-44 sm:w-56">
+            <SelectValue placeholder="Kategoria produktowa" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value={ANALYTICS_CATEGORY_ALL}>
+                Wszystkie kategorie
+              </SelectItem>
+              {getPipelineCategoryIds().map((categoryId) => (
+                <SelectItem key={categoryId} value={categoryId}>
+                  {DEAL_PIPELINE_CATEGORY_LABELS[categoryId]}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      ) : null}
 
       {isManager ? (
         <Select

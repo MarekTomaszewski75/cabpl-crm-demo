@@ -1,10 +1,7 @@
 import type {
-  Product,
   ProductAvailability,
   ProductCondition,
-  ProductCurrency,
   ProductGoodsOrService,
-  ProductPriceKind,
   ProductType,
 } from "@/types/crm"
 
@@ -24,13 +21,6 @@ export const PRODUCT_AVAILABILITY_LABELS: Record<ProductAvailability, string> =
     unavailable: "Niedostępny",
   }
 
-export const PRODUCT_PRICE_KIND_LABELS: Record<ProductPriceKind, string> = {
-  fixed: "Stała",
-  from: "Od",
-  percent: "Procent",
-  free: "Bez opłaty",
-}
-
 export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
   credit: "Kredyt",
   deposit: "Depozyt",
@@ -47,48 +37,9 @@ export const PRODUCT_CONDITION_LABELS: Record<ProductCondition, string> = {
   archived: "Zarchiwizowany",
 }
 
-export const PRODUCT_CURRENCY_LABELS: Record<ProductCurrency, string> = {
-  PLN: "PLN",
-  EUR: "EUR",
-  USD: "USD",
-}
-
 export const PRODUCT_FILTER_DEFAULTS = {
   activeProductsTagLabel: "Aktywne produkty",
   isActive: true as const,
-}
-
-const numberFormatter = new Intl.NumberFormat("pl-PL", {
-  maximumFractionDigits: 2,
-})
-
-function formatAmount(value: number, currency: ProductCurrency): string {
-  if (currency === "PLN") {
-    return `${numberFormatter.format(value)} PLN`
-  }
-  return new Intl.NumberFormat("pl-PL", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 2,
-  }).format(value)
-}
-
-export function formatProductPrice(
-  product: Pick<Product, "price" | "currency" | "priceKind">,
-): string {
-  if (product.priceKind === "free") {
-    return PRODUCT_PRICE_KIND_LABELS.free
-  }
-  if (product.priceKind === "percent") {
-    if (product.price == null) return "—"
-    return `${numberFormatter.format(product.price)}%`
-  }
-  if (product.price == null) return "—"
-  const amount = formatAmount(product.price, product.currency)
-  if (product.priceKind === "from") {
-    return `od ${amount}`
-  }
-  return amount
 }
 
 export function productAvailabilityBadgeVariant(
@@ -133,13 +84,6 @@ export const PRODUCT_AVAILABILITY_OPTIONS = (
   label: PRODUCT_AVAILABILITY_LABELS[value],
 }))
 
-export const PRODUCT_PRICE_KIND_OPTIONS = (
-  Object.keys(PRODUCT_PRICE_KIND_LABELS) as ProductPriceKind[]
-).map((value) => ({
-  value,
-  label: PRODUCT_PRICE_KIND_LABELS[value],
-}))
-
 export const PRODUCT_TYPE_OPTIONS = (
   Object.keys(PRODUCT_TYPE_LABELS) as ProductType[]
 ).map((value) => ({
@@ -152,11 +96,4 @@ export const PRODUCT_CONDITION_OPTIONS = (
 ).map((value) => ({
   value,
   label: PRODUCT_CONDITION_LABELS[value],
-}))
-
-export const PRODUCT_CURRENCY_OPTIONS = (
-  Object.keys(PRODUCT_CURRENCY_LABELS) as ProductCurrency[]
-).map((value) => ({
-  value,
-  label: PRODUCT_CURRENCY_LABELS[value],
 }))

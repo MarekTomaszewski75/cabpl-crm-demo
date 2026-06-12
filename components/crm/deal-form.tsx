@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select"
 import { useSession } from "@/lib/auth/demo-session"
 import { formatContactName } from "@/lib/crm/contact-display"
+import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import { resolvePipelineCategoryId } from "@/lib/crm/deal-pipeline"
@@ -71,6 +72,7 @@ export function DealForm({
   const [comments, setComments] = React.useState("")
   const [source, setSource] = React.useState<DealSource>("recommendation")
   const [dealType, setDealType] = React.useState<DealType | null>(null)
+  const [expectedCloseDate, setExpectedCloseDate] = React.useState("")
   const [errors, setErrors] = React.useState<Errors>({})
 
   const pipelineCategoryId = selectedProduct
@@ -139,6 +141,7 @@ export function DealForm({
       comments,
       source,
       dealType,
+      expectedCloseDate: expectedCloseDate.trim() || undefined,
       ownerId: user.id,
       regionId: user.regionId,
     })
@@ -245,6 +248,17 @@ export function DealForm({
           <SelectTrigger id="deal-type" className="w-full"><SelectValue placeholder="Brak" /></SelectTrigger>
           <SelectContent><SelectGroup><SelectItem value={DEAL_TYPE_NONE}>Brak</SelectItem>{DEAL_TYPE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectGroup></SelectContent>
         </Select>
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="deal-expected-close-date">
+          {DEAL_EXPECTED_CLOSE_DATE_LABEL}
+        </FieldLabel>
+        <Input
+          id="deal-expected-close-date"
+          type="date"
+          value={expectedCloseDate}
+          onChange={(e) => setExpectedCloseDate(e.target.value)}
+        />
       </Field>
     </FieldGroup>
   )

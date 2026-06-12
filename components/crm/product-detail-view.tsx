@@ -2,11 +2,16 @@
 
 import Link from "next/link"
 import { ArrowLeftIcon } from "lucide-react"
-import { ProductForm } from "@/components/crm/product-form"
+import { ProductDetailFields } from "@/components/crm/product-detail-fields"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { useSession } from "@/lib/auth/demo-session"
 import {
   PRODUCT_CONDITION_LABELS,
@@ -20,8 +25,11 @@ type ProductDetailViewProps = {
 
 export function ProductDetailView({ productId }: ProductDetailViewProps) {
   const { isReady } = useSession()
-  const { products } = useDemoData()
+  const { products, productCategories } = useDemoData()
   const product = products.find((item) => item.id === productId)
+  const category = product
+    ? productCategories.find((item) => item.id === product.categoryId)
+    : undefined
 
   if (!isReady) {
     return null
@@ -55,13 +63,11 @@ export function ProductDetailView({ productId }: ProductDetailViewProps) {
       </div>
 
       <Card>
-        <CardContent className="pt-6">
-          <ProductForm
-            key={product.id}
-            product={product}
-            layout="page"
-            onSuccess={() => {}}
-          />
+        <CardHeader>
+          <CardTitle className="text-base">Szczegóły produktu</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ProductDetailFields product={product} category={category} />
         </CardContent>
       </Card>
     </div>

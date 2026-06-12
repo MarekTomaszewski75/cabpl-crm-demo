@@ -19,6 +19,7 @@ import {
   type DealProductListItem,
 } from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
+import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { formatDatePl } from "@/lib/format/pl"
 import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
@@ -69,11 +70,30 @@ export function DealDetailSidebar({
 
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined
+  const [expectedCloseDraft, setExpectedCloseDraft] = React.useState(
+    deal.expectedCloseDate ?? "",
+  )
+
+  React.useEffect(() => {
+    setExpectedCloseDraft(deal.expectedCloseDate ?? "")
+  }, [deal.expectedCloseDate])
 
   function handleProductChange(next: DealProductListItem | null) {
     if (!next || !productEditable) return
     setSelectedProduct(next)
     updateDeal(deal.id, { productId: next.value })
+  }
+
+  function commitExpectedCloseDate() {
+    if (!user || readOnly) return
+    const previous = deal.expectedCloseDate ?? ""
+    const nextValue = expectedCloseDraft.trim()
+    if (nextValue === previous) return
+    updateDeal(
+      deal.id,
+      { expectedCloseDate: nextValue || undefined },
+      user,
+    )
   }
 
   return (
@@ -112,6 +132,31 @@ export function DealDetailSidebar({
             onDocumentsClick={onDocumentsClick}
           />
 
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">
+              {DEAL_EXPECTED_CLOSE_DATE_LABEL}
+            </span>
+            {readOnly ? (
+              <span className="text-sm text-muted-foreground">
+                {deal.expectedCloseDate
+                  ? formatDatePl(deal.expectedCloseDate)
+                  : "—"}
+              </span>
+            ) : (
+              <Input
+                type="date"
+                value={expectedCloseDraft}
+                onChange={(e) => setExpectedCloseDraft(e.target.value)}
+                onBlur={commitExpectedCloseDate}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    commitExpectedCloseDate()
+                  }
+                }}
+              />
+            )}
+          </div>
           <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Kontakty</span><ContactComboboxField value={deal.contactId ? [deal.contactId] : []} onChange={(ids) => updateDeal(deal.id, { contactId: ids[0] ?? null })} disabled={readOnly} /></div>

@@ -3,7 +3,7 @@ import {
   isPipelineCategoryId,
   isTerminalDealStatus,
 } from "@/lib/crm/deal-pipeline"
-import { toLocalDateKey } from "@/lib/crm/demo-today"
+import { toLocalDateKey } from "@/lib/crm/local-date"
 import type { Client, Deal, Lead, LeadActivity } from "@/types/crm"
 
 /** Horyzont terminów deali na widoku „Dziś” (dni od daty demo). */

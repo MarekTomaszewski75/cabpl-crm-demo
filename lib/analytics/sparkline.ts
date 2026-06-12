@@ -1,5 +1,8 @@
 import { DEMO_REFERENCE_DATE, getPeriodBounds } from "@/lib/analytics/filters"
-import { filterAnalyticsEntities } from "@/lib/analytics/scope"
+import {
+  applyPipelineCategoryFilter,
+  filterAnalyticsEntities,
+} from "@/lib/analytics/scope"
 import { isTerminalDealStatus } from "@/lib/crm/deal-labels"
 import type { AnalyticsGlobalFilters, AnalyticsTimePeriod } from "@/types/analytics"
 import type { Deal, DemoUser, Lead, Task } from "@/types/crm"
@@ -130,7 +133,10 @@ export function getMetricSparkline(
 ): SparklinePoint[] {
   const buckets = getSparklineBuckets(filters.timePeriod)
   const leads = filterAnalyticsEntities(data.leads, user, filters)
-  const deals = filterAnalyticsEntities(data.deals, user, filters)
+  const deals = applyPipelineCategoryFilter(
+    filterAnalyticsEntities(data.deals, user, filters),
+    filters.pipelineCategoryId,
+  )
   const tasks = filterAnalyticsEntities(data.tasks, user, filters)
 
   switch (metricKey) {

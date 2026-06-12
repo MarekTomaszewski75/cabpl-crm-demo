@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CrmUserHoverCard } from "@/components/crm/crm-user-hover-card"
+import { DealCloseDateUrgencyIcon } from "@/components/crm/deal-close-date-urgency-icon"
 import { LeadEngagementIndicators } from "@/components/crm/lead-engagement-indicators"
 import {
   DropdownMenu,
@@ -26,7 +27,8 @@ import {
 import { DEAL_SOURCE_LABELS, isTerminalDealStatus } from "@/lib/crm/deal-labels"
 import { getDealKanbanThemeForStatus } from "@/lib/crm/deal-kanban"
 import type { DealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
-import { formatCurrencyPln, formatDatePl, formatTimePl } from "@/lib/format/pl"
+import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
+import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
 import { cn } from "@/lib/utils"
 import type { Client, DemoUser, Deal, DealStatus, Product } from "@/types/crm"
 
@@ -138,19 +140,31 @@ export function DealKanbanCard({
         ) : null}
       </div>
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <time
-            className="inline-flex w-fit items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs tabular-nums text-muted-foreground"
-            dateTime={deal.createdAt}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <CalendarIcon className="size-3.5 shrink-0" aria-hidden />
-            {formatDatePl(deal.createdAt)}, {formatTimePl(deal.createdAt)}
-          </time>
-        </TooltipTrigger>
-        <TooltipContent>Data utworzenia deala</TooltipContent>
-      </Tooltip>
+      <div className="flex items-center gap-1.5">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <time
+              className="inline-flex w-fit items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-xs tabular-nums text-muted-foreground"
+              dateTime={deal.expectedCloseDate ?? undefined}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <CalendarIcon className="size-3.5 shrink-0" aria-hidden />
+              {deal.expectedCloseDate
+                ? formatDatePl(deal.expectedCloseDate)
+                : "Brak terminu"}
+            </time>
+          </TooltipTrigger>
+          <TooltipContent>
+            {deal.expectedCloseDate
+              ? DEAL_EXPECTED_CLOSE_DATE_LABEL
+              : "Brak terminu"}
+          </TooltipContent>
+        </Tooltip>
+        <DealCloseDateUrgencyIcon
+          deal={deal}
+          onClick={(event) => event.stopPropagation()}
+        />
+      </div>
 
       <div className="flex items-center justify-between gap-2 border-t border-border/60 pt-2">
         <LeadEngagementIndicators

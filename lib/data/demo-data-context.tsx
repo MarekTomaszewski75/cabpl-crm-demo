@@ -6,9 +6,14 @@ import { createNextLeadActivityId } from "@/lib/crm/lead-activity-id"
 import { createNextLeadDocumentId } from "@/lib/crm/lead-document-id"
 import { createNextDealDocumentId } from "@/lib/crm/deal-document-id"
 import { createNextClientDocumentId } from "@/lib/crm/client-document-id"
+import { createNextClientFileId } from "@/lib/crm/client-file-id"
+import { createNextLeadFileId } from "@/lib/crm/lead-file-id"
+import { createNextDealFileId } from "@/lib/crm/deal-file-id"
+import { toast } from "sonner"
 import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
+import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
 import { LEAD_LOST_REASON_LABELS } from "@/lib/crm/lead-labels"
 import { DEAL_LOST_REASON_LABELS } from "@/lib/crm/deal-labels"
 import {
@@ -18,7 +23,6 @@ import { createNextClientId } from "@/lib/crm/client-id"
 import { createNextContactId } from "@/lib/crm/contact-id"
 import { createNextContactEventId } from "@/lib/crm/contact-event-id"
 import { createNextOpportunityId } from "@/lib/crm/opportunity-id"
-import { createNextProductId } from "@/lib/crm/product-id"
 import {
   isDealWorkflowStatus,
   isPipelineCategoryId,
@@ -32,7 +36,6 @@ import {
 import type {
   AddClientInput,
   AddDealInput,
-  AddProductInput,
   AddCompanyActivityInput,
   AddCrmContactInput,
   Client,
@@ -46,10 +49,16 @@ import type {
   AddLeadDocumentInput,
   AddDealDocumentInput,
   AddClientDocumentInput,
+  AddClientFileInput,
+  AddLeadFileInput,
+  AddDealFileInput,
   Lead,
   LeadDocument,
   DealDocument,
   ClientDocument,
+  ClientFile,
+  LeadFile,
+  DealFile,
   LeadActivity,
   LeadSystemActivityType,
   LeadLostReason,
@@ -91,7 +100,11 @@ function buildCompanyCreatedEvent(
 type DemoDataContextValue = DemoDataState & {
   deals: Deal[]
   addDeal: (input: AddDealInput) => Deal
-  updateDeal: (id: string, patch: Partial<Deal>) => void
+  updateDeal: (
+    id: string,
+    patch: Partial<Deal>,
+    actingUser?: DemoUser,
+  ) => void
   winDeal: (id: string, user: DemoUser) => void
   loseDeal: (id: string, reason: DealLostReason, user: DemoUser) => void
   addDealActivity: (
@@ -147,6 +160,24 @@ type DemoDataContextValue = DemoDataState & {
     input: AddClientDocumentInput,
     user: DemoUser,
   ) => ClientDocument | null
+  addClientFile: (
+    clientId: string,
+    input: AddClientFileInput,
+    user: DemoUser,
+  ) => ClientFile | null
+  removeClientFile: (id: string) => void
+  addLeadFile: (
+    leadId: string,
+    input: AddLeadFileInput,
+    user: DemoUser,
+  ) => LeadFile | null
+  removeLeadFile: (id: string) => void
+  addDealFile: (
+    dealId: string,
+    input: AddDealFileInput,
+    user: DemoUser,
+  ) => DealFile | null
+  removeDealFile: (id: string) => void
   addLeadActivity: (
     leadId: string,
     type: LeadSystemActivityType,
@@ -173,8 +204,6 @@ type DemoDataContextValue = DemoDataState & {
   addDepartment: (department: Department) => void
   updateDepartment: (id: string, patch: Partial<Department>) => void
   removeDepartment: (id: string) => { ok: true } | { ok: false; reason: string }
-  addProduct: (input: AddProductInput) => Product
-  updateProduct: (id: string, patch: Partial<Product>) => void
 }
 
 const DemoDataContext = React.createContext<DemoDataContextValue | null>(null)
@@ -268,6 +297,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           createdAt: now,
           ownerId: input.ownerId,
           regionId: input.regionId,
+          ...(input.expectedCloseDate?.trim()
+            ? { expectedCloseDate: input.expectedCloseDate.trim() }
+            : {}),
         }
         created = deal
         return {
@@ -279,10 +311,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     },
     [],
   )
-
-  const updateDeal = React.useCallback((id: string, patch: Partial<Deal>) => {
-    updateOpportunity(id, patch)
-  }, [updateOpportunity])
 
   const addTask = React.useCallback((task: Task) => {
     setState((prev) => ({
@@ -479,7 +507,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       note: string,
       occurredAt: string,
     ): LeadActivity => {
-      const regionId = user.regionId
+      const lead = prev.leads.find((item) => item.id === leadId)
+      const regionId = user.regionId ?? lead?.regionId
       if (!regionId) {
         throw new Error("Użytkownik bez regionu nie może dodać aktywności leada.")
       }
@@ -508,7 +537,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       note: string,
       occurredAt: string,
     ): DealActivity => {
-      const regionId = user.regionId
+      const deal = prev.opportunities.find((item) => item.id === dealId)
+      const regionId = user.regionId ?? deal?.regionId
       if (!regionId) {
         throw new Error("Użytkownik bez regionu nie może dodać aktywności deala.")
       }
@@ -527,6 +557,51 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const updateDeal = React.useCallback(
+    (id: string, patch: Partial<Deal>, actingUser?: DemoUser) => {
+      setState((prev) => {
+        const deal = prev.opportunities.find((item) => item.id === id)
+        if (!deal) return prev
+
+        const safePatch = applyDealPatch(deal, patch, prev.products)
+        const nextPatch: Partial<Deal> = { ...safePatch }
+
+        if ("expectedCloseDate" in nextPatch) {
+          const value = nextPatch.expectedCloseDate
+          nextPatch.expectedCloseDate =
+            value && value.trim() ? value.trim() : undefined
+        }
+
+        let dealActivities = prev.dealActivities
+        if (actingUser && "expectedCloseDate" in patch) {
+          const previous = deal.expectedCloseDate
+          const next = nextPatch.expectedCloseDate
+          if (previous !== next) {
+            const activity = appendDealActivity(
+              prev,
+              id,
+              actingUser,
+              "deal_expected_close_changed",
+              "Zmieniono planowaną datę zamknięcia",
+              formatDealExpectedCloseDateChangeNote(previous, next),
+              new Date().toISOString(),
+            )
+            dealActivities = [...dealActivities, activity]
+          }
+        }
+
+        return {
+          ...prev,
+          opportunities: prev.opportunities.map((item) =>
+            item.id === id ? { ...item, ...nextPatch } : item,
+          ),
+          dealActivities,
+        }
+      })
+    },
+    [applyDealPatch, appendDealActivity],
+  )
+
   const updateTask = React.useCallback(
     (id: string, patch: Partial<Task>, actingUser?: DemoUser) => {
       setState((prev) => {
@@ -537,11 +612,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         let leadActivities = prev.leadActivities
         let dealActivities = prev.dealActivities
 
-        if (
-          patch.completed === true &&
-          !task.completed &&
-          actingUser?.regionId
-        ) {
+        if (patch.completed === true && !task.completed && actingUser) {
           if (nextTask.leadId) {
             const activity = appendLeadActivity(
               prev,
@@ -591,6 +662,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       const titles: Record<DealSystemActivityType, string> = {
         deal_created: "Utworzono deal",
         deal_status_changed: "Zmiana statusu deala",
+        deal_expected_close_changed: "Zmieniono planowaną datę zamknięcia",
         deal_won: "Deal wygrany",
         deal_lost: "Deal utracony",
         deal_note: "Notatka",
@@ -626,10 +698,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
 
   const addDealChannelActivity = React.useCallback(
     (dealId: string, input: AddDealActivityInput, user: DemoUser) => {
-      const regionId = user.regionId
-      if (!regionId) return
-
       setState((prev) => {
+        const deal = prev.opportunities.find((item) => item.id === dealId)
+        const regionId = user.regionId ?? deal?.regionId
+        if (!regionId) return prev
+
         const activity: DealActivity = {
           id: createNextDealActivityId(prev.dealActivities),
           dealId,
@@ -662,10 +735,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
 
   const addLeadChannelActivity = React.useCallback(
     (leadId: string, input: AddLeadActivityInput, user: DemoUser) => {
-      const regionId = user.regionId
-      if (!regionId) return
-
       setState((prev) => {
+        const lead = prev.leads.find((item) => item.id === leadId)
+        const regionId = user.regionId ?? lead?.regionId
+        if (!regionId) return prev
+
         const activity: LeadActivity = {
           id: createNextLeadActivityId(prev.leadActivities),
           leadId,
@@ -703,8 +777,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       user: DemoUser,
       options?: { note?: string; occurredAt?: string },
     ) => {
-      const regionId = user.regionId
-      if (!regionId) return
       const titles: Record<LeadSystemActivityType, string> = {
         lead_created: "Utworzono lead",
         lead_status_changed: "Zmiana statusu",
@@ -791,6 +863,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         (activity) => activity.leadId !== id,
       ),
       leadDocuments: prev.leadDocuments.filter((doc) => doc.leadId !== id),
+      leadFiles: prev.leadFiles.filter((file) => file.leadId !== id),
       tasks: prev.tasks.map((task) =>
         task.leadId === id ? { ...task, leadId: null } : task,
       ),
@@ -808,6 +881,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         (activity) => activity.dealId !== id,
       ),
       dealDocuments: prev.dealDocuments.filter((doc) => doc.dealId !== id),
+      dealFiles: prev.dealFiles.filter((file) => file.dealId !== id),
       tasks: prev.tasks.map((task) =>
         task.opportunityId === id ? { ...task, opportunityId: null } : task,
       ),
@@ -829,6 +903,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       clientDocuments: prev.clientDocuments.filter(
         (doc) => doc.clientId !== id,
       ),
+      clientFiles: prev.clientFiles.filter((file) => file.clientId !== id),
       opportunities: prev.opportunities.map((deal) =>
         deal.clientId === id ? { ...deal, clientId: null } : deal,
       ),
@@ -849,11 +924,14 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       user: DemoUser,
     ): LeadDocument | null => {
       const name = input.name.trim()
-      const regionId = user.regionId
-      if (!name || !regionId) return null
+      if (!name) return null
 
       let created: LeadDocument | null = null
       setState((prev) => {
+        const lead = prev.leads.find((item) => item.id === leadId)
+        const regionId = user.regionId ?? lead?.regionId
+        if (!regionId) return prev
+
         const doc: LeadDocument = {
           id: createNextLeadDocumentId(prev.leadDocuments),
           leadId,
@@ -868,6 +946,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           leadDocuments: [...prev.leadDocuments, doc],
         }
       })
+      if (!created) {
+        toast.error("Nie udało się dodać dokumentu.")
+      }
       return created
     },
     [],
@@ -880,11 +961,14 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       user: DemoUser,
     ): DealDocument | null => {
       const name = input.name.trim()
-      const regionId = user.regionId
-      if (!name || !regionId) return null
+      if (!name) return null
 
       let created: DealDocument | null = null
       setState((prev) => {
+        const deal = prev.opportunities.find((item) => item.id === dealId)
+        const regionId = user.regionId ?? deal?.regionId
+        if (!regionId) return prev
+
         const doc: DealDocument = {
           id: createNextDealDocumentId(prev.dealDocuments),
           dealId,
@@ -899,6 +983,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           dealDocuments: [...prev.dealDocuments, doc],
         }
       })
+      if (!created) {
+        toast.error("Nie udało się dodać dokumentu.")
+      }
       return created
     },
     [],
@@ -911,11 +998,14 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       user: DemoUser,
     ): ClientDocument | null => {
       const name = input.name.trim()
-      const regionId = user.regionId
-      if (!name || !regionId) return null
+      if (!name) return null
 
       let created: ClientDocument | null = null
       setState((prev) => {
+        const client = prev.clients.find((item) => item.id === clientId)
+        const regionId = user.regionId ?? client?.regionId
+        if (!regionId) return prev
+
         const doc: ClientDocument = {
           id: createNextClientDocumentId(prev.clientDocuments),
           clientId,
@@ -930,10 +1020,151 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           clientDocuments: [...prev.clientDocuments, doc],
         }
       })
+      if (!created) {
+        toast.error("Nie udało się dodać dokumentu.")
+      }
       return created
     },
     [],
   )
+
+  const addClientFile = React.useCallback(
+    (
+      clientId: string,
+      input: AddClientFileInput,
+      user: DemoUser,
+    ): ClientFile | null => {
+      const fileName = input.fileName.trim()
+      if (!fileName) return null
+
+      let created: ClientFile | null = null
+      setState((prev) => {
+        const client = prev.clients.find((item) => item.id === clientId)
+        const regionId = user.regionId ?? client?.regionId
+        if (!regionId) return prev
+
+        const file: ClientFile = {
+          id: createNextClientFileId(prev.clientFiles),
+          clientId,
+          fileName,
+          fileSize: input.fileSize,
+          mimeType: input.mimeType,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = file
+        return {
+          ...prev,
+          clientFiles: [...prev.clientFiles, file],
+        }
+      })
+      if (!created) {
+        toast.error("Nie udało się dodać pliku.")
+      }
+      return created
+    },
+    [],
+  )
+
+  const removeClientFile = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      clientFiles: prev.clientFiles.filter((file) => file.id !== id),
+    }))
+  }, [])
+
+  const addLeadFile = React.useCallback(
+    (
+      leadId: string,
+      input: AddLeadFileInput,
+      user: DemoUser,
+    ): LeadFile | null => {
+      const fileName = input.fileName.trim()
+      if (!fileName) return null
+
+      let created: LeadFile | null = null
+      setState((prev) => {
+        const lead = prev.leads.find((item) => item.id === leadId)
+        const regionId = user.regionId ?? lead?.regionId
+        if (!regionId) return prev
+
+        const file: LeadFile = {
+          id: createNextLeadFileId(prev.leadFiles),
+          leadId,
+          fileName,
+          fileSize: input.fileSize,
+          mimeType: input.mimeType,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = file
+        return {
+          ...prev,
+          leadFiles: [...prev.leadFiles, file],
+        }
+      })
+      if (!created) {
+        toast.error("Nie udało się dodać pliku.")
+      }
+      return created
+    },
+    [],
+  )
+
+  const removeLeadFile = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      leadFiles: prev.leadFiles.filter((file) => file.id !== id),
+    }))
+  }, [])
+
+  const addDealFile = React.useCallback(
+    (
+      dealId: string,
+      input: AddDealFileInput,
+      user: DemoUser,
+    ): DealFile | null => {
+      const fileName = input.fileName.trim()
+      if (!fileName) return null
+
+      let created: DealFile | null = null
+      setState((prev) => {
+        const deal = prev.opportunities.find((item) => item.id === dealId)
+        const regionId = user.regionId ?? deal?.regionId
+        if (!regionId) return prev
+
+        const file: DealFile = {
+          id: createNextDealFileId(prev.dealFiles),
+          dealId,
+          fileName,
+          fileSize: input.fileSize,
+          mimeType: input.mimeType,
+          uploadedAt: new Date().toISOString(),
+          ownerId: user.id,
+          regionId,
+        }
+        created = file
+        return {
+          ...prev,
+          dealFiles: [...prev.dealFiles, file],
+        }
+      })
+      if (!created) {
+        toast.error("Nie udało się dodać pliku.")
+      }
+      return created
+    },
+    [],
+  )
+
+  const removeDealFile = React.useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      dealFiles: prev.dealFiles.filter((file) => file.id !== id),
+    }))
+  }, [])
 
   const winLead = React.useCallback(
     (
@@ -972,18 +1203,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         const contacts = newContact
           ? [...prev.contacts, newContact]
           : prev.contacts
-        const wonActivity =
-          params.user.regionId
-            ? appendLeadActivity(
-                prev,
-                leadId,
-                params.user,
-                "lead_won",
-                "Lead wygrany",
-                opportunity.name,
-                now,
-              )
-            : null
+        const wonActivity = appendLeadActivity(
+          prev,
+          leadId,
+          params.user,
+          "lead_won",
+          "Lead wygrany",
+          opportunity.name,
+          now,
+        )
         return {
           ...prev,
           clients,
@@ -1010,17 +1238,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           return prev
         }
         const now = new Date().toISOString()
-        const lostActivity = user.regionId
-          ? appendLeadActivity(
-              prev,
-              leadId,
-              user,
-              "lead_lost",
-              "Lead utracony",
-              LEAD_LOST_REASON_LABELS[reason],
-              now,
-            )
-          : null
+        const lostActivity = appendLeadActivity(
+          prev,
+          leadId,
+          user,
+          "lead_lost",
+          "Lead utracony",
+          LEAD_LOST_REASON_LABELS[reason],
+          now,
+        )
         return {
           ...prev,
           leads: prev.leads.map((item) =>
@@ -1143,46 +1369,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
-  const addProduct = React.useCallback((input: AddProductInput) => {
-    let created: Product | null = null
-    setState((prev) => {
-      const now = new Date().toISOString()
-      const product: Product = {
-        id: createNextProductId(prev.products),
-        name: input.name.trim(),
-        sku: input.sku.trim(),
-        goodsOrService: input.goodsOrService,
-        categoryId: input.categoryId,
-        price: input.price,
-        currency: input.currency,
-        priceKind: input.priceKind,
-        availability: input.availability,
-        productType: input.productType,
-        condition: input.condition,
-        isActive: input.isActive,
-        description: input.description.trim(),
-        ownerId: input.ownerId ?? "",
-        regionId: input.regionId ?? "",
-        createdAt: now,
-      }
-      created = product
-      return {
-        ...prev,
-        products: [...prev.products, product],
-      }
-    })
-    return created!
-  }, [])
-
-  const updateProduct = React.useCallback((id: string, patch: Partial<Product>) => {
-    setState((prev) => ({
-      ...prev,
-      products: prev.products.map((product) =>
-        product.id === id ? { ...product, ...patch } : product,
-      ),
-    }))
-  }, [])
-
   const removeDepartment = React.useCallback((id: string) => {
     let result: { ok: true } | { ok: false; reason: string } = { ok: true }
     setState((prev) => {
@@ -1231,6 +1417,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addLeadDocument,
       addDealDocument,
       addClientDocument,
+      addClientFile,
+      removeClientFile,
+      addLeadFile,
+      removeLeadFile,
+      addDealFile,
+      removeDealFile,
       addLeadActivity,
       addLeadChannelActivity,
       addLeadNote,
@@ -1241,8 +1433,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addDepartment,
       updateDepartment,
       removeDepartment,
-      addProduct,
-      updateProduct,
     }),
     [
       state,
@@ -1271,6 +1461,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addLeadDocument,
       addDealDocument,
       addClientDocument,
+      addClientFile,
+      removeClientFile,
+      addLeadFile,
+      removeLeadFile,
+      addDealFile,
+      removeDealFile,
       addLeadActivity,
       addLeadChannelActivity,
       addLeadNote,
@@ -1281,8 +1477,6 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addDepartment,
       updateDepartment,
       removeDepartment,
-      addProduct,
-      updateProduct,
     ],
   )
 

@@ -2,7 +2,9 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
+import { DealCloseDateUrgencyIcon } from "@/components/crm/deal-close-date-urgency-icon"
 import { DealStatusBadge } from "@/components/crm/deal-status-badge"
+import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
   DEAL_SOURCE_LABELS,
@@ -147,6 +149,35 @@ export function createDealsColumns(
       ),
       cell: ({ row }) =>
         row.original.dealType ? DEAL_TYPE_LABELS[row.original.dealType] : "—",
+    },
+    {
+      id: "expectedCloseDate",
+      accessorKey: "expectedCloseDate",
+      meta: { title: DEAL_EXPECTED_CLOSE_DATE_LABEL },
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={DEAL_EXPECTED_CLOSE_DATE_LABEL}
+        />
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-1.5">
+          <span className="tabular-nums">
+            {row.original.expectedCloseDate
+              ? formatDatePl(row.original.expectedCloseDate)
+              : "—"}
+          </span>
+          <DealCloseDateUrgencyIcon deal={row.original} />
+        </div>
+      ),
+      sortingFn: (a, b) => {
+        const left = a.original.expectedCloseDate ?? ""
+        const right = b.original.expectedCloseDate ?? ""
+        if (!left && !right) return 0
+        if (!left) return 1
+        if (!right) return -1
+        return left.localeCompare(right)
+      },
     },
     {
       accessorKey: "clientName",

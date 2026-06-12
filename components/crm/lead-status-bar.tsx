@@ -1,7 +1,16 @@
 "use client"
 
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Stepper,
+  StepperIndicator,
+  StepperItem,
+  StepperList,
+  StepperSeparator,
+  StepperTitle,
+  StepperTrigger,
+} from "@/components/ui/stepper"
 import {
   canFinishLead,
   isTerminalLeadStatus,
@@ -43,50 +52,42 @@ export function LeadStatusBar({
     )
   }
 
-  const activeIndex =
-    lead.status === "in_progress" ? 1 : 0
-
   return (
     <div
-      className="grid grid-cols-3 overflow-hidden rounded-lg border border-border"
-      role="group"
+      className="flex flex-col gap-3 rounded-lg border border-border bg-card px-3 py-3 sm:flex-row sm:items-center"
       aria-label="Status leada"
     >
-      {WORKFLOW_SEGMENTS.map((segment, index) => {
-        const isActive = lead.status === segment.status
-        const isPast = index < activeIndex
-        return (
-          <button
-            key={segment.status}
-            type="button"
-            className={cn(
-              "px-4 py-2.5 text-sm font-medium transition-colors",
-              isActive
-                ? "bg-primary text-primary-foreground"
-                : isPast
-                  ? "bg-muted/80 text-foreground"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted/60",
-              "cursor-pointer",
-            )}
-            onClick={() => onStatusChange(segment.status)}
-          >
-            {segment.label}
-          </button>
-        )
-      })}
-      <button
+      <Stepper
+        value={lead.status}
+        onValueChange={(value) => onStatusChange(value as LeadStatus)}
+        orientation="horizontal"
+        activationMode="manual"
+        className="min-w-0 flex-1 gap-0"
+      >
+        <StepperList className="w-full">
+          {WORKFLOW_SEGMENTS.map((segment) => (
+            <StepperItem key={segment.status} value={segment.status}>
+              <StepperTrigger className="gap-2 rounded-md px-1 py-1">
+                <StepperIndicator />
+                <StepperTitle className="hidden sm:inline">
+                  {segment.label}
+                </StepperTitle>
+              </StepperTrigger>
+              <StepperSeparator />
+            </StepperItem>
+          ))}
+        </StepperList>
+      </Stepper>
+      <Button
         type="button"
-        className={cn(
-          "px-4 py-2.5 text-sm font-medium transition-colors",
-          canFinishLead(lead.status)
-            ? "cursor-pointer bg-muted/40 text-foreground hover:bg-muted/60"
-            : "cursor-not-allowed bg-muted/30 text-muted-foreground",
-        )}
+        variant="outline"
+        size="sm"
+        className="shrink-0"
         disabled={!canFinishLead(lead.status)}
         onClick={onFinishClick}
       >
         Zakończ przetwarzanie
-      </button>
+      </Button>
     </div>
   )
 }

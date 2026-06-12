@@ -9,7 +9,7 @@ import { DealActivityFeed } from "@/components/crm/deal-activity-feed"
 import { DealActivityForm } from "@/components/crm/deal-activity-form"
 import { DealMeetingsList } from "@/components/crm/deal-meetings-list"
 import { DealTasksList } from "@/components/crm/deal-tasks-list"
-import { CompanyFilesUploadZone } from "@/components/crm/company-files-upload-zone"
+import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -40,6 +40,7 @@ import {
   getDealMeetingsForDeal,
   getDealTasksForDeal,
 } from "@/lib/crm/deal-engagement-counts"
+import { getDealFilesForDeal } from "@/lib/crm/entity-files"
 import { formatDatePl } from "@/lib/format/pl"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Deal } from "@/types/crm"
@@ -81,8 +82,11 @@ export function DealActivityPanel({
     tasks,
     meetings,
     dealDocuments,
+    dealFiles,
     addDealNote,
     addDealDocument,
+    addDealFile,
+    removeDealFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
   const [documentName, setDocumentName] = React.useState("")
@@ -136,16 +140,21 @@ export function DealActivityPanel({
     return getDealDocumentsForDeal(deal.id, engagementData, user)
   }, [deal.id, engagementData, user])
 
+  const dealUploadedFiles = React.useMemo(() => {
+    if (!user) return []
+    return getDealFilesForDeal(deal.id, dealFiles, user)
+  }, [deal.id, dealFiles, user])
+
   const filterCounts = React.useMemo(() => {
     const counts: Record<DealActivityFilter, number> = {
       all: allItems.length,
       activities: filterDealActivityFeed(allItems, "activities").length,
       notes: filterDealActivityFeed(allItems, "notes").length,
-      files: filterDealActivityFeed(allItems, "files").length,
+      files: dealUploadedFiles.length,
       tasks: filterDealActivityFeed(allItems, "tasks").length,
     }
     return counts
-  }, [allItems])
+  }, [allItems, dealUploadedFiles.length])
 
   React.useEffect(() => {
     if (engagementSection === "meetings" && meetingsSectionRef.current) {
@@ -173,6 +182,23 @@ export function DealActivityPanel({
     if (!created) return
     setDocumentName("")
     toast.success("Dokument został dodany")
+  }
+
+  function handleUploadFile(file: File) {
+    if (!user) return false
+    const created = addDealFile(
+      deal.id,
+      {
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type || "application/octet-stream",
+      },
+      user,
+    )
+    if (created) {
+      toast.success("Plik został dodany")
+    }
+    return created !== null
   }
 
   return (
@@ -211,23 +237,14 @@ export function DealActivityPanel({
               <DealActivityForm deal={deal} />
             </TabsContent>
 
-            <TabsContent value="files" className="flex flex-col gap-3">
-              {dealDocs.length > 0 ? (
-                <ul className="flex flex-col gap-2">
-                  {dealDocs.map((file) => (
-                    <li
-                      key={file.id}
-                      className="rounded-md border border-border/80 px-3 py-2 text-sm"
-                    >
-                      <p className="font-medium">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Dodano {formatDatePl(file.uploadedAt)}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <CompanyFilesUploadZone />
+            <TabsContent value="files">
+              <CrmFileUploadPanel
+                files={dealUploadedFiles}
+                users={users}
+                onUpload={handleUploadFile}
+                onRemove={removeDealFile}
+                disabled={!user}
+              />
             </TabsContent>
 
             <TabsContent value="documents" className="flex flex-col gap-3">

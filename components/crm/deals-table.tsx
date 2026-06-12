@@ -17,6 +17,7 @@ import {
   type DealTableRow,
 } from "@/components/crm/deals-columns"
 import { DataTable } from "@/components/data-table/data-table"
+import { DataTableDateRangeFilter } from "@/components/data-table/data-table-date-range-filter"
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter"
 import { Button } from "@/components/ui/button"
 import {
@@ -54,6 +55,11 @@ import {
   DEAL_PIPELINE_CATEGORY_LABELS,
   getAllDealStatusFilterOptions,
 } from "@/lib/crm/deal-pipeline-labels"
+import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
+import {
+  matchesDealCloseDateRange,
+  type DealCloseDateRangeFilter,
+} from "@/lib/crm/deal-close-date-filter"
 import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineCategoryIds,
@@ -99,6 +105,7 @@ function applyDealListFilters(
     sourceFilters: string[]
     ownerFilters: string[]
     dealTypeFilters: string[]
+    closeDateRange: DealCloseDateRangeFilter
     searchQuery: string
     users: readonly DemoUser[]
     contacts: readonly CrmContact[]
@@ -135,6 +142,11 @@ function applyDealListFilters(
       const typeKey = deal.dealType ?? DEAL_TYPE_NONE
       if (!filters.dealTypeFilters.includes(typeKey)) return false
     }
+    if (
+      !matchesDealCloseDateRange(deal.expectedCloseDate, filters.closeDateRange)
+    ) {
+      return false
+    }
     if (!searchNormalized) return true
     const row = buildDealTableRow(
       deal,
@@ -156,6 +168,8 @@ export function DealsTable() {
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
   const [dealTypeFilters, setDealTypeFilters] = React.useState<string[]>([])
+  const [closeDateRange, setCloseDateRange] =
+    React.useState<DealCloseDateRangeFilter>({})
   const [searchQuery, setSearchQuery] = React.useState("")
   const [viewMode, setViewMode] = React.useState<DealsViewMode>("kanban")
   const [selectedPipelineCategoryId, setSelectedPipelineCategoryId] =
@@ -201,6 +215,7 @@ export function DealsTable() {
       sourceFilters,
       ownerFilters: showOwnerColumn ? ownerFilters : [],
       dealTypeFilters,
+      closeDateRange,
       searchQuery,
       users,
       contacts,
@@ -214,6 +229,7 @@ export function DealsTable() {
       sourceFilters,
       ownerFilters,
       dealTypeFilters,
+      closeDateRange,
       searchQuery,
       users,
       contacts,
@@ -479,6 +495,11 @@ export function DealsTable() {
               options={dealTypeFacetedOptions}
               selectedValues={dealTypeFilters}
               onSelectedValuesChange={setDealTypeFilters}
+            />
+            <DataTableDateRangeFilter
+              title={DEAL_EXPECTED_CLOSE_DATE_LABEL}
+              value={closeDateRange}
+              onValueChange={setCloseDateRange}
             />
           </div>
 

@@ -3,10 +3,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
-  formatProductPrice,
   PRODUCT_AVAILABILITY_LABELS,
   PRODUCT_CONDITION_LABELS,
   PRODUCT_GOODS_OR_SERVICE_LABELS,
@@ -30,8 +28,6 @@ export const PRODUCT_GROUPING_OPTIONS = [
 ] as const
 
 type ProductsColumnsContext = {
-  selectedIds: Set<string>
-  onToggleRow: (id: string, checked: boolean) => void
   showCategoryColumn?: boolean
 }
 
@@ -39,23 +35,6 @@ export function createProductsColumns(
   ctx: ProductsColumnsContext,
 ): ColumnDef<ProductTableRow>[] {
   const columns: ColumnDef<ProductTableRow>[] = [
-    {
-      id: "select",
-      meta: { title: "Zaznaczenie" },
-      header: () => null,
-      cell: ({ row }) => (
-        <Checkbox
-          checked={ctx.selectedIds.has(row.original.id)}
-          onCheckedChange={(checked) =>
-            ctx.onToggleRow(row.original.id, checked === true)
-          }
-          onClick={(event) => event.stopPropagation()}
-          aria-label={`Zaznacz ${row.original.name}`}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     createFilterSearchColumn<ProductTableRow>(),
   ]
 
@@ -104,19 +83,6 @@ export function createProductsColumns(
             </span>
           ) : null}
         </div>
-      ),
-    },
-    {
-      id: "price",
-      accessorFn: (row) => formatProductPrice(row),
-      meta: { title: "Cena" },
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Cena" />
-      ),
-      cell: ({ row }) => (
-        <span className="tabular-nums">
-          {formatProductPrice(row.original)}
-        </span>
       ),
     },
     {

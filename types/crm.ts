@@ -266,6 +266,7 @@ export type AddDealInput = {
   comments: string
   source: DealSource | null
   dealType: DealType | null
+  expectedCloseDate?: string
   ownerId: string
   regionId: string
 }
@@ -297,6 +298,7 @@ export type DealActivityKind = "system" | "note" | "channel"
 export type DealSystemActivityType =
   | "deal_created"
   | "deal_status_changed"
+  | "deal_expected_close_changed"
   | "deal_won"
   | "deal_lost"
   | "deal_note"
@@ -385,6 +387,51 @@ export interface ClientDocument extends ScopedEntity {
 
 export type AddClientDocumentInput = {
   name: string
+}
+
+export interface ClientFile extends ScopedEntity {
+  id: string
+  clientId: string
+  fileName: string
+  fileSize: number
+  mimeType: string
+  uploadedAt: string
+}
+
+export type AddClientFileInput = {
+  fileName: string
+  fileSize: number
+  mimeType: string
+}
+
+export interface LeadFile extends ScopedEntity {
+  id: string
+  leadId: string
+  fileName: string
+  fileSize: number
+  mimeType: string
+  uploadedAt: string
+}
+
+export type AddLeadFileInput = {
+  fileName: string
+  fileSize: number
+  mimeType: string
+}
+
+export interface DealFile extends ScopedEntity {
+  id: string
+  dealId: string
+  fileName: string
+  fileSize: number
+  mimeType: string
+  uploadedAt: string
+}
+
+export type AddDealFileInput = {
+  fileName: string
+  fileSize: number
+  mimeType: string
 }
 
 export interface ContactEvent extends ScopedEntity {
@@ -519,8 +566,6 @@ export type ProductAvailability =
   | "on_request"
   | "unavailable"
 
-export type ProductPriceKind = "fixed" | "from" | "percent" | "free"
-
 export type ProductType =
   | "credit"
   | "deposit"
@@ -531,8 +576,6 @@ export type ProductType =
   | "other"
 
 export type ProductCondition = "active" | "draft" | "archived"
-
-export type ProductCurrency = "PLN" | "EUR" | "USD"
 
 export interface ProductCategory {
   id: string
@@ -547,32 +590,12 @@ export interface Product extends ScopedEntity {
   sku: string
   goodsOrService: ProductGoodsOrService
   categoryId: string
-  price: number | null
-  currency: ProductCurrency
-  priceKind: ProductPriceKind
   availability: ProductAvailability
   productType: ProductType
   condition: ProductCondition
   isActive: boolean
   description: string
   createdAt: string
-}
-
-export type AddProductInput = {
-  name: string
-  sku: string
-  goodsOrService: ProductGoodsOrService
-  categoryId: string
-  price: number | null
-  currency: ProductCurrency
-  priceKind: ProductPriceKind
-  availability: ProductAvailability
-  productType: ProductType
-  condition: ProductCondition
-  isActive: boolean
-  description: string
-  ownerId?: string
-  regionId?: string
 }
 
 export type NotificationType =

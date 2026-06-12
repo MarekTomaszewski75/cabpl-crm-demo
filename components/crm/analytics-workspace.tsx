@@ -25,6 +25,7 @@ function createInitialFilters(role: UserRole): AnalyticsGlobalFilters {
     panelPresetId: presetId,
     regionId: null,
     segmentId: null,
+    pipelineCategoryId: null,
   }
 }
 

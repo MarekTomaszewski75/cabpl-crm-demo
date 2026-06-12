@@ -6,11 +6,9 @@ import {
   BoxesIcon,
   FolderIcon,
   FolderTreeIcon,
-  PlusIcon,
   Rows2Icon,
   SearchIcon,
 } from "lucide-react"
-import { ProductFormDialog } from "@/components/crm/product-form-dialog"
 import {
   buildProductTableRow,
   createProductsColumns,
@@ -50,7 +48,6 @@ import {
 import {
   PRODUCT_AVAILABILITY_LABELS,
   PRODUCT_CONDITION_LABELS,
-  PRODUCT_PRICE_KIND_LABELS,
   PRODUCT_TYPE_LABELS,
 } from "@/lib/crm/product-labels"
 import { useDemoData } from "@/lib/data/demo-data-context"
@@ -59,7 +56,6 @@ import type {
   ProductAvailability,
   ProductCategory,
   ProductCondition,
-  ProductPriceKind,
   ProductType,
 } from "@/types/crm"
 
@@ -96,15 +92,10 @@ export function ProductsTable() {
   const [availabilityFilters, setAvailabilityFilters] = React.useState<string[]>(
     [],
   )
-  const [priceKindFilters, setPriceKindFilters] = React.useState<string[]>([])
   const [productTypeFilters, setProductTypeFilters] = React.useState<string[]>(
     [],
   )
   const [conditionFilters, setConditionFilters] = React.useState<string[]>([])
-  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(
-    () => new Set(),
-  )
-  const [createSheetOpen, setCreateSheetOpen] = React.useState(false)
 
   const sortedCategories = React.useMemo(
     () => sortCategoriesForPanel(productCategories),
@@ -132,12 +123,10 @@ export function ProductsTable() {
 
   const listFilters = React.useMemo(
     (): ProductListFilters => ({
-      categoryFilters:
-        viewMode === "list" ? expandedListCategoryIds : [],
+      categoryFilters: viewMode === "list" ? expandedListCategoryIds : [],
       searchQuery,
       activityFilters,
       availabilityFilters: availabilityFilters as ProductAvailability[],
-      priceKindFilters: priceKindFilters as ProductPriceKind[],
       productTypeFilters: productTypeFilters as ProductType[],
       conditionFilters: conditionFilters as ProductCondition[],
     }),
@@ -147,7 +136,6 @@ export function ProductsTable() {
       searchQuery,
       activityFilters,
       availabilityFilters,
-      priceKindFilters,
       productTypeFilters,
       conditionFilters,
     ],
@@ -215,20 +203,6 @@ export function ProductsTable() {
       .filter((opt) => opt.count > 0)
   }, [facetedCountBase])
 
-  const priceKindFacetedOptions = React.useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const product of facetedCountBase) {
-      counts.set(product.priceKind, (counts.get(product.priceKind) ?? 0) + 1)
-    }
-    return (Object.keys(PRODUCT_PRICE_KIND_LABELS) as ProductPriceKind[])
-      .map((value) => ({
-        label: PRODUCT_PRICE_KIND_LABELS[value],
-        value,
-        count: counts.get(value) ?? 0,
-      }))
-      .filter((opt) => opt.count > 0)
-  }, [facetedCountBase])
-
   const productTypeFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
     for (const product of facetedCountBase) {
@@ -268,18 +242,9 @@ export function ProductsTable() {
   const columns = React.useMemo(
     () =>
       createProductsColumns({
-        selectedIds,
         showCategoryColumn: viewMode === "list",
-        onToggleRow: (id, checked) => {
-          setSelectedIds((prev) => {
-            const next = new Set(prev)
-            if (checked) next.add(id)
-            else next.delete(id)
-            return next
-          })
-        },
       }),
-    [selectedIds, viewMode],
+    [viewMode],
   )
 
   const resultCountLabel = React.useMemo(() => {
@@ -356,12 +321,6 @@ export function ProductsTable() {
         onSelectedValuesChange={setAvailabilityFilters}
       />
       <DataTableFacetedFilter
-        title="Cena"
-        options={priceKindFacetedOptions}
-        selectedValues={priceKindFilters}
-        onSelectedValuesChange={setPriceKindFilters}
-      />
-      <DataTableFacetedFilter
         title="Typ produktu"
         options={productTypeFacetedOptions}
         selectedValues={productTypeFilters}
@@ -394,14 +353,9 @@ export function ProductsTable() {
       <EmptyHeader>
         <EmptyTitle>Teraz jest tu pusto…</EmptyTitle>
         <EmptyDescription>
-          Brak produktów dla wybranych filtrów. Zmień kryteria lub dodaj nowy
-          produkt.
+          Brak produktów dla wybranych filtrów. Zmień kryteria wyszukiwania.
         </EmptyDescription>
       </EmptyHeader>
-      <Button size="sm" onClick={() => setCreateSheetOpen(true)}>
-        <PlusIcon />
-        Dodaj produkt
-      </Button>
     </Empty>
   )
 
@@ -452,18 +406,6 @@ export function ProductsTable() {
                 {resultCountLabel}
               </InputGroupAddon>
             </InputGroup>
-            <div className="shrink-0">
-              <ProductFormDialog
-                open={createSheetOpen}
-                onOpenChange={setCreateSheetOpen}
-                trigger={
-                  <Button size="lg" onClick={() => setCreateSheetOpen(true)}>
-                    <PlusIcon />
-                    Dodaj
-                  </Button>
-                }
-              />
-            </div>
           </div>
 
           {filterBar}
@@ -480,14 +422,9 @@ export function ProductsTable() {
                 </EmptyMedia>
                 <EmptyTitle>Teraz jest tu pusto…</EmptyTitle>
                 <EmptyDescription>
-                  Dodaj pierwszy produkt do katalogu bankowych linii
-                  produktowych.
+                  Katalog produktów bankowych jest pusty w danych demo.
                 </EmptyDescription>
               </EmptyHeader>
-              <Button size="sm" onClick={() => setCreateSheetOpen(true)}>
-                <PlusIcon />
-                Dodaj produkt
-              </Button>
             </Empty>
           ) : viewMode === "tree" ? (
             <div className="flex flex-col gap-4 lg:flex-row">

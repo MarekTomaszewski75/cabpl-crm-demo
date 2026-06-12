@@ -7,6 +7,9 @@ import leadActivitiesSeed from "@/data/lead-activities.json"
 import leadDocumentsSeed from "@/data/lead-documents.json"
 import dealDocumentsSeed from "@/data/deal-documents.json"
 import clientDocumentsSeed from "@/data/client-documents.json"
+import clientFilesSeed from "@/data/client-files.json"
+import leadFilesSeed from "@/data/lead-files.json"
+import dealFilesSeed from "@/data/deal-files.json"
 import dealActivitiesSeed from "@/data/deal-activities.json"
 import meetingsSeed from "@/data/meetings.json"
 import opportunitiesSeed from "@/data/opportunities.json"
@@ -29,6 +32,7 @@ import type {
   Client,
   ContactEvent,
   CrmContact,
+  DealSource,
   DemoUser,
   Department,
   Employee,
@@ -38,6 +42,9 @@ import type {
   LeadDocument,
   DealDocument,
   ClientDocument,
+  ClientFile,
+  LeadFile,
+  DealFile,
   Meeting,
   Deal,
   DealActivity,
@@ -45,6 +52,25 @@ import type {
   ProductCategory,
   Task,
 } from "@/types/crm"
+
+const DEAL_SOURCES: readonly DealSource[] = [
+  "phone_call",
+  "link",
+  "email",
+  "advertising",
+  "partner",
+  "recommendation",
+]
+
+function normalizeDealSource(value: unknown): DealSource {
+  if (
+    typeof value === "string" &&
+    (DEAL_SOURCES as readonly string[]).includes(value)
+  ) {
+    return value as DealSource
+  }
+  return "recommendation"
+}
 
 const DEFAULT_SEED_PRODUCT_ID = "prod-001"
 
@@ -127,7 +153,7 @@ function normalizeLegacyDeal(raw: Record<string, unknown>): Deal {
         : DEFAULT_SEED_PRODUCT_ID,
     pipelineCategoryId,
     comments: "",
-    source: "recommendation",
+    source: normalizeDealSource(raw.source),
     dealType: null,
     amount:
       typeof raw.amount === "number"
@@ -182,6 +208,7 @@ function normalizeDeals(raw: unknown[]): Deal[] {
       ...deal,
       productId,
       pipelineCategoryId,
+      source: normalizeDealSource(deal.source),
       status: normalizeDealStatus(deal, pipelineCategoryId),
     } as Deal
 
@@ -204,6 +231,9 @@ export function loadSeedData() {
     leadDocuments: leadDocumentsSeed as LeadDocument[],
     dealDocuments: dealDocumentsSeed as DealDocument[],
     clientDocuments: clientDocumentsSeed as ClientDocument[],
+    clientFiles: clientFilesSeed as ClientFile[],
+    leadFiles: leadFilesSeed as LeadFile[],
+    dealFiles: dealFilesSeed as DealFile[],
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],
