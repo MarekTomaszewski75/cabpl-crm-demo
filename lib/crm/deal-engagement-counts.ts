@@ -1,5 +1,6 @@
 import { filterByScope } from "@/lib/rbac/scope"
-import type { DealDocument, DemoUser, Meeting, Task } from "@/types/crm"
+import { getMergedDocumentsForDeal } from "@/lib/crm/entity-documents"
+import type { DealDocument, DealFile, DemoUser, Meeting, Task } from "@/types/crm"
 import type { LeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
 
 export type DealEngagementCounts = LeadEngagementCounts
@@ -8,6 +9,7 @@ export type DealEngagementData = {
   tasks: readonly Task[]
   meetings: readonly Meeting[]
   dealDocuments: readonly DealDocument[]
+  dealFiles: readonly DealFile[]
 }
 
 export function getDealTasksForDeal(
@@ -54,7 +56,9 @@ export function getDealEngagementCounts(
     meetings: data.meetings.filter(
       (meeting) => meeting.opportunityId === dealId,
     ).length,
-    documents: data.dealDocuments.filter((doc) => doc.dealId === dealId).length,
+    documents:
+      data.dealDocuments.filter((doc) => doc.dealId === dealId).length +
+      data.dealFiles.filter((file) => file.dealId === dealId).length,
   }
 }
 
@@ -66,7 +70,12 @@ export function getScopedDealEngagementCounts(
   return {
     tasks: getDealTasksForDeal(dealId, data, user).length,
     meetings: getDealMeetingsForDeal(dealId, data, user).length,
-    documents: getDealDocumentsForDeal(dealId, data, user).length,
+    documents: getMergedDocumentsForDeal(
+      dealId,
+      data.dealFiles,
+      data.dealDocuments,
+      user,
+    ).length,
   }
 }
 

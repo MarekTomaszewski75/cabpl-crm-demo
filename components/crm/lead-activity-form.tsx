@@ -4,7 +4,6 @@ import * as React from "react"
 import {
   CalendarIcon,
   ChevronDownIcon,
-  MailIcon,
   MessageSquareIcon,
   PhoneIcon,
   ZapIcon,
@@ -15,7 +14,6 @@ import {
   ActivityResponsibleUserField,
 } from "@/components/crm/activity-people-fields"
 import { CompanyActivityPrioritySelect } from "@/components/crm/company-activity-priority"
-import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -27,8 +25,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  ACTIVITY_CHANNEL_TYPE_OPTIONS,
+  type ActivityChannelType,
+} from "@/lib/crm/activity-channel-types"
+import {
   activityTitlePlaceholder,
-  COMPANY_ACTIVITY_TYPE_OPTIONS,
   emptyActivityFormState,
   toAddCompanyActivityInput,
   type CompanyActivityFormState,
@@ -36,15 +37,14 @@ import {
 import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import type { ChannelContactEventType, Lead } from "@/types/crm"
+import type { Lead } from "@/types/crm"
 import type { LucideIcon } from "lucide-react"
 
-const TYPE_ICONS: Record<ChannelContactEventType, LucideIcon> = {
+const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
   activity: ZapIcon,
   phone: PhoneIcon,
   meeting: CalendarIcon,
   chat: MessageSquareIcon,
-  email: MailIcon,
 }
 
 type LeadActivityFormProps = {
@@ -170,7 +170,7 @@ export function LeadActivityForm({ lead }: LeadActivityFormProps) {
         </Field>
 
         <div className="flex flex-wrap gap-1">
-          {COMPANY_ACTIVITY_TYPE_OPTIONS.map((option) => {
+          {ACTIVITY_CHANNEL_TYPE_OPTIONS.map((option) => {
             const Icon = TYPE_ICONS[option.id]
             const selected = state.type === option.id
             return (
@@ -267,11 +267,6 @@ export function LeadActivityForm({ lead }: LeadActivityFormProps) {
             onChange={(e) => patch({ note: e.target.value })}
           />
         </Field>
-
-        <div className="flex flex-col gap-2">
-          <FieldLabel>Załączniki</FieldLabel>
-          <CrmFileUploadPanel files={[]} onUpload={() => true} />
-        </div>
 
         <ActivityCollapsibleSection
           title="Ludzie"

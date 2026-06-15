@@ -102,6 +102,7 @@ export function DealsKanbanBoard({
     tasks,
     meetings,
     dealDocuments,
+    dealFiles,
     updateDeal,
     addDealActivity,
   } = useDemoData()
@@ -152,9 +153,9 @@ export function DealsKanbanBoard({
     () =>
       buildDealEngagementCountMap(
         deals.map((deal) => deal.id),
-        { tasks, meetings, dealDocuments },
+        { tasks, meetings, dealDocuments, dealFiles },
       ),
-    [deals, tasks, meetings, dealDocuments],
+    [deals, tasks, meetings, dealDocuments, dealFiles],
   )
 
   const finishDeal = finishDealId

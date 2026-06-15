@@ -1,21 +1,27 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { ShieldAlertIcon } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { PlusIcon, ShieldAlertIcon } from "lucide-react"
 import {
   CompanyActivityPanel,
   type CompanyComposerTab,
 } from "@/components/crm/company-activity-panel"
-import { CompanyDealsList } from "@/components/crm/company-deals-list"
+import { CompanyContactsTable } from "@/components/crm/company-contacts-table"
+import { CompanyDealsTable } from "@/components/crm/company-deals-table"
 import { CompanyDetailHeader } from "@/components/crm/company-detail-header"
 import { CompanyDetailSidebar } from "@/components/crm/company-detail-sidebar"
-import { CompanyLeadsList } from "@/components/crm/company-leads-list"
-import { CompanyTasksList } from "@/components/crm/company-tasks-list"
+import { CompanyLeadsTable } from "@/components/crm/company-leads-table"
+import { CompanyTasksTable } from "@/components/crm/company-tasks-table"
+import { ContactFormDialog } from "@/components/crm/contact-form-dialog"
+import { DealFormDialog } from "@/components/crm/deal-form-dialog"
+import { LeadFormDialog } from "@/components/crm/lead-form-dialog"
 import { TaskFormDialog } from "@/components/crm/task-form-dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
+import { getContactsForClient } from "@/lib/crm/contact-company-bindings"
 import {
   getCompanyDeals,
   getCompanyLeads,
@@ -28,19 +34,17 @@ type CompanyDetailViewProps = {
   clientId: string
 }
 
-export type CompanyEngagementSection =
-  | "tasks"
-  | "meetings"
-  | "contacts"
-  | null
+export type CompanyEngagementSection = "tasks" | "meetings" | null
 
 type CompanyMainTab = "general" | "related"
-type CompanyRelatedTab = "leady" | "deale" | "zadania"
+type CompanyRelatedTab = "leady" | "deale" | "kontakty" | "zadania"
 
 export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const highlightActivityId = searchParams.get("activityId")
   const { user, isReady } = useSession()
-  const { clients, users, tasks, meetings, clientDocuments, deals, leads, contacts } =
+  const { clients, users, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks } =
     useDemoData()
   const [composerTab, setComposerTab] =
     React.useState<CompanyComposerTab>("note")
@@ -57,11 +61,14 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
       tasks,
       meetings,
       clientDocuments,
+      clientFiles,
       deals,
       leads,
       contacts,
+      contactClientLinks,
+      clients,
     }),
-    [tasks, meetings, clientDocuments, deals, leads, contacts],
+    [tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, clients],
   )
 
   const clientLeads = React.useMemo(() => {
@@ -78,6 +85,18 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
     if (!user || !client) return []
     return getCompanyTasks(client.id, engagementData, user)
   }, [client, engagementData, user])
+
+  const clientContactRows = React.useMemo(() => {
+    if (!user || !client) return []
+    return getContactsForClient(client.id, engagementData, user)
+  }, [client, engagementData, user])
+
+  React.useEffect(() => {
+    if (highlightActivityId) {
+      setMainTab("general")
+      setEngagementSection(null)
+    }
+  }, [highlightActivityId])
 
   React.useEffect(() => {
     if (isReady && user && client && !canAccessEntity(client, user)) {
@@ -156,9 +175,9 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
                 setRelatedTab("leady")
               }}
               onContactsClick={() => {
-                setEngagementSection("contacts")
-                setComposerTab("note")
-                setMainTab("general")
+                setEngagementSection(null)
+                setMainTab("related")
+                setRelatedTab("kontakty")
               }}
             />
             <CompanyActivityPanel
@@ -167,6 +186,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
               onComposerTabChange={setComposerTab}
               engagementSection={engagementSection}
               onEngagementSectionChange={setEngagementSection}
+              highlightActivityId={highlightActivityId}
             />
           </div>
         </TabsContent>
@@ -180,20 +200,55 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
               <TabsList>
                 <TabsTrigger value="leady">Leady</TabsTrigger>
                 <TabsTrigger value="deale">Deale</TabsTrigger>
+                <TabsTrigger value="kontakty">Kontakty</TabsTrigger>
                 <TabsTrigger value="zadania">Zadania</TabsTrigger>
               </TabsList>
+              {relatedTab === "leady" ? (
+                <LeadFormDialog
+                  defaultClientId={client.id}
+                  onSuccess={(lead) => router.push(`/leads/${lead.id}`)}
+                  trigger={
+                    <Button>
+                      <PlusIcon />
+                      Nowy lead
+                    </Button>
+                  }
+                />
+              ) : null}
+              {relatedTab === "deale" ? (
+                <DealFormDialog
+                  defaultClientId={client.id}
+                  defaultContactId={client.contactIds[0] ?? null}
+                  onSuccess={(deal) => router.push(`/pipeline/${deal.id}`)}
+                  trigger={
+                    <Button>
+                      <PlusIcon />
+                      Nowy deal
+                    </Button>
+                  }
+                />
+              ) : null}
+              {relatedTab === "kontakty" ? (
+                <ContactFormDialog defaultClientId={client.id} />
+              ) : null}
               {relatedTab === "zadania" ? (
                 <TaskFormDialog user={user} defaultClientId={client.id} />
               ) : null}
             </div>
             <TabsContent value="leady" className="mt-4">
-              <CompanyLeadsList leads={clientLeads} />
+              <CompanyLeadsTable leads={clientLeads} />
             </TabsContent>
             <TabsContent value="deale" className="mt-4">
-              <CompanyDealsList deals={clientDeals} />
+              <CompanyDealsTable deals={clientDeals} />
+            </TabsContent>
+            <TabsContent value="kontakty" className="mt-4">
+              <CompanyContactsTable
+                clientId={client.id}
+                rows={clientContactRows}
+              />
             </TabsContent>
             <TabsContent value="zadania" className="mt-4">
-              <CompanyTasksList tasks={clientTasks} clientId={client.id} />
+              <CompanyTasksTable tasks={clientTasks} />
             </TabsContent>
           </Tabs>
         </TabsContent>

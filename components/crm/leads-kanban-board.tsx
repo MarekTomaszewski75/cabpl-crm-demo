@@ -75,6 +75,7 @@ export function LeadsKanbanBoard({ leads, onAddLead }: LeadsKanbanBoardProps) {
     tasks,
     meetings,
     leadDocuments,
+    leadFiles,
     updateLead,
     addLeadActivity,
   } = useDemoData()
@@ -102,9 +103,9 @@ export function LeadsKanbanBoard({ leads, onAddLead }: LeadsKanbanBoardProps) {
     () =>
       buildLeadEngagementCountMap(
         leads.map((lead) => lead.id),
-        { tasks, meetings, leadDocuments },
+        { tasks, meetings, leadDocuments, leadFiles },
       ),
-    [leads, tasks, meetings, leadDocuments],
+    [leads, tasks, meetings, leadDocuments, leadFiles],
   )
 
   const finishLead = finishLeadId

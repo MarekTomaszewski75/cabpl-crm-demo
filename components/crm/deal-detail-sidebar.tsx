@@ -39,7 +39,7 @@ export function DealDetailSidebar({
   onDocumentsClick,
 }: DealDetailSidebarProps) {
   const { user } = useSession()
-  const { updateDeal, users, clients, tasks, meetings, dealDocuments, products } =
+  const { updateDeal, users, clients, tasks, meetings, dealDocuments, dealFiles, products } =
     useDemoData()
   const readOnly = deal.status === "won" || deal.status === "lost"
   const productEditable = deal.status === "new"
@@ -63,10 +63,10 @@ export function DealDetailSidebar({
     }
     return getScopedDealEngagementCounts(
       deal.id,
-      { tasks, meetings, dealDocuments },
+      { tasks, meetings, dealDocuments, dealFiles },
       user,
     )
-  }, [deal.id, tasks, meetings, dealDocuments, user])
+  }, [deal.id, tasks, meetings, dealDocuments, dealFiles, user])
 
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined

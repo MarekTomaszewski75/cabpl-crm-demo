@@ -33,6 +33,7 @@ export type DealTableRow = Deal & {
 
 type DealsColumnsContext = {
   showOwnerColumn: boolean
+  showCompanyColumn?: boolean
 }
 
 function resolvePipelineCategoryId(
@@ -46,6 +47,7 @@ function resolvePipelineCategoryId(
 export function createDealsColumns(
   ctx: DealsColumnsContext,
 ): ColumnDef<DealTableRow>[] {
+  const showCompanyColumn = ctx.showCompanyColumn ?? true
   const columns: ColumnDef<DealTableRow>[] = [
     createFilterSearchColumn<DealTableRow>(),
     {
@@ -179,7 +181,10 @@ export function createDealsColumns(
         return left.localeCompare(right)
       },
     },
-    {
+  ]
+
+  if (showCompanyColumn) {
+    columns.push({
       accessorKey: "clientName",
       enableGrouping: true,
       meta: { title: "Firma" },
@@ -193,8 +198,8 @@ export function createDealsColumns(
       ),
       sortingFn: (a, b) =>
         a.original.clientName.localeCompare(b.original.clientName, "pl"),
-    },
-  ]
+    })
+  }
 
   if (ctx.showOwnerColumn) {
     columns.push({

@@ -9,24 +9,13 @@ import { DealActivityFeed } from "@/components/crm/deal-activity-feed"
 import { DealActivityForm } from "@/components/crm/deal-activity-form"
 import { DealMeetingsList } from "@/components/crm/deal-meetings-list"
 import { DealTasksList } from "@/components/crm/deal-tasks-list"
-import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
+import { CrmDocumentList } from "@/components/crm/crm-document-list"
+import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardHeader,
 } from "@/components/ui/card"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useSession } from "@/lib/auth/demo-session"
@@ -36,19 +25,17 @@ import {
   type DealActivityFilter,
 } from "@/lib/crm/deal-activity"
 import {
-  getDealDocumentsForDeal,
   getDealMeetingsForDeal,
   getDealTasksForDeal,
 } from "@/lib/crm/deal-engagement-counts"
+import { getMergedDocumentsForDeal } from "@/lib/crm/entity-documents"
 import { getDealFilesForDeal } from "@/lib/crm/entity-files"
-import { formatDatePl } from "@/lib/format/pl"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Deal } from "@/types/crm"
 
 export type DealComposerTab =
   | "note"
   | "activity"
-  | "files"
   | "documents"
   | "tasks"
 
@@ -58,6 +45,7 @@ type DealActivityPanelProps = {
   onComposerTabChange: (tab: DealComposerTab) => void
   engagementSection: DealEngagementSection
   onEngagementSectionChange: (section: DealEngagementSection) => void
+  highlightActivityId?: string | null
 }
 
 const FEED_FILTERS: { id: DealActivityFilter; label: string }[] = [
@@ -74,6 +62,7 @@ export function DealActivityPanel({
   onComposerTabChange,
   engagementSection,
   onEngagementSectionChange,
+  highlightActivityId = null,
 }: DealActivityPanelProps) {
   const { user } = useSession()
   const {
@@ -84,20 +73,25 @@ export function DealActivityPanel({
     dealDocuments,
     dealFiles,
     addDealNote,
-    addDealDocument,
     addDealFile,
     removeDealFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
-  const [documentName, setDocumentName] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<DealActivityFilter>("all")
+
+  React.useEffect(() => {
+    if (highlightActivityId) {
+      setFeedFilter("all")
+      onEngagementSectionChange(null)
+    }
+  }, [highlightActivityId, onEngagementSectionChange])
 
   const meetingsSectionRef = React.useRef<HTMLDivElement>(null)
 
   const engagementData = React.useMemo(
-    () => ({ tasks, meetings, dealDocuments }),
-    [tasks, meetings, dealDocuments],
+    () => ({ tasks, meetings, dealDocuments, dealFiles }),
+    [tasks, meetings, dealDocuments, dealFiles],
   )
 
   const allItems = React.useMemo(
@@ -135,10 +129,15 @@ export function DealActivityPanel({
     return getDealMeetingsForDeal(deal.id, engagementData, user)
   }, [deal.id, engagementData, user])
 
-  const dealDocs = React.useMemo(() => {
+  const mergedDocuments = React.useMemo(() => {
     if (!user) return []
-    return getDealDocumentsForDeal(deal.id, engagementData, user)
-  }, [deal.id, engagementData, user])
+    return getMergedDocumentsForDeal(
+      deal.id,
+      dealFiles,
+      dealDocuments,
+      user,
+    )
+  }, [deal.id, dealFiles, dealDocuments, user])
 
   const dealUploadedFiles = React.useMemo(() => {
     if (!user) return []
@@ -174,29 +173,29 @@ export function DealActivityPanel({
     toast.success("Notatka została dodana")
   }
 
-  function handleAddDocument() {
-    if (!user) return
-    const trimmed = documentName.trim()
-    if (!trimmed) return
-    const created = addDealDocument(deal.id, { name: trimmed }, user)
-    if (!created) return
-    setDocumentName("")
-    toast.success("Dokument został dodany")
-  }
-
-  function handleUploadFile(file: File) {
+  function handleUploadDocument({
+    file,
+    displayName,
+    description,
+  }: {
+    file: File
+    displayName: string
+    description?: string
+  }) {
     if (!user) return false
     const created = addDealFile(
       deal.id,
       {
         fileName: file.name,
+        displayName,
+        description,
         fileSize: file.size,
         mimeType: file.type || "application/octet-stream",
       },
       user,
     )
     if (created) {
-      toast.success("Plik został dodany")
+      toast.success("Dokument został dodany")
     }
     return created !== null
   }
@@ -215,7 +214,6 @@ export function DealActivityPanel({
             <TabsList className="h-auto flex-wrap justify-start">
               <TabsTrigger value="note">Notatka</TabsTrigger>
               <TabsTrigger value="activity">Aktywność</TabsTrigger>
-              <TabsTrigger value="files">Pliki</TabsTrigger>
               <TabsTrigger value="documents">Dokumenty</TabsTrigger>
               <TabsTrigger value="tasks">Zadania</TabsTrigger>
             </TabsList>
@@ -237,66 +235,18 @@ export function DealActivityPanel({
               <DealActivityForm deal={deal} />
             </TabsContent>
 
-            <TabsContent value="files">
-              <CrmFileUploadPanel
-                files={dealUploadedFiles}
+            <TabsContent value="documents" className="flex flex-col gap-4">
+              <CrmDocumentList
+                items={mergedDocuments}
                 users={users}
-                onUpload={handleUploadFile}
-                onRemove={removeDealFile}
-                disabled={!user}
+                onRemoveFile={removeDealFile}
+                emptyDescription="Dodaj dokument z plikiem, nazwą i opcjonalnym opisem."
               />
-            </TabsContent>
-
-            <TabsContent value="documents" className="flex flex-col gap-3">
-              {dealDocs.length === 0 ? (
-                <Empty className="border py-6">
-                  <EmptyHeader>
-                    <EmptyTitle>Brak dokumentów</EmptyTitle>
-                    <EmptyDescription>
-                      Dodaj nazwany dokument przypisany do tego deala.
-                    </EmptyDescription>
-                  </EmptyHeader>
-                </Empty>
-              ) : (
-                <ul className="flex flex-col gap-2">
-                  {dealDocs.map((doc) => {
-                    const author = users.find((u) => u.id === doc.ownerId)
-                    return (
-                      <li
-                        key={doc.id}
-                        className="rounded-md border border-border/80 px-3 py-2 text-sm"
-                      >
-                        <p className="font-medium">{doc.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Dodano {formatDatePl(doc.uploadedAt)}
-                          {author ? ` · ${author.displayName}` : null}
-                        </p>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="deal-document-name">
-                    Nazwa dokumentu
-                  </FieldLabel>
-                  <Input
-                    id="deal-document-name"
-                    placeholder="np. Umowa ramowa.pdf"
-                    value={documentName}
-                    onChange={(e) => setDocumentName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleAddDocument()
-                    }}
-                  />
-                </Field>
-              </FieldGroup>
-              <div className="flex flex-wrap justify-end gap-2">
-                <Button type="button" onClick={handleAddDocument}>
-                  Dodaj dokument
-                </Button>
-              </div>
+              <CrmDocumentUploadForm
+                storedFiles={dealUploadedFiles}
+                disabled={!user}
+                onSubmit={handleUploadDocument}
+              />
             </TabsContent>
 
             <TabsContent value="tasks">
@@ -343,7 +293,10 @@ export function DealActivityPanel({
         </div>
       )}
 
-      <DealActivityFeed items={filteredItems} />
+      <DealActivityFeed
+        items={filteredItems}
+        highlightActivityId={highlightActivityId}
+      />
     </div>
   )
 }

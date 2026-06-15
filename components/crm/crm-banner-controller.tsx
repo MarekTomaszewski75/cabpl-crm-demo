@@ -11,6 +11,7 @@ import {
   generateDemoBannersForUser,
   getCriticalDealBanner,
   pickRandomDemoBanners,
+  shouldShowCrmBannersForUser,
   type BannerPayload,
 } from "@/lib/crm/banner-rules"
 import { getToday } from "@/lib/crm/local-date"
@@ -37,7 +38,7 @@ export function CrmBannerController() {
   const { onBannerAdd, onBannersClear } = useBanners()
 
   React.useEffect(() => {
-    if (!isReady || !user) return
+    if (!isReady || !user || !shouldShowCrmBannersForUser(user)) return
 
     onBannersClear()
 
@@ -81,11 +82,7 @@ export function CrmBannerController() {
       )
       if (criticalDeal) {
         timeouts.push(
-          scheduleBanner(
-            criticalDeal,
-            BANNER_INITIAL_DELAY_MS,
-            onBannerAdd,
-          ),
+          scheduleBanner(criticalDeal, BANNER_INITIAL_DELAY_MS, onBannerAdd),
         )
       }
     }

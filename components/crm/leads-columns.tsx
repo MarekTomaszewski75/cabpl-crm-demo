@@ -23,11 +23,13 @@ type LeadsColumnsContext = {
   users: readonly DemoUser[]
   contacts: readonly CrmContact[]
   showOwnerColumn: boolean
+  showCompanyColumn?: boolean
 }
 
 export function createLeadsColumns(
   ctx: LeadsColumnsContext,
 ): ColumnDef<LeadTableRow>[] {
+  const showCompanyColumn = ctx.showCompanyColumn ?? true
   const columns: ColumnDef<LeadTableRow>[] = [
     createFilterSearchColumn<LeadTableRow>(),
     {
@@ -83,7 +85,10 @@ export function createLeadsColumns(
           ? LEAD_TYPE_LABELS[row.original.leadType]
           : "—",
     },
-    {
+  ]
+
+  if (showCompanyColumn) {
+    columns.push({
       accessorKey: "companyName",
       meta: { title: "Firma" },
       enableGrouping: true,
@@ -97,8 +102,8 @@ export function createLeadsColumns(
       ),
       sortingFn: (a, b) =>
         a.original.companyName.localeCompare(b.original.companyName, "pl"),
-    },
-  ]
+    })
+  }
 
   if (ctx.showOwnerColumn) {
     columns.push({

@@ -158,9 +158,12 @@ export function CompanyDetailSidebar({
     tasks,
     meetings,
     clientDocuments,
+    clientFiles,
     deals,
     leads,
     contacts,
+    contactClientLinks,
+    clients,
   } = useDemoData()
 
   const engagementCounts = React.useMemo(() => {
@@ -176,10 +179,20 @@ export function CompanyDetailSidebar({
     }
     return getScopedCompanyEngagementCounts(
       client,
-      { tasks, meetings, clientDocuments, deals, leads, contacts },
+      {
+        tasks,
+        meetings,
+        clientDocuments,
+        clientFiles,
+        deals,
+        leads,
+        contacts,
+        contactClientLinks,
+        clients,
+      },
       user,
     )
-  }, [client, user, tasks, meetings, clientDocuments, deals, leads, contacts])
+  }, [client, user, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, clients])
 
   function patch(partial: Partial<Client>) {
     updateClient(client.id, partial)

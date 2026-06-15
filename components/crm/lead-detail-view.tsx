@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { ShieldAlertIcon } from "lucide-react"
 import {
   LeadActivityPanel,
@@ -27,6 +27,8 @@ export type LeadEngagementSection = "meetings" | null
 
 export function LeadDetailView({ leadId }: LeadDetailViewProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const highlightActivityId = searchParams.get("activityId")
   const { user, isReady } = useSession()
   const { leads, users, updateLead, addLeadActivity } = useDemoData()
   const [finishOpen, setFinishOpen] = React.useState(false)
@@ -121,6 +123,7 @@ export function LeadDetailView({ leadId }: LeadDetailViewProps) {
           onComposerTabChange={setComposerTab}
           engagementSection={engagementSection}
           onEngagementSectionChange={setEngagementSection}
+          highlightActivityId={highlightActivityId}
         />
       </div>
 

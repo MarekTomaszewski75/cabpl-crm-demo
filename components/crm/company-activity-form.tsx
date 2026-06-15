@@ -4,7 +4,6 @@ import * as React from "react"
 import {
   CalendarIcon,
   ChevronDownIcon,
-  MailIcon,
   MessageSquareIcon,
   PhoneIcon,
   ZapIcon,
@@ -14,7 +13,6 @@ import {
   ActivityParticipantsField,
   ActivityResponsibleUserField,
 } from "@/components/crm/activity-people-fields"
-import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
 import { CompanyActivityPrioritySelect } from "@/components/crm/company-activity-priority"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -27,8 +25,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  ACTIVITY_CHANNEL_TYPE_OPTIONS,
+  type ActivityChannelType,
+} from "@/lib/crm/activity-channel-types"
+import {
   activityTitlePlaceholder,
-  COMPANY_ACTIVITY_TYPE_OPTIONS,
   emptyActivityFormState,
   toAddCompanyActivityInput,
   type CompanyActivityFormState,
@@ -36,15 +37,14 @@ import {
 import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import type { ChannelContactEventType, Client } from "@/types/crm"
+import type { Client } from "@/types/crm"
 import type { LucideIcon } from "lucide-react"
 
-const TYPE_ICONS: Record<ChannelContactEventType, LucideIcon> = {
+const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
   activity: ZapIcon,
   phone: PhoneIcon,
   meeting: CalendarIcon,
   chat: MessageSquareIcon,
-  email: MailIcon,
 }
 
 type CompanyActivityFormProps = {
@@ -122,9 +122,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
     emptyActivityFormState(user?.id ?? null),
   )
   const [peopleOpen, setPeopleOpen] = React.useState(true)
-  const [linksOpen, setLinksOpen] = React.useState(true)
-  const [leadDealQuery, setLeadDealQuery] = React.useState("")
-  const [contactQuery, setContactQuery] = React.useState("")
 
   React.useEffect(() => {
     if (user && !state.responsibleUserId) {
@@ -136,7 +133,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
     (state.responsibleUserId ? 1 : 0) +
     state.participantUserIds.length +
     state.participantContactIds.length
-  const linksCount = 0
 
   function patch(partial: Partial<CompanyActivityFormState>) {
     setState((prev) => ({ ...prev, ...partial }))
@@ -145,9 +141,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
   function handleReset() {
     setState(emptyActivityFormState(user?.id ?? null))
     setPeopleOpen(true)
-    setLinksOpen(true)
-    setLeadDealQuery("")
-    setContactQuery("")
   }
 
   function handleSave() {
@@ -175,7 +168,7 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
         </Field>
 
         <div className="flex flex-wrap gap-1">
-          {COMPANY_ACTIVITY_TYPE_OPTIONS.map((option) => {
+          {ACTIVITY_CHANNEL_TYPE_OPTIONS.map((option) => {
             const Icon = TYPE_ICONS[option.id]
             const selected = state.type === option.id
             return (
@@ -269,11 +262,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
           />
         </Field>
 
-        <div className="flex flex-col gap-2">
-          <FieldLabel>Załączniki</FieldLabel>
-          <CrmFileUploadPanel files={[]} onUpload={() => true} />
-        </div>
-
         <ActivityCollapsibleSection
           title="Ludzie"
           count={peopleCount}
@@ -296,33 +284,6 @@ export function CompanyActivityForm({ client }: CompanyActivityFormProps) {
                 onChange={({ participantUserIds, participantContactIds }) =>
                   patch({ participantUserIds, participantContactIds })
                 }
-              />
-            </ActivityOutlinedField>
-          </div>
-        </ActivityCollapsibleSection>
-
-        <ActivityCollapsibleSection
-          title="Powiązania z CRM"
-          count={linksCount}
-          open={linksOpen}
-          onOpenChange={setLinksOpen}
-        >
-          <div className="flex flex-col gap-3">
-            <ActivityOutlinedField label="Lead/Deal">
-              <Input
-                value={leadDealQuery}
-                onChange={(e) => setLeadDealQuery(e.target.value)}
-                placeholder="Nazwa leada/dealu"
-                className="h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
-              />
-            </ActivityOutlinedField>
-
-            <ActivityOutlinedField label="Kontakty">
-              <Input
-                value={contactQuery}
-                onChange={(e) => setContactQuery(e.target.value)}
-                placeholder="Nazwa kontaktu"
-                className="h-8 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
               />
             </ActivityOutlinedField>
           </div>

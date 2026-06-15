@@ -313,6 +313,7 @@ function toExecutiveDashboardFilters(
     timePeriod: filters.timePeriod === "month" ? "ytd" : filters.timePeriod,
     regionId: filters.regionId ?? EXECUTIVE_FILTER_ALL,
     segmentId: filters.segmentId ?? EXECUTIVE_FILTER_ALL,
+    pipelineCategoryId: filters.pipelineCategoryId ?? EXECUTIVE_FILTER_ALL,
   }
 }
 

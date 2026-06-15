@@ -28,7 +28,7 @@ import type { Client, Opportunity, Task } from "@/types/crm"
 
 export function TasksTable() {
   const { user, isReady } = useSession()
-  const { tasks, clients, opportunities, updateTask } = useDemoData()
+  const { tasks, clients, opportunities, users, updateTask } = useDemoData()
 
   const handleCompletedChange = React.useCallback(
     (task: Task, checked: boolean) => {
@@ -59,6 +59,9 @@ export function TasksTable() {
     const opportunityTitleById = new Map(
       scopedOpportunities.map((o: Opportunity) => [o.id, o.name]),
     )
+    const ownerNameById = new Map(
+      users.map((entry) => [entry.id, entry.displayName]),
+    )
 
     return filterByScope(tasks, user).map((task) => {
       const clientName = task.clientId
@@ -67,14 +70,16 @@ export function TasksTable() {
       const opportunityTitle = task.opportunityId
         ? (opportunityTitleById.get(task.opportunityId) ?? null)
         : null
+      const ownerName = ownerNameById.get(task.ownerId) ?? "—"
       return {
         ...task,
         clientName,
         opportunityTitle,
-        _filter: `${task.title} ${clientName ?? ""} ${opportunityTitle ?? ""}`.toLowerCase(),
+        ownerName,
+        _filter: `${task.title} ${clientName ?? ""} ${opportunityTitle ?? ""} ${ownerName}`.toLowerCase(),
       }
     })
-  }, [tasks, user, clients, opportunities])
+  }, [tasks, user, clients, opportunities, users])
 
   if (!isReady || !user) {
     return null

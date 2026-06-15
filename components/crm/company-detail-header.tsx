@@ -10,7 +10,6 @@ import {
   Trash2Icon,
 } from "lucide-react"
 import { toast } from "sonner"
-import { DealFormDialog } from "@/components/crm/deal-form-dialog"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,7 +46,6 @@ export function CompanyDetailHeader({
   const router = useRouter()
   const { deleteClient, deals, tasks } = useDemoData()
   const [deleteOpen, setDeleteOpen] = React.useState(false)
-  const [dealOpen, setDealOpen] = React.useState(false)
 
   const relatedDeals = deals.filter((deal) => deal.clientId === client.id)
   const openTasks = tasks.filter(
@@ -93,23 +91,6 @@ export function CompanyDetailHeader({
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setDealOpen(true)}
-          >
-            + Deal
-          </Button>
-          <DealFormDialog
-            open={dealOpen}
-            onOpenChange={setDealOpen}
-            defaultClientId={client.id}
-            defaultContactId={client.contactIds[0] ?? null}
-            onSuccess={(deal) => {
-              router.push(`/pipeline/${deal.id}`)
-            }}
-          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon-sm" aria-label="Menu firmy">

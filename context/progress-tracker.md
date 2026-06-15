@@ -46,16 +46,28 @@
 - **US-45** — **Done** — karta firmy: zakładka **Sprzedaż i relacje** (Leady · Deale · Zadania), `TaskFormDialog` z `defaultClientId`, klik wskaźnika Zadania → podzakładka Zadania. [US-45](./stories/US-45-company-tab-and-tasks/story.md).
 - **US-46** — **Done** — stepper statusu leada/deala (`@diceui/stepper`); `lead-status-bar.tsx` + `deal-status-bar.tsx`. [US-46](./stories/US-46-lead-deal-stepper/story.md).
 - **US-47** — **Done** — zadania: kolumna i formularz „Deal” zamiast „Szansa”. [US-47](./stories/US-47-tasks-deal-column-rename/story.md).
+- **US-48** — **Done** — moduł Kontakty: `ContactClientLink` + seed, `contact-company-bindings.ts`, tabela `/contacts`, nawigacja sidebar (advisor + menedżer). [US-48](./stories/US-48-contacts-module/story.md).
+- **US-49** — **Done** — podzakładka **Kontakty** na karcie firmy (Leady · Deale · Kontakty · Zadania), `contact-search.ts`, wskaźnik → podzakładka. [US-49](./stories/US-49-company-contacts-tab/story.md).
+- **US-50** — **Done** — cleanup formularza aktywności: wspólne `ACTIVITY_CHANNEL_TYPE_OPTIONS` (bez E-mail), usunięcie załączników z formularzy firma/lead/deal. [US-50](./stories/US-50-activity-form-cleanup/story.md).
+- **US-51** — **Done** — scalenie zakładek Pliki/Dokumenty: `displayName`/`description` na `*File`, `entity-documents.ts`, `CrmDocumentList` + `CrmDocumentUploadForm`, jedna zakładka Dokumenty na firmie/leadzie/dealu. [US-51](./stories/US-51-merge-files-documents/story.md).
 
 ---
 
 ## Active work
 
-- — (sprawdź [`stories/README.md`](./stories/README.md) — kolejna story z iteracji 2).
+- — (kolejna story z [`demo-feedback-iteration-2-spec.md`](./demo-feedback-iteration-2-spec.md))
 
 ---
 
 ## Recently completed
+
+- **US-51** (story **Done**) — scalona zakładka **Dokumenty** (firma/lead/deal): `entity-documents.ts`, `CrmDocumentList`, `CrmDocumentUploadForm`; `displayName`/`description` na `*File`; licznik Dokumenty = pliki + legacy `*Document`. [US-51](./stories/US-51-merge-files-documents/story.md).
+
+- **US-50** (story **Done**) — `lib/crm/activity-channel-types.ts` (`ACTIVITY_CHANNEL_TYPE_OPTIONS` bez E-mail); formularze `company-activity-form.tsx`, `lead-activity-form.tsx`, `deal-activity-form.tsx` bez przycisku E-mail i sekcji Załączniki; typ `email` i feed historyczny bez zmian. [US-50](./stories/US-50-activity-form-cleanup/story.md).
+
+- **US-49** (story **Done**) — podzakładka **Kontakty** w Sprzedaż i relacje (`company-contacts-table.tsx`); `lib/crm/contact-search.ts` na `/contacts`, podzakładce firmy i w `ContactComboboxField`; wskaźnik Kontakty → podzakładka (usunięto `CompanyContactsList` z feedu). [US-49](./stories/US-49-company-contacts-tab/story.md).
+
+- **US-48** (story **Done**) — `ContactClientLink` + `contact-client-links.json`; `lib/crm/contact-company-bindings.ts` (firma/deal/lead, RBAC); tabela `/contacts` (`contacts-table.tsx`); sidebar „Kontakty” dla advisor + regional_manager; executive → redirect `/dashboard`. [US-48](./stories/US-48-contacts-module/story.md).
 
 - **US-47** (story **Done**) — `tasks-columns.tsx`: nagłówek **Deal** + tooltip; `task-form-dialog.tsx`: etykieta **Deal**, copy bez słowa „szansa”; `Task.opportunityId` bez zmian. [US-47](./stories/US-47-tasks-deal-column-rename/story.md).
 

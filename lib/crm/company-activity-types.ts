@@ -1,3 +1,4 @@
+import { activityChannelTypeLabel } from "@/lib/crm/activity-channel-types"
 import { buildActivityNoteBody } from "@/lib/crm/activity-participants"
 import type {
   AddCompanyActivityInput,
@@ -7,22 +8,8 @@ import type {
   DemoUser,
 } from "@/types/crm"
 
-export const COMPANY_ACTIVITY_TYPE_OPTIONS: {
-  id: ChannelContactEventType
-  label: string
-}[] = [
-  { id: "activity", label: "Aktywność" },
-  { id: "phone", label: "Połączenie" },
-  { id: "meeting", label: "Spotkanie" },
-  { id: "chat", label: "Czat" },
-  { id: "email", label: "E-mail" },
-]
-
 export function activityTitlePlaceholder(type: ChannelContactEventType): string {
-  return (
-    COMPANY_ACTIVITY_TYPE_OPTIONS.find((o) => o.id === type)?.label ??
-    "Aktywność"
-  )
+  return activityChannelTypeLabel(type)
 }
 
 export type CompanyActivityPriorityIconKey =
@@ -109,10 +96,7 @@ export function defaultActivityTitle(
 ): string {
   const trimmed = customTitle.trim()
   if (trimmed) return trimmed
-  return (
-    COMPANY_ACTIVITY_TYPE_OPTIONS.find((o) => o.id === type)?.label ??
-    "Aktywność"
-  )
+  return activityChannelTypeLabel(type)
 }
 
 export type CompanyActivityFormState = {

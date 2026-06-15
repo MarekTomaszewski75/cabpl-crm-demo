@@ -1,7 +1,13 @@
+import {
+  getContactsForClient,
+  type ContactBindingsData,
+} from "@/lib/crm/contact-company-bindings"
+import { getMergedDocumentsForClient } from "@/lib/crm/entity-documents"
 import { filterByScope } from "@/lib/rbac/scope"
 import type {
   Client,
   ClientDocument,
+  ClientFile,
   CrmContact,
   Deal,
   DemoUser,
@@ -19,13 +25,11 @@ export type CompanyEngagementCounts = {
   contacts: number
 }
 
-export type CompanyEngagementData = {
+export type CompanyEngagementData = ContactBindingsData & {
   tasks: readonly Task[]
   meetings: readonly Meeting[]
   clientDocuments: readonly ClientDocument[]
-  deals: readonly Deal[]
-  leads: readonly Lead[]
-  contacts: readonly CrmContact[]
+  clientFiles: readonly ClientFile[]
 }
 
 export function getCompanyTasks(
@@ -89,9 +93,9 @@ export function getCompanyLeads(
 export function getCompanyContacts(
   client: Client,
   data: CompanyEngagementData,
+  user: DemoUser,
 ): CrmContact[] {
-  const idSet = new Set(client.contactIds)
-  return data.contacts.filter((contact) => idSet.has(contact.id))
+  return getContactsForClient(client.id, data, user).map((row) => row.contact)
 }
 
 export function getScopedCompanyEngagementCounts(
@@ -102,9 +106,14 @@ export function getScopedCompanyEngagementCounts(
   return {
     tasks: getCompanyTasks(client.id, data, user).length,
     meetings: getCompanyMeetings(client.id, data, user).length,
-    documents: getCompanyDocuments(client.id, data, user).length,
+    documents: getMergedDocumentsForClient(
+      client.id,
+      data.clientFiles,
+      data.clientDocuments,
+      user,
+    ).length,
     deals: getCompanyDeals(client.id, data, user).length,
     leads: getCompanyLeads(client.id, data, user).length,
-    contacts: getCompanyContacts(client, data).length,
+    contacts: getCompanyContacts(client, data, user).length,
   }
 }

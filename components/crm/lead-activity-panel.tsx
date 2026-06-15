@@ -9,24 +9,13 @@ import { LeadActivityFeed } from "@/components/crm/lead-activity-feed"
 import { LeadActivityForm } from "@/components/crm/lead-activity-form"
 import { LeadMeetingsList } from "@/components/crm/lead-meetings-list"
 import { LeadTasksList } from "@/components/crm/lead-tasks-list"
-import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
+import { CrmDocumentList } from "@/components/crm/crm-document-list"
+import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardHeader,
 } from "@/components/ui/card"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { useSession } from "@/lib/auth/demo-session"
@@ -36,19 +25,17 @@ import {
   type LeadActivityFilter,
 } from "@/lib/crm/lead-activity"
 import {
-  getLeadDocumentsForLead,
   getLeadMeetingsForLead,
   getLeadTasksForLead,
 } from "@/lib/crm/lead-engagement-counts"
+import { getMergedDocumentsForLead } from "@/lib/crm/entity-documents"
 import { getLeadFilesForLead } from "@/lib/crm/entity-files"
-import { formatDatePl } from "@/lib/format/pl"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Lead } from "@/types/crm"
 
 export type LeadComposerTab =
   | "note"
   | "activity"
-  | "files"
   | "documents"
   | "tasks"
 
@@ -58,6 +45,7 @@ type LeadActivityPanelProps = {
   onComposerTabChange: (tab: LeadComposerTab) => void
   engagementSection: LeadEngagementSection
   onEngagementSectionChange: (section: LeadEngagementSection) => void
+  highlightActivityId?: string | null
 }
 
 const FEED_FILTERS: { id: LeadActivityFilter; label: string }[] = [
@@ -74,6 +62,7 @@ export function LeadActivityPanel({
   onComposerTabChange,
   engagementSection,
   onEngagementSectionChange,
+  highlightActivityId = null,
 }: LeadActivityPanelProps) {
   const { user } = useSession()
   const {
@@ -84,20 +73,25 @@ export function LeadActivityPanel({
     leadDocuments,
     leadFiles,
     addLeadNote,
-    addLeadDocument,
     addLeadFile,
     removeLeadFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
-  const [documentName, setDocumentName] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<LeadActivityFilter>("all")
+
+  React.useEffect(() => {
+    if (highlightActivityId) {
+      setFeedFilter("all")
+      onEngagementSectionChange(null)
+    }
+  }, [highlightActivityId, onEngagementSectionChange])
 
   const meetingsSectionRef = React.useRef<HTMLDivElement>(null)
 
   const engagementData = React.useMemo(
-    () => ({ tasks, meetings, leadDocuments }),
-    [tasks, meetings, leadDocuments],
+    () => ({ tasks, meetings, leadDocuments, leadFiles }),
+    [tasks, meetings, leadDocuments, leadFiles],
   )
 
   const allItems = React.useMemo(
@@ -128,10 +122,15 @@ export function LeadActivityPanel({
     return getLeadMeetingsForLead(lead.id, engagementData, user)
   }, [lead.id, engagementData, user])
 
-  const leadDocs = React.useMemo(() => {
+  const mergedDocuments = React.useMemo(() => {
     if (!user) return []
-    return getLeadDocumentsForLead(lead.id, engagementData, user)
-  }, [lead.id, engagementData, user])
+    return getMergedDocumentsForLead(
+      lead.id,
+      leadFiles,
+      leadDocuments,
+      user,
+    )
+  }, [lead.id, leadFiles, leadDocuments, user])
 
   const leadUploadedFiles = React.useMemo(() => {
     if (!user) return []
@@ -167,29 +166,29 @@ export function LeadActivityPanel({
     toast.success("Notatka została dodana")
   }
 
-  function handleAddDocument() {
-    if (!user) return
-    const trimmed = documentName.trim()
-    if (!trimmed) return
-    const created = addLeadDocument(lead.id, { name: trimmed }, user)
-    if (!created) return
-    setDocumentName("")
-    toast.success("Dokument został dodany")
-  }
-
-  function handleUploadFile(file: File) {
+  function handleUploadDocument({
+    file,
+    displayName,
+    description,
+  }: {
+    file: File
+    displayName: string
+    description?: string
+  }) {
     if (!user) return false
     const created = addLeadFile(
       lead.id,
       {
         fileName: file.name,
+        displayName,
+        description,
         fileSize: file.size,
         mimeType: file.type || "application/octet-stream",
       },
       user,
     )
     if (created) {
-      toast.success("Plik został dodany")
+      toast.success("Dokument został dodany")
     }
     return created !== null
   }
@@ -208,7 +207,6 @@ export function LeadActivityPanel({
             <TabsList className="h-auto flex-wrap justify-start">
               <TabsTrigger value="note">Notatka</TabsTrigger>
               <TabsTrigger value="activity">Aktywność</TabsTrigger>
-              <TabsTrigger value="files">Pliki</TabsTrigger>
               <TabsTrigger value="documents">Dokumenty</TabsTrigger>
               <TabsTrigger value="tasks">Zadania</TabsTrigger>
             </TabsList>
@@ -230,66 +228,18 @@ export function LeadActivityPanel({
               <LeadActivityForm lead={lead} />
             </TabsContent>
 
-            <TabsContent value="files">
-              <CrmFileUploadPanel
-                files={leadUploadedFiles}
+            <TabsContent value="documents" className="flex flex-col gap-4">
+              <CrmDocumentList
+                items={mergedDocuments}
                 users={users}
-                onUpload={handleUploadFile}
-                onRemove={removeLeadFile}
-                disabled={!user}
+                onRemoveFile={removeLeadFile}
+                emptyDescription="Dodaj dokument z plikiem, nazwą i opcjonalnym opisem."
               />
-            </TabsContent>
-
-            <TabsContent value="documents" className="flex flex-col gap-3">
-              {leadDocs.length === 0 ? (
-                <Empty className="border py-6">
-                  <EmptyHeader>
-                    <EmptyTitle>Brak dokumentów</EmptyTitle>
-                    <EmptyDescription>
-                      Dodaj nazwany dokument przypisany do tego leada.
-                    </EmptyDescription>
-                  </EmptyHeader>
-                </Empty>
-              ) : (
-                <ul className="flex flex-col gap-2">
-                  {leadDocs.map((doc) => {
-                    const author = users.find((u) => u.id === doc.ownerId)
-                    return (
-                      <li
-                        key={doc.id}
-                        className="rounded-md border border-border/80 px-3 py-2 text-sm"
-                      >
-                        <p className="font-medium">{doc.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Dodano {formatDatePl(doc.uploadedAt)}
-                          {author ? ` · ${author.displayName}` : null}
-                        </p>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="lead-document-name">
-                    Nazwa dokumentu
-                  </FieldLabel>
-                  <Input
-                    id="lead-document-name"
-                    placeholder="np. Umowa ramowa.pdf"
-                    value={documentName}
-                    onChange={(e) => setDocumentName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleAddDocument()
-                    }}
-                  />
-                </Field>
-              </FieldGroup>
-              <div className="flex flex-wrap justify-end gap-2">
-                <Button type="button" onClick={handleAddDocument}>
-                  Dodaj dokument
-                </Button>
-              </div>
+              <CrmDocumentUploadForm
+                storedFiles={leadUploadedFiles}
+                disabled={!user}
+                onSubmit={handleUploadDocument}
+              />
             </TabsContent>
 
             <TabsContent value="tasks">
@@ -336,7 +286,10 @@ export function LeadActivityPanel({
         </div>
       )}
 
-      <LeadActivityFeed items={filteredItems} />
+      <LeadActivityFeed
+        items={filteredItems}
+        highlightActivityId={highlightActivityId}
+      />
     </div>
   )
 }

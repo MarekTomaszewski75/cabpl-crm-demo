@@ -9,6 +9,7 @@ import {
   CircleCheckBigIcon,
   ContactIcon,
   HandshakeIcon,
+  ActivityIcon,
   NetworkIcon,
   ShieldCheckIcon,
   SunIcon,
@@ -39,6 +40,7 @@ const NAV_ICONS: Record<NavItemId, LucideIcon> = {
   products: BoxesIcon,
   analytics: ChartNoAxesCombinedIcon,
   calendar: CalendarIcon,
+  teamActivities: ActivityIcon,
   compliance: ShieldCheckIcon,
 }
 

@@ -34,6 +34,7 @@ import {
   formatContactName,
   formatContactOptionLabel,
 } from "@/lib/crm/contact-display"
+import { contactMatchesSearch } from "@/lib/crm/contact-search"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { CrmContact } from "@/types/crm"
 
@@ -159,6 +160,7 @@ export function ContactComboboxField({
         }}
         isItemEqualToValue={(a, b) => a.value === b.value}
         itemToStringLabel={(item) => item.label}
+        filter={(item, query) => contactMatchesSearch(item.contact, query)}
         disabled={disabled}
       >
         <ComboboxChips ref={anchorRef} aria-invalid={ariaInvalid}>

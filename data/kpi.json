@@ -47,6 +47,80 @@
       "forecastPessimisticQuarterPln": 1800000
     }
   ],
+  "byCategory": [
+    {
+      "pipelineCategoryId": "pcat-credit",
+      "categoryName": "Kredyty korporacyjne",
+      "planPln": 18000000,
+      "actualPln": 12500000,
+      "forecastPln": 17200000,
+      "planQuarterPln": 5400000,
+      "actualQuarterPln": 4100000,
+      "forecastQuarterPln": 5200000,
+      "forecastOptimisticQuarterPln": 5800000,
+      "forecastPessimisticQuarterPln": 4800000
+    },
+    {
+      "pipelineCategoryId": "pcat-leasing-op",
+      "categoryName": "Leasing",
+      "planPln": 8000000,
+      "actualPln": 5800000,
+      "forecastPln": 7600000,
+      "planQuarterPln": 2400000,
+      "actualQuarterPln": 1900000,
+      "forecastQuarterPln": 2300000,
+      "forecastOptimisticQuarterPln": 2600000,
+      "forecastPessimisticQuarterPln": 2100000
+    },
+    {
+      "pipelineCategoryId": "pcat-factoring",
+      "categoryName": "Faktoring",
+      "planPln": 7000000,
+      "actualPln": 4900000,
+      "forecastPln": 6800000,
+      "planQuarterPln": 2100000,
+      "actualQuarterPln": 1600000,
+      "forecastQuarterPln": 2000000,
+      "forecastOptimisticQuarterPln": 2200000,
+      "forecastPessimisticQuarterPln": 1800000
+    },
+    {
+      "pipelineCategoryId": "pcat-guarantees",
+      "categoryName": "Gwarancje i akredytywy",
+      "planPln": 5000000,
+      "actualPln": 3500000,
+      "forecastPln": 4800000,
+      "planQuarterPln": 1500000,
+      "actualQuarterPln": 1150000,
+      "forecastQuarterPln": 1450000,
+      "forecastOptimisticQuarterPln": 1600000,
+      "forecastPessimisticQuarterPln": 1300000
+    },
+    {
+      "pipelineCategoryId": "pcat-accounts",
+      "categoryName": "Rachunki i płatności",
+      "planPln": 4000000,
+      "actualPln": 2600000,
+      "forecastPln": 3800000,
+      "planQuarterPln": 1200000,
+      "actualQuarterPln": 850000,
+      "forecastQuarterPln": 1150000,
+      "forecastOptimisticQuarterPln": 1280000,
+      "forecastPessimisticQuarterPln": 1050000
+    },
+    {
+      "pipelineCategoryId": "pcat-deposits",
+      "categoryName": "Depozyty",
+      "planPln": 3000000,
+      "actualPln": 1900000,
+      "forecastPln": 2800000,
+      "planQuarterPln": 900000,
+      "actualQuarterPln": 600000,
+      "forecastQuarterPln": 850000,
+      "forecastOptimisticQuarterPln": 950000,
+      "forecastPessimisticQuarterPln": 750000
+    }
+  ],
   "bySegment": [
     {
       "segmentId": "sme",

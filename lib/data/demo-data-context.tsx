@@ -38,7 +38,9 @@ import type {
   AddDealInput,
   AddCompanyActivityInput,
   AddCrmContactInput,
+  UpdateCrmContactInput,
   Client,
+  ContactClientLink,
   ContactEvent,
   CrmContact,
   DemoUser,
@@ -76,6 +78,36 @@ import type {
 
 function trimNonEmpty(values: string[]): string[] {
   return values.map((v) => v.trim()).filter(Boolean)
+}
+
+function syncContactClientLinks(
+  links: readonly ContactClientLink[],
+  clientId: string,
+  prevContactIds: readonly string[],
+  nextContactIds: readonly string[],
+): ContactClientLink[] {
+  const removed = new Set(
+    prevContactIds.filter((id) => !nextContactIds.includes(id)),
+  )
+  const added = nextContactIds.filter((id) => !prevContactIds.includes(id))
+
+  let nextLinks = links.filter(
+    (link) => !(link.clientId === clientId && removed.has(link.contactId)),
+  )
+
+  for (const contactId of added) {
+    const exists = nextLinks.some(
+      (link) => link.clientId === clientId && link.contactId === contactId,
+    )
+    if (!exists) {
+      nextLinks = [
+        ...nextLinks,
+        { contactId, clientId, roleAtCompany: "" },
+      ]
+    }
+  }
+
+  return nextLinks
 }
 
 function buildCompanyCreatedEvent(
@@ -135,6 +167,12 @@ type DemoDataContextValue = DemoDataState & {
   updateClient: (id: string, patch: Partial<Client>) => void
   deleteClient: (id: string) => void
   addContact: (input: AddCrmContactInput) => CrmContact
+  updateContact: (id: string, patch: UpdateCrmContactInput) => void
+  upsertContactClientLink: (
+    contactId: string,
+    clientId: string,
+    roleAtCompany: string,
+  ) => void
   addCompanyNote: (clientId: string, note: string, user: DemoUser) => void
   addCompanyActivity: (
     clientId: string,
@@ -393,9 +431,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const updateClient = React.useCallback((id: string, patch: Partial<Client>) => {
-    setState((prev) => ({
-      ...prev,
-      clients: prev.clients.map((client) => {
+    setState((prev) => {
+      const clients = prev.clients.map((client) => {
         if (client.id !== id) return client
         const next = { ...client, ...patch }
         if (patch.phones) next.phones = trimNonEmpty(patch.phones)
@@ -407,8 +444,22 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           next.lastActivityAt = new Date().toISOString()
         }
         return next
-      }),
-    }))
+      })
+
+      const updatedClient = clients.find((client) => client.id === id)
+      const previousClient = prev.clients.find((client) => client.id === id)
+      const contactClientLinks =
+        patch.contactIds && updatedClient && previousClient
+          ? syncContactClientLinks(
+              prev.contactClientLinks,
+              id,
+              previousClient.contactIds,
+              updatedClient.contactIds,
+            )
+          : prev.contactClientLinks
+
+      return { ...prev, clients, contactClientLinks }
+    })
   }, [])
 
   const addContact = React.useCallback((input: AddCrmContactInput) => {
@@ -426,6 +477,58 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     })
     return created!
   }, [])
+
+  const updateContact = React.useCallback(
+    (id: string, patch: UpdateCrmContactInput) => {
+      setState((prev) => ({
+        ...prev,
+        contacts: prev.contacts.map((contact) => {
+          if (contact.id !== id) return contact
+          const next = { ...contact, ...patch }
+          if (patch.emails !== undefined) next.emails = trimNonEmpty(patch.emails)
+          if (patch.phones !== undefined) next.phones = trimNonEmpty(patch.phones)
+          if (patch.firstName !== undefined) {
+            next.firstName = patch.firstName.trim()
+          }
+          if (patch.lastName !== undefined) {
+            next.lastName = patch.lastName.trim()
+          }
+          return next
+        }),
+      }))
+    },
+    [],
+  )
+
+  const upsertContactClientLink = React.useCallback(
+    (contactId: string, clientId: string, roleAtCompany: string) => {
+      const trimmedRole = roleAtCompany.trim()
+      setState((prev) => {
+        const existingIndex = prev.contactClientLinks.findIndex(
+          (link) =>
+            link.contactId === contactId && link.clientId === clientId,
+        )
+        if (existingIndex >= 0) {
+          return {
+            ...prev,
+            contactClientLinks: prev.contactClientLinks.map((link, index) =>
+              index === existingIndex
+                ? { ...link, roleAtCompany: trimmedRole }
+                : link,
+            ),
+          }
+        }
+        return {
+          ...prev,
+          contactClientLinks: [
+            ...prev.contactClientLinks,
+            { contactId, clientId, roleAtCompany: trimmedRole },
+          ],
+        }
+      })
+    },
+    [],
+  )
 
   const addCompanyNote = React.useCallback(
     (clientId: string, note: string, user: DemoUser) => {
@@ -1036,6 +1139,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     ): ClientFile | null => {
       const fileName = input.fileName.trim()
       if (!fileName) return null
+      const displayName = input.displayName.trim() || fileName
+      const description = input.description?.trim()
 
       let created: ClientFile | null = null
       setState((prev) => {
@@ -1047,6 +1152,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           id: createNextClientFileId(prev.clientFiles),
           clientId,
           fileName,
+          displayName,
+          ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
           uploadedAt: new Date().toISOString(),
@@ -1082,6 +1189,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     ): LeadFile | null => {
       const fileName = input.fileName.trim()
       if (!fileName) return null
+      const displayName = input.displayName.trim() || fileName
+      const description = input.description?.trim()
 
       let created: LeadFile | null = null
       setState((prev) => {
@@ -1093,6 +1202,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           id: createNextLeadFileId(prev.leadFiles),
           leadId,
           fileName,
+          displayName,
+          ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
           uploadedAt: new Date().toISOString(),
@@ -1128,6 +1239,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     ): DealFile | null => {
       const fileName = input.fileName.trim()
       if (!fileName) return null
+      const displayName = input.displayName.trim() || fileName
+      const description = input.description?.trim()
 
       let created: DealFile | null = null
       setState((prev) => {
@@ -1139,6 +1252,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           id: createNextDealFileId(prev.dealFiles),
           dealId,
           fileName,
+          displayName,
+          ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
           uploadedAt: new Date().toISOString(),
@@ -1408,6 +1523,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       updateClient,
       deleteClient,
       addContact,
+      updateContact,
+      upsertContactClientLink,
       addCompanyNote,
       addCompanyActivity,
       addLead,
@@ -1452,6 +1569,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       updateClient,
       deleteClient,
       addContact,
+      updateContact,
+      upsertContactClientLink,
       addCompanyNote,
       addCompanyActivity,
       addLead,

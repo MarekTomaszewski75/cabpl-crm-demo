@@ -19,6 +19,7 @@ import type { DemoUser, Task, TaskPriority } from "@/types/crm"
 export type TaskTableRow = Task & {
   clientName: string | null
   opportunityTitle: string | null
+  ownerName: string
   _filter: string
 }
 
@@ -38,12 +39,16 @@ function priorityBadgeVariant(
 type TasksColumnsContext = {
   user: DemoUser
   onCompletedChange: (task: Task, checked: boolean) => void
+  showClientColumn?: boolean
+  showOwnerColumn?: boolean
 }
 
 export function createTasksColumns(
   ctx: TasksColumnsContext,
 ): ColumnDef<TaskTableRow>[] {
-  return [
+  const showClientColumn = ctx.showClientColumn ?? true
+  const showOwnerColumn = ctx.showOwnerColumn ?? false
+  const columns: ColumnDef<TaskTableRow>[] = [
     createFilterSearchColumn<TaskTableRow>(),
     {
       id: "completed",
@@ -118,7 +123,25 @@ export function createTasksColumns(
         return order[a.original.priority] - order[b.original.priority]
       },
     },
-    {
+  ]
+
+  if (showOwnerColumn) {
+    columns.push({
+      accessorKey: "ownerName",
+      meta: { title: "Osoba odpowiedzialna" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Osoba odpowiedzialna" />
+      ),
+      cell: ({ row }) => (
+        <span className="truncate">{row.original.ownerName}</span>
+      ),
+      sortingFn: (a, b) =>
+        a.original.ownerName.localeCompare(b.original.ownerName, "pl"),
+    })
+  }
+
+  if (showClientColumn) {
+    columns.push({
       accessorKey: "clientName",
       meta: { title: "Klient" },
       header: ({ column }) => (
@@ -141,7 +164,10 @@ export function createTasksColumns(
           b.original.clientName ?? "",
           "pl",
         ),
-    },
+    })
+  }
+
+  columns.push(
     {
       accessorKey: "opportunityTitle",
       meta: { title: "Deal" },
@@ -180,5 +206,7 @@ export function createTasksColumns(
       enableSorting: false,
       enableHiding: false,
     },
-  ]
+  )
+
+  return columns
 }

@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
+import { PlanCategoryTable } from "@/components/crm/analytics/plan-category-table"
 import { PlanSegmentTable } from "@/components/crm/analytics/plan-segment-table"
 import { KpiCard, KpiPlanActualCard } from "@/components/crm/kpi-card"
 import {
@@ -44,6 +45,8 @@ import {
   type ExecutiveDashboardFilters,
   type ExecutiveTimePeriod,
 } from "@/lib/dashboard/executive-metrics"
+import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
+import { getPipelineCategoryIds } from "@/lib/crm/deal-pipeline"
 import { formatCurrencyPln } from "@/lib/format/pl"
 
 const chartConfig = {
@@ -83,18 +86,22 @@ type ExecutiveDashboardProps = {
   lockedRegionId?: string
   /** Tabela segmentów pod wykresem — tylko zarząd. */
   showSegmentTable?: boolean
+  /** Tabela kategorii produktowych pod wykresem. */
+  showCategoryTable?: boolean
 }
 
 export function ExecutiveDashboard({
   embedded = false,
   lockedRegionId,
   showSegmentTable = false,
+  showCategoryTable = true,
 }: ExecutiveDashboardProps) {
   const { kpi } = useDemoData()
   const [filters, setFilters] = React.useState<ExecutiveDashboardFilters>({
     timePeriod: "ytd",
     regionId: lockedRegionId ?? EXECUTIVE_FILTER_ALL,
     segmentId: EXECUTIVE_FILTER_ALL,
+    pipelineCategoryId: EXECUTIVE_FILTER_ALL,
   })
 
   React.useEffect(() => {
@@ -199,6 +206,29 @@ export function ExecutiveDashboard({
                 {kpi.bySegment.map((segment) => (
                   <SelectItem key={segment.segmentId} value={segment.segmentId}>
                     {segment.segmentName}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.pipelineCategoryId}
+            onValueChange={(pipelineCategoryId) =>
+              setFilters((prev) => ({ ...prev, pipelineCategoryId }))
+            }
+          >
+            <SelectTrigger className="w-full min-w-44 sm:w-56">
+              <SelectValue placeholder="Kategoria produktowa" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value={EXECUTIVE_FILTER_ALL}>
+                  Wszystkie kategorie
+                </SelectItem>
+                {getPipelineCategoryIds().map((categoryId) => (
+                  <SelectItem key={categoryId} value={categoryId}>
+                    {DEAL_PIPELINE_CATEGORY_LABELS[categoryId]}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -323,6 +353,23 @@ export function ExecutiveDashboard({
           </div>
           <PlanSegmentTable
             segments={kpi.bySegment}
+            timePeriod={filters.timePeriod}
+          />
+        </section>
+      ) : null}
+
+      {showCategoryTable ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h3 className="font-heading text-base font-semibold tracking-tight">
+              Realizacja wg kategorii produktowej
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Plan · realizacja · forecast per kategoria ({timeLabel.toLowerCase()})
+            </p>
+          </div>
+          <PlanCategoryTable
+            categories={kpi.byCategory}
             timePeriod={filters.timePeriod}
           />
         </section>

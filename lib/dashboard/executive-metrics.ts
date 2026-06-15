@@ -10,6 +10,7 @@ export type ExecutiveDashboardFilters = {
   timePeriod: ExecutiveTimePeriod
   regionId: string
   segmentId: string
+  pipelineCategoryId: string
 }
 
 export const EXECUTIVE_FILTER_ALL = "all"
@@ -76,6 +77,16 @@ function pickBankWideTotals(
   }
 }
 
+function countActiveExecutiveFilters(
+  filters: ExecutiveDashboardFilters
+): number {
+  let count = 0
+  if (filters.regionId !== EXECUTIVE_FILTER_ALL) count++
+  if (filters.segmentId !== EXECUTIVE_FILTER_ALL) count++
+  if (filters.pipelineCategoryId !== EXECUTIVE_FILTER_ALL) count++
+  return count
+}
+
 function getFilterScale(
   kpi: KpiSnapshot,
   filters: ExecutiveDashboardFilters
@@ -95,6 +106,16 @@ function getFilterScale(
     )
     if (segment) {
       const { actualPln } = pickPeriodValues(segment, filters.timePeriod)
+      const bankActual = pickBankWideTotals(kpi, filters.timePeriod).actualPln
+      scale *= bankActual > 0 ? actualPln / bankActual : 0
+    }
+  }
+  if (filters.pipelineCategoryId !== EXECUTIVE_FILTER_ALL) {
+    const category = kpi.byCategory.find(
+      (row) => row.pipelineCategoryId === filters.pipelineCategoryId
+    )
+    if (category) {
+      const { actualPln } = pickPeriodValues(category, filters.timePeriod)
       const bankActual = pickBankWideTotals(kpi, filters.timePeriod).actualPln
       scale *= bankActual > 0 ? actualPln / bankActual : 0
     }
@@ -127,27 +148,31 @@ export function getExecutiveTotals(
   kpi: KpiSnapshot,
   filters: ExecutiveDashboardFilters
 ): ExecutiveTotals {
-  const { regionId, segmentId, timePeriod } = filters
+  const { regionId, segmentId, pipelineCategoryId, timePeriod } = filters
+  const activeFilterCount = countActiveExecutiveFilters(filters)
 
   let base: Omit<ExecutiveTotals, "realizationPercent">
 
-  if (regionId !== EXECUTIVE_FILTER_ALL && segmentId === EXECUTIVE_FILTER_ALL) {
-    const region = kpi.byRegion.find((row) => row.regionId === regionId)
-    base = region
-      ? pickPeriodValues(region, timePeriod)
-      : pickBankWideTotals(kpi, timePeriod)
-  } else if (
-    segmentId !== EXECUTIVE_FILTER_ALL &&
-    regionId === EXECUTIVE_FILTER_ALL
-  ) {
-    const segment = kpi.bySegment.find((row) => row.segmentId === segmentId)
-    base = segment
-      ? pickPeriodValues(segment, timePeriod)
-      : pickBankWideTotals(kpi, timePeriod)
-  } else if (
-    regionId !== EXECUTIVE_FILTER_ALL &&
-    segmentId !== EXECUTIVE_FILTER_ALL
-  ) {
+  if (activeFilterCount === 1) {
+    if (regionId !== EXECUTIVE_FILTER_ALL) {
+      const region = kpi.byRegion.find((row) => row.regionId === regionId)
+      base = region
+        ? pickPeriodValues(region, timePeriod)
+        : pickBankWideTotals(kpi, timePeriod)
+    } else if (segmentId !== EXECUTIVE_FILTER_ALL) {
+      const segment = kpi.bySegment.find((row) => row.segmentId === segmentId)
+      base = segment
+        ? pickPeriodValues(segment, timePeriod)
+        : pickBankWideTotals(kpi, timePeriod)
+    } else {
+      const category = kpi.byCategory.find(
+        (row) => row.pipelineCategoryId === pipelineCategoryId
+      )
+      base = category
+        ? pickPeriodValues(category, timePeriod)
+        : pickBankWideTotals(kpi, timePeriod)
+    }
+  } else if (activeFilterCount > 1) {
     const bank = pickBankWideTotals(kpi, timePeriod)
     const scale = getFilterScale(kpi, filters)
     base = scaleTotals(bank, scale)

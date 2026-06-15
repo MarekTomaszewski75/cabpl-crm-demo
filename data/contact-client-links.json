@@ -1,0 +1,47 @@
+[
+  {
+    "contactId": "contact-001",
+    "clientId": "client-001",
+    "roleAtCompany": "Dyrektor finansowy"
+  },
+  {
+    "contactId": "contact-002",
+    "clientId": "client-001",
+    "roleAtCompany": "Prezes zarządu"
+  },
+  {
+    "contactId": "contact-003",
+    "clientId": "client-003",
+    "roleAtCompany": "Dyrektor technologiczny"
+  },
+  {
+    "contactId": "contact-004",
+    "clientId": "client-005",
+    "roleAtCompany": "Dyrektor operacyjny"
+  },
+  {
+    "contactId": "contact-005",
+    "clientId": "client-005",
+    "roleAtCompany": "Kierownik zakupów"
+  },
+  {
+    "contactId": "contact-006",
+    "clientId": "client-002",
+    "roleAtCompany": "Dyrektor handlu"
+  },
+  {
+    "contactId": "contact-007",
+    "clientId": "client-004",
+    "roleAtCompany": "Dyrektor inwestycji"
+  },
+  {
+    "contactId": "contact-008",
+    "clientId": "client-003",
+    "roleAtCompany": "Project Manager"
+  },
+  {
+    "contactId": "contact-010",
+    "clientId": "client-006",
+    "roleAtCompany": "Dyrektor logistyki"
+  }
+]

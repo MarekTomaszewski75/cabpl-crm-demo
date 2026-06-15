@@ -196,6 +196,28 @@ export interface CrmContact {
   phones: string[]
 }
 
+/** Powiązanie kontakt ↔ firma z przypisaną funkcją (seed + edycja na firmie). */
+export interface ContactClientLink {
+  contactId: string
+  clientId: string
+  roleAtCompany: string
+}
+
+export type ContactCompanyBindingSource = "company" | "deal" | "lead"
+
+export interface ContactCompanyBinding {
+  contactId: string
+  clientId: string
+  roleAtCompany: string
+  source: ContactCompanyBindingSource
+  sourceEntityId?: string
+}
+
+export interface EnrichedContactRow {
+  contact: CrmContact
+  bindings: ContactCompanyBinding[]
+}
+
 export interface Client extends ScopedEntity {
   id: string
   name: string
@@ -230,6 +252,13 @@ export type AddClientInput = {
 export type AddCrmContactInput = {
   firstName: string
   lastName: string
+  emails?: string[]
+  phones?: string[]
+}
+
+export type UpdateCrmContactInput = {
+  firstName?: string
+  lastName?: string
   emails?: string[]
   phones?: string[]
 }
@@ -393,6 +422,10 @@ export interface ClientFile extends ScopedEntity {
   id: string
   clientId: string
   fileName: string
+  /** Wyświetlana nazwa dokumentu (domyślnie fileName). */
+  displayName: string
+  /** Opcjonalny opis PL. */
+  description?: string
   fileSize: number
   mimeType: string
   uploadedAt: string
@@ -400,6 +433,8 @@ export interface ClientFile extends ScopedEntity {
 
 export type AddClientFileInput = {
   fileName: string
+  displayName: string
+  description?: string
   fileSize: number
   mimeType: string
 }
@@ -408,6 +443,8 @@ export interface LeadFile extends ScopedEntity {
   id: string
   leadId: string
   fileName: string
+  displayName: string
+  description?: string
   fileSize: number
   mimeType: string
   uploadedAt: string
@@ -415,6 +452,8 @@ export interface LeadFile extends ScopedEntity {
 
 export type AddLeadFileInput = {
   fileName: string
+  displayName: string
+  description?: string
   fileSize: number
   mimeType: string
 }
@@ -423,6 +462,8 @@ export interface DealFile extends ScopedEntity {
   id: string
   dealId: string
   fileName: string
+  displayName: string
+  description?: string
   fileSize: number
   mimeType: string
   uploadedAt: string
@@ -430,6 +471,8 @@ export interface DealFile extends ScopedEntity {
 
 export type AddDealFileInput = {
   fileName: string
+  displayName: string
+  description?: string
   fileSize: number
   mimeType: string
 }
@@ -470,6 +513,11 @@ export interface KpiSegmentRow extends KpiBreakdownRow {
   segmentName: string
 }
 
+export interface KpiCategoryRow extends KpiBreakdownRow {
+  pipelineCategoryId: string
+  categoryName: string
+}
+
 export interface KpiMonthlyTrendRow {
   monthLabel: string
   quarter: number
@@ -493,6 +541,7 @@ export interface KpiSnapshot {
   forecastPessimisticQuarterPln: number
   byRegion: KpiRegionRow[]
   bySegment: KpiSegmentRow[]
+  byCategory: KpiCategoryRow[]
   monthlyTrend: KpiMonthlyTrendRow[]
 }
 

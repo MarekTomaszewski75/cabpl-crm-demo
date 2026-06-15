@@ -7,6 +7,7 @@ import { useSession } from "@/lib/auth/demo-session"
 import {
   BANNER_INITIAL_DELAY_MS,
   createProductCatalogSyncBanner,
+  shouldShowCrmBannersForUser,
   shouldShowProductCatalogSyncBanner,
 } from "@/lib/crm/banner-rules"
 
@@ -15,7 +16,8 @@ export function ProductsCatalogSyncBanner() {
   const { onBannerAdd } = useBanners()
 
   React.useEffect(() => {
-    if (!isReady || !user) return
+    if (!isReady || !user || !shouldShowCrmBannersForUser(user)) return
+    if (user.role === "regional_manager") return
     if (!shouldShowProductCatalogSyncBanner()) return
 
     const payload = createProductCatalogSyncBanner()

@@ -6,6 +6,7 @@ export type NavItemId =
   | "employees"
   | "companyStructure"
   | "tasks"
+  | "teamActivities"
   | "leads"
   | "pipeline"
   | "contacts"
@@ -53,7 +54,14 @@ const calendar = defineNavItem({
   id: "calendar",
   labelPl: "Kalendarz",
   href: "/calendar",
-  roles: ALL_ROLES,
+  roles: ["advisor", "regional_manager"],
+})
+
+const teamActivities = defineNavItem({
+  id: "teamActivities",
+  labelPl: "Aktywność zespołu",
+  href: "/activities",
+  roles: ["regional_manager"],
 })
 
 defineNavItem({
@@ -74,7 +82,7 @@ const tasks = defineNavItem({
   id: "tasks",
   labelPl: "Zadania",
   href: "/tasks",
-  roles: ALL_ROLES,
+  roles: ["advisor", "regional_manager"],
 })
 
 const leads = defineNavItem({
@@ -91,7 +99,7 @@ const pipeline = defineNavItem({
   roles: ALL_ROLES,
 })
 
-defineNavItem({
+const contacts = defineNavItem({
   id: "contacts",
   labelPl: "Kontakty",
   href: "/contacts",
@@ -136,11 +144,12 @@ export const PRESENTATION_HIDDEN_NAV_IDS: readonly NavItemId[] = [
 export const CRM_NAV_STRUCTURE: readonly CrmNavEntry[] = [
   { type: "item", item: today },
   { type: "item", item: calendar },
+  { type: "item", item: teamActivities },
   { type: "item", item: tasks },
   {
     type: "group",
     labelPl: "CRM i sprzedaż",
-    items: [leads, pipeline, clients, products],
+    items: [leads, pipeline, contacts, clients, products],
   },
   { type: "item", item: analytics },
 ]
@@ -178,6 +187,17 @@ export function getVisibleNavStructure(user: DemoUser): CrmNavEntry[] {
       if (group) result.push(group)
     }
   }
+
+  if (user.role === "executive") {
+    const analyticsIndex = result.findIndex(
+      (entry) => entry.type === "item" && entry.item.id === "analytics",
+    )
+    if (analyticsIndex > 0) {
+      const [analyticsEntry] = result.splice(analyticsIndex, 1)
+      result.unshift(analyticsEntry)
+    }
+  }
+
   return result
 }
 

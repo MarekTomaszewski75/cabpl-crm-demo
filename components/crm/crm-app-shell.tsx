@@ -166,7 +166,7 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
       </Sidebar>
       <SidebarInset className="flex h-svh max-h-svh min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <CrmAppHeader pathname={pathname} />
-        <Banners side="top" maxVisible={2} strategy="static">
+        <Banners side="top" maxVisible={1} strategy="static">
           <CrmBannerController />
           <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-y-contain p-6">
             {children}

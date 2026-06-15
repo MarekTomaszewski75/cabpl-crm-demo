@@ -3,7 +3,6 @@
 import * as React from "react"
 import { toast } from "sonner"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
-import { DealProductCombobox } from "@/components/crm/deal-product-combobox"
 import { Button } from "@/components/ui/button"
 import { SheetFooter } from "@/components/ui/sheet"
 import {
@@ -29,16 +28,25 @@ import { formatContactName } from "@/lib/crm/contact-display"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
-import { resolvePipelineCategoryId } from "@/lib/crm/deal-pipeline"
-import type { DealProductListItem } from "@/lib/crm/deal-product-select"
+import {
+  getPipelineCategoryIds,
+  type PipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
+import {
+  getDealProductsForCategory,
+  type DealProductListItem,
+} from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { CrmContact, Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
 const DEAL_TYPE_NONE = "__none__"
+const CATEGORY_NONE = "__category_none__"
+const PRODUCT_NONE = "__product_none__"
 
 type Errors = {
   name?: string
   amount?: string
+  categoryId?: string
   productId?: string
 }
 
@@ -60,8 +68,9 @@ export function DealForm({
 }) {
   const { user } = useSession()
   const { addDeal, addDealActivity, products, contacts } = useDemoData()
-  const [selectedProduct, setSelectedProduct] =
-    React.useState<DealProductListItem | null>(null)
+  const [pipelineCategoryId, setPipelineCategoryId] =
+    React.useState<PipelineCategoryId | null>(null)
+  const [productId, setProductId] = React.useState<string | null>(null)
   const [name, setName] = React.useState("")
   const [nameManuallyEdited, setNameManuallyEdited] = React.useState(false)
   const [amount, setAmount] = React.useState("")
@@ -75,9 +84,15 @@ export function DealForm({
   const [expectedCloseDate, setExpectedCloseDate] = React.useState("")
   const [errors, setErrors] = React.useState<Errors>({})
 
-  const pipelineCategoryId = selectedProduct
-    ? resolvePipelineCategoryId(selectedProduct.product.categoryId)
-    : null
+  const productsInCategory = React.useMemo(() => {
+    if (!pipelineCategoryId) return []
+    return getDealProductsForCategory(products, pipelineCategoryId)
+  }, [products, pipelineCategoryId])
+
+  const selectedProduct = React.useMemo(
+    () => productsInCategory.find((item) => item.value === productId) ?? null,
+    [productsInCategory, productId],
+  )
 
   const contactById = React.useMemo(
     () => new Map(contacts.map((contact) => [contact.id, contact])),
@@ -95,14 +110,33 @@ export function DealForm({
     [contactById, nameManuallyEdited],
   )
 
-  function handleProductChange(next: DealProductListItem | null) {
-    setSelectedProduct(next)
+  function handleCategoryChange(value: string) {
+    const nextCategoryId =
+      value === CATEGORY_NONE ? null : (value as PipelineCategoryId)
+    setPipelineCategoryId(nextCategoryId)
+    setProductId(null)
+    setErrors((prev) => {
+      const nextErrors = { ...prev }
+      delete nextErrors.categoryId
+      delete nextErrors.productId
+      return nextErrors
+    })
+    if (!nextCategoryId) {
+      applySuggestedName(null, contactId)
+    }
+  }
+
+  function handleProductChange(value: string) {
+    const nextProductId = value === PRODUCT_NONE ? null : value
+    setProductId(nextProductId)
     setErrors((prev) => {
       const nextErrors = { ...prev }
       delete nextErrors.productId
       return nextErrors
     })
-    applySuggestedName(next, contactId)
+    const nextProduct =
+      productsInCategory.find((item) => item.value === nextProductId) ?? null
+    applySuggestedName(nextProduct, contactId)
   }
 
   function handleContactChange(ids: string[]) {
@@ -116,16 +150,17 @@ export function DealForm({
     if (!user?.regionId) return
 
     const next: Errors = {}
-    if (!selectedProduct) next.productId = "Produkt jest wymagany"
+    if (!pipelineCategoryId) next.categoryId = "Kategoria jest wymagana"
+    if (!productId) next.productId = "Produkt jest wymagany"
     if (!name.trim()) next.name = "Nazwa jest wymagana"
     if (amount && (Number.isNaN(Number(amount)) || Number(amount) < 0)) {
       next.amount = "Kwota musi być dodatnia"
     }
     setErrors(next)
     if (Object.keys(next).length > 0) {
-      if (next.productId) {
-        toast.error("Wybierz produkt bankowy", {
-          description: next.productId,
+      if (next.categoryId || next.productId) {
+        toast.error("Wybierz kategorię i produkt bankowy", {
+          description: next.categoryId ?? next.productId,
         })
       }
       return
@@ -137,7 +172,7 @@ export function DealForm({
       currency,
       contactId,
       clientId: defaultClientId,
-      productId: selectedProduct!.value,
+      productId: productId!,
       comments,
       source,
       dealType,
@@ -155,35 +190,74 @@ export function DealForm({
 
   const body = (
     <FieldGroup>
-      <Field data-invalid={errors.productId ? true : undefined}>
-        <FieldLabel htmlFor="deal-product">Produkt</FieldLabel>
-        <DealProductCombobox
-          id="deal-product"
-          products={products}
-          value={selectedProduct}
-          onValueChange={handleProductChange}
-          aria-invalid={errors.productId ? true : undefined}
-        />
-        {errors.productId ? <FieldError>{errors.productId}</FieldError> : null}
-      </Field>
-
-      <Field>
+      <Field data-invalid={errors.categoryId ? true : undefined}>
         <FieldLabel htmlFor="deal-category">Kategoria</FieldLabel>
-        <Input
-          id="deal-category"
-          readOnly
-          value={
-            pipelineCategoryId
-              ? DEAL_PIPELINE_CATEGORY_LABELS[pipelineCategoryId]
-              : ""
-          }
-          placeholder="Wybierz produkt, aby zobaczyć kategorię"
-        />
-        {pipelineCategoryId ? (
+        <Select
+          value={pipelineCategoryId ?? CATEGORY_NONE}
+          onValueChange={handleCategoryChange}
+        >
+          <SelectTrigger
+            id="deal-category"
+            className="w-full"
+            aria-invalid={errors.categoryId ? true : undefined}
+          >
+            <SelectValue placeholder="Wybierz kategorię" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value={CATEGORY_NONE}>Wybierz kategorię</SelectItem>
+              {getPipelineCategoryIds().map((categoryId) => (
+                <SelectItem key={categoryId} value={categoryId}>
+                  {DEAL_PIPELINE_CATEGORY_LABELS[categoryId]}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        {errors.categoryId ? (
+          <FieldError>{errors.categoryId}</FieldError>
+        ) : pipelineCategoryId ? (
           <FieldDescription>
             Lejek: {DEAL_PIPELINE_CATEGORY_LABELS[pipelineCategoryId]}
           </FieldDescription>
         ) : null}
+      </Field>
+
+      <Field data-invalid={errors.productId ? true : undefined}>
+        <FieldLabel htmlFor="deal-product">Produkt</FieldLabel>
+        <Select
+          value={productId ?? PRODUCT_NONE}
+          onValueChange={handleProductChange}
+          disabled={!pipelineCategoryId}
+        >
+          <SelectTrigger
+            id="deal-product"
+            className="w-full"
+            aria-invalid={errors.productId ? true : undefined}
+          >
+            <SelectValue
+              placeholder={
+                pipelineCategoryId
+                  ? "Wybierz produkt"
+                  : "Najpierw wybierz kategorię"
+              }
+            />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value={PRODUCT_NONE}>
+                {pipelineCategoryId ? "Wybierz produkt" : "Brak kategorii"}
+              </SelectItem>
+              {productsInCategory.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                  {item.product.sku ? ` · ${item.product.sku}` : ""}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        {errors.productId ? <FieldError>{errors.productId}</FieldError> : null}
       </Field>
 
       <Field data-invalid={errors.name ? true : undefined}>

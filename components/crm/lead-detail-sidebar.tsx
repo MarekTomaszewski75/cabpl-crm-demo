@@ -160,7 +160,7 @@ export function LeadDetailSidebar({
   onDocumentsClick,
 }: LeadDetailSidebarProps) {
   const { user } = useSession()
-  const { updateLead, tasks, meetings, leadDocuments } = useDemoData()
+  const { updateLead, tasks, meetings, leadDocuments, leadFiles } = useDemoData()
   const readOnly = isTerminalLeadStatus(lead.status)
 
   const engagementCounts = React.useMemo(() => {
@@ -169,10 +169,10 @@ export function LeadDetailSidebar({
     }
     return getScopedLeadEngagementCounts(
       lead.id,
-      { tasks, meetings, leadDocuments },
+      { tasks, meetings, leadDocuments, leadFiles },
       user,
     )
-  }, [lead.id, tasks, meetings, leadDocuments, user])
+  }, [lead.id, tasks, meetings, leadDocuments, leadFiles, user])
 
   function patch(partial: Partial<Lead>) {
     if (readOnly) return

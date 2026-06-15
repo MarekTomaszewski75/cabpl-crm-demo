@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { ShieldAlertIcon } from "lucide-react"
 import {
@@ -25,6 +25,8 @@ export type DealEngagementSection = "meetings" | null
 
 export function DealDetailView({ dealId }: { dealId: string }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const highlightActivityId = searchParams.get("activityId")
   const { user, isReady } = useSession()
   const { deals, users, updateDeal, addDealActivity } = useDemoData()
   const [open, setOpen] = React.useState(false)
@@ -127,6 +129,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
           onComposerTabChange={setComposerTab}
           engagementSection={engagementSection}
           onEngagementSectionChange={setEngagementSection}
+          highlightActivityId={highlightActivityId}
         />
       </div>
       <DealFinishDialog

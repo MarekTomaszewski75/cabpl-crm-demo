@@ -1,5 +1,6 @@
 import { filterByScope } from "@/lib/rbac/scope"
-import type { DemoUser, LeadDocument, Meeting, Task } from "@/types/crm"
+import { getMergedDocumentsForLead } from "@/lib/crm/entity-documents"
+import type { DemoUser, LeadDocument, LeadFile, Meeting, Task } from "@/types/crm"
 
 export type LeadEngagementCounts = {
   tasks: number
@@ -11,6 +12,7 @@ export type LeadEngagementData = {
   tasks: readonly Task[]
   meetings: readonly Meeting[]
   leadDocuments: readonly LeadDocument[]
+  leadFiles: readonly LeadFile[]
 }
 
 export function getLeadTasksForLead(
@@ -55,7 +57,9 @@ export function getLeadEngagementCounts(
   return {
     tasks: data.tasks.filter((task) => task.leadId === leadId).length,
     meetings: data.meetings.filter((meeting) => meeting.leadId === leadId).length,
-    documents: data.leadDocuments.filter((doc) => doc.leadId === leadId).length,
+    documents:
+      data.leadDocuments.filter((doc) => doc.leadId === leadId).length +
+      data.leadFiles.filter((file) => file.leadId === leadId).length,
   }
 }
 
@@ -67,7 +71,12 @@ export function getScopedLeadEngagementCounts(
   return {
     tasks: getLeadTasksForLead(leadId, data, user).length,
     meetings: getLeadMeetingsForLead(leadId, data, user).length,
-    documents: getLeadDocumentsForLead(leadId, data, user).length,
+    documents: getMergedDocumentsForLead(
+      leadId,
+      data.leadFiles,
+      data.leadDocuments,
+      user,
+    ).length,
   }
 }
 

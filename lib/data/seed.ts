@@ -1,4 +1,5 @@
 import clientsSeed from "@/data/clients.json"
+import contactClientLinksSeed from "@/data/contact-client-links.json"
 import contactEventsSeed from "@/data/contact-events.json"
 import contactsSeed from "@/data/contacts.json"
 import kpiSeed from "@/data/kpi.json"
@@ -30,6 +31,7 @@ import {
 } from "@/lib/crm/deal-pipeline"
 import type {
   Client,
+  ContactClientLink,
   ContactEvent,
   CrmContact,
   DealSource,
@@ -70,6 +72,32 @@ function normalizeDealSource(value: unknown): DealSource {
     return value as DealSource
   }
   return "recommendation"
+}
+
+function normalizeEntityFile<
+  T extends { fileName: string; displayName?: string; description?: string },
+>(file: T): T & { displayName: string } {
+  const fileName = file.fileName.trim()
+  const displayName = file.displayName?.trim() || fileName
+  const description = file.description?.trim()
+  return {
+    ...file,
+    fileName,
+    displayName,
+    ...(description ? { description } : {}),
+  }
+}
+
+function normalizeClientFiles(files: ClientFile[]): ClientFile[] {
+  return files.map((file) => normalizeEntityFile(file))
+}
+
+function normalizeLeadFiles(files: LeadFile[]): LeadFile[] {
+  return files.map((file) => normalizeEntityFile(file))
+}
+
+function normalizeDealFiles(files: DealFile[]): DealFile[] {
+  return files.map((file) => normalizeEntityFile(file))
 }
 
 const DEFAULT_SEED_PRODUCT_ID = "prod-001"
@@ -223,6 +251,7 @@ export function loadSeedData() {
     departments: departmentsSeed as Department[],
     employees: employeesSeed as Employee[],
     contacts: contactsSeed as CrmContact[],
+    contactClientLinks: contactClientLinksSeed as ContactClientLink[],
     clients: clientsSeed as Client[],
     opportunities: normalizeDeals(opportunitiesSeed as unknown[]),
     dealActivities: dealActivitiesSeed as DealActivity[],
@@ -231,9 +260,9 @@ export function loadSeedData() {
     leadDocuments: leadDocumentsSeed as LeadDocument[],
     dealDocuments: dealDocumentsSeed as DealDocument[],
     clientDocuments: clientDocumentsSeed as ClientDocument[],
-    clientFiles: clientFilesSeed as ClientFile[],
-    leadFiles: leadFilesSeed as LeadFile[],
-    dealFiles: dealFilesSeed as DealFile[],
+    clientFiles: normalizeClientFiles(clientFilesSeed as ClientFile[]),
+    leadFiles: normalizeLeadFiles(leadFilesSeed as LeadFile[]),
+    dealFiles: normalizeDealFiles(dealFilesSeed as DealFile[]),
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],

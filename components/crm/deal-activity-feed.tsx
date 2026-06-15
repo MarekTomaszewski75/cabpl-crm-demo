@@ -26,12 +26,17 @@ import {
   TimelineTitle,
 } from "@/components/ui/timeline"
 import type { DealActivityItem } from "@/lib/crm/deal-activity"
+import {
+  crmActivityItemClassName,
+  useHighlightCrmActivity,
+} from "@/lib/crm/activity-highlight"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { formatDatePl, formatTimePl } from "@/lib/format/pl"
 import { displayInitials } from "@/lib/pipeline/stage-theme"
 
 type DealActivityFeedProps = {
   items: DealActivityItem[]
+  highlightActivityId?: string | null
 }
 
 function EventAuthorAvatar({ item }: { item: DealActivityItem }) {
@@ -63,7 +68,15 @@ function EventAuthorAvatar({ item }: { item: DealActivityItem }) {
   )
 }
 
-export function DealActivityFeed({ items }: DealActivityFeedProps) {
+export function DealActivityFeed({
+  items,
+  highlightActivityId = null,
+}: DealActivityFeedProps) {
+  useHighlightCrmActivity(
+    highlightActivityId,
+    items.map((item) => item.id),
+  )
+
   return (
     <Card size="sm" className="flex min-h-0 flex-1 flex-col">
       <CardHeader className="pb-2">
@@ -82,7 +95,11 @@ export function DealActivityFeed({ items }: DealActivityFeedProps) {
         ) : (
           <Timeline orientation="vertical">
             {items.map((item) => (
-              <TimelineItem key={item.id}>
+              <TimelineItem
+                key={item.id}
+                id={`crm-activity-${item.id}`}
+                className={crmActivityItemClassName(item.id, highlightActivityId)}
+              >
                 <TimelineDot />
                 <TimelineConnector />
                 <TimelineContent>

@@ -414,6 +414,27 @@
     "regionId": "mazowsze"
   },
   {
+    "id": "meeting-mgr-001",
+    "title": "Przegląd pipeline — zespół Mazowsze",
+    "clientId": "client-002",
+    "startsAt": "2026-06-04T08:00:00.000Z",
+    "endsAt": "2026-06-04T09:00:00.000Z",
+    "note": "Sala konferencyjna, oddział centralny",
+    "ownerId": "user-marek",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "meeting-mgr-002",
+    "title": "Spotkanie strategiczne z zarządem — TechVentures",
+    "clientId": "client-003",
+    "opportunityId": "opp-003",
+    "startsAt": "2026-06-05T14:00:00.000Z",
+    "endsAt": "2026-06-05T15:30:00.000Z",
+    "note": "Wspólne spotkanie z Piotrem Nowakiem",
+    "ownerId": "user-marek",
+    "regionId": "mazowsze"
+  },
+  {
     "id": "meeting-mal-001",
     "title": "Przegląd relacji — TatraSteel Kraków",
     "clientId": "client-029",

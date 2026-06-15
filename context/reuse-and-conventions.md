@@ -158,14 +158,21 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kolumny / etykiety:** `clients-columns.tsx`, `lib/crm/company-labels.ts` (`COMPANY_SOURCE_OPTIONS`, `COMPANY_TYPE_OPTIONS`)
 - **Nowa firma:** `company-form-dialog.tsx` + `company-form.tsx` — Sheet; `addClient(input, user)` ustawia `ownerId` / `regionId`; redirect → karta
 - **Kontakty CRM:** `data/contacts.json`, `CrmContact`, `contact-combobox.tsx` (`addContact` in-place), `lib/crm/contact-display.ts`, `contact-id.ts`
-- **Karta (US-35/45):** `company-detail-view.tsx` — zakładki **Ogólne** | **Sprzedaż i relacje** (podzakładki Leady · Deale · Zadania); wskaźnik Zadania w sidebarze → podzakładka Zadania; `TaskFormDialog` z `defaultClientId` na podzakładce Zadania; `company-detail-header.tsx` (`+ Deal`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / Pliki / Dokumenty; `company-activity-form.tsx` (Powiązania z CRM bez pola Firma); `addClientDocument` + `data/client-documents.json`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-list.tsx`; liczniki i filtry RBAC: `lib/crm/company-engagement-counts.ts` (`getCompanyTasks`, …)
+- **Powiązania kontakt–firma (US-48):** `data/contact-client-links.json`, `ContactClientLink`, `lib/crm/contact-company-bindings.ts` (`getScopedContacts`, `getContactsForClient`, `getContactCompanyBindingsForClient`); lista globalna: `contacts-table.tsx` + `contacts-columns.tsx` (`/contacts`, RBAC advisor + regional_manager); sync linków przy `updateClient.contactIds` w `DemoDataContext`
+- **Kontakty na karcie firmy (US-49):** podzakładka **Kontakty** w Sprzedaż i relacje — `company-contacts-table.tsx` + `company-contacts-columns.tsx` (`getContactsForClient`); wyszukiwanie: `lib/crm/contact-search.ts` (`contactMatchesSearch`, `filterContactsBySearch`) — reuse na `/contacts`, podzakładce firmy i w `ContactComboboxField`; wskaźnik Kontakty → `setRelatedTab("kontakty")` (bez inline listy w `company-activity-panel`)
+- **Karta (US-35/45/51):** `company-detail-view.tsx` — zakładki **Ogólne** | **Sprzedaż i relacje** (podzakładki Leady · Deale · Kontakty · Zadania); wskaźnik Zadania w sidebarze → podzakładka Zadania; `TaskFormDialog` z `defaultClientId` na podzakładce Zadania; `company-detail-header.tsx` (`+ Deal`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / **Dokumenty** (scalona lista + upload); `company-activity-form.tsx`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-table.tsx`; liczniki i filtry RBAC: `lib/crm/company-engagement-counts.ts` (`getCompanyTasks`, …)
 - **Zdarzenia:** `ContactEvent` + `kind` (`channel` | `system` | `note`); utworzenie firmy → `company_created`; notatki → `addCompanyNote`
+- **Formularz aktywności (US-50):** `lib/crm/activity-channel-types.ts` — `ACTIVITY_CHANNEL_TYPE_OPTIONS` (bez E-mail) + `activityChannelTypeLabel`; wspólny stan/helpery w `lib/crm/company-activity-types.ts`; formularze `company-activity-form.tsx`, `lead-activity-form.tsx`, `deal-activity-form.tsx` (bez załączników w formularzu); typ `email` w `ChannelContactEventType` i feed — bez zmian
 - **Mutacje karty:** `deleteClient`, `addClientDocument`; ID dokumentów: `lib/crm/client-document-id.ts`
 - **NBA / szanse:** `client-active-opportunities.tsx`, `client-nba-panel.tsx`, `lib/crm/nba-rules.ts` (kanały tylko `kind=channel`)
 - **RBAC:** `canAccessEntity` w `CompanyDetailView`
 
 ### Calendar module (US-10)
-- **Widok:** `components/crm/calendar-week-view.tsx` — `/calendar`, [react-big-calendar](https://www.npmjs.com/package/react-big-calendar) (`view="week"`), `filterByScope`
+- **Widok:** `components/crm/calendar-week-view.tsx` — `/calendar`, [react-big-calendar](https://www.npmjs.com/package/react-big-calendar) (`view="week"`), `filterByScope`; menedżer regionalny / executive: spotkania zespołu, kolory wg opiekuna (`lib/crm/calendar-owner-styles.ts`), faceted **Opiekun**
+
+### Aktywność zespołu (menedżer regionalny)
+- **Lista:** `team-activities-table.tsx` + `team-activities-columns.tsx` — `/activities`, tylko `regional_manager`; agregat z `contactEvents` + `leadActivities` + `dealActivities` (`lib/crm/team-activities.ts`, `filterByScope`); faceted Opiekun / Typ; klik → karta encji z `?activityId=`
+- **Podświetlenie wpisu:** `lib/crm/activity-highlight.ts` — feedy `company-activity-feed`, `lead-activity-feed`, `deal-activity-feed` + panele szczegółów
 - **Style:** `app/crm-big-calendar.css` — import CSS biblioteki + tokeny CA
 - **Localizer PL:** `lib/crm/big-calendar-localizer.ts` — `dateFnsLocalizer` + `calendarMessagesPl`
 - **Formularz:** `meeting-form-dialog.tsx` — Dialog + `FieldGroup`, `addMeeting` + toast
@@ -302,11 +309,14 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ## Banner informacyjny (US-23)
 
-### File Upload (Dice UI, US-42)
+### File Upload (Dice UI, US-42) + scalone Dokumenty (US-51)
 - **Komponent:** `components/ui/file-upload.tsx` — `@diceui/file-upload` ([docs](https://www.diceui.com/docs/components/radix/file-upload)); import: `FileUpload`, `FileUploadDropzone`, `FileUploadList`, `FileUploadItem`, … + `useFileUpload`.
-- **Wrapper CRM:** `components/crm/crm-file-upload-panel.tsx` — symulacja progress (`onUpload` ~300–800 ms), lista zapisanych plików, walidacja PL (`lib/crm/file-upload-validation.ts`).
-- **Typy / Context:** `ClientFile`, `LeadFile`, `DealFile` w `types/crm.ts`; seed `data/*-files.json`; `add*File` / `remove*File` w `DemoDataContext`; `regionId = user.regionId ?? entity.regionId`.
-- **Helpery:** `lib/crm/entity-files.ts` — `getClientFilesForClient`, `getLeadFilesForLead`, `getDealFilesForDeal` (+ `filterByScope`).
+- **Wrapper CRM:** `components/crm/crm-file-upload-panel.tsx` — symulacja progress (`onUpload` ~300–800 ms), lista zapisanych plików, walidacja PL (`lib/crm/file-upload-validation.ts`); props `showStoredFiles`, `onFileQueued`.
+- **Scalona zakładka Dokumenty:** `components/crm/crm-document-list.tsx` (lista plików + legacy `*Document`); `components/crm/crm-document-upload-form.tsx` (upload + pola Nazwa/Opis → `add*File`).
+- **Helper merge:** `lib/crm/entity-documents.ts` — `getMergedDocumentsForClient` / `ForLead` / `ForDeal` → `CrmDocumentListItem` (sort `uploadedAt` malejąco).
+- **Typy / Context:** `ClientFile`, `LeadFile`, `DealFile` w `types/crm.ts` (+ `displayName`, `description?`); seed `data/*-files.json`; `add*File` / `remove*File` w `DemoDataContext`; `regionId = user.regionId ?? entity.regionId`.
+- **Helpery plików:** `lib/crm/entity-files.ts` — `getClientFilesForClient`, `getLeadFilesForLead`, `getDealFilesForDeal` (+ `filterByScope`).
+- **Licznik Dokumenty:** pliki + legacy dokumenty (`getMergedDocumentsFor*` w `*-engagement-counts.ts`).
 
 ### Stepper (Dice UI, US-46)
 - **Komponent:** `components/ui/stepper.tsx` — `@diceui/stepper` ([docs](https://www.diceui.com/docs/components/radix/stepper)); import: `Stepper`, `StepperList`, `StepperItem`, `StepperTrigger`, `StepperIndicator`, `StepperSeparator`, `StepperTitle`.

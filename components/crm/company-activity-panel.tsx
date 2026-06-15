@@ -7,27 +7,15 @@ import { toast } from "sonner"
 import type { CompanyEngagementSection } from "@/components/crm/company-detail-view"
 import { CompanyActivityFeed } from "@/components/crm/company-activity-feed"
 import { CompanyActivityForm } from "@/components/crm/company-activity-form"
-import { CompanyContactsList } from "@/components/crm/company-contacts-list"
 import { CompanyMeetingsList } from "@/components/crm/company-meetings-list"
-import { CompanyTasksList } from "@/components/crm/company-tasks-list"
-import { CrmFileUploadPanel } from "@/components/crm/crm-file-upload-panel"
+import { CompanyTasksTable } from "@/components/crm/company-tasks-table"
+import { CrmDocumentList } from "@/components/crm/crm-document-list"
+import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardHeader,
 } from "@/components/ui/card"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -36,18 +24,16 @@ import {
   type CompanyActivityFilter,
 } from "@/lib/crm/company-activity"
 import {
-  getCompanyContacts,
-  getCompanyDocuments,
   getCompanyMeetings,
   getCompanyTasks,
 } from "@/lib/crm/company-engagement-counts"
+import { getMergedDocumentsForClient } from "@/lib/crm/entity-documents"
 import { getClientFilesForClient } from "@/lib/crm/entity-files"
-import { formatDatePl } from "@/lib/format/pl"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Client } from "@/types/crm"
 
-export type CompanyComposerTab = "note" | "activity" | "files" | "documents"
+export type CompanyComposerTab = "note" | "activity" | "documents"
 
 type CompanyActivityPanelProps = {
   client: Client
@@ -55,6 +41,7 @@ type CompanyActivityPanelProps = {
   onComposerTabChange: (tab: CompanyComposerTab) => void
   engagementSection: CompanyEngagementSection
   onEngagementSectionChange: (section: CompanyEngagementSection) => void
+  highlightActivityId?: string | null
 }
 
 const FEED_FILTERS: { id: CompanyActivityFilter; label: string }[] = [
@@ -71,6 +58,7 @@ export function CompanyActivityPanel({
   onComposerTabChange,
   engagementSection,
   onEngagementSectionChange,
+  highlightActivityId = null,
 }: CompanyActivityPanelProps) {
   const { user } = useSession()
   const {
@@ -82,16 +70,22 @@ export function CompanyActivityPanel({
     deals,
     leads,
     contacts,
+    contactClientLinks,
     users,
     addCompanyNote,
-    addClientDocument,
     addClientFile,
     removeClientFile,
   } = useDemoData()
   const [noteDraft, setNoteDraft] = React.useState("")
-  const [documentName, setDocumentName] = React.useState("")
   const [feedFilter, setFeedFilter] =
     React.useState<CompanyActivityFilter>("all")
+
+  React.useEffect(() => {
+    if (highlightActivityId) {
+      setFeedFilter("all")
+      onEngagementSectionChange(null)
+    }
+  }, [highlightActivityId, onEngagementSectionChange])
 
   const engagementSectionRef = React.useRef<HTMLDivElement>(null)
 
@@ -100,11 +94,14 @@ export function CompanyActivityPanel({
       tasks,
       meetings,
       clientDocuments,
+      clientFiles,
       deals,
       leads,
       contacts,
+      contactClientLinks,
+      clients: [client],
     }),
-    [tasks, meetings, clientDocuments, deals, leads, contacts],
+    [tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, client],
   )
 
   const allItems = React.useMemo(
@@ -133,20 +130,20 @@ export function CompanyActivityPanel({
     return getCompanyMeetings(client.id, engagementData, user)
   }, [client.id, engagementData, user])
 
-  const clientDocs = React.useMemo(() => {
+  const mergedDocuments = React.useMemo(() => {
     if (!user) return []
-    return getCompanyDocuments(client.id, engagementData, user)
-  }, [client.id, engagementData, user])
+    return getMergedDocumentsForClient(
+      client.id,
+      clientFiles,
+      clientDocuments,
+      user,
+    )
+  }, [client.id, clientFiles, clientDocuments, user])
 
   const clientUploadedFiles = React.useMemo(() => {
     if (!user) return []
     return getClientFilesForClient(client.id, clientFiles, user)
   }, [client.id, clientFiles, user])
-
-  const clientContacts = React.useMemo(
-    () => getCompanyContacts(client, engagementData),
-    [client, engagementData],
-  )
 
   const filterCounts = React.useMemo(() => {
     const counts: Record<CompanyActivityFilter, number> = {
@@ -177,29 +174,29 @@ export function CompanyActivityPanel({
     toast.success("Notatka została dodana")
   }
 
-  function handleAddDocument() {
-    if (!user) return
-    const trimmed = documentName.trim()
-    if (!trimmed) return
-    const created = addClientDocument(client.id, { name: trimmed }, user)
-    if (!created) return
-    setDocumentName("")
-    toast.success("Dokument został dodany")
-  }
-
-  function handleUploadFile(file: File) {
+  function handleUploadDocument({
+    file,
+    displayName,
+    description,
+  }: {
+    file: File
+    displayName: string
+    description?: string
+  }) {
     if (!user) return false
     const created = addClientFile(
       client.id,
       {
         fileName: file.name,
+        displayName,
+        description,
         fileSize: file.size,
         mimeType: file.type || "application/octet-stream",
       },
       user,
     )
     if (created) {
-      toast.success("Plik został dodany")
+      toast.success("Dokument został dodany")
     }
     return created !== null
   }
@@ -218,7 +215,6 @@ export function CompanyActivityPanel({
             <TabsList className="h-auto flex-wrap justify-start">
               <TabsTrigger value="note">Notatka</TabsTrigger>
               <TabsTrigger value="activity">Aktywność</TabsTrigger>
-              <TabsTrigger value="files">Pliki</TabsTrigger>
               <TabsTrigger value="documents">Dokumenty</TabsTrigger>
             </TabsList>
 
@@ -239,66 +235,18 @@ export function CompanyActivityPanel({
               <CompanyActivityForm client={client} />
             </TabsContent>
 
-            <TabsContent value="files">
-              <CrmFileUploadPanel
-                files={clientUploadedFiles}
+            <TabsContent value="documents" className="flex flex-col gap-4">
+              <CrmDocumentList
+                items={mergedDocuments}
                 users={users}
-                onUpload={handleUploadFile}
-                onRemove={removeClientFile}
-                disabled={!user}
+                onRemoveFile={removeClientFile}
+                emptyDescription="Dodaj dokument z plikiem, nazwą i opcjonalnym opisem."
               />
-            </TabsContent>
-
-            <TabsContent value="documents" className="flex flex-col gap-3">
-              {clientDocs.length === 0 ? (
-                <Empty className="border py-6">
-                  <EmptyHeader>
-                    <EmptyTitle>Brak dokumentów</EmptyTitle>
-                    <EmptyDescription>
-                      Dodaj nazwany dokument przypisany do tej firmy.
-                    </EmptyDescription>
-                  </EmptyHeader>
-                </Empty>
-              ) : (
-                <ul className="flex flex-col gap-2">
-                  {clientDocs.map((doc) => {
-                    const author = users.find((u) => u.id === doc.ownerId)
-                    return (
-                      <li
-                        key={doc.id}
-                        className="rounded-md border border-border/80 px-3 py-2 text-sm"
-                      >
-                        <p className="font-medium">{doc.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          Dodano {formatDatePl(doc.uploadedAt)}
-                          {author ? ` · ${author.displayName}` : null}
-                        </p>
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="client-document-name">
-                    Nazwa dokumentu
-                  </FieldLabel>
-                  <Input
-                    id="client-document-name"
-                    placeholder="np. Umowa ramowa.pdf"
-                    value={documentName}
-                    onChange={(e) => setDocumentName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleAddDocument()
-                    }}
-                  />
-                </Field>
-              </FieldGroup>
-              <div className="flex flex-wrap justify-end gap-2">
-                <Button type="button" onClick={handleAddDocument}>
-                  Dodaj dokument
-                </Button>
-              </div>
+              <CrmDocumentUploadForm
+                storedFiles={clientUploadedFiles}
+                disabled={!user}
+                onSubmit={handleUploadDocument}
+              />
             </TabsContent>
           </Tabs>
         </CardHeader>
@@ -337,18 +285,18 @@ export function CompanyActivityPanel({
       {engagementSection ? (
         <div ref={engagementSectionRef}>
           {engagementSection === "tasks" ? (
-            <CompanyTasksList tasks={clientTasks} clientId={client.id} />
+            <CompanyTasksTable tasks={clientTasks} />
           ) : null}
           {engagementSection === "meetings" ? (
             <CompanyMeetingsList meetings={clientMeetings} />
           ) : null}
-          {engagementSection === "contacts" ? (
-            <CompanyContactsList contacts={clientContacts} />
-          ) : null}
         </div>
       ) : null}
 
-      <CompanyActivityFeed items={filteredItems} />
+      <CompanyActivityFeed
+        items={filteredItems}
+        highlightActivityId={highlightActivityId}
+      />
     </div>
   )
 }

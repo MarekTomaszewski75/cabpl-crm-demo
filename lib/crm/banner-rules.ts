@@ -24,8 +24,13 @@ export const SYSTEM_DEMO_BANNER_PRIORITY = 0
 
 /** Opóźnienie przed pierwszym banerem — symuluje push z systemu w tle. */
 export const BANNER_INITIAL_DELAY_MS = 4_000
-/** Drugi baner (inny losowy) — pokazuje kolejkowanie. */
+/** Drugi baner — po tym czasie trafia do kolejki (widoczny dopiero gdy pierwszy zniknie). */
 export const BANNER_FOLLOW_UP_DELAY_MS = 11_000
+
+/** Członek zarządu nie dostaje symulowanych alertów w demo. */
+export function shouldShowCrmBannersForUser(user: DemoUser): boolean {
+  return user.role !== "executive"
+}
 
 /** Horyzont spotkań w banerze (dni od dziś). */
 export const BANNER_MEETING_HORIZON_DAYS = 30
@@ -153,18 +158,30 @@ function buildMeetingSoonBanner(
     : null
   const scheduleLabel = formatMeetingSchedulePl(start, asOfDate)
 
+  const teamMode = isTeamManagerView(user)
+
   return {
     id: `meeting-${meeting.id}`,
     variant: "info",
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Nadchodzące spotkanie",
-    descriptionPl: clientName
-      ? `${meeting.title} z ${clientName} — ${scheduleLabel}.`
-      : `${meeting.title} — ${scheduleLabel}.`,
+    titlePl: teamMode
+      ? "Nadchodzące spotkanie w zespole"
+      : "Nadchodzące spotkanie",
+    descriptionPl: teamMode
+      ? clientName
+        ? `W kalendarzu regionu: ${meeting.title} z ${clientName} — ${scheduleLabel}.`
+        : `W kalendarzu regionu: ${meeting.title} — ${scheduleLabel}.`
+      : clientName
+        ? `${meeting.title} z ${clientName} — ${scheduleLabel}.`
+        : `${meeting.title} — ${scheduleLabel}.`,
     href: "/calendar",
-    actionLabelPl: "Otwórz kalendarz",
+    actionLabelPl: teamMode ? "Zobacz kalendarz zespołu" : "Otwórz kalendarz",
   }
+}
+
+function isTeamManagerView(user: DemoUser): boolean {
+  return user.role === "regional_manager"
 }
 
 function buildOverdueTasksBanner(
@@ -188,15 +205,21 @@ function buildOverdueTasksBanner(
       ? `„${first.title}” — termin ${formatDatePl(first.dueDate)}.`
       : `${overdue.length} zadania po terminie — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
 
+  const teamMode = isTeamManagerView(user)
+
   return {
     id: "tasks-overdue",
     variant: "warning",
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Zadania po terminie",
-    descriptionPl,
+    titlePl: teamMode ? "Zaległe zadania w zespole" : "Zadania po terminie",
+    descriptionPl: teamMode
+      ? overdue.length === 1
+        ? `W regionie: „${first.title}” — termin ${formatDatePl(first.dueDate)}.`
+        : `${overdue.length} zadań po terminie w zespole — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
+      : descriptionPl,
     href: "/tasks",
-    actionLabelPl: "Zobacz zadania",
+    actionLabelPl: teamMode ? "Przejrzyj zadania zespołu" : "Zobacz zadania",
   }
 }
 
@@ -232,15 +255,23 @@ function buildTasksDueSoonBanner(
       ? `„${first.title}” — ${dueLabel}.`
       : `${dueSoon.length} zadania z terminem w najbliższych dniach — m.in. „${first.title}” (${dueLabel}).`
 
+  const teamMode = isTeamManagerView(user)
+
   return {
     id: "tasks-due-soon",
     variant: "info",
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Zbliżające się terminy zadań",
-    descriptionPl,
+    titlePl: teamMode
+      ? "Zbliżające się terminy w zespole"
+      : "Zbliżające się terminy zadań",
+    descriptionPl: teamMode
+      ? dueSoon.length === 1
+        ? `W regionie: „${first.title}” — ${dueLabel}.`
+        : `${dueSoon.length} zadań z terminem w najbliższych dniach w zespole — m.in. „${first.title}” (${dueLabel}).`
+      : descriptionPl,
     href: "/tasks",
-    actionLabelPl: "Zobacz zadania",
+    actionLabelPl: teamMode ? "Przejrzyj zadania zespołu" : "Zobacz zadania",
   }
 }
 
@@ -263,15 +294,21 @@ function buildPipelineBanners(
         ? "termin jutro"
         : `termin za ${top.daysUntilClose} dni`
 
+  const teamMode = isTeamManagerView(user)
+
   banners.push({
     id: `pipeline-deal-${top.deal.id}`,
     variant: top.daysUntilClose <= 1 ? "warning" : "info",
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Termin zamknięcia deala",
-    descriptionPl: `${top.deal.name} — ${formatCurrencyPln(top.deal.amount ?? 0)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`,
+    titlePl: teamMode
+      ? "Deal w zespole z bliskim terminem"
+      : "Termin zamknięcia deala",
+    descriptionPl: teamMode
+      ? `${top.deal.name} w portfelu regionu — ${formatCurrencyPln(top.deal.amount ?? 0)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`
+      : `${top.deal.name} — ${formatCurrencyPln(top.deal.amount ?? 0)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`,
     href: `/pipeline/${top.deal.id}`,
-    actionLabelPl: "Przejdź do deala",
+    actionLabelPl: teamMode ? "Sprawdź deal w zespole" : "Przejdź do deala",
   })
 
   if (summaries.length > 1) {
@@ -280,10 +317,14 @@ function buildPipelineBanners(
       variant: "info",
       priority: SYSTEM_DEMO_BANNER_PRIORITY,
       dismissible: true,
-      titlePl: "Deale wymagające uwagi",
-      descriptionPl: `${summaries.length} deale w Twoim portfelu mają planowane zamknięcie w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni.`,
+      titlePl: teamMode
+        ? "Deale w zespole wymagające uwagi"
+        : "Deale wymagające uwagi",
+      descriptionPl: teamMode
+        ? `${summaries.length} deale w regionie mają planowane zamknięcie w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni — warto skoordynować działania zespołu.`
+        : `${summaries.length} deale w Twoim portfelu mają planowane zamknięcie w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni.`,
       href: "/pipeline",
-      actionLabelPl: "Otwórz pipeline",
+      actionLabelPl: teamMode ? "Otwórz pipeline zespołu" : "Otwórz pipeline",
     })
   }
 
@@ -313,15 +354,29 @@ function buildKycTasksBanner(
     ? `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
     : `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC do domknięcia — termin ${formatDatePl(first.dueDate)}.`
 
+  const teamMode = isTeamManagerView(user)
+
   return {
     id: "kyc-tasks",
     variant: "warning",
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Dokumentacja KYC do uzupełnienia",
-    descriptionPl,
+    titlePl: teamMode
+      ? "KYC do domknięcia w zespole"
+      : "Dokumentacja KYC do uzupełnienia",
+    descriptionPl: teamMode
+      ? clientName
+        ? `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC w regionie do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
+        : `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC w zespole do domknięcia — termin ${formatDatePl(first.dueDate)}.`
+      : descriptionPl,
     href: first.clientId ? `/clients/${first.clientId}` : "/tasks",
-    actionLabelPl: first.clientId ? "Otwórz firmę" : "Zobacz zadania",
+    actionLabelPl: teamMode
+      ? first.clientId
+        ? "Sprawdź sprawę w zespole"
+        : "Przejrzyj zadania zespołu"
+      : first.clientId
+        ? "Otwórz firmę"
+        : "Zobacz zadania",
   }
 }
 
@@ -331,10 +386,15 @@ export function generateDemoBannersForUser(
   data: BannerDataInput,
   asOfDate: Date = getToday(),
 ): BannerPayload[] {
-  const banners: BannerPayload[] = []
+  if (!shouldShowCrmBannersForUser(user)) return []
 
-  const sync = buildPortfolioSyncBanner(data.clients, user, asOfDate)
-  if (sync) banners.push(sync)
+  const banners: BannerPayload[] = []
+  const teamMode = isTeamManagerView(user)
+
+  if (!teamMode) {
+    const sync = buildPortfolioSyncBanner(data.clients, user, asOfDate)
+    if (sync) banners.push(sync)
+  }
 
   const meeting = buildMeetingSoonBanner(
     data.meetings,

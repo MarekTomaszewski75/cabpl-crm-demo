@@ -18,6 +18,7 @@ type LeadFormDialogProps = {
   onSuccess?: (lead: Lead) => void
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  defaultClientId?: string | null
 }
 
 export function LeadFormDialog({
@@ -25,6 +26,7 @@ export function LeadFormDialog({
   onSuccess,
   open: openProp,
   onOpenChange: onOpenChangeProp,
+  defaultClientId = null,
 }: LeadFormDialogProps) {
   const [internalOpen, setInternalOpen] = React.useState(false)
   const open = openProp ?? internalOpen
@@ -50,8 +52,9 @@ export function LeadFormDialog({
             <SheetTitle>Nowy lead</SheetTitle>
           </SheetHeader>
           <LeadForm
-            key="new"
+            key={`new-${defaultClientId ?? "none"}`}
             layout="sheet"
+            defaultClientId={defaultClientId}
             onSuccess={(lead) => {
               setOpen(false)
               onSuccess?.(lead)

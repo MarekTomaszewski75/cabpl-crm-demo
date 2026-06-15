@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "client-file-001",
+    "clientId": "client-001",
+    "fileName": "prezentacja-strategii-2026.pdf",
+    "displayName": "Prezentacja strategii 2026",
+    "description": "Materiały z spotkania zarządu — kwiecień 2026",
+    "fileSize": 2457600,
+    "mimeType": "application/pdf",
+    "uploadedAt": "2026-06-01T10:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-002",
+    "clientId": "client-003",
+    "fileName": "zdjecie-hali-produkcyjnej.jpg",
+    "displayName": "zdjecie-hali-produkcyjnej.jpg",
+    "fileSize": 1843200,
+    "mimeType": "image/jpeg",
+    "uploadedAt": "2026-05-18T11:30:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  }
+]

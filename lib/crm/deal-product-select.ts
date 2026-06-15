@@ -1,5 +1,9 @@
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
-import { resolvePipelineCategoryId } from "@/lib/crm/deal-pipeline"
+import {
+  getPipelineCategoryIds,
+  resolvePipelineCategoryId,
+  type PipelineCategoryId,
+} from "@/lib/crm/deal-pipeline"
 import type { Product } from "@/types/crm"
 
 export type DealProductListItem = {
@@ -30,4 +34,13 @@ export function buildDealProductListItems(
     .filter(isSelectableDealProduct)
     .map(toDealProductListItem)
     .sort((a, b) => a.label.localeCompare(b.label, "pl"))
+}
+
+export function getDealProductsForCategory(
+  products: readonly Product[],
+  categoryId: PipelineCategoryId,
+): DealProductListItem[] {
+  return buildDealProductListItems(products).filter(
+    (item) => resolvePipelineCategoryId(item.product.categoryId) === categoryId,
+  )
 }

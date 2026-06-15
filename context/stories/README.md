@@ -67,13 +67,18 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 45  | [US-45 Company tab and tasks](./US-45-company-tab-and-tasks/story.md)                   | P1        | US-35, US-09                                    |
 | 46  | [US-46 Lead deal stepper](./US-46-lead-deal-stepper/story.md)                           | P1        | US-33, US-34, US-25                             |
 | 47  | [US-47 Tasks deal column rename](./US-47-tasks-deal-column-rename/story.md)             | P2        | US-09, US-18                                    |
+| 48  | [US-48 Contacts module](./US-48-contacts-module/story.md)                               | P0        | US-03, US-05, US-16                             |
+| 49  | [US-49 Company contacts tab](./US-49-company-contacts-tab/story.md)                     | P0        | US-48, US-45                                    |
+| 50  | [US-50 Activity form cleanup](./US-50-activity-form-cleanup/story.md)                   | P1        | US-33, US-34, US-35                             |
+| 51  | [US-51 Merge files and documents](./US-51-merge-files-documents/story.md)               | P0        | US-42, US-33, US-34, US-35                      |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  
 **Produkty i lejki per kategoria (2026-06-09):** [`../products-deal-pipelines-spec.md`](../products-deal-pipelines-spec.md) → US-27 … US-32.  
 **Przebudowa kart lead/deal/firma (2026-06-10):** [`../lead-detail-rebuild-spec.md`](../lead-detail-rebuild-spec.md) → US-33; [`../deal-detail-rebuild-spec.md`](../deal-detail-rebuild-spec.md) → US-34; [`../company-detail-rebuild-spec.md`](../company-detail-rebuild-spec.md) → US-35.  
 **Analityka per rola (2026-06-10):** [`../analytics-roles-rebuild-spec.md`](../analytics-roles-rebuild-spec.md) → US-36 … US-40.  
-**Feedback iteracja 2 (2026-06-12):** [`../demo-feedback-iteration-2-spec.md`](../demo-feedback-iteration-2-spec.md) → US-41 … US-47.
+**Feedback iteracja 2 (2026-06-12):** [`../demo-feedback-iteration-2-spec.md`](../demo-feedback-iteration-2-spec.md) → US-41 … US-47.  
+**Kontakty, dokumenty, aktywność (2026-06-15):** [`../contacts-and-documents-spec.md`](../contacts-and-documents-spec.md) → US-48 … US-51.
 
 ## Mapowanie na wymagania MUST HAVE
 

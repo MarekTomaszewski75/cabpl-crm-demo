@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "lead-file-001",
+    "leadId": "lead-001",
+    "fileName": "kalkulacja-floty.xlsx",
+    "displayName": "Kalkulacja kosztów floty",
+    "description": "Wersja robocza po rozmowie z CFO",
+    "fileSize": 512000,
+    "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "uploadedAt": "2026-05-29T14:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  }
+]

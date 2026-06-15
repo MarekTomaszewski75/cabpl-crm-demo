@@ -41,6 +41,8 @@ type CrmFileUploadPanelProps = {
   onRemove?: (id: string) => void
   disabled?: boolean
   users?: readonly DemoUser[]
+  showStoredFiles?: boolean
+  onFileQueued?: (file: File) => void
 }
 
 type ActiveUpload = {
@@ -182,6 +184,8 @@ export function CrmFileUploadPanel({
   onRemove,
   disabled = false,
   users = [],
+  showStoredFiles = true,
+  onFileQueued,
 }: CrmFileUploadPanelProps) {
   const [queueValue, setQueueValue] = React.useState<File[]>([])
   const [activeUploads, setActiveUploads] = React.useState<ActiveUpload[]>([])
@@ -217,6 +221,7 @@ export function CrmFileUploadPanel({
     ) => {
       for (const file of uploadFiles) {
         const key = uploadKey(file)
+        onFileQueued?.(file)
         setActiveUploads((prev) => [
           ...prev.filter((item) => item.key !== key),
           {
@@ -265,7 +270,7 @@ export function CrmFileUploadPanel({
         }
       }
     },
-    [onUpload, removeActiveUpload, updateActiveUpload],
+    [onUpload, onFileQueued, removeActiveUpload, updateActiveUpload],
   )
 
   const handleFileValidate = React.useCallback(
@@ -320,7 +325,7 @@ export function CrmFileUploadPanel({
       </FileUpload>
 
       <CrmFileList
-        files={files}
+        files={showStoredFiles ? files : []}
         activeUploads={activeUploads}
         users={users}
         onRemove={onRemove}

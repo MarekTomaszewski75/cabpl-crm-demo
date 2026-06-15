@@ -94,12 +94,17 @@ function emptyLeadFields(): Pick<
 type LeadFormProps = {
   onSuccess: (lead: Lead) => void
   layout?: "page" | "sheet"
+  defaultClientId?: string | null
 }
 
-export function LeadForm({ onSuccess, layout = "sheet" }: LeadFormProps) {
+export function LeadForm({
+  onSuccess,
+  layout = "sheet",
+  defaultClientId = null,
+}: LeadFormProps) {
   const router = useRouter()
   const { user } = useSession()
-  const { leads, addLead } = useDemoData()
+  const { leads, clients, addLead } = useDemoData()
   const [form, setForm] = React.useState(() => emptyFormState())
   const [errors, setErrors] = React.useState<LeadFormErrors>({})
 
@@ -120,6 +125,9 @@ export function LeadForm({ onSuccess, layout = "sheet" }: LeadFormProps) {
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
 
+    const client = defaultClientId
+      ? clients.find((entry) => entry.id === defaultClientId)
+      : undefined
     const now = new Date().toISOString()
     const newLead: Lead = {
       id: createNextLeadId(leads),
@@ -133,6 +141,8 @@ export function LeadForm({ onSuccess, layout = "sheet" }: LeadFormProps) {
       ownerId: user.id,
       regionId: user.regionId,
       ...emptyLeadFields(),
+      clientId: defaultClientId,
+      companyName: client?.name ?? "",
       phones: form.phone ? [form.phone] : [],
     }
 
