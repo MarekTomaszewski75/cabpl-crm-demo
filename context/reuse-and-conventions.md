@@ -160,7 +160,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Kontakty CRM:** `data/contacts.json`, `CrmContact`, `contact-combobox.tsx` (`addContact` in-place), `lib/crm/contact-display.ts`, `contact-id.ts`
 - **Powiązania kontakt–firma (US-48):** `data/contact-client-links.json`, `ContactClientLink`, `lib/crm/contact-company-bindings.ts` (`getScopedContacts`, `getContactsForClient`, `getContactCompanyBindingsForClient`); lista globalna: `contacts-table.tsx` + `contacts-columns.tsx` (`/contacts`, RBAC advisor + regional_manager); sync linków przy `updateClient.contactIds` w `DemoDataContext`
 - **Kontakty na karcie firmy (US-49):** podzakładka **Kontakty** w Sprzedaż i relacje — `company-contacts-table.tsx` + `company-contacts-columns.tsx` (`getContactsForClient`); wyszukiwanie: `lib/crm/contact-search.ts` (`contactMatchesSearch`, `filterContactsBySearch`) — reuse na `/contacts`, podzakładce firmy i w `ContactComboboxField`; wskaźnik Kontakty → `setRelatedTab("kontakty")` (bez inline listy w `company-activity-panel`)
-- **Karta (US-35/45/51):** `company-detail-view.tsx` — zakładki **Ogólne** | **Sprzedaż i relacje** (podzakładki Leady · Deale · Kontakty · Zadania); wskaźnik Zadania w sidebarze → podzakładka Zadania; `TaskFormDialog` z `defaultClientId` na podzakładce Zadania; `company-detail-header.tsx` (`+ Deal`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / **Dokumenty** (scalona lista + upload); `company-activity-form.tsx`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-table.tsx`; liczniki i filtry RBAC: `lib/crm/company-engagement-counts.ts` (`getCompanyTasks`, …)
+- **Karta (US-35/45/51/52):** `company-detail-view.tsx` — zakładki **Ogólne** | **Sprzedaż i relacje** (podzakładki Leady · Deale · Kontakty · Zadania); wskaźnik Zadania w sidebarze → podzakładka Zadania; `TaskFormDialog` z `defaultClientId` na podzakładce Zadania; `company-detail-header.tsx` (`Sprawdź firmę` → `CompanyAiChatSheet`, `+ Deal`, `deleteClient` + `AlertDialog`); `company-detail-sidebar.tsx` (inline edit + `company-engagement-indicators.tsx`); `company-activity-panel.tsx` + `company-activity-feed.tsx` (sekcja **Zdarzenia**, `@diceui/timeline`); composer: Notatka / Aktywność / **Dokumenty** (scalona lista + upload); `company-activity-form.tsx`; listy: `company-tasks-list.tsx`, `company-meetings-list.tsx`, `company-deals-list.tsx`, `company-leads-list.tsx`, `company-contacts-table.tsx`; liczniki i filtry RBAC: `lib/crm/company-engagement-counts.ts` (`getCompanyTasks`, …)
 - **Zdarzenia:** `ContactEvent` + `kind` (`channel` | `system` | `note`); utworzenie firmy → `company_created`; notatki → `addCompanyNote`
 - **Formularz aktywności (US-50):** `lib/crm/activity-channel-types.ts` — `ACTIVITY_CHANNEL_TYPE_OPTIONS` (bez E-mail) + `activityChannelTypeLabel`; wspólny stan/helpery w `lib/crm/company-activity-types.ts`; formularze `company-activity-form.tsx`, `lead-activity-form.tsx`, `deal-activity-form.tsx` (bez załączników w formularzu); typ `email` w `ChannelContactEventType` i feed — bez zmian
 - **Mutacje karty:** `deleteClient`, `addClientDocument`; ID dokumentów: `lib/crm/client-document-id.ts`
@@ -368,6 +368,15 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 - **Referencja:** [`.context/assets/screen.png`](./assets/screen.png)
 - **Spec:** [`.context/design-guide.md`](./design-guide.md)
+
+---
+
+## Asystent AI firmy (symulacja, US-52)
+
+- **UI:** `components/crm/company-ai-chat-sheet.tsx` — Sheet na `/clients/[id]`; state hooka w komponencie (historia zachowana po zamknięciu Sheet w tej samej sesji).
+- **Symulator:** `lib/crm/company-ai-chat-simulator.ts` + `lib/crm/company-ai-chat-templates.ts` + hook `lib/crm/use-company-ai-chat-simulator.ts` — keyword matching, fake streaming, kolejka FIFO; **bez** `useChat`, Route Handlers i kluczy API.
+- **AI Elements (wizualne):** `components/ai-elements/*` — registry `npx ai-elements@latest add …`; pakiet `ai` w `package.json` to wyłącznie peer dep typów komponentów (np. `ChatStatus`), nie integracja z modelem.
+- **Kontekst:** `buildCompanyChatContext(clientId, demoData, user)` — deale/leady/zadania/kontakty z RBAC (`getCompany*`).
 
 ---
 

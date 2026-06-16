@@ -7,6 +7,7 @@ import {
   ArrowLeftIcon,
   Building2Icon,
   MoreHorizontalIcon,
+  SparklesIcon,
   Trash2Icon,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -30,6 +31,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { CompanyAiChatSheet } from "@/components/crm/company-ai-chat-sheet"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { displayInitials } from "@/lib/pipeline/stage-theme"
 import type { Client, DemoUser } from "@/types/crm"
@@ -46,6 +48,7 @@ export function CompanyDetailHeader({
   const router = useRouter()
   const { deleteClient, deals, tasks } = useDemoData()
   const [deleteOpen, setDeleteOpen] = React.useState(false)
+  const [chatOpen, setChatOpen] = React.useState(false)
 
   const relatedDeals = deals.filter((deal) => deal.clientId === client.id)
   const openTasks = tasks.filter(
@@ -91,6 +94,10 @@ export function CompanyDetailHeader({
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <Button onClick={() => setChatOpen(true)}>
+            <SparklesIcon data-icon="inline-start" />
+            Sprawdź firmę
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon-sm" aria-label="Menu firmy">
@@ -135,6 +142,12 @@ export function CompanyDetailHeader({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <CompanyAiChatSheet
+        client={client}
+        open={chatOpen}
+        onOpenChange={setChatOpen}
+      />
     </div>
   )
 }

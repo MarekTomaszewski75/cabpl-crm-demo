@@ -50,16 +50,19 @@
 - **US-49** — **Done** — podzakładka **Kontakty** na karcie firmy (Leady · Deale · Kontakty · Zadania), `contact-search.ts`, wskaźnik → podzakładka. [US-49](./stories/US-49-company-contacts-tab/story.md).
 - **US-50** — **Done** — cleanup formularza aktywności: wspólne `ACTIVITY_CHANNEL_TYPE_OPTIONS` (bez E-mail), usunięcie załączników z formularzy firma/lead/deal. [US-50](./stories/US-50-activity-form-cleanup/story.md).
 - **US-51** — **Done** — scalenie zakładek Pliki/Dokumenty: `displayName`/`description` na `*File`, `entity-documents.ts`, `CrmDocumentList` + `CrmDocumentUploadForm`, jedna zakładka Dokumenty na firmie/leadzie/dealu. [US-51](./stories/US-51-merge-files-documents/story.md).
+- **US-52** — **Done** — asystent AI „Sprawdź firmę” (symulacja) na karcie firmy: AI Elements + lokalny simulator, bez `useChat`/API. [US-52](./stories/US-52-company-ai-chat/story.md).
 
 ---
 
 ## Active work
 
-- — (kolejna story z [`demo-feedback-iteration-2-spec.md`](./demo-feedback-iteration-2-spec.md))
+- (brak — wybierz następną story z [`stories/README.md`](./stories/README.md))
 
 ---
 
 ## Recently completed
+
+- **US-52** (story **Done**) — przycisk **Sprawdź firmę** w `company-detail-header.tsx`; `CompanyAiChatSheet` + `useCompanyAiChatSimulator` (fake streaming, kolejka FIFO); komponenty `components/ai-elements/*`; szablony PL w `company-ai-chat-templates.ts`. [US-52](./stories/US-52-company-ai-chat/story.md).
 
 - **US-51** (story **Done**) — scalona zakładka **Dokumenty** (firma/lead/deal): `entity-documents.ts`, `CrmDocumentList`, `CrmDocumentUploadForm`; `displayName`/`description` na `*File`; licznik Dokumenty = pliki + legacy `*Document`. [US-51](./stories/US-51-merge-files-documents/story.md).
 
@@ -101,7 +104,7 @@
 
 ## Next up
 
-1. — (kolejna story z [`demo-feedback-iteration-2-spec.md`](./demo-feedback-iteration-2-spec.md))
+1. (brak zaplanowanej story — patrz [`stories/README.md`](./stories/README.md))
 
 ---
 
