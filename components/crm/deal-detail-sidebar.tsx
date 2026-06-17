@@ -20,6 +20,10 @@ import {
 } from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
+import {
+  formatDealBankAccountNumber,
+  normalizeDealBankAccountNumber,
+} from "@/lib/crm/deal-bank-account"
 import { formatDatePl } from "@/lib/format/pl"
 import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
@@ -161,6 +165,35 @@ export function DealDetailSidebar({
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Kontakty</span><ContactComboboxField value={deal.contactId ? [deal.contactId] : []} onChange={(ids) => updateDeal(deal.id, { contactId: ids[0] ?? null })} disabled={readOnly} /></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Firmy</span><Select value={deal.clientId ?? "__none__"} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { clientId: v === "__none__" ? null : v })}><SelectTrigger><SelectValue placeholder="Brak" /></SelectTrigger><SelectContent><SelectGroup><SelectItem value="__none__">Brak</SelectItem>{clients.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
+          {readOnly ? (
+            <div className="flex flex-col gap-1.5">
+              <span className="text-xs text-muted-foreground">Rachunek bankowy</span>
+              <span className="font-mono text-sm text-muted-foreground">
+                {formatDealBankAccountNumber(deal.bankAccountNumber)}
+              </span>
+            </div>
+          ) : (
+            <InlineEditableField
+              label="Rachunek bankowy"
+              value={deal.bankAccountNumber ?? ""}
+              placeholder="np. PL00 0000 0000 0000 0000 0000 0000"
+              onSave={(value) =>
+                updateDeal(deal.id, {
+                  bankAccountNumber: normalizeDealBankAccountNumber(value),
+                })
+              }
+            >
+              {(props) => (
+                <Input
+                  value={props.value}
+                  className="font-mono text-sm"
+                  onChange={(event) => props.onChange(event.target.value)}
+                  onBlur={props.onBlur}
+                  onKeyDown={props.onKeyDown}
+                />
+              )}
+            </InlineEditableField>
+          )}
         </CardContent>
       </Card>
       <Card size="sm">

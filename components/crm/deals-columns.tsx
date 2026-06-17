@@ -20,6 +20,7 @@ import {
   type PipelineCategoryId,
 } from "@/lib/crm/deal-pipeline"
 import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
 import type { Client, CrmContact, Deal, DemoUser, Product } from "@/types/crm"
 
 export type DealTableRow = Deal & {
@@ -87,6 +88,19 @@ export function createDealsColumns(
       ),
       sortingFn: (a, b) =>
         a.original.productName.localeCompare(b.original.productName, "pl"),
+    },
+    {
+      id: "bankAccountNumber",
+      accessorFn: (row) => row.bankAccountNumber ?? "",
+      meta: { title: "Rachunek bankowy" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Rachunek bankowy" />
+      ),
+      cell: ({ row }) => (
+        <span className="max-w-44 truncate font-mono text-xs">
+          {formatDealBankAccountNumber(row.original.bankAccountNumber)}
+        </span>
+      ),
     },
     {
       id: "status",
@@ -258,6 +272,6 @@ export function buildDealTableRow(
     contactLabel,
     categoryName,
     productName,
-    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName} ${categoryName} ${productName}`.toLowerCase(),
+    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName} ${categoryName} ${productName} ${deal.bankAccountNumber ?? ""}`.toLowerCase(),
   }
 }

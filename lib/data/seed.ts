@@ -20,6 +20,8 @@ import departmentsSeed from "@/data/departments.json"
 import employeesSeed from "@/data/employees.json"
 import productCategoriesSeed from "@/data/product-categories.json"
 import productsSeed from "@/data/products.json"
+import clientBankingProductsSeed from "@/data/client-banking-products.json"
+import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
 import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineSteps,
@@ -52,6 +54,7 @@ import type {
   DealActivity,
   Product,
   ProductCategory,
+  ClientBankingProduct,
   Task,
 } from "@/types/crm"
 
@@ -207,9 +210,19 @@ function normalizeLegacyDeal(raw: Record<string, unknown>): Deal {
         : undefined,
     ownerId: String(raw.ownerId ?? ""),
     regionId: String(raw.regionId ?? ""),
+    bankAccountNumber: normalizeDealBankAccountFromSeed(raw),
   }
   assertDealPipelineStatus(deal)
   return deal
+}
+
+function normalizeDealBankAccountFromSeed(
+  raw: Record<string, unknown>,
+): string | null {
+  if (typeof raw.bankAccountNumber === "string") {
+    return normalizeDealBankAccountNumber(raw.bankAccountNumber)
+  }
+  return null
 }
 
 function normalizeDeals(raw: unknown[]): Deal[] {
@@ -238,6 +251,7 @@ function normalizeDeals(raw: unknown[]): Deal[] {
       pipelineCategoryId,
       source: normalizeDealSource(deal.source),
       status: normalizeDealStatus(deal, pipelineCategoryId),
+      bankAccountNumber: normalizeDealBankAccountFromSeed(deal),
     } as Deal
 
     assertDealPipelineStatus(normalized)
@@ -269,6 +283,7 @@ export function loadSeedData() {
     kpi: kpiSeed as KpiSnapshot,
     productCategories: productCategoriesSeed as ProductCategory[],
     products: productsSeed as Product[],
+    clientBankingProducts: clientBankingProductsSeed as ClientBankingProduct[],
   }
 }
 

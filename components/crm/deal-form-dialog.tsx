@@ -14,6 +14,8 @@ export function DealFormDialog({
   onOpenChange,
   defaultClientId = null,
   defaultContactId = null,
+  defaultProductId = null,
+  defaultBankAccountNumber = null,
 }: {
   trigger?: React.ReactNode
   onSuccess?: (deal: Deal) => void
@@ -21,6 +23,8 @@ export function DealFormDialog({
   onOpenChange?: (open: boolean) => void
   defaultClientId?: string | null
   defaultContactId?: string | null
+  defaultProductId?: string | null
+  defaultBankAccountNumber?: string | null
 }) {
   const [internalOpen, setInternalOpen] = React.useState(false)
   const isOpen = open ?? internalOpen
@@ -36,10 +40,12 @@ export function DealFormDialog({
             <SheetTitle>Nowy deal</SheetTitle>
           </SheetHeader>
           <DealForm
-            key={`new-${defaultClientId ?? "none"}`}
+            key={`new-${defaultClientId ?? "none"}-${defaultProductId ?? "none"}-${defaultBankAccountNumber ?? "none"}`}
             layout="sheet"
             defaultClientId={defaultClientId}
             defaultContactId={defaultContactId}
+            defaultProductId={defaultProductId}
+            defaultBankAccountNumber={defaultBankAccountNumber}
             onSuccess={(deal) => {
               setOpen(false)
               onSuccess?.(deal)
@@ -50,4 +56,3 @@ export function DealFormDialog({
     </Sheet>
   )
 }
-

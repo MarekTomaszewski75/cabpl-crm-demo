@@ -42,6 +42,7 @@ type TaskFormDialogProps = {
   user: DemoUser
   task?: Task
   defaultClientId?: string | null
+  defaultTitle?: string | null
   open?: boolean
   onOpenChange?: (open: boolean) => void
   trigger?: React.ReactNode
@@ -84,6 +85,7 @@ export function TaskFormDialog({
   user,
   task,
   defaultClientId = null,
+  defaultTitle = null,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   trigger,
@@ -129,10 +131,10 @@ export function TaskFormDialog({
     } else {
       resetForm()
     }
-  }, [open, task, defaultClientId])
+  }, [open, task, defaultClientId, defaultTitle])
 
   function resetForm() {
-    setTitle("")
+    setTitle(defaultTitle ?? "")
     setDueDate("")
     setPriority("medium")
     setClientId(defaultClientId ?? LINK_NONE)

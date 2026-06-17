@@ -7,6 +7,7 @@ import {
   CompanyActivityPanel,
   type CompanyComposerTab,
 } from "@/components/crm/company-activity-panel"
+import { CompanyBankingProductsTable } from "@/components/crm/company-banking-products-table"
 import { CompanyContactsTable } from "@/components/crm/company-contacts-table"
 import { CompanyDealsTable } from "@/components/crm/company-deals-table"
 import { CompanyDetailHeader } from "@/components/crm/company-detail-header"
@@ -21,6 +22,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
+import { getClientBankingProducts } from "@/lib/crm/client-banking-products"
 import { getContactsForClient } from "@/lib/crm/contact-company-bindings"
 import {
   getCompanyDeals,
@@ -37,14 +39,15 @@ type CompanyDetailViewProps = {
 export type CompanyEngagementSection = "tasks" | "meetings" | null
 
 type CompanyMainTab = "general" | "related"
-type CompanyRelatedTab = "leady" | "deale" | "kontakty" | "zadania"
+type CompanyRelatedTab = "leady" | "deale" | "produkty" | "kontakty" | "zadania"
 
 export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const highlightActivityId = searchParams.get("activityId")
+  const relatedFromUrl = searchParams.get("related")
   const { user, isReady } = useSession()
-  const { clients, users, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks } =
+  const { clients, users, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, clientBankingProducts, products, productCategories } =
     useDemoData()
   const [composerTab, setComposerTab] =
     React.useState<CompanyComposerTab>("note")
@@ -91,12 +94,34 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
     return getContactsForClient(client.id, engagementData, user)
   }, [client, engagementData, user])
 
+  const clientBankingProductRows = React.useMemo(() => {
+    if (!user || !client) return []
+    return getClientBankingProducts(
+      client.id,
+      { clientBankingProducts, products, productCategories },
+      user,
+    )
+  }, [client, user, clientBankingProducts, products, productCategories])
+
   React.useEffect(() => {
     if (highlightActivityId) {
       setMainTab("general")
       setEngagementSection(null)
     }
   }, [highlightActivityId])
+
+  React.useEffect(() => {
+    if (
+      relatedFromUrl === "leady" ||
+      relatedFromUrl === "deale" ||
+      relatedFromUrl === "produkty" ||
+      relatedFromUrl === "kontakty" ||
+      relatedFromUrl === "zadania"
+    ) {
+      setMainTab("related")
+      setRelatedTab(relatedFromUrl)
+    }
+  }, [relatedFromUrl])
 
   React.useEffect(() => {
     if (isReady && user && client && !canAccessEntity(client, user)) {
@@ -200,6 +225,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
               <TabsList>
                 <TabsTrigger value="leady">Leady</TabsTrigger>
                 <TabsTrigger value="deale">Deale</TabsTrigger>
+                <TabsTrigger value="produkty">Produkty</TabsTrigger>
                 <TabsTrigger value="kontakty">Kontakty</TabsTrigger>
                 <TabsTrigger value="zadania">Zadania</TabsTrigger>
               </TabsList>
@@ -240,6 +266,12 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
             </TabsContent>
             <TabsContent value="deale" className="mt-4">
               <CompanyDealsTable deals={clientDeals} />
+            </TabsContent>
+            <TabsContent value="produkty" className="mt-4">
+              <CompanyBankingProductsTable
+                clientId={client.id}
+                products={clientBankingProductRows}
+              />
             </TabsContent>
             <TabsContent value="kontakty" className="mt-4">
               <CompanyContactsTable

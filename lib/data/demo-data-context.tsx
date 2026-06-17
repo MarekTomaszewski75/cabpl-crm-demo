@@ -14,6 +14,7 @@ import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
 import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
+import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
 import { LEAD_LOST_REASON_LABELS } from "@/lib/crm/lead-labels"
 import { DEAL_LOST_REASON_LABELS } from "@/lib/crm/deal-labels"
 import {
@@ -59,6 +60,7 @@ import type {
   DealDocument,
   ClientDocument,
   ClientFile,
+  ClientBankingProduct,
   LeadFile,
   DealFile,
   LeadActivity,
@@ -165,6 +167,10 @@ type DemoDataContextValue = DemoDataState & {
   addOpportunity: (opportunity: Deal) => void
   addClient: (input: AddClientInput, user: DemoUser) => Client
   updateClient: (id: string, patch: Partial<Client>) => void
+  updateClientBankingProduct: (
+    id: string,
+    patch: Partial<ClientBankingProduct>,
+  ) => void
   deleteClient: (id: string) => void
   addContact: (input: AddCrmContactInput) => CrmContact
   updateContact: (id: string, patch: UpdateCrmContactInput) => void
@@ -338,6 +344,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           ...(input.expectedCloseDate?.trim()
             ? { expectedCloseDate: input.expectedCloseDate.trim() }
             : {}),
+          bankAccountNumber: normalizeDealBankAccountNumber(
+            input.bankAccountNumber ?? "",
+          ),
         }
         created = deal
         return {
@@ -379,6 +388,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         ...opportunity,
         pipelineCategoryId,
         status: opportunity.status ?? "new",
+        bankAccountNumber: normalizeDealBankAccountNumber(
+          opportunity.bankAccountNumber ?? "",
+        ),
       }
       return {
         ...prev,
@@ -461,6 +473,18 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       return { ...prev, clients, contactClientLinks }
     })
   }, [])
+
+  const updateClientBankingProduct = React.useCallback(
+    (id: string, patch: Partial<ClientBankingProduct>) => {
+      setState((prev) => ({
+        ...prev,
+        clientBankingProducts: prev.clientBankingProducts.map((item) =>
+          item.id === id ? { ...item, ...patch } : item,
+        ),
+      }))
+    },
+    [],
+  )
 
   const addContact = React.useCallback((input: AddCrmContactInput) => {
     let created: CrmContact | null = null
@@ -673,6 +697,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           const value = nextPatch.expectedCloseDate
           nextPatch.expectedCloseDate =
             value && value.trim() ? value.trim() : undefined
+        }
+
+        if ("bankAccountNumber" in nextPatch) {
+          nextPatch.bankAccountNumber = normalizeDealBankAccountNumber(
+            nextPatch.bankAccountNumber ?? "",
+          )
         }
 
         let dealActivities = prev.dealActivities
@@ -1521,6 +1551,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addOpportunity,
       addClient,
       updateClient,
+      updateClientBankingProduct,
       deleteClient,
       addContact,
       updateContact,
@@ -1567,6 +1598,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addOpportunity,
       addClient,
       updateClient,
+      updateClientBankingProduct,
       deleteClient,
       addContact,
       updateContact,

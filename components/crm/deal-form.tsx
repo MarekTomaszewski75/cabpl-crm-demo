@@ -26,14 +26,17 @@ import {
 import { useSession } from "@/lib/auth/demo-session"
 import { formatContactName } from "@/lib/crm/contact-display"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
+import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import {
   getPipelineCategoryIds,
+  resolvePipelineCategoryId,
   type PipelineCategoryId,
 } from "@/lib/crm/deal-pipeline"
 import {
   getDealProductsForCategory,
+  toDealProductListItem,
   type DealProductListItem,
 } from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
@@ -60,11 +63,15 @@ export function DealForm({
   layout = "sheet",
   defaultClientId = null,
   defaultContactId = null,
+  defaultProductId = null,
+  defaultBankAccountNumber = null,
 }: {
   onSuccess: (deal: Deal) => void
   layout?: "page" | "sheet"
   defaultClientId?: string | null
   defaultContactId?: string | null
+  defaultProductId?: string | null
+  defaultBankAccountNumber?: string | null
 }) {
   const { user } = useSession()
   const { addDeal, addDealActivity, products, contacts } = useDemoData()
@@ -82,6 +89,9 @@ export function DealForm({
   const [source, setSource] = React.useState<DealSource>("recommendation")
   const [dealType, setDealType] = React.useState<DealType | null>(null)
   const [expectedCloseDate, setExpectedCloseDate] = React.useState("")
+  const [bankAccountNumber, setBankAccountNumber] = React.useState(
+    defaultBankAccountNumber ?? "",
+  )
   const [errors, setErrors] = React.useState<Errors>({})
 
   const productsInCategory = React.useMemo(() => {
@@ -109,6 +119,23 @@ export function DealForm({
     },
     [contactById, nameManuallyEdited],
   )
+
+  React.useEffect(() => {
+    if (!defaultProductId) return
+    const product = products.find((entry) => entry.id === defaultProductId)
+    if (!product) return
+    try {
+      const categoryId = resolvePipelineCategoryId(product.categoryId)
+      const listItem = toDealProductListItem(product)
+      setPipelineCategoryId(categoryId)
+      setProductId(product.id)
+      applySuggestedName(listItem, defaultContactId)
+    } catch {
+      // Produkt poza lejkiem demo — formularz bez prefill.
+    }
+    // Prefill tylko przy montowaniu formularza (np. z karty produktu bankowego).
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- products stabilne po seedzie
+  }, [defaultProductId, defaultContactId])
 
   function handleCategoryChange(value: string) {
     const nextCategoryId =
@@ -166,26 +193,33 @@ export function DealForm({
       return
     }
 
-    const created = addDeal({
-      name,
-      amount: amount ? Number(amount) : null,
-      currency,
-      contactId,
-      clientId: defaultClientId,
-      productId: productId!,
-      comments,
-      source,
-      dealType,
-      expectedCloseDate: expectedCloseDate.trim() || undefined,
-      ownerId: user.id,
-      regionId: user.regionId,
-    })
-    addDealActivity(created.id, "deal_created", user, {
-      note: created.name,
-      occurredAt: created.createdAt,
-    })
-    toast.success("Deal został dodany")
-    onSuccess(created)
+    try {
+      const created = addDeal({
+        name,
+        amount: amount ? Number(amount) : null,
+        currency,
+        contactId,
+        clientId: defaultClientId,
+        productId: productId!,
+        comments,
+        source,
+        dealType,
+        expectedCloseDate: expectedCloseDate.trim() || undefined,
+        bankAccountNumber: normalizeDealBankAccountNumber(bankAccountNumber),
+        ownerId: user.id,
+        regionId: user.regionId,
+      })
+      addDealActivity(created.id, "deal_created", user, {
+        note: created.name,
+        occurredAt: created.createdAt,
+      })
+      toast.success("Deal został dodany")
+      onSuccess(created)
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Nie udało się zapisać deala"
+      toast.error(message)
+    }
   }
 
   const body = (
@@ -303,7 +337,21 @@ export function DealForm({
       </Field>
       <Field>
         <FieldLabel>Kontakt</FieldLabel>
-        <ContactComboboxField value={contactId ? [contactId] : []} onChange={handleContactChange} />
+        <ContactComboboxField
+          single
+          value={contactId ? [contactId] : []}
+          onChange={handleContactChange}
+        />
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="deal-bank-account">Rachunek bankowy</FieldLabel>
+        <Input
+          id="deal-bank-account"
+          value={bankAccountNumber}
+          onChange={(event) => setBankAccountNumber(event.target.value)}
+          placeholder="np. PL00 0000 0000 0000 0000 0000 0000"
+          className="font-mono text-sm"
+        />
       </Field>
       <Field>
         <FieldLabel htmlFor="deal-comments">Komentarz</FieldLabel>

@@ -129,6 +129,7 @@ export function buildWinLeadResult(
     createdAt: now,
     ownerId: lead.ownerId,
     regionId: lead.regionId,
+    bankAccountNumber: null,
   }
 
   return {

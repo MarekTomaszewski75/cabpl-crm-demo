@@ -186,6 +186,7 @@ export function LeadForm({
       <Field>
         <FieldLabel>Kontakt</FieldLabel>
         <ContactComboboxField
+          single
           value={form.contactId ? [form.contactId] : []}
           onChange={(ids) =>
             setForm((p) => ({ ...p, contactId: ids[0] ?? null }))

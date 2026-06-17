@@ -37,6 +37,12 @@ const DEFAULT_DURATION_MS = 60 * 60 * 1000
 
 type MeetingFormDialogProps = {
   user: DemoUser
+  defaultClientId?: string | null
+  defaultNote?: string | null
+  defaultTitle?: string | null
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  trigger?: React.ReactNode
 }
 
 function defaultDateValue(): string {
@@ -47,13 +53,26 @@ function defaultTimeValue(): string {
   return "09:00"
 }
 
-export function MeetingFormDialog({ user }: MeetingFormDialogProps) {
+export function MeetingFormDialog({
+  user,
+  defaultClientId = null,
+  defaultNote = null,
+  defaultTitle = null,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
+  trigger,
+}: MeetingFormDialogProps) {
   const { meetings, clients, addMeeting } = useDemoData()
-  const [open, setOpen] = React.useState(false)
-  const [clientId, setClientId] = React.useState<string | undefined>(undefined)
+  const [internalOpen, setInternalOpen] = React.useState(false)
+  const [clientId, setClientId] = React.useState<string | undefined>(
+    defaultClientId ?? undefined,
+  )
   const [date, setDate] = React.useState(defaultDateValue)
   const [time, setTime] = React.useState(defaultTimeValue)
-  const [note, setNote] = React.useState("")
+  const [note, setNote] = React.useState(defaultNote ?? "")
+
+  const open = openProp ?? internalOpen
+  const setOpen = onOpenChangeProp ?? setInternalOpen
 
   const scopedClients = React.useMemo(
     () => filterByScope(clients, user),
@@ -61,11 +80,16 @@ export function MeetingFormDialog({ user }: MeetingFormDialogProps) {
   )
 
   function resetForm() {
-    setClientId(undefined)
+    setClientId(defaultClientId ?? undefined)
     setDate(defaultDateValue())
     setTime(defaultTimeValue())
-    setNote("")
+    setNote(defaultNote ?? "")
   }
+
+  React.useEffect(() => {
+    if (!open) return
+    resetForm()
+  }, [open, defaultClientId, defaultNote])
 
   function handleOpenChange(next: boolean) {
     setOpen(next)
@@ -90,7 +114,9 @@ export function MeetingFormDialog({ user }: MeetingFormDialogProps) {
 
     const meeting: Meeting = {
       id: createNextMeetingId(meetings),
-      title: `Spotkanie — ${client.name}`,
+      title:
+        defaultTitle?.trim() ||
+        `Spotkanie — ${client.name}`,
       clientId: client.id,
       startsAt: startsAt.toISOString(),
       endsAt: endsAt.toISOString(),
@@ -108,12 +134,18 @@ export function MeetingFormDialog({ user }: MeetingFormDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <PlusIcon data-icon="inline-start" />
-          Nowe spotkanie
-        </Button>
-      </DialogTrigger>
+      {openProp === undefined ? (
+        <DialogTrigger asChild>
+          {trigger ?? (
+            <Button>
+              <PlusIcon data-icon="inline-start" />
+              Nowe spotkanie
+            </Button>
+          )}
+        </DialogTrigger>
+      ) : (
+        trigger
+      )}
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Nowe spotkanie</DialogTitle>

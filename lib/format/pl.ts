@@ -19,6 +19,22 @@ export function formatCurrencyPln(value: number) {
   return currencyFormatter.format(value)
 }
 
+export function formatCurrency(
+  value: number,
+  currency: string,
+  maximumFractionDigits = 0,
+) {
+  return new Intl.NumberFormat("pl-PL", {
+    style: "currency",
+    currency,
+    maximumFractionDigits,
+  }).format(value)
+}
+
+export function formatIban(value: string) {
+  return value.replace(/\s/g, "").toUpperCase().replace(/(.{4})/g, "$1 ").trim()
+}
+
 export function formatDatePl(value: string | Date) {
   const date = typeof value === "string" ? new Date(value) : value
   return dateFormatter.format(date)

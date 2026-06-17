@@ -48,6 +48,8 @@ type ContactComboboxFieldProps = {
   value: string[]
   onChange: (ids: string[]) => void
   disabled?: boolean
+  /** Jeden kontakt (deal/lead) zamiast wielu (firma). */
+  single?: boolean
   "aria-invalid"?: boolean
 }
 
@@ -68,6 +70,7 @@ export function ContactComboboxField({
   value,
   onChange,
   disabled,
+  single = false,
   "aria-invalid": ariaInvalid,
 }: ContactComboboxFieldProps) {
   const anchorRef = useComboboxAnchor()
@@ -156,7 +159,14 @@ export function ContactComboboxField({
         value={selectedItems}
         onValueChange={(next) => {
           const selected = Array.isArray(next) ? next : []
-          onChange(selected.map((item) => item.value))
+          const ids = selected.map((item) => item.value)
+          if (single) {
+            const lastId = ids[ids.length - 1]
+            onChange(lastId ? [lastId] : [])
+            setComboboxOpen(false)
+            return
+          }
+          onChange(ids)
         }}
         isItemEqualToValue={(a, b) => a.value === b.value}
         itemToStringLabel={(item) => item.label}
