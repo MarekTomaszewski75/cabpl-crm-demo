@@ -75,6 +75,7 @@ import type {
   DealType,
   DemoUser,
   Product,
+  BankAccount,
 } from "@/types/crm"
 
 type DealsViewMode = "table" | "kanban"
@@ -111,6 +112,7 @@ function applyDealListFilters(
     contacts: readonly CrmContact[]
     clients: readonly Client[]
     products: readonly Product[]
+    bankAccounts: readonly BankAccount[]
   },
 ): Deal[] {
   const searchNormalized = filters.searchQuery.trim().toLowerCase()
@@ -154,6 +156,7 @@ function applyDealListFilters(
       filters.contacts,
       filters.clients,
       filters.products,
+      filters.bankAccounts,
     )
     return row._filter.includes(searchNormalized)
   })
@@ -162,7 +165,7 @@ function applyDealListFilters(
 export function DealsTable() {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { deals, users, contacts, clients, products } = useDemoData()
+  const { deals, users, contacts, clients, products, bankAccounts } = useDemoData()
   const [categoryFilters, setCategoryFilters] = React.useState<string[]>([])
   const [statusFilters, setStatusFilters] = React.useState<string[]>([])
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
@@ -221,6 +224,7 @@ export function DealsTable() {
       contacts,
       clients,
       products,
+      bankAccounts,
     }),
     [
       viewMode,
@@ -235,6 +239,7 @@ export function DealsTable() {
       contacts,
       clients,
       products,
+      bankAccounts,
       showOwnerColumn,
     ],
   )
@@ -357,9 +362,9 @@ export function DealsTable() {
   const tableData = React.useMemo(
     (): DealTableRow[] =>
       filteredDeals.map((deal) =>
-        buildDealTableRow(deal, users, contacts, clients, products),
+        buildDealTableRow(deal, users, contacts, clients, products, bankAccounts),
       ),
-    [filteredDeals, users, contacts, clients, products],
+    [filteredDeals, users, contacts, clients, products, bankAccounts],
   )
 
   const resultCountLabel = React.useMemo(() => {

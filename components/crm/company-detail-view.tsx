@@ -7,6 +7,7 @@ import {
   CompanyActivityPanel,
   type CompanyComposerTab,
 } from "@/components/crm/company-activity-panel"
+import { CompanyBankAccountsTable } from "@/components/crm/company-bank-accounts-table"
 import { CompanyBankingProductsTable } from "@/components/crm/company-banking-products-table"
 import { CompanyContactsTable } from "@/components/crm/company-contacts-table"
 import { CompanyDealsTable } from "@/components/crm/company-deals-table"
@@ -22,6 +23,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useSession } from "@/lib/auth/demo-session"
+import { getClientBankAccounts } from "@/lib/crm/bank-accounts"
 import { getClientBankingProducts } from "@/lib/crm/client-banking-products"
 import { getContactsForClient } from "@/lib/crm/contact-company-bindings"
 import {
@@ -39,7 +41,7 @@ type CompanyDetailViewProps = {
 export type CompanyEngagementSection = "tasks" | "meetings" | null
 
 type CompanyMainTab = "general" | "related"
-type CompanyRelatedTab = "leady" | "deale" | "produkty" | "kontakty" | "zadania"
+type CompanyRelatedTab = "leady" | "deale" | "produkty" | "rachunki" | "kontakty" | "zadania"
 
 export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const router = useRouter()
@@ -47,7 +49,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
   const highlightActivityId = searchParams.get("activityId")
   const relatedFromUrl = searchParams.get("related")
   const { user, isReady } = useSession()
-  const { clients, users, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, clientBankingProducts, products, productCategories } =
+  const { clients, users, tasks, meetings, clientDocuments, clientFiles, deals, leads, contacts, contactClientLinks, clientBankingProducts, products, productCategories, bankAccounts } =
     useDemoData()
   const [composerTab, setComposerTab] =
     React.useState<CompanyComposerTab>("note")
@@ -98,10 +100,15 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
     if (!user || !client) return []
     return getClientBankingProducts(
       client.id,
-      { clientBankingProducts, products, productCategories },
+      { clientBankingProducts, products, productCategories, bankAccounts },
       user,
     )
-  }, [client, user, clientBankingProducts, products, productCategories])
+  }, [client, user, clientBankingProducts, products, productCategories, bankAccounts])
+
+  const clientBankAccountRows = React.useMemo(() => {
+    if (!user || !client) return []
+    return getClientBankAccounts(client.id, bankAccounts, user)
+  }, [client, user, bankAccounts])
 
   React.useEffect(() => {
     if (highlightActivityId) {
@@ -115,6 +122,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
       relatedFromUrl === "leady" ||
       relatedFromUrl === "deale" ||
       relatedFromUrl === "produkty" ||
+      relatedFromUrl === "rachunki" ||
       relatedFromUrl === "kontakty" ||
       relatedFromUrl === "zadania"
     ) {
@@ -226,6 +234,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
                 <TabsTrigger value="leady">Leady</TabsTrigger>
                 <TabsTrigger value="deale">Deale</TabsTrigger>
                 <TabsTrigger value="produkty">Produkty</TabsTrigger>
+                <TabsTrigger value="rachunki">Rachunki</TabsTrigger>
                 <TabsTrigger value="kontakty">Kontakty</TabsTrigger>
                 <TabsTrigger value="zadania">Zadania</TabsTrigger>
               </TabsList>
@@ -272,6 +281,9 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
                 clientId={client.id}
                 products={clientBankingProductRows}
               />
+            </TabsContent>
+            <TabsContent value="rachunki" className="mt-4">
+              <CompanyBankAccountsTable accounts={clientBankAccountRows} />
             </TabsContent>
             <TabsContent value="kontakty" className="mt-4">
               <CompanyContactsTable

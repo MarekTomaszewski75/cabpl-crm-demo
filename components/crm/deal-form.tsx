@@ -24,9 +24,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useSession } from "@/lib/auth/demo-session"
+import { buildDealClientChangePatch } from "@/lib/crm/bank-accounts"
 import { formatContactName } from "@/lib/crm/contact-display"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
-import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
+import { DealBankAccountSelect } from "@/components/crm/deal-bank-account-select"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import {
@@ -40,9 +41,11 @@ import {
   type DealProductListItem,
 } from "@/lib/crm/deal-product-select"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import type { CrmContact, Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
+import { filterByScope } from "@/lib/rbac/scope"
+import type { Client, CrmContact, Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
 const DEAL_TYPE_NONE = "__none__"
+const CLIENT_NONE = "__none__"
 const CATEGORY_NONE = "__category_none__"
 const PRODUCT_NONE = "__product_none__"
 
@@ -64,17 +67,18 @@ export function DealForm({
   defaultClientId = null,
   defaultContactId = null,
   defaultProductId = null,
-  defaultBankAccountNumber = null,
+  defaultBankAccountId = null,
 }: {
   onSuccess: (deal: Deal) => void
   layout?: "page" | "sheet"
   defaultClientId?: string | null
   defaultContactId?: string | null
   defaultProductId?: string | null
-  defaultBankAccountNumber?: string | null
+  defaultBankAccountId?: string | null
 }) {
   const { user } = useSession()
-  const { addDeal, addDealActivity, products, contacts } = useDemoData()
+  const { addDeal, addDealActivity, products, contacts, clients, bankAccounts } =
+    useDemoData()
   const [pipelineCategoryId, setPipelineCategoryId] =
     React.useState<PipelineCategoryId | null>(null)
   const [productId, setProductId] = React.useState<string | null>(null)
@@ -85,14 +89,24 @@ export function DealForm({
   const [contactId, setContactId] = React.useState<string | null>(
     defaultContactId,
   )
+  const [clientId, setClientId] = React.useState<string | null>(
+    defaultClientId,
+  )
   const [comments, setComments] = React.useState("")
   const [source, setSource] = React.useState<DealSource>("recommendation")
   const [dealType, setDealType] = React.useState<DealType | null>(null)
   const [expectedCloseDate, setExpectedCloseDate] = React.useState("")
-  const [bankAccountNumber, setBankAccountNumber] = React.useState(
-    defaultBankAccountNumber ?? "",
+  const [bankAccountId, setBankAccountId] = React.useState<string | null>(
+    defaultBankAccountId,
   )
   const [errors, setErrors] = React.useState<Errors>({})
+
+  const scopedClients = React.useMemo(() => {
+    if (!user) return []
+    return filterByScope(clients, user).sort((a, b) =>
+      a.name.localeCompare(b.name, "pl"),
+    )
+  }, [clients, user])
 
   const productsInCategory = React.useMemo(() => {
     if (!pipelineCategoryId) return []
@@ -172,6 +186,17 @@ export function DealForm({
     applySuggestedName(selectedProduct, nextContactId)
   }
 
+  function handleClientChange(value: string) {
+    const nextClientId = value === CLIENT_NONE ? null : value
+    const patch = buildDealClientChangePatch(
+      { bankAccountId },
+      nextClientId,
+      bankAccounts,
+    )
+    setClientId(nextClientId)
+    setBankAccountId(patch.bankAccountId)
+  }
+
   function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!user?.regionId) return
@@ -199,13 +224,13 @@ export function DealForm({
         amount: amount ? Number(amount) : null,
         currency,
         contactId,
-        clientId: defaultClientId,
+        clientId,
         productId: productId!,
         comments,
         source,
         dealType,
         expectedCloseDate: expectedCloseDate.trim() || undefined,
-        bankAccountNumber: normalizeDealBankAccountNumber(bankAccountNumber),
+        bankAccountId,
         ownerId: user.id,
         regionId: user.regionId,
       })
@@ -336,6 +361,27 @@ export function DealForm({
         </Select>
       </Field>
       <Field>
+        <FieldLabel htmlFor="deal-client">Firma</FieldLabel>
+        <Select
+          value={clientId ?? CLIENT_NONE}
+          onValueChange={handleClientChange}
+        >
+          <SelectTrigger id="deal-client" className="w-full">
+            <SelectValue placeholder="Brak" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value={CLIENT_NONE}>Brak</SelectItem>
+              {scopedClients.map((client: Client) => (
+                <SelectItem key={client.id} value={client.id}>
+                  {client.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </Field>
+      <Field>
         <FieldLabel>Kontakt</FieldLabel>
         <ContactComboboxField
           single
@@ -345,12 +391,11 @@ export function DealForm({
       </Field>
       <Field>
         <FieldLabel htmlFor="deal-bank-account">Rachunek bankowy</FieldLabel>
-        <Input
+        <DealBankAccountSelect
           id="deal-bank-account"
-          value={bankAccountNumber}
-          onChange={(event) => setBankAccountNumber(event.target.value)}
-          placeholder="np. PL00 0000 0000 0000 0000 0000 0000"
-          className="font-mono text-sm"
+          clientId={clientId}
+          value={bankAccountId}
+          onValueChange={setBankAccountId}
         />
       </Field>
       <Field>

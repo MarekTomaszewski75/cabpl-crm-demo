@@ -58,7 +58,7 @@ export function ClientBankingProductDetailView({
 }: ClientBankingProductDetailViewProps) {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { clients, users, clientBankingProducts, products, productCategories } =
+  const { clients, users, clientBankingProducts, products, productCategories, bankAccounts } =
     useDemoData()
 
   const client = clients.find((entry) => entry.id === clientId)
@@ -66,10 +66,10 @@ export function ClientBankingProductDetailView({
     if (!user) return null
     return getEnrichedClientBankingProductById(
       productId,
-      { clientBankingProducts, products, productCategories },
+      { clientBankingProducts, products, productCategories, bankAccounts },
       user,
     )
-  }, [user, productId, clientBankingProducts, products, productCategories])
+  }, [user, productId, clientBankingProducts, products, productCategories, bankAccounts])
 
   const owner = users.find((entry) => entry.id === item?.ownerId)
   const utilizationPercent = item
@@ -172,21 +172,33 @@ export function ClientBankingProductDetailView({
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Rachunek bankowy</CardTitle>
+              <CardTitle className="text-base">
+                {item.isAccountProduct ? "Rachunek produktu" : "Rachunek obsługi"}
+              </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <ReadOnlyField label="Numer IBAN">
-                <span className="font-mono text-sm">
-                  {formatIban(item.bankAccountNumber)}
-                </span>
-              </ReadOnlyField>
-              <ReadOnlyField label="Waluta">{item.currency}</ReadOnlyField>
-              <ReadOnlyField label="Opis rachunku">
-                {item.bankAccountName}
-              </ReadOnlyField>
-              <ReadOnlyField label="Podsumowanie">
-                {formatClientBankingProductAmountSummary(item)}
-              </ReadOnlyField>
+              {item.bankAccount ? (
+                <>
+                  <ReadOnlyField label="Numer IBAN">
+                    <span className="font-mono text-sm">
+                      {formatIban(item.bankAccount.accountNumber)}
+                    </span>
+                  </ReadOnlyField>
+                  <ReadOnlyField label="Waluta">
+                    {item.bankAccount.currency}
+                  </ReadOnlyField>
+                  <ReadOnlyField label="Opis rachunku">
+                    {item.bankAccount.accountName}
+                  </ReadOnlyField>
+                  <ReadOnlyField label="Podsumowanie">
+                    {formatClientBankingProductAmountSummary(item)}
+                  </ReadOnlyField>
+                </>
+              ) : (
+                <ReadOnlyField label="Powiązany rachunek">
+                  <span className="text-muted-foreground">Brak przypisanego rachunku</span>
+                </ReadOnlyField>
+              )}
             </CardContent>
           </Card>
 
@@ -224,8 +236,11 @@ export function ClientBankingProductDetailView({
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2">
                   <ReadOnlyField label="Saldo">
-                    {item.balanceAmount != null
-                      ? formatCurrency(item.balanceAmount, item.currency)
+                    {item.bankAccount?.balanceAmount != null
+                      ? formatCurrency(
+                          item.bankAccount.balanceAmount,
+                          item.bankAccount.currency,
+                        )
                       : "—"}
                   </ReadOnlyField>
                 </div>

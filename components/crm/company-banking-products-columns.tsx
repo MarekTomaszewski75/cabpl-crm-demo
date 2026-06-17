@@ -32,8 +32,8 @@ export function buildCompanyBankingProductTableRow(
     item.product.name,
     item.categoryName,
     PRODUCT_TYPE_LABELS[item.product.productType],
-    item.bankAccountNumber,
-    item.bankAccountName,
+    item.bankAccount?.accountNumber,
+    item.bankAccount?.accountName,
     item.contractNumber,
     CLIENT_BANKING_PRODUCT_STATUS_LABELS[item.status],
     item.currency,
@@ -77,20 +77,26 @@ export function createCompanyBankingProductsColumns(): ColumnDef<CompanyBankingP
       ),
     },
     {
-      id: "bankAccount",
-      accessorFn: (row) => row.bankAccountNumber,
-      meta: { title: "Rachunek bankowy" },
+      id: "serviceBankAccount",
+      accessorFn: (row) => row.bankAccount?.accountNumber ?? "",
+      meta: { title: "Rachunek obsługi" },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Rachunek bankowy" />
+        <DataTableColumnHeader column={column} title="Rachunek obsługi" />
       ),
-      cell: ({ row }) => (
-        <div className="flex flex-col gap-0.5 font-mono text-xs">
-          <span>{formatIban(row.original.bankAccountNumber)}</span>
-          <span className="font-sans text-muted-foreground">
-            {row.original.bankAccountName}
-          </span>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const account = row.original.bankAccount
+        if (!account) {
+          return <span className="text-muted-foreground">—</span>
+        }
+        return (
+          <div className="flex flex-col gap-0.5 font-mono text-xs">
+            <span>{formatIban(account.accountNumber)}</span>
+            <span className="font-sans text-muted-foreground">
+              {account.accountName}
+            </span>
+          </div>
+        )
+      },
     },
     {
       id: "contractNumber",

@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
+import { DealBankAccountSelect } from "@/components/crm/deal-bank-account-select"
 import { DealProductCombobox } from "@/components/crm/deal-product-combobox"
 import { LeadEngagementIndicators } from "@/components/crm/lead-engagement-indicators"
 import { InlineEditableField } from "@/components/crm/inline-editable-field"
@@ -21,9 +22,10 @@ import {
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import {
-  formatDealBankAccountNumber,
-  normalizeDealBankAccountNumber,
-} from "@/lib/crm/deal-bank-account"
+  buildDealClientChangePatch,
+  formatBankAccountLabel,
+  resolveBankAccount,
+} from "@/lib/crm/bank-accounts"
 import { formatDatePl } from "@/lib/format/pl"
 import type { Deal, DealCurrency, DealSource, DealType } from "@/types/crm"
 
@@ -43,7 +45,7 @@ export function DealDetailSidebar({
   onDocumentsClick,
 }: DealDetailSidebarProps) {
   const { user } = useSession()
-  const { updateDeal, users, clients, tasks, meetings, dealDocuments, dealFiles, products } =
+  const { updateDeal, users, clients, tasks, meetings, dealDocuments, dealFiles, products, bankAccounts } =
     useDemoData()
   const readOnly = deal.status === "won" || deal.status === "lost"
   const productEditable = deal.status === "new"
@@ -71,6 +73,11 @@ export function DealDetailSidebar({
       user,
     )
   }, [deal.id, tasks, meetings, dealDocuments, dealFiles, user])
+
+  const linkedBankAccount = React.useMemo(
+    () => resolveBankAccount(deal.bankAccountId, bankAccounts),
+    [deal.bankAccountId, bankAccounts],
+  )
 
   const finisher = deal.finishedByUserId ? users.find((u) => u.id === deal.finishedByUserId) : undefined
   const firstFinisher = deal.firstFinishedByUserId ? users.find((u) => u.id === deal.firstFinishedByUserId) : undefined
@@ -164,36 +171,26 @@ export function DealDetailSidebar({
           <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Kontakty</span><ContactComboboxField value={deal.contactId ? [deal.contactId] : []} onChange={(ids) => updateDeal(deal.id, { contactId: ids[0] ?? null })} disabled={readOnly} /></div>
-          <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Firmy</span><Select value={deal.clientId ?? "__none__"} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { clientId: v === "__none__" ? null : v })}><SelectTrigger><SelectValue placeholder="Brak" /></SelectTrigger><SelectContent><SelectGroup><SelectItem value="__none__">Brak</SelectItem>{clients.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
-          {readOnly ? (
-            <div className="flex flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Rachunek bankowy</span>
+          <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Firmy</span><Select value={deal.clientId ?? "__none__"} disabled={readOnly} onValueChange={(v) => {
+            const nextClientId = v === "__none__" ? null : v
+            updateDeal(deal.id, buildDealClientChangePatch(deal, nextClientId, bankAccounts))
+          }}><SelectTrigger><SelectValue placeholder="Brak" /></SelectTrigger><SelectContent><SelectGroup><SelectItem value="__none__">Brak</SelectItem>{clients.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Rachunek bankowy</span>
+            {readOnly ? (
               <span className="font-mono text-sm text-muted-foreground">
-                {formatDealBankAccountNumber(deal.bankAccountNumber)}
+                {formatBankAccountLabel(linkedBankAccount)}
               </span>
-            </div>
-          ) : (
-            <InlineEditableField
-              label="Rachunek bankowy"
-              value={deal.bankAccountNumber ?? ""}
-              placeholder="np. PL00 0000 0000 0000 0000 0000 0000"
-              onSave={(value) =>
-                updateDeal(deal.id, {
-                  bankAccountNumber: normalizeDealBankAccountNumber(value),
-                })
-              }
-            >
-              {(props) => (
-                <Input
-                  value={props.value}
-                  className="font-mono text-sm"
-                  onChange={(event) => props.onChange(event.target.value)}
-                  onBlur={props.onBlur}
-                  onKeyDown={props.onKeyDown}
-                />
-              )}
-            </InlineEditableField>
-          )}
+            ) : (
+              <DealBankAccountSelect
+                clientId={deal.clientId}
+                value={deal.bankAccountId}
+                onValueChange={(nextBankAccountId) =>
+                  updateDeal(deal.id, { bankAccountId: nextBankAccountId })
+                }
+              />
+            )}
+          </div>
         </CardContent>
       </Card>
       <Card size="sm">

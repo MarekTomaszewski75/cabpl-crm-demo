@@ -21,7 +21,7 @@ import employeesSeed from "@/data/employees.json"
 import productCategoriesSeed from "@/data/product-categories.json"
 import productsSeed from "@/data/products.json"
 import clientBankingProductsSeed from "@/data/client-banking-products.json"
-import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
+import bankAccountsSeed from "@/data/bank-accounts.json"
 import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineSteps,
@@ -55,6 +55,7 @@ import type {
   Product,
   ProductCategory,
   ClientBankingProduct,
+  BankAccount,
   Task,
 } from "@/types/crm"
 
@@ -169,7 +170,30 @@ function normalizeDealStatus(
   return "new"
 }
 
-function normalizeLegacyDeal(raw: Record<string, unknown>): Deal {
+function normalizeDealBankAccountFromSeed(
+  raw: Record<string, unknown>,
+  bankAccounts: readonly BankAccount[],
+): string | null {
+  if (typeof raw.bankAccountId === "string") {
+    const id = raw.bankAccountId.trim()
+    return id || null
+  }
+  if (typeof raw.bankAccountNumber === "string") {
+    const normalized = raw.bankAccountNumber.replace(/\s/g, "").trim()
+    if (!normalized) return null
+    const match = bankAccounts.find(
+      (account) =>
+        account.accountNumber.replace(/\s/g, "") === normalized,
+    )
+    return match?.id ?? null
+  }
+  return null
+}
+
+function normalizeLegacyDeal(
+  raw: Record<string, unknown>,
+  bankAccounts: readonly BankAccount[],
+): Deal {
   const pipelineCategoryId = resolveSeedPipelineCategoryId(
     raw.pipelineCategoryId,
   )
@@ -210,22 +234,16 @@ function normalizeLegacyDeal(raw: Record<string, unknown>): Deal {
         : undefined,
     ownerId: String(raw.ownerId ?? ""),
     regionId: String(raw.regionId ?? ""),
-    bankAccountNumber: normalizeDealBankAccountFromSeed(raw),
+    bankAccountId: normalizeDealBankAccountFromSeed(raw, bankAccounts),
   }
   assertDealPipelineStatus(deal)
   return deal
 }
 
-function normalizeDealBankAccountFromSeed(
-  raw: Record<string, unknown>,
-): string | null {
-  if (typeof raw.bankAccountNumber === "string") {
-    return normalizeDealBankAccountNumber(raw.bankAccountNumber)
-  }
-  return null
-}
-
-function normalizeDeals(raw: unknown[]): Deal[] {
+function normalizeDeals(
+  raw: unknown[],
+  bankAccounts: readonly BankAccount[],
+): Deal[] {
   return raw.map((item) => {
     const deal = item as Record<string, unknown>
     const isLegacy =
@@ -234,7 +252,7 @@ function normalizeDeals(raw: unknown[]): Deal[] {
       typeof deal.amountPln === "number"
 
     if (isLegacy) {
-      return normalizeLegacyDeal(deal)
+      return normalizeLegacyDeal(deal, bankAccounts)
     }
 
     const pipelineCategoryId = resolveSeedPipelineCategoryId(
@@ -251,7 +269,7 @@ function normalizeDeals(raw: unknown[]): Deal[] {
       pipelineCategoryId,
       source: normalizeDealSource(deal.source),
       status: normalizeDealStatus(deal, pipelineCategoryId),
-      bankAccountNumber: normalizeDealBankAccountFromSeed(deal),
+      bankAccountId: normalizeDealBankAccountFromSeed(deal, bankAccounts),
     } as Deal
 
     assertDealPipelineStatus(normalized)
@@ -260,6 +278,7 @@ function normalizeDeals(raw: unknown[]): Deal[] {
 }
 
 export function loadSeedData() {
+  const bankAccounts = bankAccountsSeed as BankAccount[]
   return {
     users: usersSeed as DemoUser[],
     departments: departmentsSeed as Department[],
@@ -267,7 +286,7 @@ export function loadSeedData() {
     contacts: contactsSeed as CrmContact[],
     contactClientLinks: contactClientLinksSeed as ContactClientLink[],
     clients: clientsSeed as Client[],
-    opportunities: normalizeDeals(opportunitiesSeed as unknown[]),
+    opportunities: normalizeDeals(opportunitiesSeed as unknown[], bankAccounts),
     dealActivities: dealActivitiesSeed as DealActivity[],
     leads: leadsSeed as Lead[],
     leadActivities: leadActivitiesSeed as LeadActivity[],
@@ -284,6 +303,7 @@ export function loadSeedData() {
     productCategories: productCategoriesSeed as ProductCategory[],
     products: productsSeed as Product[],
     clientBankingProducts: clientBankingProductsSeed as ClientBankingProduct[],
+    bankAccounts,
   }
 }
 

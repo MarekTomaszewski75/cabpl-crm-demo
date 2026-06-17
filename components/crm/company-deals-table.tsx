@@ -53,6 +53,7 @@ import type {
   DealType,
   DemoUser,
   Product,
+  BankAccount,
 } from "@/types/crm"
 
 type CompanyDealsTableProps = {
@@ -90,6 +91,7 @@ function applyDealListFilters(
     contacts: readonly CrmContact[]
     clients: readonly Client[]
     products: readonly Product[]
+    bankAccounts: readonly BankAccount[]
   },
 ): Deal[] {
   const searchNormalized = filters.searchQuery.trim().toLowerCase()
@@ -133,6 +135,7 @@ function applyDealListFilters(
       filters.contacts,
       filters.clients,
       filters.products,
+      filters.bankAccounts,
     )
     return row._filter.includes(searchNormalized)
   })
@@ -141,7 +144,7 @@ function applyDealListFilters(
 export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
   const router = useRouter()
   const { user } = useSession()
-  const { users, contacts, clients, products } = useDemoData()
+  const { users, contacts, clients, products, bankAccounts } = useDemoData()
   const [categoryFilters, setCategoryFilters] = React.useState<string[]>([])
   const [statusFilters, setStatusFilters] = React.useState<string[]>([])
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
@@ -180,6 +183,7 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
       contacts,
       clients,
       products,
+      bankAccounts,
     }),
     [
       categoryFilters,
@@ -193,6 +197,7 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
       contacts,
       clients,
       products,
+      bankAccounts,
       showOwnerColumn,
     ],
   )
@@ -315,9 +320,9 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
   const tableData = React.useMemo(
     (): DealTableRow[] =>
       filteredDeals.map((deal) =>
-        buildDealTableRow(deal, users, contacts, clients, products),
+        buildDealTableRow(deal, users, contacts, clients, products, bankAccounts),
       ),
-    [filteredDeals, users, contacts, clients, products],
+    [filteredDeals, users, contacts, clients, products, bankAccounts],
   )
 
   const resultCountLabel = React.useMemo(() => {

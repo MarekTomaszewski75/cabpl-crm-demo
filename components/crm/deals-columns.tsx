@@ -20,8 +20,11 @@ import {
   type PipelineCategoryId,
 } from "@/lib/crm/deal-pipeline"
 import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
-import { formatDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
-import type { Client, CrmContact, Deal, DemoUser, Product } from "@/types/crm"
+import {
+  formatBankAccountLabel,
+  resolveBankAccount,
+} from "@/lib/crm/bank-accounts"
+import type { BankAccount, Client, CrmContact, Deal, DemoUser, Product } from "@/types/crm"
 
 export type DealTableRow = Deal & {
   ownerName: string
@@ -29,6 +32,7 @@ export type DealTableRow = Deal & {
   contactLabel: string | null
   categoryName: string
   productName: string
+  bankAccountDisplay: string
   _filter: string
 }
 
@@ -90,15 +94,15 @@ export function createDealsColumns(
         a.original.productName.localeCompare(b.original.productName, "pl"),
     },
     {
-      id: "bankAccountNumber",
-      accessorFn: (row) => row.bankAccountNumber ?? "",
+      id: "bankAccount",
+      accessorFn: (row) => row.bankAccountDisplay,
       meta: { title: "Rachunek bankowy" },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Rachunek bankowy" />
       ),
       cell: ({ row }) => (
         <span className="max-w-44 truncate font-mono text-xs">
-          {formatDealBankAccountNumber(row.original.bankAccountNumber)}
+          {row.original.bankAccountDisplay}
         </span>
       ),
     },
@@ -250,6 +254,7 @@ export function buildDealTableRow(
   contacts: readonly CrmContact[],
   clients: readonly Client[] = [],
   products: readonly Product[] = [],
+  bankAccounts: readonly BankAccount[] = [],
 ): DealTableRow {
   const ownerName =
     users.find((u) => u.id === deal.ownerId)?.displayName ?? "—"
@@ -265,6 +270,9 @@ export function buildDealTableRow(
   const categoryName = isPipelineCategoryId(deal.pipelineCategoryId)
     ? DEAL_PIPELINE_CATEGORY_LABELS[deal.pipelineCategoryId]
     : "—"
+  const bankAccountDisplay = formatBankAccountLabel(
+    resolveBankAccount(deal.bankAccountId, bankAccounts),
+  )
   return {
     ...deal,
     ownerName,
@@ -272,6 +280,7 @@ export function buildDealTableRow(
     contactLabel,
     categoryName,
     productName,
-    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName} ${categoryName} ${productName} ${deal.bankAccountNumber ?? ""}`.toLowerCase(),
+    bankAccountDisplay,
+    _filter: `${deal.name} ${ownerName} ${contactLabel ?? ""} ${clientName} ${categoryName} ${productName} ${bankAccountDisplay}`.toLowerCase(),
   }
 }

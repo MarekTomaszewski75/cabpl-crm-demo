@@ -1,5 +1,5 @@
-import { formatCurrency } from "@/lib/format/pl"
 import type { EnrichedClientBankingProduct } from "@/lib/crm/client-banking-products"
+import { formatCurrency } from "@/lib/format/pl"
 import type { ProductType } from "@/types/crm"
 
 const LIMIT_PRODUCT_TYPES: ProductType[] = [
@@ -47,8 +47,8 @@ export function formatClientBankingProductAmountSummary(
     return `Limit ${limit}`
   }
 
-  if (item.balanceAmount != null) {
-    return `Saldo ${formatCurrency(item.balanceAmount, currency)}`
+  if (item.bankAccount?.balanceAmount != null) {
+    return `Saldo ${formatCurrency(item.bankAccount.balanceAmount, item.bankAccount.currency)}`
   }
 
   return "—"

@@ -151,7 +151,7 @@ export function ClientBankingProductCrmActions({
         defaultClientId={client.id}
         defaultContactId={defaultContactId}
         defaultProductId={item.product.id}
-        defaultBankAccountNumber={item.bankAccountNumber}
+        defaultBankAccountId={item.bankAccountId}
         onSuccess={(deal) => router.push(`/pipeline/${deal.id}`)}
         trigger={<span className="hidden" />}
       />

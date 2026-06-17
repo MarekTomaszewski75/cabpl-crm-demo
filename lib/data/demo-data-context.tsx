@@ -14,7 +14,10 @@ import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
 import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
-import { normalizeDealBankAccountNumber } from "@/lib/crm/deal-bank-account"
+import {
+  buildDealClientChangePatch,
+  isBankAccountValidForClient,
+} from "@/lib/crm/bank-accounts"
 import { LEAD_LOST_REASON_LABELS } from "@/lib/crm/lead-labels"
 import { DEAL_LOST_REASON_LABELS } from "@/lib/crm/deal-labels"
 import {
@@ -344,9 +347,13 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           ...(input.expectedCloseDate?.trim()
             ? { expectedCloseDate: input.expectedCloseDate.trim() }
             : {}),
-          bankAccountNumber: normalizeDealBankAccountNumber(
-            input.bankAccountNumber ?? "",
-          ),
+          bankAccountId: isBankAccountValidForClient(
+            input.bankAccountId ?? null,
+            input.clientId ?? null,
+            prev.bankAccounts,
+          )
+            ? (input.bankAccountId ?? null)
+            : null,
         }
         created = deal
         return {
@@ -388,9 +395,13 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         ...opportunity,
         pipelineCategoryId,
         status: opportunity.status ?? "new",
-        bankAccountNumber: normalizeDealBankAccountNumber(
-          opportunity.bankAccountNumber ?? "",
-        ),
+        bankAccountId: isBankAccountValidForClient(
+          opportunity.bankAccountId ?? null,
+          opportunity.clientId,
+          prev.bankAccounts,
+        )
+          ? (opportunity.bankAccountId ?? null)
+          : null,
       }
       return {
         ...prev,
@@ -699,10 +710,29 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
             value && value.trim() ? value.trim() : undefined
         }
 
-        if ("bankAccountNumber" in nextPatch) {
-          nextPatch.bankAccountNumber = normalizeDealBankAccountNumber(
-            nextPatch.bankAccountNumber ?? "",
+        if ("clientId" in patch) {
+          const clientPatch = buildDealClientChangePatch(
+            deal,
+            patch.clientId ?? null,
+            prev.bankAccounts,
           )
+          nextPatch.clientId = clientPatch.clientId
+          if (!("bankAccountId" in patch)) {
+            nextPatch.bankAccountId = clientPatch.bankAccountId
+          }
+        }
+
+        if ("bankAccountId" in nextPatch) {
+          const clientId = nextPatch.clientId ?? deal.clientId
+          if (
+            !isBankAccountValidForClient(
+              nextPatch.bankAccountId ?? null,
+              clientId,
+              prev.bankAccounts,
+            )
+          ) {
+            nextPatch.bankAccountId = null
+          }
         }
 
         let dealActivities = prev.dealActivities

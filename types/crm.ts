@@ -283,8 +283,8 @@ export interface Deal extends ScopedEntity {
   createdAt: string
   probability?: number
   expectedCloseDate?: string
-  /** Opcjonalny rachunek bankowy powiązany z dealem (IBAN). */
-  bankAccountNumber: string | null
+  /** Opcjonalny rachunek bankowy firmy powiązany z dealem. */
+  bankAccountId: string | null
 }
 
 export type AddDealInput = {
@@ -298,7 +298,7 @@ export type AddDealInput = {
   source: DealSource | null
   dealType: DealType | null
   expectedCloseDate?: string
-  bankAccountNumber?: string | null
+  bankAccountId?: string | null
   ownerId: string
   regionId: string
 }
@@ -656,21 +656,40 @@ export type ClientBankingProductStatus =
   | "blocked"
   | "closed"
 
-/** Produkt bankowy już posiadany przez firmę — powiązany z rachunkiem. */
+export type BankAccountType =
+  | "current"
+  | "auxiliary"
+  | "foreign"
+  | "deposit"
+  | "escrow"
+  | "vat"
+
+/** Rachunek bankowy firmy — produkt bankowy typu „rachunek” lub konto obsługi. */
+export interface BankAccount extends ScopedEntity {
+  id: string
+  clientId: string
+  accountNumber: string
+  accountName: string
+  accountType: BankAccountType
+  currency: DealCurrency
+  status: ClientBankingProductStatus
+  openedAt: string
+  balanceAmount: number | null
+}
+
+/** Produkt bankowy już posiadany przez firmę (kredyt, leasing, konto itd.). */
 export interface ClientBankingProduct extends ScopedEntity {
   id: string
   clientId: string
   productId: string
-  bankAccountNumber: string
-  bankAccountName: string
+  /** Rachunek obsługi / rozliczeniowy — opcjonalny dla produktów nierachunkowych. */
+  bankAccountId: string | null
   contractNumber: string
   status: ClientBankingProductStatus
   openedAt: string
   expiresAt: string | null
   /** Limit produktu (kredyt, faktoring, gwarancja). */
   limitAmount: number | null
-  /** Saldo rachunku lub depozytu. */
-  balanceAmount: number | null
   /** Wykorzystanie limitu — np. linia kredytowa. */
   utilizedAmount: number | null
   currency: DealCurrency
