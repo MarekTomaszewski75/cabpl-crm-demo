@@ -398,6 +398,15 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ---
 
+## Przebieg demo (US-53)
+
+- Duplikat prospectu: `findProspectDuplicates` w `lib/crm/prospect-duplicate.ts`; formularz leada i `LeadImportDialog`.
+- Bramka etapu kredytowego (`new` → dalszy etap): `requiresCreditStageGate` + `DealStageGateDialog`.
+- Historia po konwersji: `DealSourceLeadCard` szuka leada po `opportunityId`.
+- Follow-up: `MeetingFormDialog` tworzy `Task` powiązany z firmą.
+- Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
+- Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
+
 ## Otwarte
 
 - (brak — patrz tracker)

@@ -23,7 +23,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { LEAD_SOURCE_LABELS, isTerminalLeadStatus } from "@/lib/crm/lead-labels"
+import { isTerminalLeadStatus, leadSourceLabel } from "@/lib/crm/lead-labels"
+import { useDemoData } from "@/lib/data/demo-data-context"
 import { LEAD_KANBAN_THEME } from "@/lib/crm/lead-kanban"
 import type { LeadEngagementCounts } from "@/lib/crm/lead-engagement-counts"
 import { formatDatePl, formatTimePl } from "@/lib/format/pl"
@@ -47,6 +48,7 @@ export function LeadKanbanCard({
   isDragOverlay = false,
   onOpen,
 }: LeadKanbanCardProps) {
+  const { salesDictionary } = useDemoData()
   const theme = LEAD_KANBAN_THEME[status]
   const dragDisabled = isDragOverlay || isTerminalLeadStatus(lead.status)
   const companyName = lead.companyName.trim()
@@ -120,7 +122,7 @@ export function LeadKanbanCard({
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1">
           <LogInIcon className="size-3.5 shrink-0" aria-hidden />
-          {LEAD_SOURCE_LABELS[lead.source]}
+          {leadSourceLabel(lead.source, salesDictionary)}
         </span>
       </div>
 

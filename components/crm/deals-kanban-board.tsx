@@ -6,6 +6,10 @@ import type { DragEndEvent } from "@dnd-kit/core"
 import { BriefcaseIcon, PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import { DealFinishDialog } from "@/components/crm/deal-finish-dialog"
+import {
+  DealStageGateDialog,
+  type StageGateValues,
+} from "@/components/crm/deal-stage-gate-dialog"
 import { DealKanbanCard } from "@/components/crm/deal-kanban-card"
 import { Button } from "@/components/ui/button"
 import {
@@ -32,6 +36,7 @@ import {
   getDealKanbanStatuses,
   getDealKanbanTheme,
 } from "@/lib/crm/deal-kanban"
+import { requiresCreditStageGate } from "@/lib/crm/deal-stage-gate"
 import {
   isDealWorkflowStatusChange,
   requiresDealFinishDialog,
@@ -129,6 +134,10 @@ export function DealsKanbanBoard({
   const [finishMode, setFinishMode] = React.useState<"won" | "lost" | undefined>(
     undefined,
   )
+  const [gateRequest, setGateRequest] = React.useState<{
+    dealId: string
+    nextStatus: DealStatus
+  } | null>(null)
 
   React.useEffect(() => {
     setColumns(buildDealColumns(deals, pipelineCategoryId))
@@ -199,6 +208,10 @@ export function DealsKanbanBoard({
             pipelineCategoryId,
           )
         ) {
+          if (requiresCreditStageGate(deal, newStatus)) {
+            setGateRequest({ dealId, nextStatus: newStatus })
+            return buildDealColumns(deals, pipelineCategoryId)
+          }
           const previousStatus = deal.status
           updateDeal(dealId, { status: newStatus })
           addDealActivity(dealId, "deal_status_changed", user, {
@@ -383,6 +396,35 @@ export function DealsKanbanBoard({
           defaultMode={finishMode}
         />
       ) : null}
+      <DealStageGateDialog
+        deal={
+          gateRequest
+            ? (allDeals.find((deal) => deal.id === gateRequest.dealId) ?? null)
+            : null
+        }
+        open={gateRequest !== null}
+        onOpenChange={(open) => {
+          if (!open) setGateRequest(null)
+        }}
+        onConfirm={(values: StageGateValues) => {
+          if (!user || !gateRequest) return
+          const deal = allDeals.find((item) => item.id === gateRequest.dealId)
+          if (!deal) return
+          updateDeal(deal.id, {
+            status: gateRequest.nextStatus,
+            amount: values.amount,
+            expectedCloseDate: values.expectedCloseDate,
+            stageChecklist: values.stageChecklist,
+          })
+          addDealActivity(deal.id, "deal_status_changed", user, {
+            note: `${getDealStatusLabel(deal.status, pipelineCategoryId)} → ${getDealStatusLabel(gateRequest.nextStatus, pipelineCategoryId)}`,
+          })
+          toast.success(
+            `Przeniesiono do „${columnLabels[gateRequest.nextStatus]}”`,
+          )
+          setGateRequest(null)
+        }}
+      />
     </>
   )
 }

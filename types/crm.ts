@@ -283,6 +283,8 @@ export interface Deal extends ScopedEntity {
   createdAt: string
   probability?: number
   expectedCloseDate?: string
+  /** Checklista bramki etapu (demo: lejek kredytowy, wyjście z „Nowy”). */
+  stageChecklist?: Record<string, boolean>
   /** Opcjonalny rachunek bankowy firmy powiązany z dealem. */
   bankAccountId: string | null
 }
@@ -315,6 +317,7 @@ export interface Lead extends ScopedEntity {
   source: LeadSource
   leadType: LeadType | null
   companyName: string
+  nip?: string
   position: string
   phones: string[]
   emails: string[]
@@ -356,6 +359,24 @@ export interface DealActivity {
   responsibleUserId?: string
   participantUserIds?: string[]
   participantContactIds?: string[]
+}
+
+export type SalesDictionaryStatus = "approved" | "pending"
+
+export interface SalesDictionaryItem {
+  id: LeadSource
+  labelPl: string
+  proposedLabelPl: string | null
+  status: SalesDictionaryStatus
+}
+
+export interface AuditEntry {
+  id: string
+  occurredAt: string
+  actorUserId: string
+  areaPl: string
+  actionPl: string
+  detailPl: string
 }
 
 export type AddLeadInput = {

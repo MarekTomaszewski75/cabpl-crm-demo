@@ -72,6 +72,7 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 50  | [US-50 Activity form cleanup](./US-50-activity-form-cleanup/story.md)                   | P1        | US-33, US-34, US-35                             |
 | 51  | [US-51 Merge files and documents](./US-51-merge-files-documents/story.md)               | P0        | US-42, US-33, US-34, US-35                      |
 | 52  | [US-52 Company AI chat (simulation)](./US-52-company-ai-chat/story.md)                  | P1        | US-35, US-45, US-49                             |
+| 53  | [US-53 Demo scenario prep](./US-53-demo-scenario-prep/story.md)                         | P0        | US-11, US-17, US-18, US-34, US-43               |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  

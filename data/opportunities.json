@@ -1,5 +1,28 @@
 [
   {
+    "id": "opp-demo-gate",
+    "name": "Kredyt na linię produkcyjną — bramka etapu",
+    "clientId": "client-001",
+    "contactId": null,
+    "productId": "prod-014",
+    "pipelineCategoryId": "pcat-credit",
+    "comments": "Demo: wyjście z etapu Nowy wymaga kwoty, daty zamknięcia i checklisty.",
+    "source": "recommendation",
+    "dealType": null,
+    "amount": null,
+    "currency": "PLN",
+    "status": "new",
+    "lostReason": null,
+    "finishedByUserId": null,
+    "finishedAt": null,
+    "firstFinishedByUserId": null,
+    "createdAt": "2026-05-28T08:00:00.000Z",
+    "probability": 20,
+    "bankAccountId": null,
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
     "id": "opp-001",
     "name": "Linia kredytowa obrotowa",
     "clientId": "client-001",

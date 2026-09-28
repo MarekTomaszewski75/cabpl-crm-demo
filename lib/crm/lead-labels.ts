@@ -44,6 +44,16 @@ export const LEAD_LOST_REASON_LABELS: Record<LeadLostReason, string> = {
   other: "Inne",
 }
 
+export function leadSourceLabel(
+  source: LeadSource,
+  dictionary?: readonly { id: LeadSource; labelPl: string }[],
+): string {
+  return (
+    dictionary?.find((item) => item.id === source)?.labelPl ??
+    LEAD_SOURCE_LABELS[source]
+  )
+}
+
 export const LEAD_SOURCE_OPTIONS = (
   Object.entries(LEAD_SOURCE_LABELS) as [LeadSource, string][]
 ).map(([value, label]) => ({ value, label }))

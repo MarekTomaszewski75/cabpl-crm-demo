@@ -114,7 +114,7 @@ function applyLeadListFilters(
 export function CompanyLeadsTable({ leads }: CompanyLeadsTableProps) {
   const router = useRouter()
   const { user } = useSession()
-  const { users, contacts } = useDemoData()
+  const { users, contacts, salesDictionary } = useDemoData()
   const [statusTab, setStatusTab] = React.useState<StatusTabValue>(FILTER_ALL)
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
@@ -123,6 +123,12 @@ export function CompanyLeadsTable({ leads }: CompanyLeadsTableProps) {
 
   const showOwnerColumn = user?.role !== "advisor"
 
+  const sourceLabels = React.useMemo(() => {
+    const labels = { ...LEAD_SOURCE_LABELS }
+    for (const item of salesDictionary) labels[item.id] = item.labelPl
+    return labels
+  }, [salesDictionary])
+
   const columns = React.useMemo(
     () =>
       createLeadsColumns({
@@ -130,8 +136,9 @@ export function CompanyLeadsTable({ leads }: CompanyLeadsTableProps) {
         contacts,
         showOwnerColumn,
         showCompanyColumn: false,
+        sourceLabels,
       }),
-    [users, contacts, showOwnerColumn],
+    [users, contacts, showOwnerColumn, sourceLabels],
   )
 
   const leadGroupingOptions = React.useMemo(
@@ -211,12 +218,12 @@ export function CompanyLeadsTable({ leads }: CompanyLeadsTableProps) {
     }
     return (Object.keys(LEAD_SOURCE_LABELS) as LeadSource[])
       .map((source) => ({
-        label: LEAD_SOURCE_LABELS[source],
+        label: sourceLabels[source],
         value: source,
         count: counts.get(source) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [statusScopedLeads])
+  }, [statusScopedLeads, sourceLabels])
 
   const leadTypeFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()

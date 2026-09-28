@@ -27,6 +27,7 @@ import { createNextClientId } from "@/lib/crm/client-id"
 import { createNextContactId } from "@/lib/crm/contact-id"
 import { createNextContactEventId } from "@/lib/crm/contact-event-id"
 import { createNextOpportunityId } from "@/lib/crm/opportunity-id"
+import { createNextAuditId } from "@/lib/crm/audit-id"
 import {
   isDealWorkflowStatus,
   isPipelineCategoryId,
@@ -59,6 +60,8 @@ import type {
   AddLeadFileInput,
   AddDealFileInput,
   Lead,
+  LeadSource,
+  AuditEntry,
   LeadDocument,
   DealDocument,
   ClientDocument,
@@ -251,6 +254,13 @@ type DemoDataContextValue = DemoDataState & {
   addDepartment: (department: Department) => void
   updateDepartment: (id: string, patch: Partial<Department>) => void
   removeDepartment: (id: string) => { ok: true } | { ok: false; reason: string }
+  proposeSalesDictionaryLabel: (
+    sourceId: LeadSource,
+    proposedLabel: string,
+    user: DemoUser,
+  ) => void
+  approveSalesDictionaryLabel: (sourceId: LeadSource, user: DemoUser) => void
+  appendAuditEntry: (input: Omit<AuditEntry, "id">) => void
 }
 
 const DemoDataContext = React.createContext<DemoDataContextValue | null>(null)
@@ -1563,6 +1573,87 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     return result
   }, [])
 
+  const proposeSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, proposedLabel: string, user: DemoUser) => {
+      const trimmed = proposedLabel.trim()
+      if (!trimmed) return
+      setState((prev) => {
+        const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
+        if (!item || item.labelPl === trimmed) return prev
+        const entry: AuditEntry = {
+          id: createNextAuditId(prev.auditLog),
+          occurredAt: new Date().toISOString(),
+          actorUserId: user.id,
+          areaPl: "Słownik",
+          actionPl: "Zgłoszono zmianę",
+          detailPl: `Źródło „${item.labelPl}” → „${trimmed}” (do zatwierdzenia)`,
+        }
+        return {
+          ...prev,
+          salesDictionary: prev.salesDictionary.map((entryItem) =>
+            entryItem.id === sourceId
+              ? {
+                  ...entryItem,
+                  proposedLabelPl: trimmed,
+                  status: "pending",
+                }
+              : entryItem,
+          ),
+          auditLog: [...prev.auditLog, entry],
+        }
+      })
+    },
+    [],
+  )
+
+  const approveSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser) => {
+      if (user.role !== "regional_manager") return
+      setState((prev) => {
+        const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
+        if (!item || item.status !== "pending" || !item.proposedLabelPl) {
+          return prev
+        }
+        const entry: AuditEntry = {
+          id: createNextAuditId(prev.auditLog),
+          occurredAt: new Date().toISOString(),
+          actorUserId: user.id,
+          areaPl: "Słownik",
+          actionPl: "Zatwierdzono zmianę",
+          detailPl: `Źródło „${item.labelPl}” → „${item.proposedLabelPl}”`,
+        }
+        return {
+          ...prev,
+          salesDictionary: prev.salesDictionary.map((entryItem) =>
+            entryItem.id === sourceId
+              ? {
+                  ...entryItem,
+                  labelPl: item.proposedLabelPl ?? entryItem.labelPl,
+                  proposedLabelPl: null,
+                  status: "approved",
+                }
+              : entryItem,
+          ),
+          auditLog: [...prev.auditLog, entry],
+        }
+      })
+    },
+    [],
+  )
+
+  const appendAuditEntry = React.useCallback(
+    (input: Omit<AuditEntry, "id">) => {
+      setState((prev) => ({
+        ...prev,
+        auditLog: [
+          ...prev.auditLog,
+          { ...input, id: createNextAuditId(prev.auditLog) },
+        ],
+      }))
+    },
+    [],
+  )
+
   const value = React.useMemo(
     () => ({
       ...state,
@@ -1611,6 +1702,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addDepartment,
       updateDepartment,
       removeDepartment,
+      proposeSalesDictionaryLabel,
+      approveSalesDictionaryLabel,
+      appendAuditEntry,
     }),
     [
       state,
@@ -1658,6 +1752,9 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       addDepartment,
       updateDepartment,
       removeDepartment,
+      proposeSalesDictionaryLabel,
+      approveSalesDictionaryLabel,
+      appendAuditEntry,
     ],
   )
 

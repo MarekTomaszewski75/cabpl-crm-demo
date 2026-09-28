@@ -11,6 +11,7 @@ import {
   HandshakeIcon,
   ActivityIcon,
   NetworkIcon,
+  ScaleIcon,
   ShieldCheckIcon,
   SunIcon,
   UserPlusIcon,
@@ -42,6 +43,7 @@ const NAV_ICONS: Record<NavItemId, LucideIcon> = {
   calendar: CalendarIcon,
   teamActivities: ActivityIcon,
   compliance: ShieldCheckIcon,
+  salesRules: ScaleIcon,
 }
 
 function isNavItemActive(pathname: string, href: string): boolean {

@@ -11,9 +11,15 @@ import {
 import { DealDetailHeader } from "@/components/crm/deal-detail-header"
 import { DealDetailSidebar } from "@/components/crm/deal-detail-sidebar"
 import { DealFinishDialog } from "@/components/crm/deal-finish-dialog"
+import { DealSourceLeadCard } from "@/components/crm/deal-source-lead-card"
+import {
+  DealStageGateDialog,
+  type StageGateValues,
+} from "@/components/crm/deal-stage-gate-dialog"
 import { DealStatusBar } from "@/components/crm/deal-status-bar"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useSession } from "@/lib/auth/demo-session"
+import { requiresCreditStageGate } from "@/lib/crm/deal-stage-gate"
 import { isDealWorkflowStatusChange } from "@/lib/crm/deal-status-transition"
 import { getDealStatusLabel } from "@/lib/crm/deal-pipeline-labels"
 import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
@@ -34,6 +40,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
   const [composerTab, setComposerTab] = React.useState<DealComposerTab>("note")
   const [engagementSection, setEngagementSection] =
     React.useState<DealEngagementSection>(null)
+  const [gateStatus, setGateStatus] = React.useState<DealStatus | null>(null)
 
   const deal = deals.find((d) => d.id === dealId)
   const owner = users.find((u) => u.id === deal?.ownerId)
@@ -85,6 +92,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
           setDefaultMode(undefined)
           setOpen(true)
         }}
+        onStageGate={setGateStatus}
         onStatusChange={(next: DealStatus) => {
           if (!user || deal.status === next) return
           if (
@@ -100,6 +108,10 @@ export function DealDetailView({ dealId }: { dealId: string }) {
             })
             return
           }
+          if (requiresCreditStageGate(deal, next)) {
+            setGateStatus(next)
+            return
+          }
           const prev = deal.status
           const categoryId = isPipelineCategoryId(deal.pipelineCategoryId)
             ? deal.pipelineCategoryId
@@ -110,6 +122,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
           })
         }}
       />
+      <DealSourceLeadCard dealId={deal.id} />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
         <DealDetailSidebar
           deal={deal}
@@ -137,6 +150,30 @@ export function DealDetailView({ dealId }: { dealId: string }) {
         open={open}
         onOpenChange={setOpen}
         defaultMode={defaultMode}
+      />
+      <DealStageGateDialog
+        deal={gateStatus ? deal : null}
+        open={gateStatus !== null}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) setGateStatus(null)
+        }}
+        onConfirm={(values: StageGateValues) => {
+          if (!user || !gateStatus) return
+          const prev = deal.status
+          const categoryId = isPipelineCategoryId(deal.pipelineCategoryId)
+            ? deal.pipelineCategoryId
+            : undefined
+          updateDeal(deal.id, {
+            status: gateStatus,
+            amount: values.amount,
+            expectedCloseDate: values.expectedCloseDate,
+            stageChecklist: values.stageChecklist,
+          })
+          addDealActivity(deal.id, "deal_status_changed", user, {
+            note: `${getDealStatusLabel(prev, categoryId)} → ${getDealStatusLabel(gateStatus, categoryId)}`,
+          })
+          setGateStatus(null)
+        }}
       />
     </div>
   )

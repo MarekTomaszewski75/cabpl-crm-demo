@@ -15,6 +15,7 @@ export type NavItemId =
   | "analytics"
   | "calendar"
   | "compliance"
+  | "salesRules"
 
 const ALL_ROLES: UserRole[] = ["advisor", "regional_manager", "executive"]
 
@@ -134,6 +135,13 @@ defineNavItem({
   roles: ALL_ROLES,
 })
 
+const salesRules = defineNavItem({
+  id: "salesRules",
+  labelPl: "Reguły sprzedaży",
+  href: "/sales-rules",
+  roles: ALL_ROLES,
+})
+
 /** Moduły poza widoczną nawigacją prezentacji (trasy i breadcrumb nadal działają). */
 export const PRESENTATION_HIDDEN_NAV_IDS: readonly NavItemId[] = [
   "employees",
@@ -149,7 +157,7 @@ export const CRM_NAV_STRUCTURE: readonly CrmNavEntry[] = [
   {
     type: "group",
     labelPl: "CRM i sprzedaż",
-    items: [leads, pipeline, contacts, clients, products],
+    items: [leads, pipeline, contacts, clients, products, salesRules],
   },
   { type: "item", item: analytics },
 ]
