@@ -18,6 +18,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -29,9 +30,10 @@ import {
 } from "@/components/ui/select"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { createNextMeetingId } from "@/lib/crm/meeting-id"
+import { createNextTaskId } from "@/lib/crm/task-id"
 import { toLocalDateKey } from "@/lib/crm/calendar-week"
 import { filterByScope } from "@/lib/rbac/scope"
-import type { Client, DemoUser, Meeting } from "@/types/crm"
+import type { Client, DemoUser, Meeting, Task } from "@/types/crm"
 
 const DEFAULT_DURATION_MS = 60 * 60 * 1000
 
@@ -53,6 +55,12 @@ function defaultTimeValue(): string {
   return "09:00"
 }
 
+function addDays(dateKey: string, days: number): string {
+  const date = new Date(`${dateKey}T12:00:00`)
+  date.setDate(date.getDate() + days)
+  return toLocalDateKey(date)
+}
+
 export function MeetingFormDialog({
   user,
   defaultClientId = null,
@@ -62,7 +70,7 @@ export function MeetingFormDialog({
   onOpenChange: onOpenChangeProp,
   trigger,
 }: MeetingFormDialogProps) {
-  const { meetings, clients, addMeeting } = useDemoData()
+  const { meetings, clients, tasks, addMeeting, addTask } = useDemoData()
   const [internalOpen, setInternalOpen] = React.useState(false)
   const [clientId, setClientId] = React.useState<string | undefined>(
     defaultClientId ?? undefined,
@@ -70,6 +78,12 @@ export function MeetingFormDialog({
   const [date, setDate] = React.useState(defaultDateValue)
   const [time, setTime] = React.useState(defaultTimeValue)
   const [note, setNote] = React.useState(defaultNote ?? "")
+  const [createFollowUp, setCreateFollowUp] = React.useState(true)
+  const [followUpTitle, setFollowUpTitle] = React.useState("")
+  const [followUpDate, setFollowUpDate] = React.useState(() =>
+    addDays(defaultDateValue(), 3),
+  )
+  const followUpTouched = React.useRef(false)
 
   const open = openProp ?? internalOpen
   const setOpen = onOpenChangeProp ?? setInternalOpen
@@ -81,9 +95,16 @@ export function MeetingFormDialog({
 
   function resetForm() {
     setClientId(defaultClientId ?? undefined)
-    setDate(defaultDateValue())
+    const nextDate = defaultDateValue()
+    setDate(nextDate)
     setTime(defaultTimeValue())
     setNote(defaultNote ?? "")
+    setCreateFollowUp(true)
+    followUpTouched.current = false
+    setFollowUpTitle(
+      defaultNote?.trim() ? `Follow-up: ${defaultNote.trim()}` : "",
+    )
+    setFollowUpDate(addDays(nextDate, 3))
   }
 
   React.useEffect(() => {
@@ -126,7 +147,28 @@ export function MeetingFormDialog({
     }
 
     addMeeting(meeting)
-    toast.success("Spotkanie zostało dodane")
+    const followUpRegionId = user.regionId ?? client.regionId
+    if (createFollowUp && followUpRegionId) {
+      const task: Task = {
+        id: createNextTaskId(tasks),
+        title:
+          followUpTitle.trim() ||
+          (note.trim()
+            ? `Follow-up: ${note.trim()}`
+            : `Follow-up — ${client.name}`),
+        dueDate: followUpDate || addDays(date, 3),
+        priority: "medium",
+        completed: false,
+        clientId: client.id,
+        opportunityId: null,
+        ownerId: user.id,
+        regionId: followUpRegionId,
+      }
+      addTask(task)
+      toast.success("Spotkanie zostało dodane. Utworzono zadanie follow-up.")
+    } else {
+      toast.success("Spotkanie zostało dodane")
+    }
     handleOpenChange(false)
   }
 
@@ -197,10 +239,58 @@ export function MeetingFormDialog({
               <Input
                 id="meeting-note"
                 value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="np. Siedziba klienta, online Teams"
+                onChange={(e) => {
+                  const value = e.target.value
+                  setNote(value)
+                  if (!followUpTouched.current) {
+                    setFollowUpTitle(
+                      value.trim() ? `Follow-up: ${value.trim()}` : "",
+                    )
+                  }
+                }}
+                placeholder="Ustalenia ze spotkania"
               />
             </Field>
+            <Field orientation="horizontal">
+              <Checkbox
+                id="meeting-follow-up"
+                checked={createFollowUp}
+                onCheckedChange={(checked) => setCreateFollowUp(checked === true)}
+              />
+              <FieldLabel htmlFor="meeting-follow-up">
+                Utwórz zadanie follow-up
+              </FieldLabel>
+            </Field>
+            {createFollowUp ? (
+              <>
+                <Field>
+                  <FieldLabel htmlFor="meeting-follow-up-title">
+                    Treść zobowiązania
+                  </FieldLabel>
+                  <Input
+                    id="meeting-follow-up-title"
+                    value={followUpTitle}
+                    onChange={(e) => {
+                      followUpTouched.current = true
+                      setFollowUpTitle(e.target.value)
+                    }}
+                    placeholder="np. Wysłać listę dokumentów"
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="meeting-follow-up-date">
+                    Termin follow-up
+                  </FieldLabel>
+                  <Input
+                    id="meeting-follow-up-date"
+                    type="date"
+                    value={followUpDate}
+                    onChange={(e) => setFollowUpDate(e.target.value)}
+                    required
+                  />
+                </Field>
+              </>
+            ) : null}
           </FieldGroup>
           <DialogFooter className="mt-4">
             <Button

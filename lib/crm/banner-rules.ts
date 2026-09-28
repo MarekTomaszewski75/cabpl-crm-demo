@@ -462,27 +462,12 @@ function buildCriticalDealPayload(deal: Deal, asOfDate: Date): BannerPayload {
   }
 }
 
-export const PRODUCTS_SYNC_SESSION_KEY = "products-sync-notified"
+export const PRODUCTS_SYNC_RETRY_KEY = "products-sync-retried"
 
-export const PRODUCTS_SYNC_BANNER_CHANCE = 0.3
-
-export function createProductCatalogSyncBanner(): BannerPayload {
-  return {
-    id: "sync-products",
-    variant: "info",
-    priority: SYSTEM_DEMO_BANNER_PRIORITY,
-    dismissible: true,
-    titlePl: "Katalog produktów zaktualizowany",
-    descriptionPl: "Pobrano zmiany z systemu produktowego banku.",
-  }
-}
-
-/** Los ~30% przy pierwszym wejściu na `/products` w sesji przeglądarki. */
-export function shouldShowProductCatalogSyncBanner(): boolean {
+/** Alert błędu na `/products`, dopóki w tej sesji nie kliknięto Ponów. */
+export function shouldShowProductCatalogSyncFailure(): boolean {
   if (typeof sessionStorage === "undefined") return false
-  if (sessionStorage.getItem(PRODUCTS_SYNC_SESSION_KEY)) return false
-  sessionStorage.setItem(PRODUCTS_SYNC_SESSION_KEY, "1")
-  return Math.random() < PRODUCTS_SYNC_BANNER_CHANCE
+  return sessionStorage.getItem(PRODUCTS_SYNC_RETRY_KEY) !== "1"
 }
 
 export function getCriticalDealBanner(

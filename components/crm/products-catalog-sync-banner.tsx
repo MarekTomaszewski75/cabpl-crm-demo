@@ -1,37 +1,77 @@
 "use client"
 
 import * as React from "react"
-import { CrmBannerPayloadContent } from "@/components/crm/crm-banner-payload-content"
-import { useBanners } from "@/components/ui/banner"
+import { AlertTriangleIcon, InfoIcon } from "lucide-react"
+import { toast } from "sonner"
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import { useSession } from "@/lib/auth/demo-session"
 import {
-  BANNER_INITIAL_DELAY_MS,
-  createProductCatalogSyncBanner,
+  PRODUCTS_SYNC_RETRY_KEY,
   shouldShowCrmBannersForUser,
-  shouldShowProductCatalogSyncBanner,
+  shouldShowProductCatalogSyncFailure,
 } from "@/lib/crm/banner-rules"
+import { useDemoData } from "@/lib/data/demo-data-context"
 
 export function ProductsCatalogSyncBanner() {
   const { user, isReady } = useSession()
-  const { onBannerAdd } = useBanners()
+  const { appendAuditEntry } = useDemoData()
+  const [phase, setPhase] = React.useState<"failure" | "success" | null>(null)
 
   React.useEffect(() => {
     if (!isReady || !user || !shouldShowCrmBannersForUser(user)) return
     if (user.role === "regional_manager") return
-    if (!shouldShowProductCatalogSyncBanner()) return
+    if (!shouldShowProductCatalogSyncFailure()) return
+    setPhase("failure")
+  }, [isReady, user])
 
-    const payload = createProductCatalogSyncBanner()
-    const timeoutId = setTimeout(() => {
-      onBannerAdd({
-        content: <CrmBannerPayloadContent payload={payload} />,
-        variant: payload.variant,
-        priority: payload.priority,
-        dismissible: payload.dismissible,
-      })
-    }, BANNER_INITIAL_DELAY_MS)
+  function retry() {
+    if (!user || phase !== "failure") return
+    sessionStorage.setItem(PRODUCTS_SYNC_RETRY_KEY, "1")
+    appendAuditEntry({
+      occurredAt: new Date().toISOString(),
+      actorUserId: user.id,
+      areaPl: "Integracje",
+      actionPl: "Ponowienie synchronizacji",
+      detailPl:
+        "Katalog produktów — ponowienie po błędzie timeout zakończone sukcesem.",
+    })
+    setPhase("success")
+    toast.success("Synchronizacja katalogu zakończona")
+  }
 
-    return () => clearTimeout(timeoutId)
-  }, [isReady, user, onBannerAdd])
+  if (!phase) return null
 
-  return null
+  if (phase === "success") {
+    return (
+      <Alert>
+        <InfoIcon />
+        <AlertTitle>Katalog produktów zaktualizowany</AlertTitle>
+        <AlertDescription>
+          Ponowienie synchronizacji zakończone sukcesem.
+        </AlertDescription>
+      </Alert>
+    )
+  }
+
+  return (
+    <Alert variant="destructive">
+      <AlertTriangleIcon />
+      <AlertTitle>Synchronizacja katalogu nieudana</AlertTitle>
+      <AlertDescription>
+        System produktowy nie odpowiedział (timeout). Katalog pozostaje w
+        ostatniej wersji.
+      </AlertDescription>
+      <AlertAction>
+        <Button variant="outline" size="sm" onClick={retry}>
+          Ponów
+        </Button>
+      </AlertAction>
+    </Alert>
+  )
 }

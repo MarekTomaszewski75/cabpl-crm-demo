@@ -22,6 +22,8 @@ import productCategoriesSeed from "@/data/product-categories.json"
 import productsSeed from "@/data/products.json"
 import clientBankingProductsSeed from "@/data/client-banking-products.json"
 import bankAccountsSeed from "@/data/bank-accounts.json"
+import auditLogSeed from "@/data/audit-log.json"
+import { LEAD_SOURCE_LABELS } from "@/lib/crm/lead-labels"
 import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineSteps,
@@ -57,6 +59,9 @@ import type {
   ClientBankingProduct,
   BankAccount,
   Task,
+  AuditEntry,
+  LeadSource,
+  SalesDictionaryItem,
 } from "@/types/crm"
 
 const DEAL_SOURCES: readonly DealSource[] = [
@@ -304,6 +309,17 @@ export function loadSeedData() {
     products: productsSeed as Product[],
     clientBankingProducts: clientBankingProductsSeed as ClientBankingProduct[],
     bankAccounts,
+    salesDictionary: (
+      Object.entries(LEAD_SOURCE_LABELS) as [LeadSource, string][]
+    ).map(
+      ([id, labelPl]): SalesDictionaryItem => ({
+        id,
+        labelPl,
+        proposedLabelPl: null,
+        status: "approved",
+      }),
+    ),
+    auditLog: auditLogSeed as AuditEntry[],
   }
 }
 

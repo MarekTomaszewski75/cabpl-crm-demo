@@ -18,6 +18,7 @@ import {
 } from "@/lib/crm/deal-pipeline"
 import { getDealStatusLabel } from "@/lib/crm/deal-pipeline-labels"
 import { canFinishDeal } from "@/lib/crm/deal-labels"
+import { requiresCreditStageGate } from "@/lib/crm/deal-stage-gate"
 import { isDealWorkflowStatusChange } from "@/lib/crm/deal-status-transition"
 import type { Deal, DealStatus } from "@/types/crm"
 
@@ -25,10 +26,12 @@ export function DealStatusBar({
   deal,
   onFinishClick,
   onStatusChange,
+  onStageGate,
 }: {
   deal: Deal
   onFinishClick: () => void
   onStatusChange: (status: DealStatus) => void
+  onStageGate?: (status: DealStatus) => void
 }) {
   const pipelineCategoryId = isPipelineCategoryId(deal.pipelineCategoryId)
     ? deal.pipelineCategoryId
@@ -54,15 +57,21 @@ export function DealStatusBar({
       aria-label="Status deala"
     >
       <Stepper
+        key={deal.status}
         value={deal.status}
         onValueChange={(value) => onStatusChange(value as DealStatus)}
-        onValidate={(value) =>
-          isDealWorkflowStatusChange(
+        onValidate={(value) => {
+          const next = value as DealStatus
+          if (requiresCreditStageGate(deal, next)) {
+            onStageGate?.(next)
+            return false
+          }
+          return isDealWorkflowStatusChange(
             deal.status,
-            value as DealStatus,
+            next,
             deal.pipelineCategoryId,
           )
-        }
+        }}
         orientation="horizontal"
         activationMode="manual"
         className="min-w-0 flex-1 gap-0"

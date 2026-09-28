@@ -24,12 +24,14 @@ type LeadsColumnsContext = {
   contacts: readonly CrmContact[]
   showOwnerColumn: boolean
   showCompanyColumn?: boolean
+  sourceLabels?: Record<Lead["source"], string>
 }
 
 export function createLeadsColumns(
   ctx: LeadsColumnsContext,
 ): ColumnDef<LeadTableRow>[] {
   const showCompanyColumn = ctx.showCompanyColumn ?? true
+  const sourceLabels = ctx.sourceLabels ?? LEAD_SOURCE_LABELS
   const columns: ColumnDef<LeadTableRow>[] = [
     createFilterSearchColumn<LeadTableRow>(),
     {
@@ -63,13 +65,13 @@ export function createLeadsColumns(
     },
     {
       id: "source",
-      accessorFn: (row) => LEAD_SOURCE_LABELS[row.source],
+      accessorFn: (row) => sourceLabels[row.source],
       meta: { title: "Źródło" },
       enableGrouping: true,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Źródło" />
       ),
-      cell: ({ row }) => LEAD_SOURCE_LABELS[row.original.source],
+      cell: ({ row }) => sourceLabels[row.original.source],
     },
     {
       id: "leadType",

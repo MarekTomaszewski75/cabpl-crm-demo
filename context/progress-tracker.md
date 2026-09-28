@@ -51,16 +51,19 @@
 - **US-50** — **Done** — cleanup formularza aktywności: wspólne `ACTIVITY_CHANNEL_TYPE_OPTIONS` (bez E-mail), usunięcie załączników z formularzy firma/lead/deal. [US-50](./stories/US-50-activity-form-cleanup/story.md).
 - **US-51** — **Done** — scalenie zakładek Pliki/Dokumenty: `displayName`/`description` na `*File`, `entity-documents.ts`, `CrmDocumentList` + `CrmDocumentUploadForm`, jedna zakładka Dokumenty na firmie/leadzie/dealu. [US-51](./stories/US-51-merge-files-documents/story.md).
 - **US-52** — **Done** — asystent AI „Sprawdź firmę” (symulacja) na karcie firmy: AI Elements + lokalny simulator, bez `useChat`/API. [US-52](./stories/US-52-company-ai-chat/story.md).
+- **US-53** — **Done** — przebieg demo: duplikat i import prospectu, historia leada na dealu, bramka etapu kredytowego, follow-up ze spotkania, słownik źródeł z zatwierdzeniem i audytem, błąd synchronizacji katalogu z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 
 ---
 
 ## Active work
 
-- (brak — wybierz następną story z [`stories/README.md`](./stories/README.md))
+- (brak — US-53 domknięte na branchu `demo/scenario-prep`)
 
 ---
 
 ## Recently completed
+
+- **US-53** (story **Done**) — import prospectów z ostrzeżeniem duplikatu i wyborem opiekuna; karta deala „Powstał z leada”; bramka `new` → dalszy etap w lejku kredytowym; zadanie follow-up ze spotkania; `/sales-rules` (słownik + audyt); baner błędu katalogu produktów z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 
 - **US-52** (story **Done**) — przycisk **Sprawdź firmę** w `company-detail-header.tsx`; `CompanyAiChatSheet` + `useCompanyAiChatSimulator` (fake streaming, kolejka FIFO); komponenty `components/ai-elements/*`; szablony PL w `company-ai-chat-templates.ts`. [US-52](./stories/US-52-company-ai-chat/story.md).
 

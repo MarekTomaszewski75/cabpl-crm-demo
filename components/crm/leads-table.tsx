@@ -17,6 +17,7 @@ import {
   type LeadTableRow,
 } from "@/components/crm/leads-columns"
 import { LeadFormDialog } from "@/components/crm/lead-form-dialog"
+import { LeadImportDialog } from "@/components/crm/lead-import-dialog"
 import { DataTable } from "@/components/data-table/data-table"
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter"
 import {
@@ -123,7 +124,7 @@ function applyLeadListFilters(
 export function LeadsTable() {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { leads, users, contacts } = useDemoData()
+  const { leads, users, contacts, salesDictionary } = useDemoData()
   const [statusTab, setStatusTab] = React.useState<StatusTabValue>(FILTER_ALL)
   const [sourceFilters, setSourceFilters] = React.useState<string[]>([])
   const [ownerFilters, setOwnerFilters] = React.useState<string[]>([])
@@ -134,9 +135,21 @@ export function LeadsTable() {
 
   const showOwnerColumn = user?.role !== "advisor"
 
+  const sourceLabels = React.useMemo(() => {
+    const labels = { ...LEAD_SOURCE_LABELS }
+    for (const item of salesDictionary) labels[item.id] = item.labelPl
+    return labels
+  }, [salesDictionary])
+
   const columns = React.useMemo(
-    () => createLeadsColumns({ users, contacts, showOwnerColumn }),
-    [users, contacts, showOwnerColumn],
+    () =>
+      createLeadsColumns({
+        users,
+        contacts,
+        showOwnerColumn,
+        sourceLabels,
+      }),
+    [users, contacts, showOwnerColumn, sourceLabels],
   )
 
   const leadGroupingOptions = React.useMemo(
@@ -224,12 +237,12 @@ export function LeadsTable() {
     }
     return (Object.keys(LEAD_SOURCE_LABELS) as LeadSource[])
       .map((source) => ({
-        label: LEAD_SOURCE_LABELS[source],
+        label: sourceLabels[source],
         value: source,
         count: counts.get(source) ?? 0,
       }))
       .filter((opt) => opt.count > 0)
-  }, [statusScopedLeads])
+  }, [statusScopedLeads, sourceLabels])
 
   const leadTypeFacetedOptions = React.useMemo(() => {
     const counts = new Map<string, number>()
@@ -322,7 +335,8 @@ export function LeadsTable() {
                 {resultCountLabel}
               </InputGroupAddon>
             </InputGroup>
-            <div className="shrink-0">
+            <div className="flex shrink-0 items-center gap-2">
+              <LeadImportDialog />
               <LeadFormDialog
                 open={createSheetOpen}
                 onOpenChange={setCreateSheetOpen}
