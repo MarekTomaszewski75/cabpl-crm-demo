@@ -1,0 +1,65 @@
+[
+  {
+    "id": "org-pion",
+    "name": "Pion Bankowości Korporacyjnej",
+    "level": "division",
+    "parentId": null
+  },
+  {
+    "id": "org-dep-centrum",
+    "name": "Departament Sprzedaży Korporacyjnej Centrum",
+    "level": "department",
+    "parentId": "org-pion"
+  },
+  {
+    "id": "org-dep-regiony",
+    "name": "Departament Sprzedaży Korporacyjnej Regiony",
+    "level": "department",
+    "parentId": "org-pion"
+  },
+  {
+    "id": "org-reg-mazowsze",
+    "name": "Region Mazowsze",
+    "level": "region",
+    "parentId": "org-dep-centrum",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "org-reg-malopolska",
+    "name": "Region Małopolska",
+    "level": "region",
+    "parentId": "org-dep-regiony",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "org-reg-pomorze",
+    "name": "Region Pomorze",
+    "level": "region",
+    "parentId": "org-dep-regiony",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "org-team-waw-1",
+    "name": "Zespół Warszawa I",
+    "level": "team",
+    "parentId": "org-reg-mazowsze"
+  },
+  {
+    "id": "org-team-waw-2",
+    "name": "Zespół Warszawa II",
+    "level": "team",
+    "parentId": "org-reg-mazowsze"
+  },
+  {
+    "id": "org-team-krk",
+    "name": "Zespół Kraków",
+    "level": "team",
+    "parentId": "org-reg-malopolska"
+  },
+  {
+    "id": "org-team-trojmiasto",
+    "name": "Zespół Trójmiasto",
+    "level": "team",
+    "parentId": "org-reg-pomorze"
+  }
+]

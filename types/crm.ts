@@ -189,7 +189,21 @@ export interface DemoUser {
   role: UserRole
   roleLabelPl: string
   regionId: string | null
+  /** Zespół sprzedażowy RM w `data/sales-structure.json` (US-59). */
+  teamId?: string
   scopeDescriptionPl: string
+}
+
+/** Poziomy struktury sprzedaży: Pion → Departament → Region → Zespół (→ RM = użytkownik). */
+export type SalesOrgLevel = "division" | "department" | "region" | "team"
+
+export interface SalesOrgUnit {
+  id: string
+  name: string
+  level: SalesOrgLevel
+  parentId: string | null
+  /** Dla poziomu „region” — powiązanie z `regionId` encji i planem w `kpi.json`. */
+  regionId?: string
 }
 
 export interface CrmContact {

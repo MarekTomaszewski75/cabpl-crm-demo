@@ -183,7 +183,7 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
 | US-56 | **Dane i copy korporacyjne:** słowniki, nazwy deali, kontakty, ślady demo, literówki, segment FI (§5 pkt 2–7, §4a) — **Done** | P1 |
 | US-57 | **Done** — **Scenariusze 4 i 5:** spotkanie z deala w kalendarzu i na „Dziś”; dialog zadania z kontekstem i wykonawcą; „Dziś” z sekcjami Zaległe, Bez postępu i Odnowienia 90 dni; E-mail jako rejestracja ręczna | P1 |
 | US-58 | **Done** — **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo; stabilny baner bez przesuwania układu (§5 pkt 8–9) | P1 |
-| US-59 | **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
+| US-59 | **Done** — **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
 | US-60 | **Scenariusz 7 i QW-05:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala; deale w EUR z przeliczeniem w analityce | P1 |
 | US-61 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka; AI nie proponuje produktów, które klient ma); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
 | US-62+ | P2: nagłówek Customer 360 Lite (REGON, KRS, grupa, KYC); kwalifikacja leada; bramki w innych lejkach; statusy cancelled/deferred (§4.2 specyfikacji); zakładka „Raporty” (5 raportów); ekran Audyt; raport importu; pulpit adopcji (s.72) | P2 |

@@ -23,6 +23,7 @@ import productsSeed from "@/data/products.json"
 import clientBankingProductsSeed from "@/data/client-banking-products.json"
 import bankAccountsSeed from "@/data/bank-accounts.json"
 import auditLogSeed from "@/data/audit-log.json"
+import salesStructureSeed from "@/data/sales-structure.json"
 import { LEAD_SOURCE_LABELS } from "@/lib/crm/lead-labels"
 import {
   moveMeetingsOffWeekend,
@@ -67,6 +68,7 @@ import type {
   AuditEntry,
   LeadSource,
   SalesDictionaryItem,
+  SalesOrgUnit,
 } from "@/types/crm"
 
 const DEAL_SOURCES: readonly DealSource[] = [
@@ -337,6 +339,7 @@ function buildSeedData() {
       }),
     ),
     auditLog: auditLogSeed as AuditEntry[],
+    salesStructure: salesStructureSeed as SalesOrgUnit[],
   }
 }
 

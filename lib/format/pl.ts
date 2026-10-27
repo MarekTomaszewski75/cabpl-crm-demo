@@ -19,6 +19,19 @@ export function formatCurrencyPln(value: number) {
   return currencyFormatter.format(value)
 }
 
+const compactCurrencyFormatter = new Intl.NumberFormat("pl-PL", {
+  style: "currency",
+  currency: "PLN",
+  notation: "compact",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 1,
+})
+
+/** Kwoty w tabelach zarządczych — np. „446,9 mln zł”, „950 tys. zł” (US-59). */
+export function formatCurrencyPlnCompact(value: number) {
+  return compactCurrencyFormatter.format(value)
+}
+
 export function formatCurrency(
   value: number,
   currency: string,

@@ -416,6 +416,16 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Reset pokazu: `resetDemoSession()` (`lib/auth/reset-demo.ts`) czyści `sessionStorage` i przeładowuje seed. Przycisk jest na ekranie logowania.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
 
+## Struktura sprzedaży i lejek wg struktury (US-59)
+
+- **Seed:** `data/sales-structure.json` (`SalesOrgUnit`: division → department → region → team). RM = doradca z `teamId`, a `regionId` węzła regionu łączy go z encjami i planem.
+- **Logika:** `buildOrgPipelineTree` w `lib/analytics/org-pipeline.ts`:
+  - metryki liczone na RM i sumowane w górę,
+  - zakres: zarząd widzi pion, menedżer swój region,
+  - plan RM = plan regionu / liczba doradców.
+- **UI:** `OrgPipelineView`, zakładka Analityki „Lejek wg struktury”.
+- **Kwoty w tabelach zarządczych:** `formatCurrencyPlnCompact` („446,9 mln zł”).
+
 ## Aktywności, zadania i „Dziś → Wymaga uwagi” (US-57)
 
 - **Spotkanie z aktywności:** `addCompanyActivity`, `addLeadChannelActivity` i `addDealChannelActivity` przy `type: "meeting"` dopisują `Meeting` (`appendMeetingFromActivity`; lead tylko z `clientId`). Kalendarz i „Dziś” widzą je bez dodatkowego kodu.
