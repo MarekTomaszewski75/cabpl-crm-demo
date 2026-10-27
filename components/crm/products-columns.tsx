@@ -7,7 +7,6 @@ import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
   PRODUCT_AVAILABILITY_LABELS,
   PRODUCT_CONDITION_LABELS,
-  PRODUCT_GOODS_OR_SERVICE_LABELS,
   PRODUCT_TYPE_LABELS,
   productAvailabilityBadgeVariant,
   productConditionBadgeVariant,
@@ -21,7 +20,6 @@ export type ProductTableRow = Product & {
 
 export const PRODUCT_GROUPING_OPTIONS = [
   { columnId: "categoryName", label: "Kategoria" },
-  { columnId: "goodsOrService", label: "Towar/Usługa" },
   { columnId: "availability", label: "Dostępność" },
   { columnId: "condition", label: "Stan" },
   { columnId: "productType", label: "Typ produktu" },
@@ -54,25 +52,10 @@ export function createProductsColumns(
 
   columns.push(
     {
-      id: "goodsOrService",
-      accessorFn: (row) =>
-        PRODUCT_GOODS_OR_SERVICE_LABELS[row.goodsOrService],
-      meta: { title: "Towar/Usługa" },
-      enableGrouping: true,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Towar/Usługa" />
-      ),
-      cell: ({ row }) => (
-        <span className="text-sm">
-          {PRODUCT_GOODS_OR_SERVICE_LABELS[row.original.goodsOrService]}
-        </span>
-      ),
-    },
-    {
       accessorKey: "name",
-      meta: { title: "Artykuł" },
+      meta: { title: "Produkt" },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Artykuł" />
+        <DataTableColumnHeader column={column} title="Produkt" />
       ),
       cell: ({ row }) => (
         <div className="flex max-w-64 flex-col gap-0.5">

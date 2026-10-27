@@ -144,18 +144,18 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
    - Lejek Mazowsza to 708 mln zł przy planie 28 mln zł.
    - Do wyboru: albo realizację liczyć z wygranych deali (tak obiecuje QW-08), albo przeskalować kwoty deali do planu.
    - Nie ruszamy zasady z `reuse-and-conventions.md` („nie wyliczać KPI z opportunities”) bez decyzji.
-2. **Słowniki korporacyjne:**
+2. **Słowniki korporacyjne:** (**zrobione w US-56**)
    - Usunąć źródła i kanały detaliczne: Link, E-mail jako źródło, Reklama, Czat, Media społecznościowe, Towar/Usługa.
    - Usunąć pole social media.
    - Usunąć typy firm `contractor` i `partner`. To pozostałości po Uspacy, patrz też `rfp-qa-gap-analysis.md` §5.
-3. **Nazwy deali:** dziś są szablonowe i powtarzają się w Top 10. Trzeba nadać realne, unikalne nazwy.
-4. **Kontakty klientów** noszą nazwiska doradców (Anna Kowalska, Piotr Nowak w `contacts.json`). Trzeba je zmienić.
-5. **Polska Logistyka** to firma z przebiegu demo. Dane do poprawy według oceny z 23.10.
-6. **Ślady reżyserii:**
+3. **Nazwy deali:** (**zrobione w US-56**) dziś są szablonowe i powtarzają się w Top 10. Trzeba nadać realne, unikalne nazwy.
+4. **Kontakty klientów** (**zrobione w US-56**) noszą nazwiska doradców (Anna Kowalska, Piotr Nowak w `contacts.json`). Trzeba je zmienić.
+5. **Polska Logistyka** (**zrobione w US-56**) to firma z przebiegu demo. Dane do poprawy według oceny z 23.10.
+6. **Ślady reżyserii:** (**zrobione w US-56**)
    - komentarz „Demo: …” w `opportunities.json`,
    - „(demo)”, „Wkrótce”,
    - „Zaimportowano N prospectów”.
-7. **Język:** „Wszyscy regiony / Wszyscy segmenty” w `analytics-filters-bar.tsx`, do tego inne literówki.
+7. **Język:** (**zrobione w US-56**) „Wszyscy regiony / Wszyscy segmenty” w `analytics-filters-bar.tsx`, do tego inne literówki.
 8. **Sesja zużywa scenariusze:** błąd katalogu pokazuje się tylko do pierwszego „Ponów”, a stan siedzi w sessionStorage. Przed pokazem trzeba otworzyć świeżą kartę albo zrobić przycisk „Reset demo”.
 9. **Rotujący baner** przesuwa układ strony. Trzeba go ustabilizować.
 
@@ -180,12 +180,12 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
 | Story | Zakres | Priorytet |
 | --- | --- | --- |
 | US-55 | **Spójne kwoty:** realizacja z wygranych, prognoza z ważonego lejka, lejek ok. 3,4× planu rocznego (§5 pkt 1) — **Done** | P1 |
-| US-56 | **Dane i copy korporacyjne:** słowniki, nazwy deali, kontakty, ślady demo, literówki, segment FI, kilka deali w EUR (§5 pkt 2–9, §4a) | P1 |
+| US-56 | **Dane i copy korporacyjne:** słowniki, nazwy deali, kontakty, ślady demo, literówki, segment FI (§5 pkt 2–7, §4a) — **Done** | P1 |
 | US-57 | **Scenariusze 4 i 5:** spotkanie z deala w kalendarzu i na „Dziś”; dialog zadania z kontekstem i wykonawcą; „Dziś” z sekcjami Zaległe, Bez postępu i Odnowienia 90 dni; E-mail jako rejestracja ręczna | P1 |
-| US-58 | **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo | P1 |
+| US-58 | **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo; stabilny baner bez przesuwania układu (§5 pkt 8–9) | P1 |
 | US-59 | **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
-| US-60 | **Scenariusz 7:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala | P1 |
-| US-61 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
+| US-60 | **Scenariusz 7 i QW-05:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala; deale w EUR z przeliczeniem w analityce | P1 |
+| US-61 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka; AI nie proponuje produktów, które klient ma); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
 | US-62+ | P2: nagłówek Customer 360 Lite (REGON, KRS, grupa, KYC); kwalifikacja leada; bramki w innych lejkach; statusy cancelled/deferred (§4.2 specyfikacji); zakładka „Raporty” (5 raportów); ekran Audyt; raport importu; pulpit adopcji (s.72) | P2 |
 | — | P3: widok grupy kapitałowej, przepływ wieloetapowy z SLA, panel statusu integracji, @wzmianki (QW-20 Should) | P3 |
 

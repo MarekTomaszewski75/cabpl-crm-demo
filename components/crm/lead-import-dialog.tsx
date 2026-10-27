@@ -22,6 +22,7 @@ import {
 } from "@/lib/crm/prospect-duplicate"
 import { PROSPECT_IMPORT_ROWS } from "@/lib/crm/prospect-import-preview"
 import { useDemoData } from "@/lib/data/demo-data-context"
+import { pluralPl } from "@/lib/format/pl"
 import type { Lead } from "@/types/crm"
 
 export function LeadImportDialog() {
@@ -55,7 +56,7 @@ export function LeadImportDialog() {
         name: row.leadName,
         status: "new",
         contactId: null,
-        comments: "Zaimportowano z podglądu pliku demo.",
+        comments: "Zaimportowano z pliku CSV.",
         source: row.source,
         leadType: null,
         companyName: row.companyName,
@@ -77,8 +78,8 @@ export function LeadImportDialog() {
     const skipped = rows.length - importable.length
     toast.success(
       skipped > 0
-        ? `Zaimportowano ${importable.length} prospectów. Pominięto ${skipped} — możliwy duplikat.`
-        : `Zaimportowano ${importable.length} prospectów.`,
+        ? `Zaimportowano ${importable.length} ${pluralPl(importable.length, "prospekt", "prospekty", "prospektów")}. Pominięto ${skipped} — możliwy duplikat.`
+        : `Zaimportowano ${importable.length} ${pluralPl(importable.length, "prospekt", "prospekty", "prospektów")}.`,
     )
     setOpen(false)
   }
@@ -93,7 +94,7 @@ export function LeadImportDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Import prospectów</DialogTitle>
+          <DialogTitle>Import prospektów</DialogTitle>
           <DialogDescription>
             Podgląd trzech wierszy z pliku. Wiersz z istniejącym NIP nie
             zostanie zapisany.

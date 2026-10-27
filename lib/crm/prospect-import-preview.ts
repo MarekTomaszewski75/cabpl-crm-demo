@@ -22,13 +22,13 @@ export const PROSPECT_IMPORT_ROWS: readonly ProspectImportRow[] = [
     companyName: "Polska Logistyka S.A.",
     nip: "5210001001",
     leadName: "Limit gwarancji — Polska Logistyka",
-    source: "recommendation",
+    source: "client_referral",
   },
   {
     id: "imp-huta",
     companyName: "Huta Północ Sp. z o.o.",
     nip: "7770001103",
     leadName: "Leasing linii — Huta Północ",
-    source: "phone_call",
+    source: "ca_group",
   },
 ]

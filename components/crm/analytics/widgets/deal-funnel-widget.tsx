@@ -1,6 +1,5 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
 import {
   ChartContainer,
   ChartTooltip,
@@ -91,11 +90,6 @@ export function DealFunnelWidget({ rows }: DealFunnelWidgetProps) {
             />
             <span className="text-muted-foreground">{row.label}</span>
             <span className="font-medium tabular-nums">{row.count}</span>
-            {row.stage === "won" ? (
-              <Badge variant="outline" className="font-normal">
-                Wkrótce
-              </Badge>
-            ) : null}
           </div>
         ))}
       </div>

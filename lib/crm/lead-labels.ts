@@ -20,12 +20,12 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
 }
 
 export const LEAD_SOURCE_LABELS: Record<LeadSource, string> = {
-  phone_call: "Połączenie",
-  link: "Link",
-  email: "E-mail",
-  advertising: "Reklama",
-  partner: "Partner",
-  recommendation: "Z rekomendacji",
+  rm_initiative: "Inicjatywa opiekuna",
+  client_request: "Zapytanie klienta",
+  client_referral: "Rekomendacja klienta",
+  ca_group: "Grupa Crédit Agricole",
+  partner: "Partner / pośrednik",
+  industry_event: "Wydarzenie branżowe",
 }
 
 export const LEAD_TYPE_LABELS: Record<LeadType, string> = {
@@ -37,11 +37,11 @@ export const LEAD_TYPE_LABELS: Record<LeadType, string> = {
 }
 
 export const LEAD_LOST_REASON_LABELS: Record<LeadLostReason, string> = {
-  misrouted: "Błędnie skierowane zgłoszenie",
+  misrouted: "Błędnie przypisany lead",
   invalid_contact: "Nieprawidłowe dane kontaktowe",
-  no_response_3d: "Nie odpowiada od 3 dni",
-  competitor_chosen: "Wybrano konkurencję",
-  other: "Inne",
+  no_response_3d: "Brak odpowiedzi klienta",
+  competitor_chosen: "Wybór oferty innego banku",
+  other: "Inny powód",
 }
 
 export function leadSourceLabel(

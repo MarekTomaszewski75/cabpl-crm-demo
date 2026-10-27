@@ -76,7 +76,7 @@ function emptyFormState(ownerId = ""): LeadFormState {
     phone: "",
     contactId: null,
     comments: "",
-    source: "recommendation",
+    source: "rm_initiative",
     leadType: null,
     ownerId,
   }

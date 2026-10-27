@@ -7,7 +7,7 @@ export const CONTACT_EVENT_TYPE_LABELS: Record<
   activity: "Aktywność",
   phone: "Połączenie",
   meeting: "Spotkanie",
-  chat: "Czat",
+  video_call: "Wideokonferencja",
   email: "E-mail",
 }
 

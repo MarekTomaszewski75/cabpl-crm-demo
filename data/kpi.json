@@ -80,14 +80,19 @@
   ],
   "bySegment": [
     {
-      "segmentId": "sme",
-      "segmentName": "Średnie przedsiębiorstwo",
-      "planPln": 71000000
+      "segmentId": "mid_corporate",
+      "segmentName": "Mid Corporate",
+      "planPln": 42000000
     },
     {
-      "segmentId": "enterprise",
-      "segmentName": "Duże przedsiębiorstwo",
-      "planPln": 129000000
+      "segmentId": "large_corporate",
+      "segmentName": "Large Corporate",
+      "planPln": 109000000
+    },
+    {
+      "segmentId": "financial_institutions",
+      "segmentName": "Instytucje finansowe",
+      "planPln": 49000000
     }
   ],
   "byCategory": [

@@ -70,12 +70,12 @@ import type {
 } from "@/types/crm"
 
 const DEAL_SOURCES: readonly DealSource[] = [
-  "phone_call",
-  "link",
-  "email",
-  "advertising",
+  "rm_initiative",
+  "client_request",
+  "client_referral",
+  "ca_group",
   "partner",
-  "recommendation",
+  "industry_event",
 ]
 
 function normalizeDealSource(value: unknown): DealSource {
@@ -85,7 +85,7 @@ function normalizeDealSource(value: unknown): DealSource {
   ) {
     return value as DealSource
   }
-  return "recommendation"
+  return "client_referral"
 }
 
 function normalizeEntityFile<

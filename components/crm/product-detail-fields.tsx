@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge"
 import {
   PRODUCT_AVAILABILITY_LABELS,
   PRODUCT_CONDITION_LABELS,
-  PRODUCT_GOODS_OR_SERVICE_LABELS,
   PRODUCT_TYPE_LABELS,
   productAvailabilityBadgeVariant,
   productConditionBadgeVariant,
@@ -40,17 +39,13 @@ export function ProductDetailFields({
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <ReadOnlyField label="Artykuł">{product.name}</ReadOnlyField>
+      <ReadOnlyField label="Produkt">{product.name}</ReadOnlyField>
 
       <ReadOnlyField label="Kod produktu">
         {product.sku.trim() ? product.sku : "—"}
       </ReadOnlyField>
 
       <ReadOnlyField label="Kategoria">{categoryName}</ReadOnlyField>
-
-      <ReadOnlyField label="Towar/Usługa">
-        {PRODUCT_GOODS_OR_SERVICE_LABELS[product.goodsOrService]}
-      </ReadOnlyField>
 
       <ReadOnlyField label="Typ produktu">
         {PRODUCT_TYPE_LABELS[product.productType]}

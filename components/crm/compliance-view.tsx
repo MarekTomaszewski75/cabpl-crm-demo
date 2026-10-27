@@ -35,7 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 const ROADMAP_PHASES = [
   {
     phase: "Etap 1",
-    label: "Quick Win (demo)",
+    label: "Quick Win",
     status: "active" as const,
     items: [
       "Lejek sprzedażowy i forecast",

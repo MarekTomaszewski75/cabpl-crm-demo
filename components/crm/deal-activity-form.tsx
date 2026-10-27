@@ -4,8 +4,8 @@ import * as React from "react"
 import {
   CalendarIcon,
   ChevronDownIcon,
-  MessageSquareIcon,
   PhoneIcon,
+  VideoIcon,
   ZapIcon,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -44,7 +44,7 @@ const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
   activity: ZapIcon,
   phone: PhoneIcon,
   meeting: CalendarIcon,
-  chat: MessageSquareIcon,
+  video_call: VideoIcon,
 }
 
 type DealActivityFormProps = {

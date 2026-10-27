@@ -40,12 +40,12 @@ export type DealStatus =
 export type DealCurrency = "PLN" | "EUR" | "USD" | "CHF" | "GBP"
 
 export type DealSource =
-  | "phone_call"
-  | "link"
-  | "email"
-  | "advertising"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type DealType =
   | "unknown"
@@ -65,12 +65,12 @@ export type DealLostReason =
 export type LeadStatus = "new" | "in_progress" | "won" | "lost"
 
 export type LeadSource =
-  | "phone_call"
-  | "link"
-  | "email"
-  | "advertising"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type LeadType =
   | "unknown"
@@ -121,21 +121,18 @@ export interface LeadActivity {
 export type TaskPriority = "low" | "medium" | "high"
 
 export type CompanySource =
-  | "phone_call"
-  | "link"
-  | "email"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type CompanyType =
   | "unknown"
   | "active_client"
   | "potential_client"
   | "former_client"
-  | "partner"
-  | "contractor"
-  | "competitor"
-  | "spam"
 
 export type ContactEventKind = "channel" | "system" | "note"
 
@@ -143,7 +140,7 @@ export type ChannelContactEventType =
   | "activity"
   | "phone"
   | "meeting"
-  | "chat"
+  | "video_call"
   | "email"
 
 export type CompanyActivityPriority =

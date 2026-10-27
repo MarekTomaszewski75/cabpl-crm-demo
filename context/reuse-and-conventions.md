@@ -288,6 +288,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### formatCurrencyPln / formatDatePl / formatTimePl / formatRelativeTimePl
 - **Plik:** `lib/format/pl.ts`
 - **`formatRelativeTimePl`** — czas względny PL w powiadomieniach (np. „2 godz. temu”, „za 3 dni”); baza: `getToday()`.
+- **`pluralPl(count, one, few, many)`** (US-56) — odmiana po liczebniku: „1 prospekt / 2 prospekty / 5 prospektów”. Używaj zawsze, gdy liczba stoi przed rzeczownikiem w copy.
 
 ---
 
@@ -410,6 +411,14 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Follow-up: `MeetingFormDialog` tworzy `Task` powiązany z firmą.
 - Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
+
+## Słowniki i copy korporacyjne (US-56)
+
+- **Źródła** (`LeadSource` = `DealSource` = `CompanySource`): `rm_initiative`, `client_request`, `client_referral`, `ca_group`, `partner`, `industry_event`. Etykiety są w `lead-labels.ts`, `deal-labels.ts` i `company-labels.ts`. Nie dodawaj kanałów detalicznych (Link, Reklama, social media).
+- **Typy firm:** `active_client` / `potential_client` (Prospekt) / `former_client` / `unknown`. **Kanał aktywności** `video_call` („Wideokonferencja”) zamiast czatu.
+- **Segmenty Banku** (tekst w `Client.segment`, łączony z `kpi.json` po nazwie): „Mid Corporate”, „Large Corporate”, „Instytucje finansowe”.
+- **Nazwy deali:** „cel — klient”, unikalne. Lead z inną firmą w nazwie nie jest podpinany pod klienta (prospekt); cross-sell ma `companyName` = nazwa klienta.
+- **Szablony AI:** nie wstawiaj imion, branż ani nazw firm w miejsca wymagające odmiany. Używaj form „sektora „{{industryLabel}}””, „opiekuna ({{ownerName}})”, „firmy „{{companyName}}”” i „rzeczownik: liczba”.
 
 ## Daty seedu „od dziś” (US-54)
 

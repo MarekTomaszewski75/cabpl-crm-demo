@@ -4,7 +4,7 @@ import type { Client, DemoUser, ScopedEntity } from "@/types/crm"
 
 export type AnalyticsScopeContext = {
   clients?: readonly Client[]
-  /** Nazwa segmentu z KPI (np. „Średnie przedsiębiorstwo”) — join z `Client.segment`. */
+  /** Nazwa segmentu z KPI (np. „Mid Corporate”) — join z `Client.segment`. */
   segmentNameForFilter?: string | null
   getClientId?: (item: ScopedEntity) => string | null | undefined
 }

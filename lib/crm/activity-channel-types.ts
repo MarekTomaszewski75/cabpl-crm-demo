@@ -12,7 +12,7 @@ export const ACTIVITY_CHANNEL_TYPE_OPTIONS: ActivityChannelTypeOption[] = [
   { id: "activity", label: "Aktywność" },
   { id: "phone", label: "Połączenie" },
   { id: "meeting", label: "Spotkanie" },
-  { id: "chat", label: "Czat" },
+  { id: "video_call", label: "Wideokonferencja" },
 ]
 
 export function activityChannelTypeLabel(type: ChannelContactEventType): string {

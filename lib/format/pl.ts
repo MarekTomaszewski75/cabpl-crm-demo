@@ -45,6 +45,21 @@ export function formatTimePl(value: string | Date) {
   return timeFormatter.format(date)
 }
 
+/** Odmiana rzeczownika po liczebniku: 1 prospekt, 2 prospekty, 5 prospektów. */
+export function pluralPl(
+  count: number,
+  one: string,
+  few: string,
+  many: string,
+): string {
+  const abs = Math.abs(count)
+  if (abs === 1) return one
+  const lastTwo = abs % 100
+  const last = abs % 10
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few
+  return many
+}
+
 /** Prosty czas względny PL — np. „2 godz. temu”, „za 3 dni”. */
 export function formatRelativeTimePl(date: Date, base: Date = new Date()): string {
   const diffMs = date.getTime() - base.getTime()

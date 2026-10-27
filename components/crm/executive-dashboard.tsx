@@ -137,8 +137,8 @@ export function ExecutiveDashboard({
           </h2>
           <p className="text-sm text-muted-foreground">
             {lockedRegionName
-              ? `Plan vs realizacja regionu ${lockedRegionName} — widok menedżera (demo).`
-              : "Plan vs realizacja, forecast i podziały — widok bank-wide (demo)."}
+              ? `Plan i realizacja regionu ${lockedRegionName} — widok menedżera.`
+              : "Plan, realizacja i prognoza z podziałem na regiony, segmenty i kategorie — cały bank."}
           </p>
         </div>
       ) : (
@@ -147,7 +147,7 @@ export function ExecutiveDashboard({
             Panel zarządczy
           </h1>
           <p className="text-sm text-muted-foreground">
-            Plan vs realizacja, forecast i podziały — widok bank-wide (demo).
+            Plan, realizacja i prognoza z podziałem na regiony, segmenty i kategorie — cały bank.
           </p>
         </div>
       )}

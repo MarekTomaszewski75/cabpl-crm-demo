@@ -38,12 +38,12 @@ export const DEAL_CURRENCY_LABELS: Record<DealCurrency, string> = {
 }
 
 export const DEAL_SOURCE_LABELS: Record<DealSource, string> = {
-  phone_call: "Połączenie",
-  link: "Link",
-  email: "E-mail",
-  advertising: "Reklama",
-  partner: "Partner",
-  recommendation: "Z rekomendacji",
+  rm_initiative: "Inicjatywa opiekuna",
+  client_request: "Zapytanie klienta",
+  client_referral: "Rekomendacja klienta",
+  ca_group: "Grupa Crédit Agricole",
+  partner: "Partner / pośrednik",
+  industry_event: "Wydarzenie branżowe",
 }
 
 export const DEAL_TYPE_LABELS: Record<DealType, string> = {
@@ -55,12 +55,12 @@ export const DEAL_TYPE_LABELS: Record<DealType, string> = {
 }
 
 export const DEAL_LOST_REASON_LABELS: Record<DealLostReason, string> = {
-  refusal: "Odmowa",
-  outdated: "Nieaktualne",
-  communication_broken: "Komunikacja przerwana",
-  too_expensive: "Drogo",
-  competitor_chosen: "Wybrano konkurencję",
-  other: "Inne",
+  refusal: "Rezygnacja klienta",
+  outdated: "Potrzeba nieaktualna",
+  communication_broken: "Brak kontaktu z klientem",
+  too_expensive: "Warunki cenowe nieakceptowane",
+  competitor_chosen: "Wybór oferty innego banku",
+  other: "Inny powód",
 }
 
 export const DEAL_CURRENCY_OPTIONS = (

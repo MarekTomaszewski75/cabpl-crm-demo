@@ -79,6 +79,7 @@ import {
   getDemoChatModel,
 } from "@/lib/crm/company-ai-chat-models"
 import { useCompanyAiChatSimulator } from "@/lib/crm/use-company-ai-chat-simulator"
+import { pluralPl } from "@/lib/format/pl"
 import type { Client } from "@/types/crm"
 import { SparklesIcon } from "lucide-react"
 
@@ -192,7 +193,13 @@ export function CompanyAiChatSheet({
                         <Sources>
                           <SourcesTrigger count={message.sources!.length}>
                             <p className="font-medium">
-                              Wykorzystano {message.sources!.length} źródeł
+                              Wykorzystano {message.sources!.length}{" "}
+                              {pluralPl(
+                                message.sources!.length,
+                                "źródło",
+                                "źródła",
+                                "źródeł",
+                              )}
                             </p>
                           </SourcesTrigger>
                           <SourcesContent>

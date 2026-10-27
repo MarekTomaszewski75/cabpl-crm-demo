@@ -54,16 +54,19 @@
 - **US-53** — **Done** — przebieg demo: duplikat i import prospectu, historia leada na dealu, bramka etapu kredytowego, follow-up ze spotkania, słownik źródeł z zatwierdzeniem i audytem, błąd synchronizacji katalogu z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 - **US-54** — **Done** — daty seedu przesuwane na „dziś” przy ładowaniu (`lib/data/seed-dates.ts`), analityka liczy od bieżącej daty i kwartału, KPI mają 12 miesięcy, poprawki jakości dat w seedzie. [US-54](./stories/US-54-seed-dates-rolling/story.md).
 - **US-55** — **Done** — KPI liczone z deali: plan z `kpi.json` (`KpiPlanSeed`), realizacja z wygranych, prognoza z ważonego lejka; seed: 44 wygrane, lejek 3,4 × plan. [US-55](./stories/US-55-consistent-amounts/story.md).
+- **US-56** — **Done** — słowniki korporacyjne (źródła, typy firm, wideokonferencja, powody utraty), segmenty Banku + instytucje finansowe, unikalne nazwy deali, kontakty i leady Polskiej Logistyki, bez śladów demo, `pluralPl`, poprawna polszczyzna w AI. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-55 domknięte na branchu `demo/rfp-alignment`)
+- (brak — US-56 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-56** (story **Done**) — migracja seedu (źródła, segmenty, nazwy deali, leady, kontakty); etykiety w `*-labels.ts`; usunięte pola detaliczne w UI; `pluralPl`; szablony AI. EUR → US-60, baner → US-58, AI → US-61. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
 
 - **US-55** (story **Done**) — `deriveKpiSnapshot` w `lib/analytics/kpi-snapshot.ts` + `useMemo` w `DemoDataContext`; `data/kpi.json` → plan roczny; migracja seedu dealów (kwoty, daty wygranych, daty zamknięcia lejka). [US-55](./stories/US-55-consistent-amounts/story.md).
 
@@ -113,7 +116,7 @@
 
 ## Next up
 
-1. US-56 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
+1. US-57 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
 
 ---
 

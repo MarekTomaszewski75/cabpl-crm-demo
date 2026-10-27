@@ -93,7 +93,7 @@ export function DealForm({
     defaultClientId,
   )
   const [comments, setComments] = React.useState("")
-  const [source, setSource] = React.useState<DealSource>("recommendation")
+  const [source, setSource] = React.useState<DealSource>("rm_initiative")
   const [dealType, setDealType] = React.useState<DealType | null>(null)
   const [expectedCloseDate, setExpectedCloseDate] = React.useState("")
   const [bankAccountId, setBankAccountId] = React.useState<string | null>(
