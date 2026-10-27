@@ -154,6 +154,8 @@ export type AddCompanyActivityInput = {
   title: string
   type: ChannelContactEventType
   occurredAt: string
+  /** Koniec — używany, gdy aktywność „Spotkanie” trafia do kalendarza (US-57). */
+  endsAt?: string
   note: string
   priority?: CompanyActivityPriority
   responsibleUserId?: string | null

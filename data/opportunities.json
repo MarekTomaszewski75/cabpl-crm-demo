@@ -24,7 +24,7 @@
   },
   {
     "id": "opp-001",
-    "name": "Linia kredytowa obrotowa — Polska Logistyka",
+    "name": "Linia kredytowa w rachunku bieżącym — Polska Logistyka",
     "clientId": "client-001",
     "contactId": null,
     "productId": "prod-014",
@@ -48,7 +48,7 @@
   },
   {
     "id": "opp-002",
-    "name": "Faktoring kontraktowy — Baltic Foods",
+    "name": "Faktoring kontraktowy na budowę — Baltic Foods",
     "clientId": "client-002",
     "contactId": "contact-006",
     "productId": "prod-016",
@@ -71,7 +71,7 @@
   },
   {
     "id": "opp-003",
-    "name": "Leasing floty — TechVentures Poland",
+    "name": "Wymiana floty pojazdów — TechVentures Poland",
     "clientId": "client-003",
     "contactId": null,
     "productId": "prod-015",
@@ -94,7 +94,7 @@
   },
   {
     "id": "opp-004",
-    "name": "Kredyt inwestycyjny — hala — GreenBuild Development",
+    "name": "Kredyt inwestycyjny na projekt OZE — GreenBuild Development",
     "clientId": "client-004",
     "contactId": "contact-007",
     "productId": "prod-002",
@@ -117,7 +117,7 @@
   },
   {
     "id": "opp-005",
-    "name": "Gwarancje bankowe — MazurChem",
+    "name": "Gwarancja zapłaty — MazurChem",
     "clientId": "client-005",
     "contactId": null,
     "productId": "prod-006",
@@ -140,7 +140,7 @@
   },
   {
     "id": "opp-006",
-    "name": "Hedging walutowy USD/PLN — TransEuropa Cargo",
+    "name": "Akredytywa importowa na surowce — TransEuropa Cargo",
     "clientId": "client-006",
     "contactId": "contact-010",
     "productId": "prod-005",
@@ -163,7 +163,7 @@
   },
   {
     "id": "opp-007",
-    "name": "Rabat depozytowy korporacyjny — AgroNova Polska",
+    "name": "Depozyt overnight na środki z emisji — AgroNova Polska",
     "clientId": "client-007",
     "contactId": null,
     "productId": "prod-008",
@@ -186,7 +186,7 @@
   },
   {
     "id": "opp-008",
-    "name": "Terminal płatniczy — sieć sklepów — AgroNova Polska",
+    "name": "Akceptacja kart w sieci sklepów — AgroNova Polska",
     "clientId": "client-007",
     "contactId": null,
     "productId": "prod-018",
@@ -209,7 +209,7 @@
   },
   {
     "id": "opp-009",
-    "name": "Pożyczka na kapitał obrotowy — PackMaster Poland",
+    "name": "Kredyt obrotowy na kontrakt eksportowy — PackMaster Poland",
     "clientId": "client-008",
     "contactId": null,
     "productId": "prod-001",
@@ -232,7 +232,7 @@
   },
   {
     "id": "opp-010",
-    "name": "Factoring odwrotny",
+    "name": "Program faktoringu odwrotnego — PackMaster Poland",
     "clientId": "client-008",
     "contactId": null,
     "productId": "prod-012",
@@ -255,7 +255,7 @@
   },
   {
     "id": "opp-011",
-    "name": "Leasing maszyn produkcyjnych",
+    "name": "Leasing parku maszynowego — PackMaster Poland",
     "clientId": "client-008",
     "contactId": null,
     "productId": "prod-003",
@@ -278,7 +278,7 @@
   },
   {
     "id": "opp-012",
-    "name": "Kredyt na ekspansję zagraniczną",
+    "name": "Kredyt inwestycyjny na projekt OZE — FreshMarket Dystrybucja",
     "clientId": "client-009",
     "contactId": null,
     "productId": "prod-002",
@@ -301,7 +301,7 @@
   },
   {
     "id": "opp-013",
-    "name": "Gwarancja realizacji kontraktu",
+    "name": "Gwarancja realizacji kontraktu zagranicznego — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-017",
@@ -324,7 +324,7 @@
   },
   {
     "id": "opp-014",
-    "name": "Linia overdraft",
+    "name": "Podwyższenie limitu linii — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-014",
@@ -347,7 +347,7 @@
   },
   {
     "id": "opp-015",
-    "name": "Linia kredytowa obrotowa — EcoPaper Recycling",
+    "name": "Podwyższenie limitu linii — EcoPaper Recycling",
     "clientId": "client-011",
     "contactId": null,
     "productId": "prod-014",
@@ -370,7 +370,7 @@
   },
   {
     "id": "opp-016",
-    "name": "Faktoring kontraktowy — EcoPaper Recycling",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — EcoPaper Recycling",
     "clientId": "client-011",
     "contactId": null,
     "productId": "prod-016",
@@ -393,7 +393,7 @@
   },
   {
     "id": "opp-017",
-    "name": "Leasing floty — EcoPaper Recycling",
+    "name": "Leasing floty samochodów osobowych — EcoPaper Recycling",
     "clientId": "client-011",
     "contactId": null,
     "productId": "prod-015",
@@ -416,7 +416,7 @@
   },
   {
     "id": "opp-018",
-    "name": "Kredyt inwestycyjny — hala — MedDevice Components",
+    "name": "Kredyt inwestycyjny na rozbudowę zakładu — MedDevice Components",
     "clientId": "client-012",
     "contactId": null,
     "productId": "prod-002",
@@ -439,7 +439,7 @@
   },
   {
     "id": "opp-019",
-    "name": "Gwarancje bankowe — UrbanBud Development",
+    "name": "Gwarancja należytego wykonania — UrbanBud Development",
     "clientId": "client-013",
     "contactId": null,
     "productId": "prod-006",
@@ -462,7 +462,7 @@
   },
   {
     "id": "opp-020",
-    "name": "Akredytywa importowa",
+    "name": "Akredytywa importowa na komponenty — UrbanBud Development",
     "clientId": "client-013",
     "contactId": null,
     "productId": "prod-005",
@@ -485,7 +485,7 @@
   },
   {
     "id": "opp-021",
-    "name": "Hedging walutowy USD/PLN — FastRetail Logistics",
+    "name": "Akredytywa importowa dla dostawcy z Azji — FastRetail Logistics",
     "clientId": "client-014",
     "contactId": null,
     "productId": "prod-005",
@@ -508,7 +508,7 @@
   },
   {
     "id": "opp-022",
-    "name": "Rabat depozytowy korporacyjny — FastRetail Logistics",
+    "name": "Depozyt overnight na środki z emisji — FastRetail Logistics",
     "clientId": "client-014",
     "contactId": null,
     "productId": "prod-008",
@@ -531,7 +531,7 @@
   },
   {
     "id": "opp-023",
-    "name": "Terminal płatniczy — sieć sklepów — FastRetail Logistics",
+    "name": "Akceptacja kart w sieci sklepów — FastRetail Logistics",
     "clientId": "client-014",
     "contactId": null,
     "productId": "prod-018",
@@ -554,7 +554,7 @@
   },
   {
     "id": "opp-024",
-    "name": "Pożyczka na kapitał obrotowy — ChemLab Polska",
+    "name": "Kredyt obrotowy na finansowanie zapasów — ChemLab Polska",
     "clientId": "client-015",
     "contactId": null,
     "productId": "prod-001",
@@ -715,7 +715,7 @@
   },
   {
     "id": "opp-031",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — Mazovia Leasing",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — Mazovia Leasing",
     "clientId": "client-019",
     "contactId": null,
     "productId": "prod-016",
@@ -1060,7 +1060,7 @@
   },
   {
     "id": "opp-046",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — HotelChain Central",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — HotelChain Central",
     "clientId": "client-026",
     "contactId": null,
     "productId": "prod-016",
@@ -1175,7 +1175,7 @@
   },
   {
     "id": "opp-051",
-    "name": "Kredyt obrotowy — linia produkcyjna",
+    "name": "Odnowienie linii kredytowej — TatraSteel Kraków",
     "clientId": "client-029",
     "contactId": null,
     "productId": "prod-014",
@@ -1198,7 +1198,7 @@
   },
   {
     "id": "opp-052",
-    "name": "Leasing floty ciężarowej",
+    "name": "Wymiana floty pojazdów — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-015",
@@ -1221,7 +1221,7 @@
   },
   {
     "id": "opp-053",
-    "name": "Gwarancja realizacji kontraktu hotelowego",
+    "name": "Gwarancja usunięcia wad — Zakopane Resorts Group",
     "clientId": "client-031",
     "contactId": null,
     "productId": "prod-017",
@@ -1244,7 +1244,7 @@
   },
   {
     "id": "opp-054",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — TatraSteel Kraków",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — TatraSteel Kraków",
     "clientId": "client-029",
     "contactId": null,
     "productId": "prod-016",
@@ -1267,7 +1267,7 @@
   },
   {
     "id": "opp-055",
-    "name": "Kredyt inwestycyjny — remont stoczni",
+    "name": "Kredyt inwestycyjny na projekt OZE — Baltic Shipyard Gdańsk",
     "clientId": "client-032",
     "contactId": null,
     "productId": "prod-002",
@@ -1336,7 +1336,7 @@
   },
   {
     "id": "opp-058",
-    "name": "Depozyt korporacyjny — farma wiatrowa",
+    "name": "Depozyt overnight na nadwyżki płynności — Pomorskie Wind Energy",
     "clientId": "client-034",
     "contactId": null,
     "productId": "prod-008",
@@ -1520,7 +1520,7 @@
   },
   {
     "id": "opp-066",
-    "name": "Podwyższenie limitu linii — EcoPaper Recycling",
+    "name": "Linia kredytowa dla grupy kapitałowej — EcoPaper Recycling",
     "clientId": "client-011",
     "contactId": null,
     "productId": "prod-014",
@@ -1612,7 +1612,7 @@
   },
   {
     "id": "opp-070",
-    "name": "Kredyt obrotowy na finansowanie zapasów — ChemLab Polska",
+    "name": "Odnowienie kredytu obrotowego — ChemLab Polska",
     "clientId": "client-015",
     "contactId": null,
     "productId": "prod-001",
@@ -1658,7 +1658,7 @@
   },
   {
     "id": "opp-072",
-    "name": "Linia kredytowa w rachunku bieżącym — Polska Logistyka",
+    "name": "Linia wielocelowa — Polska Logistyka",
     "clientId": "client-001",
     "contactId": null,
     "productId": "prod-014",
@@ -2095,7 +2095,7 @@
   },
   {
     "id": "opp-091",
-    "name": "Kredyt obrotowy na kontrakt eksportowy — PackMaster Poland",
+    "name": "Kredyt obrotowy na finansowanie zapasów — PackMaster Poland",
     "clientId": "client-008",
     "contactId": null,
     "productId": "prod-001",
@@ -2118,7 +2118,7 @@
   },
   {
     "id": "opp-092",
-    "name": "Kredyt inwestycyjny na projekt OZE — FreshMarket Dystrybucja",
+    "name": "Kredyt inwestycyjny na rozbudowę zakładu — FreshMarket Dystrybucja",
     "clientId": "client-009",
     "contactId": null,
     "productId": "prod-002",
@@ -2141,7 +2141,7 @@
   },
   {
     "id": "opp-093",
-    "name": "Podwyższenie limitu linii — SteelForm Mazowsze",
+    "name": "Linia kredytowa dla grupy kapitałowej — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-014",
@@ -2325,7 +2325,7 @@
   },
   {
     "id": "opp-101",
-    "name": "Kredyt inwestycyjny na projekt OZE — GreenBuild Development",
+    "name": "Kredyt inwestycyjny na rozbudowę zakładu — GreenBuild Development",
     "clientId": "client-004",
     "contactId": null,
     "productId": "prod-002",
@@ -3015,7 +3015,7 @@
   },
   {
     "id": "opp-131",
-    "name": "Wymiana floty pojazdów — Beskid Logistics",
+    "name": "Leasing floty samochodów dostawczych — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-015",
@@ -3153,7 +3153,7 @@
   },
   {
     "id": "opp-137",
-    "name": "Leasing floty samochodów dostawczych — Beskid Logistics",
+    "name": "Leasing floty ciągników siodłowych — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-015",
@@ -4257,7 +4257,7 @@
   },
   {
     "id": "opp-185",
-    "name": "Faktoring kontraktowy — budowa — Baltic Foods",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — Baltic Foods",
     "clientId": "client-002",
     "contactId": null,
     "productId": "prod-016",
@@ -4303,7 +4303,7 @@
   },
   {
     "id": "opp-187",
-    "name": "Faktoring kontraktowy — budowa — TransEuropa Cargo",
+    "name": "Faktoring kontraktowy na budowę — TransEuropa Cargo",
     "clientId": "client-006",
     "contactId": null,
     "productId": "prod-016",
@@ -4349,7 +4349,7 @@
   },
   {
     "id": "opp-189",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — PackMaster Poland",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — PackMaster Poland",
     "clientId": "client-008",
     "contactId": null,
     "productId": "prod-016",
@@ -4372,7 +4372,7 @@
   },
   {
     "id": "opp-190",
-    "name": "Faktoring pełny — odbiorcy z UE — FreshMarket Dystrybucja",
+    "name": "Faktoring pełny dla odbiorców z UE — FreshMarket Dystrybucja",
     "clientId": "client-009",
     "contactId": null,
     "productId": "prod-004",
@@ -4395,7 +4395,7 @@
   },
   {
     "id": "opp-191",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — SteelForm Mazowsze",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-016",
@@ -4441,7 +4441,7 @@
   },
   {
     "id": "opp-193",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — MedDevice Components",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — MedDevice Components",
     "clientId": "client-012",
     "contactId": null,
     "productId": "prod-016",
@@ -4464,7 +4464,7 @@
   },
   {
     "id": "opp-194",
-    "name": "Faktoring pełny — odbiorcy z UE — BioResearch Labs",
+    "name": "Faktoring pełny dla odbiorców z UE — BioResearch Labs",
     "clientId": "client-025",
     "contactId": null,
     "productId": "prod-004",
@@ -4487,7 +4487,7 @@
   },
   {
     "id": "opp-195",
-    "name": "Faktoring kontraktowy — kontrakt publiczny (etap 2) — HotelChain Central",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego (etap 2) — HotelChain Central",
     "clientId": "client-026",
     "contactId": null,
     "productId": "prod-016",
@@ -4533,7 +4533,7 @@
   },
   {
     "id": "opp-197",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — Vistula Towarzystwo Ubezpieczeń",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — Vistula Towarzystwo Ubezpieczeń",
     "clientId": "client-028",
     "contactId": null,
     "productId": "prod-016",
@@ -4556,7 +4556,7 @@
   },
   {
     "id": "opp-198",
-    "name": "Faktoring pełny — odbiorcy z UE — TechVentures Poland",
+    "name": "Faktoring pełny dla odbiorców z UE — TechVentures Poland",
     "clientId": "client-003",
     "contactId": null,
     "productId": "prod-004",
@@ -4579,7 +4579,7 @@
   },
   {
     "id": "opp-199",
-    "name": "Faktoring kontraktowy — budowa — GreenBuild Development",
+    "name": "Faktoring kontraktowy na budowę — GreenBuild Development",
     "clientId": "client-004",
     "contactId": null,
     "productId": "prod-016",
@@ -4602,7 +4602,7 @@
   },
   {
     "id": "opp-200",
-    "name": "Faktoring pełny — sieci handlowe — CloudScale Systems",
+    "name": "Faktoring pełny dla sieci handlowych — CloudScale Systems",
     "clientId": "client-017",
     "contactId": null,
     "productId": "prod-004",
@@ -4625,7 +4625,7 @@
   },
   {
     "id": "opp-201",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — FinTech Solutions PL",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — FinTech Solutions PL",
     "clientId": "client-018",
     "contactId": null,
     "productId": "prod-016",
@@ -4648,7 +4648,7 @@
   },
   {
     "id": "opp-202",
-    "name": "Faktoring pełny — odbiorcy krajowi — Mazovia Leasing",
+    "name": "Faktoring pełny dla odbiorców krajowych — Mazovia Leasing",
     "clientId": "client-019",
     "contactId": null,
     "productId": "prod-004",
@@ -4671,7 +4671,7 @@
   },
   {
     "id": "opp-203",
-    "name": "Faktoring kontraktowy — budowa — RoboAssembly Industries",
+    "name": "Faktoring kontraktowy na budowę — RoboAssembly Industries",
     "clientId": "client-020",
     "contactId": null,
     "productId": "prod-016",
@@ -4694,7 +4694,7 @@
   },
   {
     "id": "opp-204",
-    "name": "Faktoring pełny — odbiorcy krajowi — SolarGrid Energia",
+    "name": "Faktoring pełny dla odbiorców krajowych — SolarGrid Energia",
     "clientId": "client-021",
     "contactId": null,
     "productId": "prod-004",
@@ -4717,7 +4717,7 @@
   },
   {
     "id": "opp-205",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — PharmaPack Export",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — PharmaPack Export",
     "clientId": "client-022",
     "contactId": null,
     "productId": "prod-016",
@@ -4763,7 +4763,7 @@
   },
   {
     "id": "opp-207",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — MediaStream Holdings",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — MediaStream Holdings",
     "clientId": "client-024",
     "contactId": null,
     "productId": "prod-016",
@@ -4786,7 +4786,7 @@
   },
   {
     "id": "opp-208",
-    "name": "Faktoring pełny — odbiorcy krajowi — BioResearch Labs",
+    "name": "Faktoring pełny dla odbiorców krajowych — BioResearch Labs",
     "clientId": "client-025",
     "contactId": null,
     "productId": "prod-004",
@@ -4809,7 +4809,7 @@
   },
   {
     "id": "opp-209",
-    "name": "Faktoring kontraktowy — budowa — HotelChain Central",
+    "name": "Faktoring kontraktowy na budowę — HotelChain Central",
     "clientId": "client-026",
     "contactId": null,
     "productId": "prod-016",
@@ -4832,7 +4832,7 @@
   },
   {
     "id": "opp-210",
-    "name": "Faktoring pełny — odbiorcy krajowi — AgriTech Innovations",
+    "name": "Faktoring pełny dla odbiorców krajowych — AgriTech Innovations",
     "clientId": "client-027",
     "contactId": null,
     "productId": "prod-004",
@@ -4855,7 +4855,7 @@
   },
   {
     "id": "opp-211",
-    "name": "Faktoring kontraktowy — budowa — Vistula Towarzystwo Ubezpieczeń",
+    "name": "Faktoring kontraktowy na budowę — Vistula Towarzystwo Ubezpieczeń",
     "clientId": "client-028",
     "contactId": null,
     "productId": "prod-016",
@@ -4878,7 +4878,7 @@
   },
   {
     "id": "opp-212",
-    "name": "Faktoring pełny — odbiorcy krajowi — TechVentures Poland",
+    "name": "Faktoring pełny dla odbiorców krajowych — TechVentures Poland",
     "clientId": "client-003",
     "contactId": null,
     "productId": "prod-004",
@@ -4901,7 +4901,7 @@
   },
   {
     "id": "opp-213",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — GreenBuild Development",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — GreenBuild Development",
     "clientId": "client-004",
     "contactId": null,
     "productId": "prod-016",
@@ -4924,7 +4924,7 @@
   },
   {
     "id": "opp-214",
-    "name": "Faktoring pełny — odbiorcy z UE — CloudScale Systems",
+    "name": "Faktoring pełny dla odbiorców z UE — CloudScale Systems",
     "clientId": "client-017",
     "contactId": null,
     "productId": "prod-004",
@@ -4947,7 +4947,7 @@
   },
   {
     "id": "opp-215",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — FinTech Solutions PL",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — FinTech Solutions PL",
     "clientId": "client-018",
     "contactId": null,
     "productId": "prod-016",
@@ -4970,7 +4970,7 @@
   },
   {
     "id": "opp-216",
-    "name": "Faktoring pełny — sieci handlowe — Mazovia Leasing",
+    "name": "Faktoring pełny dla sieci handlowych — Mazovia Leasing",
     "clientId": "client-019",
     "contactId": null,
     "productId": "prod-004",
@@ -4993,7 +4993,7 @@
   },
   {
     "id": "opp-217",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — RoboAssembly Industries",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — RoboAssembly Industries",
     "clientId": "client-020",
     "contactId": null,
     "productId": "prod-016",
@@ -5016,7 +5016,7 @@
   },
   {
     "id": "opp-218",
-    "name": "Faktoring pełny — sieci handlowe — SolarGrid Energia",
+    "name": "Faktoring pełny dla sieci handlowych — SolarGrid Energia",
     "clientId": "client-021",
     "contactId": null,
     "productId": "prod-004",
@@ -5039,7 +5039,7 @@
   },
   {
     "id": "opp-219",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — PharmaPack Export",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — PharmaPack Export",
     "clientId": "client-022",
     "contactId": null,
     "productId": "prod-016",
@@ -5062,7 +5062,7 @@
   },
   {
     "id": "opp-220",
-    "name": "Faktoring pełny — sieci handlowe — AutoComponents Poland",
+    "name": "Faktoring pełny dla sieci handlowych — AutoComponents Poland",
     "clientId": "client-023",
     "contactId": null,
     "productId": "prod-004",
@@ -5085,7 +5085,7 @@
   },
   {
     "id": "opp-221",
-    "name": "Faktoring kontraktowy — budowa — MediaStream Holdings",
+    "name": "Faktoring kontraktowy na budowę — MediaStream Holdings",
     "clientId": "client-024",
     "contactId": null,
     "productId": "prod-016",
@@ -5108,7 +5108,7 @@
   },
   {
     "id": "opp-222",
-    "name": "Faktoring pełny — sieci handlowe — BioResearch Labs",
+    "name": "Faktoring pełny dla sieci handlowych — BioResearch Labs",
     "clientId": "client-025",
     "contactId": null,
     "productId": "prod-004",
@@ -5131,7 +5131,7 @@
   },
   {
     "id": "opp-223",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — HotelChain Central",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — HotelChain Central",
     "clientId": "client-026",
     "contactId": null,
     "productId": "prod-016",
@@ -5154,7 +5154,7 @@
   },
   {
     "id": "opp-224",
-    "name": "Faktoring pełny — odbiorcy z UE — AgriTech Innovations",
+    "name": "Faktoring pełny dla odbiorców z UE — AgriTech Innovations",
     "clientId": "client-027",
     "contactId": null,
     "productId": "prod-004",
@@ -5177,7 +5177,7 @@
   },
   {
     "id": "opp-225",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — Vistula Towarzystwo Ubezpieczeń",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — Vistula Towarzystwo Ubezpieczeń",
     "clientId": "client-028",
     "contactId": null,
     "productId": "prod-016",
@@ -5200,7 +5200,7 @@
   },
   {
     "id": "opp-226",
-    "name": "Faktoring pełny — sieci handlowe — TechVentures Poland",
+    "name": "Faktoring pełny dla sieci handlowych — TechVentures Poland",
     "clientId": "client-003",
     "contactId": null,
     "productId": "prod-004",
@@ -5223,7 +5223,7 @@
   },
   {
     "id": "opp-227",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — GreenBuild Development",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — GreenBuild Development",
     "clientId": "client-004",
     "contactId": null,
     "productId": "prod-016",
@@ -5269,7 +5269,7 @@
   },
   {
     "id": "opp-229",
-    "name": "Faktoring kontraktowy — budowa — FinTech Solutions PL",
+    "name": "Faktoring kontraktowy na budowę — FinTech Solutions PL",
     "clientId": "client-018",
     "contactId": null,
     "productId": "prod-016",
@@ -5292,7 +5292,7 @@
   },
   {
     "id": "opp-230",
-    "name": "Faktoring pełny — odbiorcy krajowi — Beskid Logistics",
+    "name": "Faktoring pełny dla odbiorców krajowych — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-004",
@@ -5315,7 +5315,7 @@
   },
   {
     "id": "opp-231",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — Zakopane Resorts Group",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — Zakopane Resorts Group",
     "clientId": "client-031",
     "contactId": null,
     "productId": "prod-016",
@@ -5361,7 +5361,7 @@
   },
   {
     "id": "opp-233",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — Beskid Logistics",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-016",
@@ -5407,7 +5407,7 @@
   },
   {
     "id": "opp-235",
-    "name": "Faktoring kontraktowy — budowa — TatraSteel Kraków",
+    "name": "Faktoring kontraktowy na budowę — TatraSteel Kraków",
     "clientId": "client-029",
     "contactId": null,
     "productId": "prod-016",
@@ -5453,7 +5453,7 @@
   },
   {
     "id": "opp-237",
-    "name": "Faktoring kontraktowy — budowa — Zakopane Resorts Group",
+    "name": "Faktoring kontraktowy na budowę — Zakopane Resorts Group",
     "clientId": "client-031",
     "contactId": null,
     "productId": "prod-016",
@@ -5476,7 +5476,7 @@
   },
   {
     "id": "opp-238",
-    "name": "Faktoring pełny — odbiorcy z UE — TatraSteel Kraków",
+    "name": "Faktoring pełny dla odbiorców z UE — TatraSteel Kraków",
     "clientId": "client-029",
     "contactId": null,
     "productId": "prod-004",
@@ -5499,7 +5499,7 @@
   },
   {
     "id": "opp-239",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — Beskid Logistics",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-016",
@@ -5522,7 +5522,7 @@
   },
   {
     "id": "opp-240",
-    "name": "Faktoring pełny — sieci handlowe — Zakopane Resorts Group",
+    "name": "Faktoring pełny dla sieci handlowych — Zakopane Resorts Group",
     "clientId": "client-031",
     "contactId": null,
     "productId": "prod-004",
@@ -5545,7 +5545,7 @@
   },
   {
     "id": "opp-241",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — TatraSteel Kraków",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — TatraSteel Kraków",
     "clientId": "client-029",
     "contactId": null,
     "productId": "prod-016",
@@ -5568,7 +5568,7 @@
   },
   {
     "id": "opp-242",
-    "name": "Faktoring pełny — sieci handlowe — Beskid Logistics",
+    "name": "Faktoring pełny dla sieci handlowych — Beskid Logistics",
     "clientId": "client-030",
     "contactId": null,
     "productId": "prod-004",
@@ -5591,7 +5591,7 @@
   },
   {
     "id": "opp-243",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — Zakopane Resorts Group",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — Zakopane Resorts Group",
     "clientId": "client-031",
     "contactId": null,
     "productId": "prod-016",
@@ -5614,7 +5614,7 @@
   },
   {
     "id": "opp-244",
-    "name": "Faktoring pełny — odbiorcy krajowi — Baltic Shipyard Gdańsk",
+    "name": "Faktoring pełny dla odbiorców krajowych — Baltic Shipyard Gdańsk",
     "clientId": "client-032",
     "contactId": null,
     "productId": "prod-004",
@@ -5637,7 +5637,7 @@
   },
   {
     "id": "opp-245",
-    "name": "Faktoring kontraktowy — kontrakt publiczny — Tri-City Marine Export",
+    "name": "Faktoring kontraktowy dla kontraktu publicznego — Tri-City Marine Export",
     "clientId": "client-033",
     "contactId": null,
     "productId": "prod-016",
@@ -5660,7 +5660,7 @@
   },
   {
     "id": "opp-246",
-    "name": "Faktoring pełny — sieci handlowe — Pomorskie Wind Energy",
+    "name": "Faktoring pełny dla sieci handlowych — Pomorskie Wind Energy",
     "clientId": "client-034",
     "contactId": null,
     "productId": "prod-004",
@@ -5683,7 +5683,7 @@
   },
   {
     "id": "opp-247",
-    "name": "Faktoring kontraktowy — dostawy dla sieci — Baltic Shipyard Gdańsk",
+    "name": "Faktoring kontraktowy na dostawy dla sieci — Baltic Shipyard Gdańsk",
     "clientId": "client-032",
     "contactId": null,
     "productId": "prod-016",
@@ -5752,7 +5752,7 @@
   },
   {
     "id": "opp-250",
-    "name": "Akredytywa importowa — dostawca z Azji — Baltic Shipyard Gdańsk",
+    "name": "Akredytywa importowa dla dostawcy z Azji — Baltic Shipyard Gdańsk",
     "clientId": "client-032",
     "contactId": null,
     "productId": "prod-005",
@@ -6005,7 +6005,7 @@
   },
   {
     "id": "opp-261",
-    "name": "Gwarancja realizacji kontraktu zagranicznego — SteelForm Mazowsze",
+    "name": "Gwarancja dobrego wykonania kontraktu — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-017",
@@ -6097,7 +6097,7 @@
   },
   {
     "id": "opp-265",
-    "name": "Akredytywa importowa — dostawca z Azji — FastRetail Logistics",
+    "name": "Akredytywa importowa na komponenty — FastRetail Logistics",
     "clientId": "client-014",
     "contactId": null,
     "productId": "prod-005",
@@ -6235,7 +6235,7 @@
   },
   {
     "id": "opp-271",
-    "name": "Akredytywa importowa na surowce — TransEuropa Cargo",
+    "name": "Akredytywa importowa na maszyny — TransEuropa Cargo",
     "clientId": "client-006",
     "contactId": null,
     "productId": "prod-005",
@@ -6396,7 +6396,7 @@
   },
   {
     "id": "opp-278",
-    "name": "Gwarancja należytego wykonania — UrbanBud Development",
+    "name": "Gwarancja zapłaty — UrbanBud Development",
     "clientId": "client-013",
     "contactId": null,
     "productId": "prod-006",
@@ -6534,7 +6534,7 @@
   },
   {
     "id": "opp-284",
-    "name": "Gwarancja zapłaty — MazurChem",
+    "name": "Gwarancja zwrotu zaliczki — MazurChem",
     "clientId": "client-005",
     "contactId": null,
     "productId": "prod-006",
@@ -6649,7 +6649,7 @@
   },
   {
     "id": "opp-289",
-    "name": "Akredytywa importowa — dostawca z Azji — SteelForm Mazowsze",
+    "name": "Akredytywa importowa dla dostawcy z Azji — SteelForm Mazowsze",
     "clientId": "client-010",
     "contactId": null,
     "productId": "prod-005",
@@ -6718,7 +6718,7 @@
   },
   {
     "id": "opp-292",
-    "name": "Akredytywa importowa na komponenty — UrbanBud Development",
+    "name": "Akredytywa importowa na surowce — UrbanBud Development",
     "clientId": "client-013",
     "contactId": null,
     "productId": "prod-005",
@@ -8351,7 +8351,7 @@
   },
   {
     "id": "opp-363",
-    "name": "Akceptacja kart w sieci sklepów — FastRetail Logistics",
+    "name": "Terminale płatnicze w sieci placówek — FastRetail Logistics",
     "clientId": "client-014",
     "contactId": null,
     "productId": "prod-018",
@@ -8834,7 +8834,7 @@
   },
   {
     "id": "opp-384",
-    "name": "Depozyt overnight na środki z emisji — AgroNova Polska",
+    "name": "Depozyt overnight na nadwyżki płynności — AgroNova Polska",
     "clientId": "client-007",
     "contactId": null,
     "productId": "prod-008",

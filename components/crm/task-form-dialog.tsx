@@ -42,6 +42,7 @@ type TaskFormDialogProps = {
   user: DemoUser
   task?: Task
   defaultClientId?: string | null
+  defaultOpportunityId?: string | null
   defaultTitle?: string | null
   open?: boolean
   onOpenChange?: (open: boolean) => void
@@ -71,6 +72,23 @@ function resolveTaskScope(
   }
 }
 
+/** Wykonawcy w zasięgu: doradcy z regionu (zarząd — wszyscy), bieżący użytkownik i aktualny wykonawca. */
+function getAssignableUsers(
+  user: DemoUser,
+  users: readonly DemoUser[],
+  regionId: string | null,
+  currentAssigneeId: string,
+): DemoUser[] {
+  const region = regionId ?? user.regionId
+  return users.filter(
+    (candidate) =>
+      candidate.id === user.id ||
+      candidate.id === currentAssigneeId ||
+      (candidate.role === "advisor" &&
+        (user.role === "executive" || !region || candidate.regionId === region)),
+  )
+}
+
 function taskToFormState(task: Task) {
   return {
     title: task.title,
@@ -85,19 +103,25 @@ export function TaskFormDialog({
   user,
   task,
   defaultClientId = null,
+  defaultOpportunityId = null,
   defaultTitle = null,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   trigger,
 }: TaskFormDialogProps) {
   const isEdit = Boolean(task)
-  const { tasks, clients, opportunities, addTask, updateTask } = useDemoData()
+  const { tasks, clients, opportunities, users, addTask, updateTask } =
+    useDemoData()
   const [internalOpen, setInternalOpen] = React.useState(false)
   const [title, setTitle] = React.useState("")
   const [dueDate, setDueDate] = React.useState("")
   const [priority, setPriority] = React.useState<TaskPriority>("medium")
   const [clientId, setClientId] = React.useState(LINK_NONE)
   const [opportunityId, setOpportunityId] = React.useState(LINK_NONE)
+  /** null = wykonawca podąża za opiekunem klienta / deala. */
+  const [assigneeOverride, setAssigneeOverride] = React.useState<
+    string | null
+  >(null)
 
   const open = openProp ?? internalOpen
   const setOpen = onOpenChangeProp ?? setInternalOpen
@@ -110,6 +134,22 @@ export function TaskFormDialog({
   const scopedOpportunities = React.useMemo(
     () => filterByScope(opportunities, user),
     [opportunities, user],
+  )
+
+  const selectedClient =
+    clientId !== LINK_NONE
+      ? scopedClients.find((c) => c.id === clientId)
+      : undefined
+  const selectedOpportunity =
+    opportunityId !== LINK_NONE
+      ? scopedOpportunities.find((opp) => opp.id === opportunityId)
+      : undefined
+  const scope = resolveTaskScope(user, selectedClient, selectedOpportunity)
+  const assigneeId = assigneeOverride ?? scope.ownerId
+
+  const assignableUsers = React.useMemo(
+    () => getAssignableUsers(user, users, scope.regionId, assigneeId),
+    [user, users, scope.regionId, assigneeId],
   )
 
   const opportunitiesForClient = React.useMemo(() => {
@@ -128,17 +168,19 @@ export function TaskFormDialog({
       setPriority(state.priority)
       setClientId(state.clientId)
       setOpportunityId(state.opportunityId)
+      setAssigneeOverride(task.ownerId)
     } else {
       resetForm()
     }
-  }, [open, task, defaultClientId, defaultTitle])
+  }, [open, task, defaultClientId, defaultOpportunityId, defaultTitle])
 
   function resetForm() {
     setTitle(defaultTitle ?? "")
     setDueDate("")
     setPriority("medium")
     setClientId(defaultClientId ?? LINK_NONE)
-    setOpportunityId(LINK_NONE)
+    setOpportunityId(defaultOpportunityId ?? LINK_NONE)
+    setAssigneeOverride(null)
   }
 
   function handleOpenChange(next: boolean) {
@@ -170,16 +212,7 @@ export function TaskFormDialog({
       return
     }
 
-    const selectedClient =
-      clientId !== LINK_NONE
-        ? scopedClients.find((c) => c.id === clientId)
-        : undefined
-    const selectedOpportunity =
-      opportunityId !== LINK_NONE
-        ? scopedOpportunities.find((opp) => opp.id === opportunityId)
-        : undefined
-
-    const scope = resolveTaskScope(user, selectedClient, selectedOpportunity)
+    const ownerId = assigneeId
     const links = {
       clientId: clientId === LINK_NONE ? null : clientId,
       opportunityId: opportunityId === LINK_NONE ? null : opportunityId,
@@ -192,6 +225,7 @@ export function TaskFormDialog({
         priority,
         ...links,
         ...scope,
+        ownerId,
       })
       toast.success("Zadanie zostało zaktualizowane")
     } else {
@@ -203,6 +237,7 @@ export function TaskFormDialog({
         completed: false,
         ...links,
         ...scope,
+        ownerId,
       }
       addTask(newTask)
       toast.success("Zadanie zostało dodane")
@@ -230,8 +265,8 @@ export function TaskFormDialog({
           <DialogTitle>{isEdit ? "Edytuj zadanie" : "Nowe zadanie"}</DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Zmień tytuł, termin, priorytet lub powiązania z klientem i dealem."
-              : "Tytuł, termin, priorytet i opcjonalne powiązanie z klientem lub dealem."}
+              ? "Zmień tytuł, termin, priorytet, wykonawcę lub powiązania z klientem i dealem."
+              : "Tytuł, termin, priorytet, wykonawca i opcjonalne powiązanie z klientem lub dealem."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -270,6 +305,23 @@ export function TaskFormDialog({
                     {TASK_PRIORITY_OPTIONS.map((p) => (
                       <SelectItem key={p} value={p}>
                         {TASK_PRIORITY_LABELS[p]}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="task-assignee">Wykonawca</FieldLabel>
+              <Select value={assigneeId} onValueChange={setAssigneeOverride}>
+                <SelectTrigger id="task-assignee" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {assignableUsers.map((candidate) => (
+                      <SelectItem key={candidate.id} value={candidate.id}>
+                        {candidate.displayName}
                       </SelectItem>
                     ))}
                   </SelectGroup>

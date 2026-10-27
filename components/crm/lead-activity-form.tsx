@@ -4,6 +4,7 @@ import * as React from "react"
 import {
   CalendarIcon,
   ChevronDownIcon,
+  MailIcon,
   PhoneIcon,
   VideoIcon,
   ZapIcon,
@@ -30,6 +31,7 @@ import {
 } from "@/lib/crm/activity-channel-types"
 import {
   activityTitlePlaceholder,
+  applyActivityType,
   emptyActivityFormState,
   toAddCompanyActivityInput,
   type CompanyActivityFormState,
@@ -45,6 +47,7 @@ const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
   phone: PhoneIcon,
   meeting: CalendarIcon,
   video_call: VideoIcon,
+  email: MailIcon,
 }
 
 type LeadActivityFormProps = {
@@ -185,7 +188,9 @@ export function LeadActivityForm({ lead }: LeadActivityFormProps) {
                     ? "text-primary hover:text-primary"
                     : "text-muted-foreground",
                 )}
-                onClick={() => patch({ type: option.id })}
+                onClick={() =>
+                  setState((prev) => applyActivityType(prev, option.id))
+                }
                 aria-pressed={selected}
               >
                 <Icon className="size-4 shrink-0" aria-hidden />

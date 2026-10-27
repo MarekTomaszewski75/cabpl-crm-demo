@@ -55,16 +55,19 @@
 - **US-54** — **Done** — daty seedu przesuwane na „dziś” przy ładowaniu (`lib/data/seed-dates.ts`), analityka liczy od bieżącej daty i kwartału, KPI mają 12 miesięcy, poprawki jakości dat w seedzie. [US-54](./stories/US-54-seed-dates-rolling/story.md).
 - **US-55** — **Done** — KPI liczone z deali: plan z `kpi.json` (`KpiPlanSeed`), realizacja z wygranych, prognoza z ważonego lejka; seed: 44 wygrane, lejek 3,4 × plan. [US-55](./stories/US-55-consistent-amounts/story.md).
 - **US-56** — **Done** — słowniki korporacyjne (źródła, typy firm, wideokonferencja, powody utraty), segmenty Banku + instytucje finansowe, unikalne nazwy deali, kontakty i leady Polskiej Logistyki, bez śladów demo, `pluralPl`, poprawna polszczyzna w AI. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
+- **US-57** — **Done** — spotkanie z aktywności w kalendarzu, follow-up z deala, „Nowe zadanie” z wykonawcą, „Dziś → Wymaga uwagi” (zaległe, bez postępu, odnowienia), e-mail jako rejestracja ręczna, czas lokalny w formularzach, historia aktywności deali w seedzie. [US-57](./stories/US-57-activities-and-today-attention/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-56 domknięte na branchu `demo/rfp-alignment`)
+- (brak — US-57 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-57** (story **Done**) — `appendMeetingFromActivity` w `DemoDataContext`; `applyActivityType` / `buildActivityEndsAt` (czas lokalny); `TaskFormDialog` (`defaultOpportunityId`, Wykonawca); `lib/crm/today-attention.ts` + `TodayAttentionCard`; `data/deal-activities.json` (561). [US-57](./stories/US-57-activities-and-today-attention/story.md).
 
 - **US-56** (story **Done**) — migracja seedu (źródła, segmenty, nazwy deali, leady, kontakty); etykiety w `*-labels.ts`; usunięte pola detaliczne w UI; `pluralPl`; szablony AI. EUR → US-60, baner → US-58, AI → US-61. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
 
@@ -116,7 +119,7 @@
 
 ## Next up
 
-1. US-57 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
+1. US-58 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
 
 ---
 

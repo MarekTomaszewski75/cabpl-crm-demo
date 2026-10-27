@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 import type { DealEngagementSection } from "@/components/crm/deal-detail-view"
@@ -9,6 +8,7 @@ import { DealActivityFeed } from "@/components/crm/deal-activity-feed"
 import { DealActivityForm } from "@/components/crm/deal-activity-form"
 import { DealMeetingsList } from "@/components/crm/deal-meetings-list"
 import { DealTasksList } from "@/components/crm/deal-tasks-list"
+import { TaskFormDialog } from "@/components/crm/task-form-dialog"
 import { CrmDocumentList } from "@/components/crm/crm-document-list"
 import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
@@ -279,12 +279,19 @@ export function DealActivityPanel({
             </Button>
           ))}
         </div>
-        <Button variant="outline" size="sm" asChild className="shrink-0">
-          <Link href="/tasks">
-            <PlusIcon data-icon="inline-start" />
-            Nowe zadanie
-          </Link>
-        </Button>
+        {user ? (
+          <TaskFormDialog
+            user={user}
+            defaultClientId={deal.clientId}
+            defaultOpportunityId={deal.id}
+            trigger={
+              <Button variant="outline" size="sm" className="shrink-0">
+                <PlusIcon data-icon="inline-start" />
+                Nowe zadanie
+              </Button>
+            }
+          />
+        ) : null}
       </div>
 
       {engagementSection === "meetings" && (

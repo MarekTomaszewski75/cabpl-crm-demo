@@ -13,6 +13,7 @@ import { createNextDealFileId } from "@/lib/crm/deal-file-id"
 import { toast } from "sonner"
 import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
+import { createNextMeetingId } from "@/lib/crm/meeting-id"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
 import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
 import {
@@ -118,6 +119,41 @@ function syncContactClientLinks(
   }
 
   return nextLinks
+}
+
+const ACTIVITY_MEETING_DEFAULT_MS = 60 * 60 * 1000
+
+/** Aktywność „Spotkanie” z firmą trafia też do kalendarza (US-57). */
+function appendMeetingFromActivity(
+  meetings: Meeting[],
+  input: AddCompanyActivityInput,
+  link: {
+    clientId: string | null | undefined
+    leadId?: string
+    opportunityId?: string
+    ownerId: string
+    regionId: string
+  },
+): Meeting[] {
+  if (input.type !== "meeting" || !link.clientId) return meetings
+  const endsAt =
+    input.endsAt ??
+    new Date(
+      new Date(input.occurredAt).getTime() + ACTIVITY_MEETING_DEFAULT_MS,
+    ).toISOString()
+  const meeting: Meeting = {
+    id: createNextMeetingId(meetings),
+    title: input.title,
+    clientId: link.clientId,
+    startsAt: input.occurredAt,
+    endsAt,
+    note: input.note,
+    ownerId: link.ownerId,
+    regionId: link.regionId,
+    ...(link.leadId ? { leadId: link.leadId } : {}),
+    ...(link.opportunityId ? { opportunityId: link.opportunityId } : {}),
+  }
+  return [...meetings, meeting]
 }
 
 function buildCompanyCreatedEvent(
@@ -640,6 +676,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           contactEvents: [...prev.contactEvents, event],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId,
+            ownerId: event.ownerId,
+            regionId,
+          }),
           clients: prev.clients.map((c) =>
             c.id === clientId ? { ...c, lastActivityAt: occurredAt } : c,
           ),
@@ -904,6 +945,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           dealActivities: [...prev.dealActivities, activity],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId: deal?.clientId,
+            opportunityId: dealId,
+            ownerId: activity.ownerId,
+            regionId,
+          }),
         }
       })
     },
@@ -941,6 +988,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           leadActivities: [...prev.leadActivities, activity],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId: lead?.clientId,
+            leadId,
+            ownerId: activity.ownerId,
+            regionId,
+          }),
         }
       })
     },

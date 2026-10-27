@@ -76,6 +76,7 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 54  | [US-54 Seed dates rolling](./US-54-seed-dates-rolling/story.md)                         | P0        | US-21, US-36, US-40, US-53                      |
 | 55  | [US-55 Consistent amounts](./US-55-consistent-amounts/story.md)                         | P0        | US-07, US-36, US-38, US-54                      |
 | 56  | [US-56 Corporate data and copy](./US-56-corporate-data-and-copy/story.md)               | P0        | US-17, US-35, US-52, US-53, US-55               |
+| 57  | [US-57 Activities and Today attention](./US-57-activities-and-today-attention/story.md) | P0        | US-21, US-34, US-45, US-53                      |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  

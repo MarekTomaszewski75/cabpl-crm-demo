@@ -40,6 +40,12 @@ import {
   getTasksDueOnDate,
   isMeetingOnDate,
 } from "@/lib/crm/today-dashboard"
+import {
+  getOverdueTasks,
+  getStaleDeals,
+  getUpcomingRenewals,
+} from "@/lib/crm/today-attention"
+import { TodayAttentionCard } from "@/components/crm/today-attention-card"
 import { TodayNotificationsCard } from "@/components/crm/today-notifications-card"
 import { TodayPipelineSummary } from "@/components/crm/today-pipeline-summary"
 import { useDemoData } from "@/lib/data/demo-data-context"
@@ -63,8 +69,18 @@ function priorityBadgeVariant(
 export function TodayView() {
   const router = useRouter()
   const { user, isReady } = useSession()
-  const { tasks, meetings, clients, opportunities, leads, leadActivities, contactEvents } =
-    useDemoData()
+  const {
+    tasks,
+    meetings,
+    clients,
+    opportunities,
+    leads,
+    leadActivities,
+    contactEvents,
+    dealActivities,
+    clientBankingProducts,
+    products,
+  } = useDemoData()
 
   const today = getToday()
   const todayDateKey = getTodayDateKey()
@@ -105,9 +121,22 @@ export function TodayView() {
     [contactEvents, user],
   )
 
+  const scopedDealActivities = React.useMemo(
+    () => (user ? filterByScope(dealActivities, user) : []),
+    [dealActivities, user],
+  )
+  const scopedBankingProducts = React.useMemo(
+    () => (user ? filterByScope(clientBankingProducts, user) : []),
+    [clientBankingProducts, user],
+  )
+
   const clientNameById = React.useMemo(
     () => new Map(scopedClients.map((c: Client) => [c.id, c.name])),
     [scopedClients],
+  )
+  const productNameById = React.useMemo(
+    () => new Map(products.map((product) => [product.id, product.name])),
+    [products],
   )
 
   const tasksToday = getTasksDueOnDate(scopedTasks, todayDateKey)
@@ -115,6 +144,13 @@ export function TodayView() {
     scopedMeetings,
     startOfDay(today),
   )
+  const overdueTasks = getOverdueTasks(scopedTasks, today)
+  const staleDeals = getStaleDeals(
+    scopedOpportunities,
+    { dealActivities: scopedDealActivities, meetings: scopedMeetings },
+    today,
+  )
+  const renewals = getUpcomingRenewals(scopedBankingProducts, today)
   const nbaHighlight = getPrimaryNbaHighlight(
     scopedClients,
     scopedOpportunities,
@@ -255,6 +291,14 @@ export function TodayView() {
           </CardContent>
         </Card>
       </div>
+
+      <TodayAttentionCard
+        overdueTasks={overdueTasks}
+        staleDeals={staleDeals}
+        renewals={renewals}
+        clientNameById={clientNameById}
+        productNameById={productNameById}
+      />
 
       <TodayNotificationsCard />
 

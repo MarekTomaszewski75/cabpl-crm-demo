@@ -412,6 +412,19 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
 
+## Aktywności, zadania i „Dziś → Wymaga uwagi” (US-57)
+
+- **Spotkanie z aktywności:** `addCompanyActivity`, `addLeadChannelActivity` i `addDealChannelActivity` przy `type: "meeting"` dopisują `Meeting` (`appendMeetingFromActivity`; lead tylko z `clientId`). Kalendarz i „Dziś” widzą je bez dodatkowego kodu.
+- **Formularz aktywności:** `applyActivityType` (spotkanie domyślnie 10:00–11:00), `buildActivityOccurredAt` i `buildActivityEndsAt` liczą **czas lokalny**. Nie składaj ISO z `T${time}:00.000Z`.
+- **Follow-up z deala:** checkbox w `DealActivityForm` przy spotkaniu tworzy `Task` z terminem +3 dni.
+- **Zadanie z kontekstu:** `TaskFormDialog` z `defaultClientId` i `defaultOpportunityId`. Pole **Wykonawca** (`ownerId`) domyślnie bierze opiekuna klienta lub deala, a po ręcznej zmianie trzyma wybór.
+- **Wymaga uwagi:** `lib/crm/today-attention.ts`:
+  - `getOverdueTasks`,
+  - `getStaleDeals` (ostatni kontakt = aktywność deala, spotkanie lub utworzenie; próg `STALE_DEAL_DAYS` = 14),
+  - `getUpcomingRenewals` (`RENEWAL_HORIZON_DAYS` = 90).
+  - UI: `TodayAttentionCard`.
+- **Kanał e-mail:** w formularzach jako „E-mail (rejestracja ręczna)” (QW-18).
+
 ## Słowniki i copy korporacyjne (US-56)
 
 - **Źródła** (`LeadSource` = `DealSource` = `CompanySource`): `rm_initiative`, `client_request`, `client_referral`, `ca_group`, `partner`, `industry_event`. Etykiety są w `lead-labels.ts`, `deal-labels.ts` i `company-labels.ts`. Nie dodawaj kanałów detalicznych (Link, Reklama, social media).

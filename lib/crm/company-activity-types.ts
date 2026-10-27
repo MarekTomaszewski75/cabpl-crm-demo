@@ -1,5 +1,6 @@
 import { activityChannelTypeLabel } from "@/lib/crm/activity-channel-types"
 import { buildActivityNoteBody } from "@/lib/crm/activity-participants"
+import { toLocalDateKey } from "@/lib/crm/local-date"
 import type {
   AddCompanyActivityInput,
   ChannelContactEventType,
@@ -76,18 +77,36 @@ export function getCompanyActivityPriorityOption(
 }
 
 export function todayDateInputValue(): string {
-  return new Date().toISOString().slice(0, 10)
+  return toLocalDateKey(new Date())
 }
 
+const ACTIVITY_DEFAULT_DURATION_MS = 60 * 60 * 1000
+
+/** Data i godzina z formularza to czas lokalny przeglądarki (US-57). */
 export function buildActivityOccurredAt(input: {
   startDate: string
   startTime: string
   allDay: boolean
 }): string {
   if (!input.startDate) return new Date().toISOString()
-  if (input.allDay) return `${input.startDate}T12:00:00.000Z`
+  if (input.allDay) return new Date(`${input.startDate}T12:00:00`).toISOString()
   const time = input.startTime || "09:00"
-  return `${input.startDate}T${time}:00.000Z`
+  return new Date(`${input.startDate}T${time}:00`).toISOString()
+}
+
+/** Koniec aktywności; brak lub koniec przed startem → start + 1 h. */
+export function buildActivityEndsAt(input: {
+  startDate: string
+  startTime: string
+  endDate: string
+  endTime: string
+  allDay: boolean
+}): string {
+  const startsAt = new Date(buildActivityOccurredAt(input))
+  const fallback = new Date(startsAt.getTime() + ACTIVITY_DEFAULT_DURATION_MS)
+  if (input.allDay || !input.endTime) return fallback.toISOString()
+  const endsAt = new Date(`${input.endDate || input.startDate}T${input.endTime}:00`)
+  return endsAt > startsAt ? endsAt.toISOString() : fallback.toISOString()
 }
 
 export function defaultActivityTitle(
@@ -134,6 +153,15 @@ export function emptyActivityFormState(
   }
 }
 
+/** Zmiana typu aktywności; spotkanie domyślnie 10:00–11:00 zamiast „cały dzień”. */
+export function applyActivityType(
+  state: CompanyActivityFormState,
+  type: ChannelContactEventType,
+): CompanyActivityFormState {
+  if (type !== "meeting" || !state.allDay) return { ...state, type }
+  return { ...state, type, allDay: false, startTime: "10:00", endTime: "11:00" }
+}
+
 export function toAddCompanyActivityInput(
   state: CompanyActivityFormState,
   catalogs: {
@@ -149,6 +177,7 @@ export function toAddCompanyActivityInput(
       startTime: state.startTime,
       allDay: state.allDay,
     }),
+    endsAt: buildActivityEndsAt(state),
     note: buildActivityNoteBody({
       note: state.note,
       priority: state.priority,

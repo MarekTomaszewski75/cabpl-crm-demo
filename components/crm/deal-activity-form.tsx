@@ -4,6 +4,7 @@ import * as React from "react"
 import {
   CalendarIcon,
   ChevronDownIcon,
+  MailIcon,
   PhoneIcon,
   VideoIcon,
   ZapIcon,
@@ -30,14 +31,17 @@ import {
 } from "@/lib/crm/activity-channel-types"
 import {
   activityTitlePlaceholder,
+  applyActivityType,
   emptyActivityFormState,
   toAddCompanyActivityInput,
   type CompanyActivityFormState,
 } from "@/lib/crm/company-activity-types"
+import { toLocalDateKey } from "@/lib/crm/local-date"
+import { createNextTaskId } from "@/lib/crm/task-id"
 import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import type { Deal } from "@/types/crm"
+import type { Deal, Task } from "@/types/crm"
 import type { LucideIcon } from "lucide-react"
 
 const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
@@ -45,10 +49,19 @@ const TYPE_ICONS: Record<ActivityChannelType, LucideIcon> = {
   phone: PhoneIcon,
   meeting: CalendarIcon,
   video_call: VideoIcon,
+  email: MailIcon,
 }
 
 type DealActivityFormProps = {
   deal: Deal
+}
+
+const FOLLOW_UP_OFFSET_DAYS = 3
+
+function addDaysToDateKey(dateKey: string, days: number): string {
+  const date = new Date(`${dateKey}T12:00:00`)
+  date.setDate(date.getDate() + days)
+  return toLocalDateKey(date)
 }
 
 function ActivityOutlinedField({
@@ -117,11 +130,14 @@ function ActivityCollapsibleSection({
 
 export function DealActivityForm({ deal }: DealActivityFormProps) {
   const { user } = useSession()
-  const { users, contacts, addDealChannelActivity } = useDemoData()
+  const { users, contacts, tasks, addDealChannelActivity, addTask } =
+    useDemoData()
   const [state, setState] = React.useState<CompanyActivityFormState>(() =>
     emptyActivityFormState(user?.id ?? null),
   )
   const [peopleOpen, setPeopleOpen] = React.useState(true)
+  const [createFollowUp, setCreateFollowUp] = React.useState(true)
+  const isMeeting = state.type === "meeting"
 
   React.useEffect(() => {
     if (user && !state.responsibleUserId) {
@@ -143,17 +159,37 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
   function handleReset() {
     setState(emptyActivityFormState(user?.id ?? null))
     setPeopleOpen(true)
+    setCreateFollowUp(true)
   }
 
   function handleSave() {
     if (!user) return
-    addDealChannelActivity(
-      deal.id,
-      toAddCompanyActivityInput(state, { users, contacts }),
-      user,
-    )
+    const input = toAddCompanyActivityInput(state, { users, contacts })
+    addDealChannelActivity(deal.id, input, user)
+
+    if (isMeeting && createFollowUp) {
+      const task: Task = {
+        id: createNextTaskId(tasks),
+        title: `Follow-up: ${input.title}`,
+        dueDate: addDaysToDateKey(state.startDate, FOLLOW_UP_OFFSET_DAYS),
+        priority: "medium",
+        completed: false,
+        clientId: deal.clientId,
+        opportunityId: deal.id,
+        ownerId: state.responsibleUserId ?? user.id,
+        regionId: deal.regionId,
+      }
+      addTask(task)
+    }
+
     handleReset()
-    toast.success("Aktywność została zapisana")
+    toast.success(
+      isMeeting
+        ? createFollowUp
+          ? "Spotkanie zapisane w kalendarzu. Utworzono zadanie follow-up."
+          : "Spotkanie zapisane w kalendarzu"
+        : "Aktywność została zapisana",
+    )
   }
 
   return (
@@ -185,7 +221,9 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
                     ? "text-primary hover:text-primary"
                     : "text-muted-foreground",
                 )}
-                onClick={() => patch({ type: option.id })}
+                onClick={() =>
+                  setState((prev) => applyActivityType(prev, option.id))
+                }
                 aria-pressed={selected}
               >
                 <Icon className="size-4 shrink-0" aria-hidden />
@@ -252,6 +290,22 @@ export function DealActivityForm({ deal }: DealActivityFormProps) {
             Na cały dzień
           </FieldLabel>
         </Field>
+
+        {isMeeting ? (
+          <Field orientation="horizontal" className="items-center">
+            <Checkbox
+              id="deal-activity-follow-up"
+              checked={createFollowUp}
+              onCheckedChange={(checked) => setCreateFollowUp(checked === true)}
+            />
+            <FieldLabel
+              htmlFor="deal-activity-follow-up"
+              className="font-normal"
+            >
+              Utwórz zadanie follow-up (termin +{FOLLOW_UP_OFFSET_DAYS} dni)
+            </FieldLabel>
+          </Field>
+        ) : null}
 
         <CompanyActivityPrioritySelect
           value={state.priority}
