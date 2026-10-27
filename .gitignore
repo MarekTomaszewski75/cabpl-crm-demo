@@ -33,5 +33,7 @@ yarn-error.log*
 # vercel
 .vercel
 
-# client documents (RFP Q&A etc.) — keep out of repo
+# client documents (RFP Q&A, specyfikacja, oferta) — keep out of repo
 /context/*.xlsx
+/context/*.docx
+/context/*.pptx
