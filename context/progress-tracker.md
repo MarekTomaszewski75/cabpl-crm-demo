@@ -121,7 +121,7 @@
 
 | Temat | Plik |
 | ----- | ---- |
-| —     | —    |
+| Appendix B (scenariusz demo wymagany przez Bank) — brak w repo; plan fal US-54+ po Q&A RFP | [`rfp-qa-gap-analysis.md`](./rfp-qa-gap-analysis.md) |
 
 ---
 
