@@ -245,7 +245,7 @@ export function CompanyDetailSidebar({
           />
 
           <InlineEditableField
-            label="Link"
+            label="Strona www"
             value={client.website}
             onSave={(website) => patch({ website })}
           >

@@ -51,7 +51,7 @@ export function LoginUserPicker({ users }: LoginUserPickerProps) {
       <CardHeader>
         <CardTitle className="text-xl">Zaloguj się</CardTitle>
         <CardDescription>
-          Wybierz konto demo, aby wejść do CRM korporacyjnego.
+          Wybierz konto demo, aby wejść do CRM Bankowości Korporacyjnej.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">

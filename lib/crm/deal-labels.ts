@@ -49,9 +49,9 @@ export const DEAL_SOURCE_LABELS: Record<DealSource, string> = {
 export const DEAL_TYPE_LABELS: Record<DealType, string> = {
   unknown: "Nieznany",
   active_client: "Aktywny klient",
-  hot: "Gorący deal",
-  warm: "Ciepły deal",
-  cold: "Zimny deal",
+  hot: "Gorąca szansa",
+  warm: "Ciepła szansa",
+  cold: "Zimna szansa",
 }
 
 export const DEAL_LOST_REASON_LABELS: Record<DealLostReason, string> = {

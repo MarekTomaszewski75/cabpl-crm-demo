@@ -25,6 +25,7 @@ import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import { filterByScope } from "@/lib/rbac/scope"
 import type { Client, Opportunity, Task } from "@/types/crm"
+import { pluralPl } from "@/lib/format/pl"
 
 export function TasksTable() {
   const { user, isReady } = useSession()
@@ -94,7 +95,7 @@ export function TasksTable() {
           <h1 className="text-xl font-semibold tracking-tight">Zadania</h1>
           <p className="text-sm text-muted-foreground">
             {openCount} otwartych · {tableData.length}{" "}
-            {tableData.length === 1 ? "zadanie" : "zadań"} w Twoim zakresie
+            {pluralPl(tableData.length, "zadanie", "zadania", "zadań")} w Twoim zakresie
           </p>
         </div>
         <TaskFormDialog user={user} />

@@ -61,7 +61,7 @@ export function TodayPipelineSummary({
         <CardHeader>
           <CardTitle className="flex flex-wrap items-center gap-2">
             <BriefcaseIcon className="text-primary" />
-            Deale wymagające uwagi
+            Szanse wymagające uwagi
             <Badge variant="secondary">{dealsAttention.length}</Badge>
           </CardTitle>
           <CardDescription>
@@ -75,9 +75,9 @@ export function TodayPipelineSummary({
                 <EmptyMedia variant="icon">
                   <BriefcaseIcon />
                 </EmptyMedia>
-                <EmptyTitle>Brak pilnych deali</EmptyTitle>
+                <EmptyTitle>Brak pilnych szans</EmptyTitle>
                 <EmptyDescription>
-                  Żaden deal w ostatnich etapach nie ma terminu w najbliższym
+                  Żadna szansa w ostatnich etapach nie ma terminu w najbliższym
                   tygodniu.
                 </EmptyDescription>
               </EmptyHeader>

@@ -24,7 +24,7 @@ export type CompanyContactTableRow = {
 
 const SOURCE_LABELS: Record<ContactCompanyBindingSource, string> = {
   company: "Firma",
-  deal: "Deal",
+  deal: "Szansa",
   lead: "Lead",
 }
 

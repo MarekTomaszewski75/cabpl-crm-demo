@@ -2,6 +2,8 @@ import { formatDealAmount, getDealAmountPln } from "@/lib/crm/currency"
 import { COMPANY_TYPE_LABELS } from "@/lib/crm/company-labels"
 import { getDealStatusLabel } from "@/lib/crm/deal-labels"
 import { LEAD_STATUS_LABELS } from "@/lib/crm/lead-labels"
+import { toLocalDateKey } from "@/lib/crm/local-date"
+import { getUpcomingRenewals, RENEWAL_HORIZON_DAYS } from "@/lib/crm/today-attention"
 import {
   formatCurrencyPln,
   formatDatePl,
@@ -9,6 +11,7 @@ import {
 } from "@/lib/format/pl"
 import type {
   Client,
+  ClientBankingProduct,
   CrmContact,
   Deal,
   Lead,
@@ -27,7 +30,12 @@ export type TemplateContext = {
   deals: Deal[]
   leads: Lead[]
   openTasks: Task[]
+  /** Produkty z katalogu w otwartych szansach firmy. */
   products: Product[]
+  /** Umowy produktowe firmy (rachunki, kredyty, leasing…). */
+  clientProducts: ClientBankingProduct[]
+  /** Pełny katalog — źródło tematów produktowych. */
+  catalog: Product[]
   contacts: CrmContact[]
   meetings: Meeting[]
   ownerName?: string
@@ -35,22 +43,10 @@ export type TemplateContext = {
 
 export const CHAT_SUGGESTIONS = [
   "Jaka jest ogólna kondycja finansowa tej firmy?",
-  "Jakie produkty bankowe warto zaproponować?",
-  "Podsumuj aktywny pipeline sprzedażowy",
-  "Czy są sygnały ryzyka kredytowego?",
+  "Jakie produkty warto omówić z klientem?",
+  "Podsumuj otwarte szanse w lejku",
+  "Jakie sygnały ostrzegawcze widać w relacji?",
   "Kiedy ostatnio kontaktowaliśmy klienta i co dalej?",
-] as const
-
-export const BANKING_PRODUCT_NAMES = [
-  "Kredyt obrotowy",
-  "Kredyt inwestycyjny",
-  "Faktoring pełny",
-  "Faktoring odwrotny",
-  "Leasing środków trwałych",
-  "Rachunek firmowy Premium",
-  "Gwarancje bankowe",
-  "FX / zabezpieczenie kursu",
-  "Karta biznesowa",
 ] as const
 
 export type ChatIntent =
@@ -86,6 +82,8 @@ type IntentRule = {
 const INTENT_RULES: IntentRule[] = [
   { intent: "compare", pattern: /porównaj| zestawi| vs |kontrahent|benchmark.*firm/ },
   { intent: "next_steps", pattern: /co dalej|następn|kolejny krok|kiedy ostatnio|ostatni kontakt/ },
+  // Przed „credit”: pytanie o ryzyko kredytowe ma trafić do sygnałów, nie do oferty kredytu.
+  { intent: "risk", pattern: /ryzyk|zadłuż|scoring|bik|wiarygodnoś|sygnał|ostrzeg/ },
   { intent: "factoring", pattern: /faktoring|należnoś|wierzytelnoś|factor/ },
   { intent: "leasing", pattern: /leasing|środk.*trwał|flot|pojazd|maszyn/ },
   { intent: "credit", pattern: /kredyt|linia kredyt|finansowanie inwest/ },
@@ -98,9 +96,8 @@ const INTENT_RULES: IntentRule[] = [
   { intent: "meetings", pattern: /spotkan|kalendarz|wizyt|wideokonferenc/ },
   { intent: "leads", pattern: /lead|zapytani|konwersj|szansa sprzedaż/ },
   { intent: "financial_health", pattern: /kondycj|płynnoś|finansow|wynik|przychod|bilans|marż/ },
-  { intent: "risk", pattern: /ryzyko|zadłuż|płatnoś|scoring|bik|wiarygodnoś|limit kredyt/ },
-  { intent: "products", pattern: /produkt|ofert|cross|sprzeda|pakiet bankow/ },
-  { intent: "pipeline", pattern: /deal|pipeline|szans|lejek|wartość portfel/ },
+  { intent: "products", pattern: /produkt|ofert|cross|sprzeda|pakiet bankow|zapropon/ },
+  { intent: "pipeline", pattern: /deal|pipeline|szans|lejek|lejk|wartość portfel/ },
   { intent: "contacts", pattern: /kontakt|relacj|decydent|zarząd|prezes|osoba kontakt/ },
   { intent: "operations", pattern: /zadani|operacj|termin|priorytet/ },
   { intent: "sector", pattern: /branż|sektor|makro|trend rynk|otoczenie/ },
@@ -126,7 +123,7 @@ function inferIndustryLabel(name: string): string {
   if (/fintech|leasing|ubezpiecz|towarzystw|fundusz|finans/.test(normalized)) {
     return "usługi finansowe"
   }
-  if (/logist|transport|spedycj|kurier/.test(normalized)) {
+  if (/logist|transport|spedycj|kurier|cargo/.test(normalized)) {
     return "transport i logistyka"
   }
   if (/tech|soft|it|digital|data|cloud/.test(normalized)) {
@@ -150,12 +147,223 @@ function inferIndustryLabel(name: string): string {
   return "usługi dla przedsiębiorstw"
 }
 
+/** Kolejność tematów produktowych wg sektora (ID z `data/products.json`). */
+const SECTOR_PRODUCT_PRIORITY: Record<string, readonly string[]> = {
+  "usługi finansowe": ["prod-008", "prod-013", "prod-009", "prod-007"],
+  "transport i logistyka": ["prod-015", "prod-004", "prod-001", "prod-009", "prod-005"],
+  "technologie i IT": ["prod-007", "prod-014", "prod-008", "prod-001"],
+  "spożywczy i AGRO": ["prod-001", "prod-004", "prod-005", "prod-015"],
+  "budownictwo i infrastruktura": ["prod-017", "prod-016", "prod-006", "prod-002"],
+  "energetyka i OZE": ["prod-002", "prod-017", "prod-006", "prod-014"],
+  "medycyna i farmacja": ["prod-002", "prod-003", "prod-004", "prod-005"],
+  "handel i dystrybucja": ["prod-018", "prod-001", "prod-009", "prod-004"],
+}
+
+/** Uzupełnienie listy, gdy firma ma już produkty priorytetowe dla sektora. */
+const GENERAL_PRODUCT_PRIORITY = [
+  "prod-009",
+  "prod-014",
+  "prod-001",
+  "prod-002",
+  "prod-004",
+  "prod-003",
+  "prod-006",
+  "prod-007",
+  "prod-008",
+  "prod-013",
+  "prod-015",
+  "prod-016",
+  "prod-017",
+  "prod-005",
+  "prod-018",
+] as const
+
+const PRODUCT_TOPIC_REASONS: Record<string, string> = {
+  "prod-001": "finansowanie cyklu operacyjnego i sezonowości",
+  "prod-002": "modernizacja i rozbudowa majątku trwałego",
+  "prod-003": "maszyny i pojazdy bez angażowania własnego kapitału",
+  "prod-004": "płynność przy długich terminach płatności odbiorców",
+  "prod-005": "bezpieczne rozliczenia z dostawcami zagranicznymi",
+  "prod-006": "zabezpieczenie zobowiązań w kontraktach i przetargach",
+  "prod-007": "rachunek z pakietem usług i raportowaniem",
+  "prod-008": "krótkoterminowe lokowanie nadwyżek płynności",
+  "prod-009": "przelewy zbiorcze i wynagrodzenia",
+  "prod-013": "lokowanie nadwyżek na 12 miesięcy",
+  "prod-014": "bufor płynności z limitem obrotu",
+  "prod-015": "odnowienie floty samochodów dostawczych i służbowych",
+  "prod-016": "finansowanie należności z dużego kontraktu",
+  "prod-017": "wymóg w kontraktach publicznych i komercyjnych",
+  "prod-018": "płatności kartą w sieci punktów sprzedaży",
+}
+
+const PRODUCT_TOPIC_LIMIT = 3
+
+/** Statusy umów, przy których produktu nie proponujemy ponownie. */
+const HELD_PRODUCT_STATUSES = new Set<ClientBankingProduct["status"]>([
+  "active",
+  "expiring",
+  "blocked",
+])
+
+function isOfferable(product: Product): boolean {
+  return (
+    product.isActive &&
+    product.condition === "active" &&
+    product.availability !== "unavailable"
+  )
+}
+
+function getTopicReason(product: Product): string {
+  const reason = PRODUCT_TOPIC_REASONS[product.id]
+  if (reason) return reason
+  const description = product.description.replace(/\.$/, "")
+  return description.charAt(0).toLowerCase() + description.slice(1)
+}
+
+type HeldProduct = { product: Product; contract: ClientBankingProduct }
+
+function getHeldProducts(ctx: TemplateContext): HeldProduct[] {
+  const catalogById = new Map(ctx.catalog.map((product) => [product.id, product]))
+  return ctx.clientProducts
+    .filter(
+      (contract) =>
+        contract.clientId === ctx.client.id &&
+        HELD_PRODUCT_STATUSES.has(contract.status),
+    )
+    .flatMap((contract) => {
+      const product = catalogById.get(contract.productId)
+      return product ? [{ product, contract }] : []
+    })
+}
+
+function formatHeldProductName({ product, contract }: HeldProduct): string {
+  if (contract.status === "expiring") return `${product.name} (umowa wygasa)`
+  if (contract.status === "blocked") return `${product.name} (zablokowany)`
+  return product.name
+}
+
+function formatHeldList(held: readonly HeldProduct[], emptyLabel: string): string {
+  return held.length > 0 ? held.map(formatHeldProductName).join(", ") : emptyLabel
+}
+
+function formatTopicLines(products: readonly Product[], emptyLine: string): string {
+  if (products.length === 0) return emptyLine
+  return products
+    .map((product) => `- **${product.name}** — ${getTopicReason(product)}`)
+    .join("\n")
+}
+
+/**
+ * Tematy produktowe dla rozmowy opiekuna: produkty z katalogu dostępne w ofercie,
+ * bez tych, które firma już ma, i bez produktów z otwartych szans (US-61).
+ */
+function getProductTopics(
+  ctx: TemplateContext,
+  industryLabel: string,
+  excludedIds: ReadonlySet<string>,
+): Product[] {
+  const catalogById = new Map(ctx.catalog.map((product) => [product.id, product]))
+  const ordered = [
+    ...(SECTOR_PRODUCT_PRIORITY[industryLabel] ?? []),
+    ...GENERAL_PRODUCT_PRIORITY,
+  ]
+  const topics: Product[] = []
+  for (const id of new Set(ordered)) {
+    const product = catalogById.get(id)
+    if (!product || excludedIds.has(id) || !isOfferable(product)) continue
+    topics.push(product)
+    if (topics.length === PRODUCT_TOPIC_LIMIT) break
+  }
+  return topics
+}
+
+/** Produkty z danej kategorii katalogu: posiadane i możliwe do omówienia. */
+function getCategoryTopics(
+  ctx: TemplateContext,
+  held: readonly HeldProduct[],
+  excludedIds: ReadonlySet<string>,
+  categoryId: string,
+): { held: string; options: string } {
+  const heldInCategory = held.filter(
+    (item) => item.product.categoryId === categoryId,
+  )
+  const options = ctx.catalog.filter(
+    (product) =>
+      product.categoryId === categoryId &&
+      !excludedIds.has(product.id) &&
+      isOfferable(product),
+  )
+  return {
+    held: formatHeldList(heldInCategory, "brak produktów z tej grupy"),
+    options: formatTopicLines(
+      options,
+      "- Firma ma już produkty z tej grupy — porozmawiaj o wykorzystaniu limitu i warunkach odnowienia.",
+    ),
+  }
+}
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+/** Brak kontaktu dłużej niż N dni to sygnał dla opiekuna. */
+const CONTACT_GAP_SIGNAL_DAYS = 30
+
+function getRelationshipSignals(
+  ctx: TemplateContext,
+  held: readonly HeldProduct[],
+  now: Date,
+): { overdueTaskCount: number; renewalCount: number; blockedCount: number; lines: string } {
+  const todayKey = toLocalDateKey(now)
+  const overdueTasks = ctx.openTasks
+    .filter((task) => task.dueDate < todayKey)
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+  const renewals = getUpcomingRenewals(
+    held.map((item) => item.contract),
+    now,
+  )
+  const blocked = held.filter((item) => item.contract.status === "blocked")
+  const catalogById = new Map(ctx.catalog.map((product) => [product.id, product]))
+
+  const lines: string[] = []
+  if (overdueTasks.length > 0) {
+    lines.push(
+      `- Zaległe zadania: ${overdueTasks.length} (najstarsze z terminem ${formatDatePl(overdueTasks[0]!.dueDate)})`,
+    )
+  }
+  for (const renewal of renewals) {
+    const name = catalogById.get(renewal.product.productId)?.name ?? "produkt"
+    lines.push(
+      `- Koniec umowy: ${name}, ${formatDatePl(renewal.product.expiresAt!)} — zaplanuj rozmowę o odnowieniu`,
+    )
+  }
+  for (const item of blocked) {
+    lines.push(`- Produkt zablokowany: ${item.product.name} — sprawdź przyczynę z obsługą klienta`)
+  }
+  if (ctx.client.lastActivityAt) {
+    const gapDays = Math.floor(
+      (now.getTime() - new Date(ctx.client.lastActivityAt).getTime()) / MS_PER_DAY,
+    )
+    if (gapDays > CONTACT_GAP_SIGNAL_DAYS) {
+      lines.push(
+        `- Ostatni kontakt: ${formatRelativeTimePl(new Date(ctx.client.lastActivityAt), now)} — odnów rytm kontaktu`,
+      )
+    }
+  }
+
+  return {
+    overdueTaskCount: overdueTasks.length,
+    renewalCount: renewals.length,
+    blockedCount: blocked.length,
+    lines:
+      lines.join("\n") ||
+      "- Brak sygnałów wymagających reakcji — utrzymaj standardowy rytm kontaktu.",
+  }
+}
+
 function crmProfileSource(clientId: string): SimulatedSource {
   return { title: "Profil firmy — CRM", href: `#crm-client-${clientId}` }
 }
 
 function crmDealsSource(clientId: string): SimulatedSource {
-  return { title: "Pipeline dealów", href: `#crm-deals-${clientId}` }
+  return { title: "Szanse w lejku", href: `#crm-deals-${clientId}` }
 }
 
 function crmLeadsSource(clientId: string): SimulatedSource {
@@ -170,6 +378,10 @@ function crmProductsSource(): SimulatedSource {
   return { title: "Katalog produktów bankowych", href: "#products-catalog" }
 }
 
+function crmClientProductsSource(clientId: string): SimulatedSource {
+  return { title: "Produkty firmy — CRM", href: `#crm-client-products-${clientId}` }
+}
+
 function crmMeetingsSource(clientId: string): SimulatedSource {
   return { title: "Kalendarz spotkań", href: `#crm-meetings-${clientId}` }
 }
@@ -180,10 +392,6 @@ function crmDocumentsSource(clientId: string): SimulatedSource {
 
 function mockKrsSource(): SimulatedSource {
   return { title: "KRS — dane rejestrowe (symulacja)", href: "#mock-krs" }
-}
-
-function mockBikSource(): SimulatedSource {
-  return { title: "BIK — scoring (symulacja)", href: "#mock-bik" }
 }
 
 function mockSectorSource(): SimulatedSource {
@@ -198,7 +406,10 @@ function mockEsgSource(): SimulatedSource {
   return { title: "Raport ESG sektora (symulacja)", href: "#mock-esg" }
 }
 
-export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
+export function buildTemplateVars(
+  ctx: TemplateContext,
+  now: Date = new Date(),
+): TemplateVars {
   const { client, deals, leads, openTasks, products, ownerName, contacts, meetings } =
     ctx
 
@@ -235,7 +446,7 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
     .join("\n")
 
   const upcomingMeetings = meetings
-    .filter((meeting) => new Date(meeting.startsAt) >= new Date())
+    .filter((meeting) => new Date(meeting.startsAt) >= now)
     .sort(
       (a, b) =>
         new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime(),
@@ -245,32 +456,28 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
     .slice(0, 4)
     .map(
       (meeting) =>
-        `- **${meeting.title}** — ${formatDatePl(meeting.startsAt)}, ${formatRelativeTimePl(new Date(meeting.startsAt))}`,
+        `- **${meeting.title}** — ${formatDatePl(meeting.startsAt)}, ${formatRelativeTimePl(new Date(meeting.startsAt), now)}`,
     )
     .join("\n")
 
   const lastActivity = client.lastActivityAt
-    ? formatRelativeTimePl(new Date(client.lastActivityAt))
+    ? formatRelativeTimePl(new Date(client.lastActivityAt), now)
     : "brak danych"
 
   const industryLabel = inferIndustryLabel(client.name)
   const productBundle = products.map((product) => product.name).join(", ")
 
-  const primaryRecommendation =
-    industryLabel.includes("logistyk") || industryLabel.includes("transport")
-      ? "Faktoring pełny + karta flotowa"
-      : industryLabel.includes("IT")
-        ? "Rachunek Premium + kredyt obrotowy + FX"
-        : industryLabel.includes("spożywcza")
-          ? "Kredyt obrotowy sezonowy + faktoring"
-          : "Pakiet rozliczeniowy + kredyt w rachunku"
-
-  const riskScore =
-    openDeals.length > 3
-      ? "podwyższone (monitoring)"
-      : openDeals.length > 1
-        ? "umiarkowane"
-        : "niskie"
+  const held = getHeldProducts(ctx)
+  const excludedIds = new Set([
+    ...held.map((item) => item.product.id),
+    ...products.map((product) => product.id),
+  ])
+  const topics = getProductTopics(ctx, industryLabel, excludedIds)
+  const signals = getRelationshipSignals(ctx, held, now)
+  const factoring = getCategoryTopics(ctx, held, excludedIds, "pcat-factoring")
+  const leasing = getCategoryTopics(ctx, held, excludedIds, "pcat-leasing-op")
+  const credit = getCategoryTopics(ctx, held, excludedIds, "pcat-credit")
+  const guarantees = getCategoryTopics(ctx, held, excludedIds, "pcat-guarantees")
 
   const engagementScore =
     contacts.length >= 3 && openDeals.length >= 2
@@ -300,14 +507,37 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
       upcomingMeetings[0]?.title ??
       "brak zaplanowanych spotkań — zaproponuj termin",
     pipelineValuePln: formatCurrencyPln(pipelineValue),
-    activeDealLines: activeDealLines || "- Brak aktywnych deali w pipeline.",
+    activeDealLines: activeDealLines || "- Brak aktywnych szans w lejku.",
     leadLines: leadLines || "- Brak powiązanych leadów.",
     contactLines: contactLines || "- Brak przypisanych kontaktów.",
     taskLines: taskLines || "- Brak otwartych zadań.",
     meetingLines: meetingLines || "- Brak nadchodzących spotkań w kalendarzu.",
-    productInDeals: productBundle || "brak aktywnych produktów w dealach",
-    primaryRecommendation,
-    riskScore,
+    productInDeals: productBundle || "brak produktów w otwartych szansach",
+    heldProductList: formatHeldList(held, "brak produktów w CRM"),
+    heldProductCount: held.length,
+    productTopicLines: formatTopicLines(
+      topics,
+      "- Firma ma już produkty dopasowane do sektora — skup się na wykorzystaniu limitów i odnowieniach.",
+    ),
+    productTopicRows:
+      topics
+        .map((product) => `| ${product.name} | ${getTopicReason(product)} |`)
+        .join("\n") || "| — | firma ma już produkty dopasowane do sektora |",
+    primaryRecommendation:
+      topics[0]?.name ?? "przegląd wykorzystania obecnych produktów",
+    factoringHeld: factoring.held,
+    factoringOptions: factoring.options,
+    leasingHeld: leasing.held,
+    leasingOptions: leasing.options,
+    creditHeld: credit.held,
+    creditOptions: credit.options,
+    guaranteesHeld: guarantees.held,
+    guaranteesOptions: guarantees.options,
+    signalLines: signals.lines,
+    overdueTaskCount: signals.overdueTaskCount,
+    renewalCount: signals.renewalCount,
+    blockedProductCount: signals.blockedCount,
+    renewalHorizonDays: RENEWAL_HORIZON_DAYS,
     engagementScore,
     sectorOutlook:
       client.segment.includes("Duże")
@@ -315,83 +545,79 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
         : client.segment.includes("Średnie")
           ? "stabilny z presją kosztową i płynnościową"
           : "zróżnicowany — zależny od branży i sezonowości",
-    bikScoreSim: openDeals.length > 2 ? "BB+" : "BBB",
-    limitHeadroom: formatCurrencyPln(
-      Math.max(500_000, pipelineValue * 1.4 + 250_000),
-    ),
   }
 }
 
 const REASONING_VARIANTS: Record<ChatIntent, readonly string[]> = {
   financial_health: [
-    "Analizuję wskaźniki płynności i rentowności na podstawie profilu CRM.\nPorównuję segment {{segment}} z profilem branżowym ({{industryLabel}}).\nSprawdzam obciążenie pipeline i historyczną aktywność klienta.\nSyntetyzuję ocenę kondycji finansowej do rozmowy z doradcą.",
-    "Pobieram dane z karty firmy i powiązanych deali.\nSzacuję presję na kapitał obrotowy w kontekście sektora „{{industryLabel}}”.\nWeryfikuję ostatnią aktywność ({{lastActivity}}) jako proxy za zaangażowanie.\nPrzygotowuję zwięzłą diagnozę kondycji firmy „{{companyName}}”.",
+    "Analizuję dane z profilu CRM.\nPorównuję segment {{segment}} z profilem branżowym ({{industryLabel}}).\nSprawdzam obciążenie lejka i historię aktywności klienta.\nZbieram obraz firmy do rozmowy opiekuna.",
+    "Pobieram dane z karty firmy i powiązanych szans.\nSzacuję presję na kapitał obrotowy w kontekście sektora „{{industryLabel}}”.\nWeryfikuję ostatnią aktywność ({{lastActivity}}) jako miarę zaangażowania.\nPrzygotowuję zwięzły obraz firmy „{{companyName}}”.",
   ],
   risk: [
-    "Sprawdzam profil w CRM ({{segment}}, {{companyTypeLabel}}).\nAnalizuję ekspozycję w pipeline ({{pipelineValuePln}}) i symulowany scoring BIK.\nIdentyfikuję sygnały ostrzegawcze w historii relacji.\nFormułuję ocenę ryzyka kredytowego.",
-    "Łączę dane CRM z modelem scoringowym (symulacja: {{bikScoreSim}}).\nOceniam koncentrację szans sprzedażowych i typ klienta.\nSprawdzam spójność aktywności operacyjnej z profilem firmy.\nPrzygotowuję rekomendacje monitoringu ryzyka.",
+    "Sprawdzam profil w CRM ({{segment}}, {{companyTypeLabel}}).\nPrzeglądam zaległe zadania, ostatni kontakt i umowy z bliskim końcem.\nZbieram sygnały do weryfikacji przez opiekuna.\nNie oceniam ryzyka kredytowego — to rola obszaru ryzyka Banku.",
+    "Łączę zadania, aktywności i produkty firmy z CRM.\nSzukam umów wygasających w ciągu {{renewalHorizonDays}} dni i produktów zablokowanych.\nSprawdzam, kiedy był ostatni kontakt.\nPrzygotowuję listę faktów dla opiekuna, bez oceny ryzyka.",
   ],
   products: [
-    "Analizuję portfel produktowy w aktywnych dealach.\nMapuję luki cross-sell w segmencie {{segment}}.\nPorównuję z benchmarkiem sektora „{{industryLabel}}”.\nDobieram pakiet rekomendacji produktowych CA.",
-    "Przeglądam historię produktów: {{productInDeals}}.\nSzukam naturalnych ścieżek rozszerzenia relacji.\nUwzględniam typ klienta ({{companyTypeLabel}}) i wielkość pipeline.\nUkładam priorytety ofertowe na najbliższy kwartał.",
+    "Sprawdzam produkty, które firma już ma ({{heldProductCount}}).\nPomijam je oraz produkty z otwartych szans.\nDobieram produkty z katalogu do sektora „{{industryLabel}}”.\nUkładam tematy do rozmowy opiekuna z klientem.",
+    "Przeglądam produkty firmy: {{heldProductList}}.\nSzukam naturalnych ścieżek rozszerzenia relacji.\nUwzględniam typ klienta ({{companyTypeLabel}}) i otwarte szanse.\nPomijam produkty, które firma już ma.",
   ],
   factoring: [
-    "Sprawdzam profil należności typowy dla sektora „{{industryLabel}}”.\nAnalizuję terminy płatności kontrahentów w kontekście sektorowym.\nPorównuję z obecnymi produktami w dealach.\nDobieram wariant faktoringu dla firmy „{{companyName}}”.",
+    "Sprawdzam profil należności typowy dla sektora „{{industryLabel}}”.\nSprawdzam, czy firma ma już faktoring w Banku.\nPomijam produkty z obecnych umów.\nDobieram warianty faktoringu do rozmowy z firmą „{{companyName}}”.",
   ],
   leasing: [
-    "Identyfikuję potrzeby inwestycyjne typowe dla sektora „{{industryLabel}}”.\nSprawdzam aktywne deale pod kątem leasingu.\nSzacuję potencjał finansowania środków trwałych.\nPrzygotowuję propozycję struktury leasingowej.",
+    "Identyfikuję potrzeby inwestycyjne typowe dla sektora „{{industryLabel}}”.\nSprawdzam umowy leasingowe firmy i otwarte szanse.\nPomijam produkty, które firma już ma.\nPrzygotowuję tematy do rozmowy o finansowaniu środków trwałych.",
   ],
   credit: [
-    "Analizuję zapotrzebowanie na finansowanie obrotowe i inwestycyjne.\nWeryfikuję pojemność limitu (szac. {{limitHeadroom}}).\nPorównuję z profilem ryzyka {{riskScore}}.\nDobieram strukturę kredytową dopasowaną do sezonowości.",
+    "Analizuję zapotrzebowanie na finansowanie obrotowe i inwestycyjne.\nSprawdzam produkty kredytowe, które firma już ma.\nPomijam produkty z obecnych umów.\nUkładam tematy do rozmowy; decyzja kredytowa zapada poza CRM.",
   ],
   fx: [
-    "Sprawdzam ekspozycję walutową typową dla sektora „{{industryLabel}}”.\nAnalizuję przepływy importowo-eksportowe (symulacja).\nOceniam potrzebę zabezpieczenia kursu.\nPrzygotowuję rekomendacje FX i hedgingu.",
+    "Sprawdzam ekspozycję walutową typową dla sektora „{{industryLabel}}”.\nAnalizuję przepływy importowo-eksportowe (symulacja).\nOceniam potrzebę zabezpieczenia kursu.\nPrzygotowuję tematy do rozmowy o walutach.",
   ],
   guarantees: [
-    "Identyfikuję potencjalne przetargi i kontrakty w sektorze.\nSprawdzam historię gwarancji w relacji z bankiem.\nSzacuję wymagania wadium i gwarancji wykonania.\nUkładam propozycję produktów gwarancyjnych.",
+    "Identyfikuję potencjalne przetargi i kontrakty w sektorze.\nSprawdzam gwarancje, które firma już ma w Banku.\nPomijam produkty z obecnych umów.\nUkładam tematy do rozmowy o gwarancjach.",
   ],
   pipeline: [
-    "Pobieram listę aktywnych deali ({{openDealCount}}).\nWeryfikuję statusy w lejkach produktowych.\nSzacuję wartość pipeline: {{pipelineValuePln}}.\nWskazuję deale wymagające interwencji doradcy.",
-    "Analizuję rozkład szans po statusach.\nPorównuję tempo pracy opiekuna ({{ownerName}}).\nIdentyfikuję wąskie gardła w konwersji.\nPrzygotowuję podsumowanie portfela szans.",
+    "Pobieram listę aktywnych szans ({{openDealCount}}).\nWeryfikuję etapy w lejkach produktowych.\nSzacuję wartość lejka: {{pipelineValuePln}}.\nWskazuję szanse wymagające działania opiekuna.",
+    "Analizuję rozkład szans po etapach.\nPorównuję tempo pracy opiekuna ({{ownerName}}).\nIdentyfikuję wąskie gardła w konwersji.\nPrzygotowuję podsumowanie portfela szans.",
   ],
   leads: [
-    "Przeglądam leady powiązane z firmą ({{leadCount}}).\nOceniam jakość leadów i etap kwalifikacji.\nSprawdzam potencjał konwersji do deali.\nRekomenduję priorytety pracy na leadach.",
+    "Przeglądam leady powiązane z firmą ({{leadCount}}).\nOceniam jakość leadów i etap kwalifikacji.\nSprawdzam potencjał konwersji do szans.\nRekomenduję priorytety pracy na leadach.",
   ],
   contacts: [
-    "Mapuję kontakty ({{contactCount}}) i pokrycie decyzyjne.\nAnalizuję jakość relacji (engagement: {{engagementScore}}).\nSprawdzam ostatnie kanały kontaktu.\nSugeruję plan utrzymania relacji.",
+    "Mapuję kontakty ({{contactCount}}) i pokrycie decyzyjne.\nAnalizuję jakość relacji (zaangażowanie: {{engagementScore}}).\nSprawdzam ostatnie kanały kontaktu.\nSugeruję plan utrzymania relacji.",
   ],
   meetings: [
-    "Sprawdzam kalendarz — nadchodzące spotkania: {{upcomingMeetingCount}}.\nWeryfikuję spójność agendy z pipeline.\nOceniam częstotliwość kontaktu (ostatnio: {{lastActivity}}).\nProponuję optymalny rytm spotkań.",
+    "Sprawdzam kalendarz — nadchodzące spotkania: {{upcomingMeetingCount}}.\nWeryfikuję spójność agendy z lejkiem.\nOceniam częstotliwość kontaktu (ostatnio: {{lastActivity}}).\nProponuję rytm spotkań.",
   ],
   operations: [
-    "Analizuję otwarte zadania ({{openTaskCount}}).\nWeryfikuję terminy i priorytety operacyjne.\nŁączę zadania z aktywnymi dealami.\nUkładam plan domknięcia zaległości.",
+    "Analizuję otwarte zadania ({{openTaskCount}}).\nWeryfikuję terminy i priorytety operacyjne.\nŁączę zadania z aktywnymi szansami.\nUkładam plan domknięcia zaległości.",
   ],
   documents: [
-    "Przeglądam dokumentację powiązaną z firmą w CRM.\nSprawdzam kompletność umów i aneksów (symulacja).\nIdentyfikuję braki w dokumentacji kredytowej.\nWskazuję dokumenty do uzupełnienia przed ofertą.",
+    "Przeglądam dokumentację powiązaną z firmą w CRM.\nSprawdzam kompletność umów i aneksów (symulacja).\nIdentyfikuję braki w dokumentacji do wniosku.\nWskazuję dokumenty do uzupełnienia.",
   ],
   sector: [
-    "Pobieram raport sektorowy: {{industryLabel}}.\nAnalizuję trendy makro i konkurencję.\nPorównuję firmę „{{companyName}}” z medianą segmentu {{segment}}.\nOceniam wpływ otoczenia na strategię bankową.",
-    "Łączę dane makro z profilem klienta.\nSzacuję cykliczność sektora „{{industryLabel}}”.\nIdentyfikuję szanse i zagrożenia sektorowe.\nSyntetyzuję rekomendacje dla doradcy.",
+    "Pobieram raport sektorowy: {{industryLabel}}.\nAnalizuję trendy makro i konkurencję.\nPorównuję firmę „{{companyName}}” z medianą segmentu {{segment}}.\nOceniam wpływ otoczenia na współpracę z Bankiem.",
+    "Łączę dane makro z profilem klienta.\nSzacuję cykliczność sektora „{{industryLabel}}”.\nIdentyfikuję szanse i zagrożenia sektorowe.\nSyntetyzuję wnioski dla opiekuna.",
   ],
   competition: [
-    "Analizuję sygnały konkurencyjne w relacji.\nSprawdzam unikalne przewagi oferty CA.\nOceniam ryzyko migracji produktowej.\nPrzygotowuję argumentację retencyjną.",
+    "Analizuję sygnały konkurencyjne w relacji.\nSprawdzam przewagi oferty Banku.\nOceniam ryzyko przeniesienia produktów do innego banku.\nPrzygotowuję argumentację retencyjną.",
   ],
   retention: [
-    "Oceniam siłę relacji ({{engagementScore}}).\nAnalizuję głębokość produktową i kontaktów.\nIdentyfikuję sygnały słabnącej lojalności.\nProponuję działania retencyjne.",
+    "Oceniam siłę relacji ({{engagementScore}}).\nAnalizuję liczbę produktów i kontaktów.\nIdentyfikuję sygnały słabnącej lojalności.\nProponuję działania retencyjne.",
   ],
   esg: [
-    "Sprawdzam profil ESG sektora „{{industryLabel}}”.\nAnalizuję wymogi raportowania i zielone finansowanie.\nPorównuję z trendami regulacyjnymi UE.\nWskazuję produkty ESG adekwatne dla klienta.",
+    "Sprawdzam profil ESG sektora „{{industryLabel}}”.\nAnalizuję wymogi raportowania i zielone finansowanie.\nPorównuję z trendami regulacyjnymi UE.\nWskazuję tematy ESG do rozmowy z klientem.",
   ],
   compare: [
-    "Porównuję profil firmy „{{companyName}}” z portfelem podobnych klientów.\nAnalizuję różnice w pipeline i produktach.\nSzukam wzorców cross-sell u firm z tej branży.\nSyntetyzuję wnioski porównawcze.",
+    "Porównuję profil firmy „{{companyName}}” z portfelem podobnych klientów.\nAnalizuję różnice w lejku i produktach.\nSprawdzam, z jakich produktów korzystają firmy z tej branży.\nSyntetyzuję wnioski porównawcze.",
   ],
   next_steps: [
-    "Sprawdzam ostatnią aktywność: {{lastActivity}}.\nŁączę zadania, spotkania i otwarte deale.\nPriorytetyzuję działania na najbliższe 14 dni.\nUkładam plan następnych kroków dla opiekuna ({{ownerName}}).",
-    "Analizuję stan relacji i otwarte zobowiązania operacyjne.\nWeryfikuję terminy zadań i spotkań.\nIdentyfikuję „quick wins” w pipeline.\nPrzygotowuję rekomendowany plan działania.",
+    "Sprawdzam ostatnią aktywność: {{lastActivity}}.\nŁączę zadania, spotkania i otwarte szanse.\nPriorytetyzuję działania na najbliższe 14 dni.\nUkładam plan następnych kroków dla opiekuna ({{ownerName}}).",
+    "Analizuję stan relacji i otwarte zobowiązania operacyjne.\nWeryfikuję terminy zadań i spotkań.\nSzukam szybkich efektów w lejku.\nPrzygotowuję plan działania.",
   ],
   fallback: [
-    "Przeglądam pełną kartę firmy w CRM.\nŁączę deale, leady, kontakty i zadania.\nSprawdzam notatki i ostatnią aktywność.\nPrzygotowuję holistyczne podsumowanie sytuacji klienta.",
-    "Analizuję profil firmy „{{companyName}}” wielowymiarowo.\nUwzględniam segment, branżę i typ relacji.\nSzukam najważniejszych sygnałów biznesowych.\nFormułuję odpowiedź dopasowaną do pytania doradcy.",
+    "Przeglądam pełną kartę firmy w CRM.\nŁączę szanse, leady, kontakty i zadania.\nSprawdzam notatki i ostatnią aktywność.\nPrzygotowuję podsumowanie sytuacji klienta.",
+    "Analizuję profil firmy „{{companyName}}” wielowymiarowo.\nUwzględniam segment, branżę i typ relacji.\nSzukam najważniejszych sygnałów biznesowych.\nFormułuję odpowiedź dopasowaną do pytania opiekuna.",
   ],
 }
 
@@ -399,132 +625,128 @@ const ANSWER_VARIANTS: Record<ChatIntent, readonly string[]> = {
   financial_health: [
     `## Kondycja finansowa — {{companyName}}
 
-**Ocena ogólna:** profil **{{segment}}** w sektorze „{{industryLabel}}” wskazuje na **stabilną** pozycję operacyjną z umiarkowaną presją na płynność.
+**Obraz z CRM:** profil **{{segment}}** w sektorze „{{industryLabel}}” wskazuje na **stabilną** pozycję operacyjną z umiarkowaną presją na płynność.
 
 | Obszar | Sygnał |
 | --- | --- |
-| Pipeline aktywny | aktywne deale: {{openDealCount}} · {{pipelineValuePln}} |
+| Lejek | aktywne szanse: {{openDealCount}} · {{pipelineValuePln}} |
 | Relacja z bankiem | {{companyTypeLabel}} |
 | Zaangażowanie | {{engagementScore}} |
 
-**Wniosek:** klient nadaje się do rozszerzenia relacji produktowej — zacznij od {{primaryRecommendation}}.`,
+**Wniosek:** klient nadaje się do rozszerzenia relacji. Pierwszy temat do rozmowy: {{primaryRecommendation}}.`,
 
     `## Diagnoza finansowa — {{companyName}}
 
 Na podstawie danych CRM **{{companyName}}** (NIP {{nip}}) utrzymuje aktywną współpracę — ostatnia aktywność: **{{lastActivity}}**.
 
 **Mocne strony:**
-- zamknięte szanse (historycznie): {{wonDealCount}}
+- wygrane szanse (historycznie): {{wonDealCount}}
 - kontakty decyzyjne w kartotece: {{contactCount}}
-- Segment {{segment}} z relatywnie stabilną marżą sektorową
+- produkty w Banku: {{heldProductList}}
 
-**Uwaga:** monitoruj koncentrację w pipeline ({{pipelineValuePln}}) przy sezonowości typowej dla sektora „{{industryLabel}}”.
+**Uwaga:** monitoruj koncentrację w lejku ({{pipelineValuePln}}) przy sezonowości typowej dla sektora „{{industryLabel}}”.
 
-**Rekomendacja:** krótkie spotkanie review + propozycja {{primaryRecommendation}}.`,
+**Rekomendacja:** krótkie spotkanie przeglądowe; temat do rozmowy: {{primaryRecommendation}}.`,
   ],
 
   risk: [
-    `## Ocena ryzyka — {{companyName}}
+    `## Sygnały w relacji — {{companyName}}
 
-Profil ryzyka: **{{riskScore}}** · symulowany scoring BIK: **{{bikScoreSim}}**
+Zestawiam fakty z CRM do weryfikacji przez opiekuna ({{ownerName}}). Nie oceniam ryzyka kredytowego i nie podejmuję decyzji — to rola obszaru ryzyka Banku.
 
-**Czynniki:**
-- Typ klienta: {{companyTypeLabel}}
-- Ekspozycja pipeline: {{pipelineValuePln}}
-- Aktywne deale: {{openDealCount}}
+**Do sprawdzenia:**
+{{signalLines}}
 
-Brak krytycznych sygnałów — utrzymaj standardowy monitoring. Przy kolejnym zwiększeniu limitu zweryfikuj aktualne sprawozdanie.`,
+| Wskaźnik w CRM | Stan |
+| --- | --- |
+| Zaległe zadania | {{overdueTaskCount}} |
+| Umowy z końcem w ciągu {{renewalHorizonDays}} dni | {{renewalCount}} |
+| Produkty zablokowane | {{blockedProductCount}} |
+| Ostatni kontakt | {{lastActivity}} |`,
 
-    `## Ryzyko kredytowe — {{companyName}}
+    `## Na co zwrócić uwagę — {{companyName}}
 
-Dla segmentu **{{segment}}** i sektora „{{industryLabel}}” profil jest **akceptowalny** przy obecnej strukturze deali.
+**Sygnały z CRM:**
+{{signalLines}}
 
-**Sygnały do obserwacji:**
-- Zaległe zadania operacyjne: {{openTaskCount}}
-- Głębokość relacji: {{engagementScore}}
-- Szacowany headroom limitu: {{limitHeadroom}}
+**Kontekst:** {{companyTypeLabel}} · segment {{segment}} · aktywne szanse: {{openDealCount}}
 
-**Działanie:** zaplanuj przegląd limitu po domknięciu deale o najwyższej wartości.`,
+Asystent zbiera fakty do rozmowy opiekuna ({{ownerName}}). Nie ocenia ryzyka kredytowego i nie podejmuje decyzji — ocena należy do obszaru ryzyka Banku.`,
   ],
 
   products: [
-    `## Rekomendacje produktowe — {{companyName}}
+    `## Tematy produktowe — {{companyName}}
 
-Dla sektora „{{industryLabel}}” proponuję pakiet:
+**Firma ma już:** {{heldProductList}}
 
-1. **Faktoring pełny** — płynność przy długich terminach płatności
-2. **Kredyt obrotowy w rachunku** — elastyczność sezonowa
-3. **Karta biznesowa flotowa** — koszty operacyjne
+Produkty z katalogu, których firma jeszcze nie ma, dopasowane do sektora „{{industryLabel}}”:
 
-**W deale dziś:** {{productInDeals}}
+{{productTopicLines}}
 
-**Priorytet Q:** {{primaryRecommendation}}`,
+**W otwartych szansach:** {{productInDeals}}
 
-    `## Cross-sell — {{companyName}}
+Propozycję weryfikuje i przedstawia opiekun ({{ownerName}}).`,
 
-**{{companyName}}** ma potencjał rozszerzenia portfela — obecnie: {{productInDeals}}.
+    `## Rozszerzenie relacji — {{companyName}}
+
+Firma korzysta z: {{heldProductList}}. Tych produktów nie proponuję ponownie.
 
 | Produkt | Uzasadnienie |
 | --- | --- |
-| Rachunek firmowy Premium | cash management i raportowanie |
-| Gwarancje bankowe | przetargi w sektorze „{{industryLabel}}” |
-| FX / hedging | zabezpieczenie kosztów importu |
+{{productTopicRows}}
 
-**Następny krok:** mini-warsztat produktowy z udziałem opiekuna ({{ownerName}}) i CFO klienta.`,
+**Następny krok:** rozmowa opiekuna ({{ownerName}}) z CFO klienta o potrzebach na najbliższy kwartał.`,
   ],
 
   factoring: [
     `## Faktoring — {{companyName}}
 
-Sektor „{{industryLabel}}” często wykazuje rozdłużone terminy płatności — faktoring adresuje ten pain point.
+Sektor „{{industryLabel}}” często ma długie terminy płatności, a faktoring poprawia płynność.
 
-**Propozycja:**
-- **Faktoring pełny** — przejęcie administracji należności
-- **Faktoring odwrotny** — jeśli dominują zobowiązania do dostawców
+**Firma ma już:** {{factoringHeld}}
 
-**Kontekst CRM:** aktywne szanse: {{openDealCount}} · produkty: {{productInDeals}}
+**Tematy do rozmowy:**
+{{factoringOptions}}
 
-**Szacowany efekt:** poprawa DSO o 12–18 dni (model demo).`,
+**Kontekst CRM:** aktywne szanse: {{openDealCount}}`,
   ],
 
   leasing: [
     `## Leasing — {{companyName}}
 
-Dla sektora „{{industryLabel}}” rekomenduję leasing operacyjny na środki trwałe związane z core business.
+W sektorze „{{industryLabel}}” leasing finansuje środki trwałe związane z podstawową działalnością.
 
-**Opcje CA:**
-- Leasing maszyn i urządzeń
-- Leasing pojazdów dostawczych / floty
-- Leasing z opcją wykupu po 36–48 mies.
+**Firma ma już:** {{leasingHeld}}
 
-**Powiązanie z pipeline:** wykorzystaj aktywny deal jako wejście do rozmowy o finansowaniu CAPEX.`,
+**Tematy do rozmowy:**
+{{leasingOptions}}
+
+**Powiązanie z lejkiem:** wykorzystaj aktywną szansę jako wejście do rozmowy o finansowaniu inwestycji.`,
   ],
 
   credit: [
     `## Finansowanie kredytowe — {{companyName}}
 
-**Profil:** {{segment}} · ryzyko {{riskScore}}
+**Profil:** {{segment}} · {{companyTypeLabel}}
 
-**Rekomendowane struktury:**
-- Kredyt obrotowy w rachunku — bieżąca działalność
-- Kredyt inwestycyjny — modernizacja / ekspansja
-- Linia kredytowa — elastyczny bufor płynności
+**Firma ma już:** {{creditHeld}}
 
-**Szacowany headroom:** {{limitHeadroom}}
+**Tematy do rozmowy:**
+{{creditOptions}}
 
-**Warunek:** aktualne sprawozdanie + aktualizacja danych KRS (symulacja).`,
+**Warunek:** aktualne sprawozdanie finansowe i dane KRS (symulacja). Decyzję kredytową podejmuje Bank w procesie kredytowym, poza CRM.`,
   ],
 
   fx: [
     `## Waluty i zabezpieczenia — {{companyName}}
 
-Przy profilu sektora „{{industryLabel}}” warto rozważyć pakiet FX:
+Przy profilu sektora „{{industryLabel}}” warto omówić tematy walutowe:
 
 - **Forward / NDF** — zabezpieczenie przyszłych płatności
-- **Konto wielowalutowe** — naturalne nettingi
+- **Konto wielowalutowe** — naturalny netting przepływów
 - **Alerty kursowe** — progi EUR/PLN i USD/PLN
 
-**Scenariusz demo:** deprecjacja PLN o 3% zwiększa koszt importu — hedging redukuje volatility marży.`,
+**Przykład:** osłabienie złotego o 3% zwiększa koszt importu — zabezpieczenie kursu ogranicza zmienność marży.`,
   ],
 
   guarantees: [
@@ -532,35 +754,35 @@ Przy profilu sektora „{{industryLabel}}” warto rozważyć pakiet FX:
 
 Dla firm z sektora „{{industryLabel}}” gwarancje często są warunkiem udziału w przetargach.
 
-**Produkty:**
-- Gwarancja należytego wykonania
-- Gwarancja przetargowa (wadium)
-- Gwarancja zaliczki
+**Firma ma już:** {{guaranteesHeld}}
 
-**Status relacji:** {{companyTypeLabel}} — możliwa akceleracja decyzji przy pozytywnej historii spłat.`,
+**Tematy do rozmowy:**
+{{guaranteesOptions}}
+
+**Status relacji:** {{companyTypeLabel}}.`,
   ],
 
   pipeline: [
-    `## Pipeline — {{companyName}}
+    `## Lejek — {{companyName}}
 
-aktywne deale: **{{openDealCount}}** · wartość **{{pipelineValuePln}}**
+aktywne szanse: **{{openDealCount}}** · wartość **{{pipelineValuePln}}**
 
 {{activeDealLines}}
 
 **Leady:** {{leadCount}} · **Opiekun:** {{ownerName}}
 
-**Rekomendacja:** skup się na deale najbliższym etapowi decyzji — reszta wymaga nurturingu.`,
+**Rekomendacja:** skup się na szansie najbliższej decyzji klienta — pozostałe wymagają dalszej pracy.`,
 
     `## Portfel szans — {{companyName}}
 
-Rozkład pipeline wskazuje na **{{engagementScore}}** zaangażowanie zespołu klienta.
+Rozkład lejka wskazuje na zaangażowanie zespołu klienta: **{{engagementScore}}**.
 
 {{activeDealLines}}
 
 **Akcje:**
-1. Weekly check-in z championem po stronie klienta
+1. Cotygodniowy kontakt z osobą wspierającą po stronie klienta
 2. Uzupełnienie brakujących dokumentów
-3. Cross-sell {{primaryRecommendation}} przy zamknięciu głównej szansy`,
+3. Rozmowa o kolejnej potrzebie ({{primaryRecommendation}}) po zamknięciu głównej szansy`,
   ],
 
   leads: [
@@ -572,13 +794,13 @@ Powiązanych leadów: **{{leadCount}}**
 
 **Konwersja:** priorytetyzuj leady „W toku” z kompletem danych kontaktowych.
 
-**Sugestia:** jeden lead → jeden deal w ciągu 30 dni przy aktywnej pracy opiekuna ({{ownerName}}).`,
+**Sugestia:** jeden lead → jedna szansa w ciągu 30 dni przy aktywnej pracy opiekuna ({{ownerName}}).`,
   ],
 
   contacts: [
     `## Kontakty — {{companyName}}
 
-osoby w kartotece: **{{contactCount}}** · engagement **{{engagementScore}}**
+osoby w kartotece: **{{contactCount}}** · zaangażowanie **{{engagementScore}}**
 
 {{contactLines}}
 
@@ -596,7 +818,7 @@ Nadchodzących w kalendarzu: **{{upcomingMeetingCount}}**
 
 **Następne:** {{nextMeeting}}
 
-**Agenda sugerowana:** pipeline · produkty · harmonogram płatności.`,
+**Sugerowana agenda:** lejek · produkty · harmonogram płatności.`,
   ],
 
   operations: [
@@ -612,7 +834,7 @@ Otwartych zadań: **{{openTaskCount}}**
   documents: [
     `## Dokumentacja — {{companyName}}
 
-**Checklist demo (symulacja):**
+**Lista kontrolna (symulacja):**
 - [ ] Aktualne sprawozdanie finansowe
 - [ ] Umowa ramowa / aneksy
 - [ ] Pełnomocnictwa do produktów rozliczeniowych
@@ -620,7 +842,7 @@ Otwartych zadań: **{{openTaskCount}}**
 
 **Notatka opiekuna:** {{clientComments}}
 
-Uzupełnienie dokumentów przyspieszy decyzję kredytową o 5–10 dni roboczych.`,
+Komplet dokumentów skraca przygotowanie wniosku.`,
   ],
 
   sector: [
@@ -633,7 +855,7 @@ Uzupełnienie dokumentów przyspieszy decyzję kredytową o 5–10 dni roboczych
 - Wzrost kosztów finansowania po stronie dostawców
 - Konsolidacja w segmencie {{segment}}
 
-**Implikacja bankowa:** pakiet rozliczeniowy + produkt finansujący cykl operacyjny.`,
+**Temat do rozmowy:** {{primaryRecommendation}}.`,
   ],
 
   competition: [
@@ -641,12 +863,12 @@ Uzupełnienie dokumentów przyspieszy decyzję kredytową o 5–10 dni roboczych
 
 **Sygnały:** klient {{companyTypeLabel}} jest celem aktywnej sprzedaży innych banków w segmencie {{segment}}.
 
-**Przewagi CA:**
-- Zintegrowany CRM i opiekun {{ownerName}}
-- Pakiet {{primaryRecommendation}}
-- Szybsza ścieżka decyzji dla relacji historycznej
+**Przewagi Banku:**
+- Stały opiekun ({{ownerName}}) i pełna historia relacji w CRM
+- Produkty dopasowane do potrzeb, np. {{primaryRecommendation}}
+- Szybsza ścieżka obsługi dla relacji historycznej
 
-**Retencja:** zaproponuj warunki pakietowe przy odnowieniu limitu.`,
+**Retencja:** zaproponuj rozmowę o warunkach przy odnowieniu umów.`,
   ],
 
   retention: [
@@ -655,12 +877,12 @@ Uzupełnienie dokumentów przyspieszy decyzję kredytową o 5–10 dni roboczych
 **Siła relacji:** {{engagementScore}}
 
 **Co działa:**
-- kontakty: {{contactCount}} · wygrane deale: {{wonDealCount}}
-- Aktywny pipeline {{pipelineValuePln}}
+- kontakty: {{contactCount}} · wygrane szanse: {{wonDealCount}}
+- Aktywny lejek {{pipelineValuePln}}
 
 **Ryzyko odejścia:** niskie przy regularnym kontakcie — ostatnio {{lastActivity}}.
 
-**Plan:** kwartalny business review + roadmap produktowa.`,
+**Plan:** kwartalny przegląd współpracy i plan produktowy.`,
   ],
 
   esg: [
@@ -668,12 +890,12 @@ Uzupełnienie dokumentów przyspieszy decyzję kredytową o 5–10 dni roboczych
 
 Sektor „{{industryLabel}}” podlega rosnącym wymogom raportowania niefinansowego.
 
-**Szanse CA:**
+**Tematy do rozmowy:**
 - Finansowanie zielonej inwestycji (CAPEX ESG)
 - Raportowanie wpływu dla łańcucha dostaw
 - Produkty cyfrowe ograniczające papier i podróże
 
-**Krok 1:** krótki audyt ESG-light w oparciu o dane KRS i deklaracje klienta.`,
+**Krok 1:** krótki przegląd ESG na podstawie danych KRS i deklaracji klienta.`,
   ],
 
   compare: [
@@ -683,11 +905,11 @@ Względem podobnych firm w segmencie **{{segment}}**:
 
 | Wymiar | {{companyName}} | Mediana sektora |
 | --- | --- | --- |
-| Aktywne deale | {{openDealCount}} | 1–2 |
+| Aktywne szanse | {{openDealCount}} | 1–2 |
 | Kontakty | {{contactCount}} | 2–3 |
-| Engagement | {{engagementScore}} | średnie |
+| Zaangażowanie | {{engagementScore}} | średnie |
 
-**Wniosek:** powyżej mediany w pipeline — szansa na upsell {{primaryRecommendation}}.`,
+**Wniosek:** kolejny temat do rozmowy: {{primaryRecommendation}}.`,
   ],
 
   next_steps: [
@@ -698,20 +920,20 @@ Względem podobnych firm w segmencie **{{segment}}**:
 **Priorytety na 14 dni:**
 1. Spotkanie: {{nextMeeting}}
 2. Domknij otwarte zadania ({{openTaskCount}}, najbliższe terminy w CRM)
-3. Push na deale: aktywne szanse ({{openDealCount}})
+3. Aktywne szanse do prowadzenia: {{openDealCount}}
 
-**Opiekun:** {{ownerName}} — zsynchronizuj plan z klientem mailowo w 48h.`,
+**Opiekun:** {{ownerName}} — potwierdź plan z klientem mailowo w 48h.`,
 
     `## Co dalej? — {{companyName}}
 
 **Sytuacja:** {{companyTypeLabel}} · segment {{segment}} · sektor: {{industryLabel}}.
 
-**Quick wins:**
+**Szybkie efekty:**
 - Follow-up po ostatniej aktywności ({{lastActivity}})
-- Propozycja {{primaryRecommendation}}
+- Temat do rozmowy: {{primaryRecommendation}}
 - Aktualizacja dokumentów przed komitetem kredytowym
 
-**KPI do śledzenia:** konwersja lead → deal, wartość {{pipelineValuePln}}.`,
+**Do śledzenia:** konwersja lead → szansa, wartość lejka {{pipelineValuePln}}.`,
   ],
 
   fallback: [
@@ -721,25 +943,25 @@ Względem podobnych firm w segmencie **{{segment}}**:
 
 | Metryka | Wartość |
 | --- | --- |
-| Deale | {{dealCount}} (aktywne: {{openDealCount}}) |
-| Pipeline | {{pipelineValuePln}} |
+| Szanse | {{dealCount}} (aktywne: {{openDealCount}}) |
+| Lejek | {{pipelineValuePln}} |
 | Leady | {{leadCount}} |
 | Kontakty | {{contactCount}} |
 | Zadania | {{openTaskCount}} |
 
 **Ostatnia aktywność:** {{lastActivity}} · **Opiekun:** {{ownerName}}
 
-Relacja ma potencjał rozwoju — sugerowany fokus: {{primaryRecommendation}}.`,
+Relacja ma potencjał rozwoju — sugerowany temat: {{primaryRecommendation}}.`,
 
     `## Profil klienta — {{companyName}}
 
 Notatka CRM: „{{clientComments}}”
 
-**Engagement:** {{engagementScore}} · **Ryzyko:** {{riskScore}}
+**Zaangażowanie:** {{engagementScore}} · **Produkty w Banku:** {{heldProductList}}
 
 {{activeDealLines}}
 
-Zapytaj doradcę o szczegóły — mogę też przeanalizować produkty, ryzyko, leady lub plan spotkań.`,
+Mogę też przygotować tematy produktowe, sygnały w relacji, przegląd leadów lub plan spotkań.`,
   ],
 }
 
@@ -747,37 +969,38 @@ const SOURCE_SETS: Record<ChatIntent, (ctx: TemplateContext) => SimulatedSource[
   {
     financial_health: (ctx) => [
       crmProfileSource(ctx.client.id),
-      mockBikSource(),
+      crmClientProductsSource(ctx.client.id),
       crmDealsSource(ctx.client.id),
       mockSectorSource(),
     ],
     risk: (ctx) => [
       crmProfileSource(ctx.client.id),
+      crmClientProductsSource(ctx.client.id),
+      crmActivitiesSource(ctx.client.id),
       crmDealsSource(ctx.client.id),
-      mockBikSource(),
-      mockKrsSource(),
     ],
     products: (ctx) => [
-      crmProfileSource(ctx.client.id),
-      crmDealsSource(ctx.client.id),
+      crmClientProductsSource(ctx.client.id),
       crmProductsSource(),
-      mockBikSource(),
+      crmDealsSource(ctx.client.id),
+      crmProfileSource(ctx.client.id),
     ],
     factoring: (ctx) => [
+      crmClientProductsSource(ctx.client.id),
       crmProductsSource(),
       crmDealsSource(ctx.client.id),
       mockSectorSource(),
-      mockBikSource(),
     ],
     leasing: (ctx) => [
+      crmClientProductsSource(ctx.client.id),
       crmProductsSource(),
       crmDealsSource(ctx.client.id),
       mockSectorSource(),
     ],
     credit: (ctx) => [
+      crmClientProductsSource(ctx.client.id),
+      crmProductsSource(),
       crmProfileSource(ctx.client.id),
-      mockBikSource(),
-      crmDealsSource(ctx.client.id),
       mockKrsSource(),
     ],
     fx: (ctx) => [
@@ -787,6 +1010,7 @@ const SOURCE_SETS: Record<ChatIntent, (ctx: TemplateContext) => SimulatedSource[
       mockSectorSource(),
     ],
     guarantees: (ctx) => [
+      crmClientProductsSource(ctx.client.id),
       crmProductsSource(),
       crmDealsSource(ctx.client.id),
       mockKrsSource(),
@@ -824,7 +1048,6 @@ const SOURCE_SETS: Record<ChatIntent, (ctx: TemplateContext) => SimulatedSource[
     ],
     sector: (ctx) => [
       mockSectorSource(),
-      mockBikSource(),
       crmProfileSource(ctx.client.id),
       mockEsgSource(),
     ],

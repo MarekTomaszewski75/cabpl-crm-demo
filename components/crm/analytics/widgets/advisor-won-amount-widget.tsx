@@ -42,7 +42,7 @@ export function AdvisorWonAmountWidget({ rows }: AdvisorWonAmountWidgetProps) {
 
   if (visibleRows.length === 0) {
     return (
-      <AnalyticsWidgetEmpty message="Brak wygranych dealów w wybranym okresie" />
+      <AnalyticsWidgetEmpty message="Brak wygranych szans w wybranym okresie" />
     )
   }
 

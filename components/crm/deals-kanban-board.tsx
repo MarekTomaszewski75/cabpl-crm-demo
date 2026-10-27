@@ -225,7 +225,7 @@ export function DealsKanbanBoard({
 
         toast.message("Nie można zmienić statusu", {
           description:
-            "Deale zakończone (Wygrany / Utracony) nie mogą wrócić do wcześniejszego etapu w demo.",
+            "Szanse zakończone (wygrane lub utracone) nie mogą wrócić do wcześniejszego etapu.",
         })
         return buildDealColumns(deals, pipelineCategoryId)
       })
@@ -258,16 +258,16 @@ export function DealsKanbanBoard({
             <BriefcaseIcon />
           </EmptyMedia>
           <EmptyTitle>
-            Brak deali w kategorii {categoryLabel}
+            Brak szans w kategorii {categoryLabel}
           </EmptyTitle>
           <EmptyDescription>
-            Dodaj deal w tej linii produktowej lub wybierz inną kategorię.
+            Dodaj szansę w tej linii produktowej lub wybierz inną kategorię.
           </EmptyDescription>
         </EmptyHeader>
         {onAddDeal ? (
           <Button type="button" onClick={onAddDeal}>
             <PlusIcon data-icon="inline-start" />
-            Nowy deal
+            Nowa szansa
           </Button>
         ) : null}
       </Empty>
@@ -314,7 +314,7 @@ export function DealsKanbanBoard({
 
                 {columnDeals.length === 0 ? (
                   <p className="py-4 text-center text-xs text-muted-foreground">
-                    Upuść deal tutaj
+                    Upuść szansę tutaj
                   </p>
                 ) : (
                   columnDeals.map((deal) => (

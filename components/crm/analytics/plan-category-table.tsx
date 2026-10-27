@@ -49,7 +49,7 @@ export function PlanCategoryTable({
             <TableHead className="text-right">Plan</TableHead>
             <TableHead className="text-right">Realizacja</TableHead>
             <TableHead className="text-right">%</TableHead>
-            <TableHead className="text-right">Forecast</TableHead>
+            <TableHead className="text-right">Prognoza</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

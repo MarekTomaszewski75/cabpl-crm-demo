@@ -97,7 +97,7 @@ export function ContactsTable() {
               </EmptyMedia>
               <EmptyTitle>Brak kontaktów w Twoim zakresie</EmptyTitle>
               <EmptyDescription>
-                Kontakty pojawią się po powiązaniu z firmą, dealem lub leadem w
+                Kontakty pojawią się po powiązaniu z firmą, szansą lub leadem w
                 Twoim portfelu.
               </EmptyDescription>
             </EmptyHeader>

@@ -737,7 +737,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       const deal = prev.opportunities.find((item) => item.id === dealId)
       const regionId = user.regionId ?? deal?.regionId
       if (!regionId) {
-        throw new Error("Użytkownik bez regionu nie może dodać aktywności deala.")
+        throw new Error("Użytkownik bez regionu nie może dodać aktywności szansy.")
       }
       return {
         id: createNextDealActivityId(prev.dealActivities),
@@ -882,11 +882,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       options?: { note?: string; occurredAt?: string },
     ) => {
       const titles: Record<DealSystemActivityType, string> = {
-        deal_created: "Utworzono deal",
-        deal_status_changed: "Zmiana statusu deala",
+        deal_created: "Utworzono szansę",
+        deal_status_changed: "Zmiana statusu szansy",
         deal_expected_close_changed: "Zmieniono planowaną datę zamknięcia",
-        deal_won: "Deal wygrany",
-        deal_lost: "Deal utracony",
+        deal_won: "Szansa wygrana",
+        deal_lost: "Szansa utracona",
         deal_note: "Notatka",
         deal_document_added: "Dodano dokument",
         deal_task_created: "Utworzono zadanie",
@@ -1522,7 +1522,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         id,
         user,
         "deal_won",
-        "Deal wygrany",
+        "Szansa wygrana",
         deal.name,
         now,
       )
@@ -1555,7 +1555,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           id,
           user,
           "deal_lost",
-          "Deal utracony",
+          "Szansa utracona",
           DEAL_LOST_REASON_LABELS[reason],
           now,
         )

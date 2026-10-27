@@ -37,7 +37,8 @@ import {
   PromptInputTools,
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input"
-import { SelectGroup } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { SelectGroup, SelectLabel } from "@/components/ui/select"
 import {
   Queue,
   QueueItem,
@@ -73,6 +74,7 @@ import {
 } from "@/components/ui/sheet"
 import { getChatSuggestions } from "@/lib/crm/company-ai-chat-simulator"
 import {
+  DEMO_CHAT_MODEL_GROUP,
   DEMO_CHAT_MODELS,
   estimateChatTokenUsage,
   formatCompactTokens,
@@ -123,10 +125,13 @@ export function CompanyAiChatSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="flex h-full w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-xl data-[side=right]:sm:max-w-xl"
+        className="flex h-full w-full flex-col gap-0 overflow-hidden p-0 data-[side=right]:w-full sm:max-w-xl data-[side=right]:sm:max-w-xl"
       >
         <SheetHeader className="shrink-0 border-b px-4 py-4">
-          <SheetTitle>Asystent firmy</SheetTitle>
+          <div className="flex items-center gap-2">
+            <SheetTitle>Asystent firmy</SheetTitle>
+            <Badge variant="outline">Opcja</Badge>
+          </div>
           <SheetDescription>{client.name}</SheetDescription>
         </SheetHeader>
 
@@ -331,6 +336,7 @@ export function CompanyAiChatSheet({
                     </PromptInputSelectTrigger>
                     <PromptInputSelectContent align="start">
                       <SelectGroup>
+                        <SelectLabel>{DEMO_CHAT_MODEL_GROUP}</SelectLabel>
                         {DEMO_CHAT_MODELS.map((model) => (
                           <PromptInputSelectItem key={model.id} value={model.id}>
                             {model.name}
@@ -343,6 +349,10 @@ export function CompanyAiChatSheet({
                 <PromptInputSubmit status={inputStatus} />
               </PromptInputFooter>
             </PromptInput>
+            <p className="text-xs text-muted-foreground">
+              Odpowiedzi weryfikuje opiekun. Asystent nie podejmuje decyzji
+              ryzyka ani zobowiązań wobec klienta.
+            </p>
           </div>
         </div>
       </SheetContent>

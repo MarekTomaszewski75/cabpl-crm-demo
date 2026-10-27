@@ -76,7 +76,7 @@ export function SalesRulesView() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h1 className="font-heading text-lg font-medium">Reguły sprzedaży</h1>
+        <h1 className="font-heading text-lg font-medium">Administracja biznesowa</h1>
         <p className="text-sm text-muted-foreground">
           Słownik źródeł leadów i szans. Zmianę zgłasza dowolny użytkownik z
           uzasadnieniem, a zatwierdza administrator biznesowy lub menedżer

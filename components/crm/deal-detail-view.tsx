@@ -47,7 +47,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
   const accessDenied = useAccessDeniedAudit(
     deal,
     user,
-    `Deal „${deal?.name ?? dealId}”`,
+    `Szansa „${deal?.name ?? dealId}”`,
   )
 
   if (!isReady || !user) return null
@@ -55,8 +55,8 @@ export function DealDetailView({ dealId }: { dealId: string }) {
   if (!deal) {
     return (
       <Alert variant="destructive">
-        <AlertTitle>Nie znaleziono deala</AlertTitle>
-        <AlertDescription>Brak deala o podanym identyfikatorze.</AlertDescription>
+        <AlertTitle>Nie znaleziono szansy</AlertTitle>
+        <AlertDescription>Brak szansy o podanym identyfikatorze.</AlertDescription>
       </Alert>
     )
   }
@@ -64,9 +64,9 @@ export function DealDetailView({ dealId }: { dealId: string }) {
   if (accessDenied) {
     return (
       <AccessDeniedAlert
-        subjectPl="Ten deal należy"
+        subjectPl="Ta szansa należy"
         backHref="/pipeline"
-        backLabelPl="Wróć do listy deali"
+        backLabelPl="Wróć do listy szans"
       />
     )
   }
@@ -103,7 +103,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
           ) {
             toast.message("Nie można zmienić statusu", {
               description:
-                "Ten etap nie jest dostępny w lejku tego deala.",
+                "Ten etap nie jest dostępny w lejku tej szansy.",
             })
             return
           }

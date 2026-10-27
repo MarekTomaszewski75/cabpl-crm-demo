@@ -106,7 +106,7 @@ function buildDealNotifications(
         id: `gen-deal-${deal.id}`,
         userId: user.id,
         type: "deal_deadline" as const,
-        titlePl: "Zbliża się termin deala",
+        titlePl: "Zbliża się termin szansy",
         bodyPl: `${deal.name} — ${formatDaysUntilPl(daysUntil)}`,
         createdAt: asOfDate.toISOString(),
         read: false,

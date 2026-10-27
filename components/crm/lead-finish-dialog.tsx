@@ -87,7 +87,7 @@ export function LeadFinishDialog({
     if (!user) return
     if (!selectedProduct) {
       toast.error("Wybierz produkt bankowy", {
-        description: "Deal musi być powiązany z produktem z katalogu.",
+        description: "Szansa musi być powiązana z produktem z katalogu.",
       })
       return
     }
@@ -100,9 +100,9 @@ export function LeadFinishDialog({
       toast.error("Nie udało się zakończyć leada jako wygrany")
       return
     }
-    toast.success("Lead oznaczony jako wygrany i utworzono deal", {
+    toast.success("Lead oznaczony jako wygrany i utworzono szansę", {
       action: {
-        label: "Przejdź do deala",
+        label: "Przejdź do szansy",
         onClick: () => router.push(`/pipeline/${opportunity.id}`),
       },
     })
@@ -168,7 +168,7 @@ export function LeadFinishDialog({
             <DialogHeader>
               <DialogTitle>Wygrano</DialogTitle>
               <DialogDescription>
-                Oznaczymy lead jako wygrany i utworzymy nowy deal.
+                Oznaczymy lead jako wygrany i utworzymy nową szansę.
               </DialogDescription>
             </DialogHeader>
             <FieldGroup>

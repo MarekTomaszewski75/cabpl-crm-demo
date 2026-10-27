@@ -12,6 +12,7 @@ import {
 import { PlanCategoryTable } from "@/components/crm/analytics/plan-category-table"
 import { PlanSegmentTable } from "@/components/crm/analytics/plan-segment-table"
 import { KpiCard, KpiPlanActualCard } from "@/components/crm/kpi-card"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -59,15 +60,15 @@ const chartConfig = {
     color: "var(--chart-2)",
   },
   forecastPln: {
-    label: "Forecast (bazowy)",
+    label: "Prognoza bazowa",
     color: "var(--chart-1)",
   },
   forecastOptimisticPln: {
-    label: "Forecast (optymistyczny)",
+    label: "Prognoza optymistyczna",
     color: "var(--chart-3)",
   },
   forecastPessimisticPln: {
-    label: "Forecast (pesymistyczny)",
+    label: "Prognoza pesymistyczna",
     color: "var(--chart-4)",
   },
 } satisfies ChartConfig
@@ -80,7 +81,7 @@ function formatAxisPln(value: number) {
 }
 
 type ExecutiveDashboardProps = {
-  /** Ukrywa nagłówek modułu — używane w zakładce Plan i cele (US-20). */
+  /** Ukrywa nagłówek modułu — używane w zakładce Plan i realizacja (US-20). */
   embedded?: boolean
   /** Wymusza region i ukrywa select (menedżer regionalny). */
   lockedRegionId?: string
@@ -252,8 +253,8 @@ export function ExecutiveDashboard({
           value={formatCurrencyPln(totals.planPln)}
         />
         <KpiCard
-          title="Forecast (bazowy)"
-          description="Scenariusz bazowy"
+          title="Prognoza bazowa"
+          description="Wygrane + lejek × prawdopodobieństwo"
           value={formatCurrencyPln(totals.forecastPln)}
           badge={timeLabel}
         />
@@ -268,7 +269,10 @@ export function ExecutiveDashboard({
 
       <Card>
         <CardHeader>
-          <CardTitle>Plan, realizacja i scenariusze forecast</CardTitle>
+          <div className="flex flex-wrap items-center gap-2">
+            <CardTitle>Plan, realizacja i scenariusze prognozy</CardTitle>
+            <Badge variant="outline">Etap 2: scenariusze</Badge>
+          </div>
           <CardDescription>
             Trend miesięczny ({timeLabel.toLowerCase()}) — wartości w PLN
           </CardDescription>

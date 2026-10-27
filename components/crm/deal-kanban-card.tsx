@@ -78,7 +78,7 @@ export function DealKanbanCard({
         {!dragDisabled ? (
           <KanbanItemHandle
             className="mt-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground hover:bg-muted"
-            aria-label="Przeciągnij deal"
+            aria-label="Przeciągnij szansę"
             onClick={(event) => event.stopPropagation()}
             onDoubleClick={(event) => event.stopPropagation()}
           >
@@ -96,7 +96,7 @@ export function DealKanbanCard({
                   variant="ghost"
                   size="icon-sm"
                   className="shrink-0"
-                  aria-label="Menu deala"
+                  aria-label="Menu szansy"
                   onClick={(event) => event.stopPropagation()}
                   onDoubleClick={(event) => event.stopPropagation()}
                 >
@@ -109,7 +109,7 @@ export function DealKanbanCard({
               >
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={handleOpen}>
-                    Otwórz deal
+                    Otwórz szansę
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

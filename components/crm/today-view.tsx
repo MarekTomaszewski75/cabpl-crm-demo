@@ -49,7 +49,7 @@ import { TodayAttentionCard } from "@/components/crm/today-attention-card"
 import { TodayNotificationsCard } from "@/components/crm/today-notifications-card"
 import { TodayPipelineSummary } from "@/components/crm/today-pipeline-summary"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import { formatDatePl, formatTimePl } from "@/lib/format/pl"
+import { formatDatePl, formatTimePl, pluralPl } from "@/lib/format/pl"
 import { filterByScope } from "@/lib/rbac/scope"
 import type { Client, TaskPriority } from "@/types/crm"
 
@@ -160,7 +160,7 @@ export function TodayView() {
 
   if (!isReady || !user || user.role !== "advisor") {
     return (
-      <p className="text-sm text-muted-foreground">Ładowanie widoku „Dziś”…</p>
+      <p className="text-sm text-muted-foreground">Ładowanie centrum działań…</p>
     )
   }
 
@@ -172,7 +172,7 @@ export function TodayView() {
             <SunIcon className="text-primary" />
           </div>
           <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold tracking-tight">Dziś</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Centrum działań</h1>
             <p className="text-sm text-muted-foreground">
               {formatTodayPl()}
             </p>
@@ -193,7 +193,12 @@ export function TodayView() {
             <CardDescription>
               Termin {formatDatePl(todayDateKey)} —{" "}
               {tasksToday.length}{" "}
-              {tasksToday.length === 1 ? "otwarte zadanie" : "otwartych zadań"}
+              {pluralPl(
+                tasksToday.length,
+                "otwarte zadanie",
+                "otwarte zadania",
+                "otwartych zadań",
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent>

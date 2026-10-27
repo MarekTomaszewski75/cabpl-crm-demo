@@ -80,6 +80,7 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 58  | [US-58 Business admin and four eyes](./US-58-business-admin-four-eyes/story.md)         | P0        | US-03, US-04, US-23, US-53                      |
 | 59  | [US-59 Org structure pipeline](./US-59-org-structure-pipeline/story.md)                 | P0        | US-36, US-37, US-38, US-55                      |
 | 60  | [US-60 Documents, duplicates, money](./US-60-documents-duplicates-money/story.md)       | P0        | US-16, US-32, US-51, US-53, US-55               |
+| 61  | [US-61 Offer signals](./US-61-offer-signals/story.md)                                   | P0        | US-20, US-52, US-56, US-58                      |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  

@@ -17,7 +17,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "won-deals",
-    titlePl: "Wygrane deale",
+    titlePl: "Wygrane szanse",
     domainTag: "deals",
     kind: "kpi_count",
     size: "1x1",
@@ -25,7 +25,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "open-deals",
-    titlePl: "Otwarte deale",
+    titlePl: "Otwarte szanse",
     domainTag: "deals",
     kind: "kpi_count",
     size: "1x1",
@@ -41,7 +41,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "deal-funnel",
-    titlePl: "Konwersja dealów",
+    titlePl: "Konwersja szans",
     domainTag: "deals",
     kind: "funnel",
     size: "2x1",
@@ -49,7 +49,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "won-amount-by-source",
-    titlePl: "Kwota wygranych dealów wg źródła",
+    titlePl: "Kwota wygranych szans wg źródła",
     domainTag: "deals",
     kind: "bar_chart",
     size: "2x1",
@@ -58,7 +58,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "avg-deal-value",
-    titlePl: "Średnia wartość deala",
+    titlePl: "Średnia wartość szansy",
     domainTag: "deals",
     kind: "kpi_currency",
     size: "1x1",
@@ -66,7 +66,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "avg-deal-duration",
-    titlePl: "Średni czas trwania deala",
+    titlePl: "Średni czas trwania szansy",
     domainTag: "deals",
     kind: "kpi_duration",
     size: "1x1",
@@ -127,7 +127,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "lead-conversion-line",
-    titlePl: "Konwersja lead → deal",
+    titlePl: "Konwersja lead → szansa",
     domainTag: "leads",
     kind: "line_chart",
     size: "2x1",
@@ -136,7 +136,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "plan-actual-area",
-    titlePl: "Plan vs realizacja vs forecast",
+    titlePl: "Plan, realizacja i prognoza",
     domainTag: "plan",
     kind: "area_chart",
     size: "2x2",
@@ -163,12 +163,13 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "forecast-scenarios-line",
-    titlePl: "Scenariusze forecastu",
+    titlePl: "Scenariusze prognozy",
     domainTag: "plan",
     kind: "line_chart",
     size: "2x1",
     metricKey: "forecast_scenarios_trend",
     allowedRoles: ["executive"],
+    stageTwo: true,
   },
   {
     id: "product-category-won",
@@ -208,7 +209,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "leads-vs-won-line",
-    titlePl: "Nowe leady vs wygrane deale",
+    titlePl: "Nowe leady a wygrane szanse",
     domainTag: "leads",
     kind: "line_chart",
     size: "2x1",
@@ -217,7 +218,7 @@ export const ANALYTICS_WIDGETS: readonly AnalyticsWidgetDefinition[] = [
   },
   {
     id: "top-open-deals-table",
-    titlePl: "Top 10 otwartych dealów",
+    titlePl: "Top 10 otwartych szans",
     domainTag: "deals",
     kind: "table",
     size: "4x2",

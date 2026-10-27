@@ -154,7 +154,7 @@ export function AnalyticsWorkspace() {
         <TabsList>
           <TabsTrigger value="panels">Panel główny</TabsTrigger>
           <TabsTrigger value="structure">Lejek wg struktury</TabsTrigger>
-          <TabsTrigger value="plan">Plan i cele</TabsTrigger>
+          <TabsTrigger value="plan">Plan i realizacja</TabsTrigger>
         </TabsList>
 
         <TabsContent value="panels" className="mt-4 flex flex-col gap-4">

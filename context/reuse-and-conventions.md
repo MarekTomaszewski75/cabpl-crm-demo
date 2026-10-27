@@ -416,6 +416,17 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Reset pokazu: `resetDemoSession()` (`lib/auth/reset-demo.ts`) czyści `sessionStorage` i przeładowuje seed. Przycisk jest na ekranie logowania.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
 
+## Nazewnictwo oferty, AI i „Etap 2” (US-61)
+
+- **Copy UI:** „Szansa” (nie „Deal”), „lejek” (nie „pipeline”), „prognoza” (nie „forecast”). Ekrany: **Centrum działań** (`/today`), **Plan i realizacja** (zakładka Analityki), **Administracja biznesowa** (`/sales-rules`), produkt **CRM Bankowości Korporacyjnej**. Kod, typy i trasy zostają przy `deal` / `pipeline`.
+- **Liczebniki:** zawsze `pluralPl(n, "zadanie", "zadania", "zadań")` albo „rzeczownik: liczba”; nie pisz `n === 1 ? … : …`.
+- **AI (szablony w `company-ai-chat-templates.ts`):**
+  - nie oceniaj ryzyka, nie podawaj scoringu ani limitów — pytania o ryzyko trafiają do sygnałów z CRM (`getRelationshipSignals`),
+  - produkty proponuj tylko przez `getProductTopics` / `getCategoryTopics`: katalog dostępny w ofercie, bez umów firmy (`clientProducts`: active / expiring / blocked) i bez produktów z otwartych szans,
+  - modele: `DEMO_CHAT_MODEL_GROUP` (Azure OpenAI po zatwierdzeniu przez Bank).
+- **Poza Quick Win:** widżet z `stageTwo: true` dostaje badge „Etap 2”; w innych miejscach `<Badge variant="outline">Etap 2</Badge>` przy funkcji.
+- **Telefon:** w nagłówkach list wyszukiwarka ma `order-last basis-full sm:order-none sm:flex-1 sm:basis-0` (osobny wiersz na wąskim ekranie). Pole edytowane w miejscu pokazuje sformatowaną wartość przez `InlineEditableField.displayValue`.
+
 ## Dokumenty z repozytoriów, duplikaty, prawdopodobieństwo, waluty (US-60)
 
 - **Odnośnik do repozytorium:** rekord `ClientFile` / `LeadFile` / `DealFile` z `repository` (`aida` | `sharepoint` | `drive_s` | `case_pro` + `externalRef`, MIME `REPOSITORY_LINK_MIME`).

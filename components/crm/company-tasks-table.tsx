@@ -26,6 +26,7 @@ import {
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Task } from "@/types/crm"
+import { pluralPl } from "@/lib/format/pl"
 
 type CompanyTasksTableProps = {
   tasks: Task[]
@@ -91,9 +92,7 @@ export function CompanyTasksTable({ tasks }: CompanyTasksTableProps) {
 
   const resultCountLabel = React.useMemo(() => {
     const n = filteredData.length
-    if (n === 1) return "1 wynik"
-    if (n >= 2 && n <= 4) return `${n} wyniki`
-    return `${n} wyników`
+    return `${n} ${pluralPl(n, "wynik", "wyniki", "wyników")}`
   }, [filteredData.length])
 
   if (!user) {

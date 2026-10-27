@@ -5,6 +5,7 @@ import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities"
 import { GripVerticalIcon } from "lucide-react"
 import { AnalyticsDomainBadge } from "@/components/crm/analytics-domain-badge"
 import { AnalyticsWidgetRestricted } from "@/components/crm/analytics-widget-restricted"
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
@@ -77,6 +78,7 @@ export function AnalyticsWidget({
             {definition.titlePl}
           </span>
           <AnalyticsDomainBadge domain={definition.domainTag} />
+          {definition.stageTwo ? <Badge variant="outline">Etap 2</Badge> : null}
         </div>
       </CardHeader>
       <CardContent className="relative min-h-36 pt-4">

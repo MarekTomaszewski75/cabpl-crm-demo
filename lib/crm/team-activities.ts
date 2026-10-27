@@ -34,7 +34,7 @@ export const TEAM_ACTIVITY_ENTITY_LABELS: Record<
 > = {
   client: "Firma",
   lead: "Lead",
-  deal: "Deal",
+  deal: "Szansa",
 }
 
 function contactEventTitle(event: ContactEvent): string {

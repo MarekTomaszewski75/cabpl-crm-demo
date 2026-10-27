@@ -57,7 +57,7 @@ export function DealDetailHeader({
 
   function handleDelete() {
     deleteDeal(deal.id)
-    toast.success("Deal został usunięty")
+    toast.success("Szansa została usunięta")
     router.push("/pipeline")
   }
 
@@ -66,13 +66,13 @@ export function DealDetailHeader({
       <Button variant="ghost" size="sm" className="w-fit px-2" asChild>
         <Link href="/pipeline">
           <ArrowLeftIcon data-icon="inline-start" />
-          Deale
+          Szanse
         </Link>
       </Button>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="truncate text-xl font-semibold tracking-tight">
+            <h1 className="text-xl font-semibold tracking-tight sm:truncate">
               {deal.name}
             </h1>
             <DealStatusBadge
@@ -98,17 +98,17 @@ export function DealDetailHeader({
             <>
               <Button type="button" variant="outline" onClick={onLostClick}>
                 <XIcon data-icon="inline-start" />
-                Stracony deal
+                Utracona
               </Button>
               <Button type="button" onClick={onWonClick}>
                 <CheckIcon data-icon="inline-start" />
-                Wygrany deal
+                Wygrana
               </Button>
             </>
           ) : null}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon-sm" aria-label="Menu deala">
+              <Button variant="outline" size="icon-sm" aria-label="Menu szansy">
                 <MoreHorizontalIcon />
               </Button>
             </DropdownMenuTrigger>
@@ -130,11 +130,11 @@ export function DealDetailHeader({
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Usunąć deala?</AlertDialogTitle>
+            <AlertDialogTitle>Usunąć szansę?</AlertDialogTitle>
             <AlertDialogDescription>
               Deal „{deal.name}” zostanie trwale usunięty.
               {isTerminal
-                ? " Deal ma status końcowy (wygrany lub utracony) — usunięcie nie cofnie wyniku w raportach demo."
+                ? " Szansa ma status końcowy (wygrana lub utracona) — usunięcie nie cofnie wyniku w raportach."
                 : null}
             </AlertDialogDescription>
           </AlertDialogHeader>

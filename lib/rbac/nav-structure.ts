@@ -48,7 +48,7 @@ function defineNavItem(config: CrmNavItem): CrmNavItem {
 
 const today = defineNavItem({
   id: "today",
-  labelPl: "Dziś",
+  labelPl: "Centrum działań",
   href: "/today",
   roles: ["advisor"],
 })
@@ -97,7 +97,7 @@ const leads = defineNavItem({
 
 const pipeline = defineNavItem({
   id: "pipeline",
-  labelPl: "Deale",
+  labelPl: "Szanse",
   href: "/pipeline",
   roles: SALES_ROLES,
 })
@@ -139,7 +139,7 @@ defineNavItem({
 
 const salesRules = defineNavItem({
   id: "salesRules",
-  labelPl: "Reguły sprzedaży",
+  labelPl: "Administracja biznesowa",
   href: "/sales-rules",
   roles: ALL_ROLES,
 })

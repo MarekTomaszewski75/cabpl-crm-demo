@@ -59,9 +59,9 @@ export function createDealsColumns(
     createFilterSearchColumn<DealTableRow>(),
     {
       accessorKey: "name",
-      meta: { title: "Deal" },
+      meta: { title: "Szansa" },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Deal" />
+        <DataTableColumnHeader column={column} title="Szansa" />
       ),
       cell: ({ row }) => (
         <span className="max-w-56 truncate font-medium">

@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils"
 type InlineEditableFieldProps = {
   label: string
   value: string
+  /** Sformatowana wartość w trybie podglądu (np. kwota z walutą). */
+  displayValue?: string
   placeholder?: string
   onSave: (value: string) => void
   children: (props: {
@@ -20,6 +22,7 @@ type InlineEditableFieldProps = {
 export function InlineEditableField({
   label,
   value,
+  displayValue,
   placeholder = "Wprowadź wartość…",
   onSave,
   children,
@@ -78,7 +81,7 @@ export function InlineEditableField({
         )}
         onClick={() => setIsEditing(true)}
       >
-        {value.trim() || placeholder}
+        {value.trim() ? (displayValue ?? value.trim()) : placeholder}
       </button>
     </div>
   )

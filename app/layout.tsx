@@ -10,8 +10,8 @@ const notoSans = Noto_Sans({
 })
 
 export const metadata = {
-  title: "CRM Korporacyjny — Demo | Credit Agricole",
-  description: "Demonstracja Quick Win CRM — bankowość korporacyjna CABPL",
+  title: "CRM Bankowości Korporacyjnej | Credit Agricole",
+  description: "Demonstracja Etapu 1 (Quick Win) CRM Bankowości Korporacyjnej CABPL",
 }
 
 export default function RootLayout({

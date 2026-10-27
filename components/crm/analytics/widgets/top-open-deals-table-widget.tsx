@@ -21,7 +21,7 @@ type TopOpenDealsTableWidgetProps = {
 
 export function TopOpenDealsTableWidget({ rows }: TopOpenDealsTableWidgetProps) {
   if (rows.length === 0) {
-    return <AnalyticsWidgetEmpty message="Brak otwartych dealów w scope" />
+    return <AnalyticsWidgetEmpty message="Brak otwartych szans w Twoim zakresie" />
   }
 
   return (
@@ -29,7 +29,7 @@ export function TopOpenDealsTableWidget({ rows }: TopOpenDealsTableWidgetProps) 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Deal</TableHead>
+            <TableHead>Szansa</TableHead>
             <TableHead>Firma</TableHead>
             <TableHead>Region</TableHead>
             <TableHead className="text-right">Kwota</TableHead>

@@ -45,7 +45,7 @@ export function AdvisorRankingTableWidget({
           <TableRow>
             <TableHead>Doradca</TableHead>
             <TableHead className="text-right">Wygrane</TableHead>
-            <TableHead className="text-right">Otwarte deale</TableHead>
+            <TableHead className="text-right">Otwarte szanse</TableHead>
             <TableHead className="text-right">Nowe leady</TableHead>
             <TableHead className="text-right">Po terminie</TableHead>
             <TableHead className="text-right">Spotkania</TableHead>

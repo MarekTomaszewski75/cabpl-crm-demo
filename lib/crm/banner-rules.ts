@@ -4,7 +4,7 @@ import {
   getDealsRequiringAttention,
   TODAY_PIPELINE_HORIZON_DAYS,
 } from "@/lib/crm/today-pipeline-summary"
-import { formatDatePl, formatTimePl } from "@/lib/format/pl"
+import { formatDatePl, formatTimePl, pluralPl } from "@/lib/format/pl"
 import { filterByScope } from "@/lib/rbac/scope"
 import type {
   Client,
@@ -205,7 +205,7 @@ function buildOverdueTasksBanner(
   const descriptionPl =
     overdue.length === 1
       ? `„${first.title}” — termin ${formatDatePl(first.dueDate)}.`
-      : `${overdue.length} zadania po terminie — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
+      : `${overdue.length} ${pluralPl(overdue.length, "zadanie", "zadania", "zadań")} po terminie — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
 
   const teamMode = isTeamManagerView(user)
 
@@ -218,7 +218,7 @@ function buildOverdueTasksBanner(
     descriptionPl: teamMode
       ? overdue.length === 1
         ? `W regionie: „${first.title}” — termin ${formatDatePl(first.dueDate)}.`
-        : `${overdue.length} zadań po terminie w zespole — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
+        : `${overdue.length} ${pluralPl(overdue.length, "zadanie", "zadania", "zadań")} po terminie w zespole — m.in. „${first.title}” (${formatDatePl(first.dueDate)}).`
       : descriptionPl,
     href: "/tasks",
     actionLabelPl: teamMode ? "Przejrzyj zadania zespołu" : "Zobacz zadania",
@@ -255,7 +255,7 @@ function buildTasksDueSoonBanner(
   const descriptionPl =
     dueSoon.length === 1
       ? `„${first.title}” — ${dueLabel}.`
-      : `${dueSoon.length} zadania z terminem w najbliższych dniach — m.in. „${first.title}” (${dueLabel}).`
+      : `${dueSoon.length} ${pluralPl(dueSoon.length, "zadanie", "zadania", "zadań")} z terminem w najbliższych dniach — m.in. „${first.title}” (${dueLabel}).`
 
   const teamMode = isTeamManagerView(user)
 
@@ -304,13 +304,13 @@ function buildPipelineBanners(
     priority: SYSTEM_DEMO_BANNER_PRIORITY,
     dismissible: true,
     titlePl: teamMode
-      ? "Deal w zespole z bliskim terminem"
-      : "Termin zamknięcia deala",
+      ? "Szansa w zespole z bliskim terminem"
+      : "Termin zamknięcia szansy",
     descriptionPl: teamMode
       ? `${top.deal.name} w portfelu regionu — ${formatDealAmount(top.deal)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`
       : `${top.deal.name} — ${formatDealAmount(top.deal)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`,
     href: `/pipeline/${top.deal.id}`,
-    actionLabelPl: teamMode ? "Sprawdź deal w zespole" : "Przejdź do deala",
+    actionLabelPl: teamMode ? "Sprawdź szansę w zespole" : "Przejdź do szansy",
   })
 
   if (summaries.length > 1) {
@@ -320,13 +320,13 @@ function buildPipelineBanners(
       priority: SYSTEM_DEMO_BANNER_PRIORITY,
       dismissible: true,
       titlePl: teamMode
-        ? "Deale w zespole wymagające uwagi"
-        : "Deale wymagające uwagi",
+        ? "Szanse w zespole wymagające uwagi"
+        : "Szanse wymagające uwagi",
       descriptionPl: teamMode
-        ? `${summaries.length} deale w regionie mają planowane zamknięcie w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni — warto skoordynować działania zespołu.`
-        : `${summaries.length} deale w Twoim portfelu mają planowane zamknięcie w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni.`,
+        ? `Szanse w regionie z planowanym zamknięciem w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni: ${summaries.length} — warto skoordynować działania zespołu.`
+        : `Szanse w Twoim portfelu z planowanym zamknięciem w ciągu ${TODAY_PIPELINE_HORIZON_DAYS} dni: ${summaries.length}.`,
       href: "/pipeline",
-      actionLabelPl: teamMode ? "Otwórz pipeline zespołu" : "Otwórz pipeline",
+      actionLabelPl: teamMode ? "Otwórz lejek zespołu" : "Otwórz lejek",
     })
   }
 
@@ -353,8 +353,8 @@ function buildKycTasksBanner(
     : null
 
   const descriptionPl = clientName
-    ? `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
-    : `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC do domknięcia — termin ${formatDatePl(first.dueDate)}.`
+    ? `${kycTasks.length} ${pluralPl(kycTasks.length, "zadanie", "zadania", "zadań")} KYC do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
+    : `${kycTasks.length} ${pluralPl(kycTasks.length, "zadanie", "zadania", "zadań")} KYC do domknięcia — termin ${formatDatePl(first.dueDate)}.`
 
   const teamMode = isTeamManagerView(user)
 
@@ -368,8 +368,8 @@ function buildKycTasksBanner(
       : "Dokumentacja KYC do uzupełnienia",
     descriptionPl: teamMode
       ? clientName
-        ? `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC w regionie do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
-        : `${kycTasks.length === 1 ? "1 zadanie" : `${kycTasks.length} zadania`} KYC w zespole do domknięcia — termin ${formatDatePl(first.dueDate)}.`
+        ? `${kycTasks.length} ${pluralPl(kycTasks.length, "zadanie", "zadania", "zadań")} KYC w regionie do domknięcia — m.in. ${clientName} (termin ${formatDatePl(first.dueDate)}).`
+        : `${kycTasks.length} ${pluralPl(kycTasks.length, "zadanie", "zadania", "zadań")} KYC w zespole do domknięcia — termin ${formatDatePl(first.dueDate)}.`
       : descriptionPl,
     href: first.clientId ? `/clients/${first.clientId}` : "/tasks",
     actionLabelPl: teamMode
@@ -457,10 +457,10 @@ function buildCriticalDealPayload(deal: Deal, asOfDate: Date): BannerPayload {
     variant: "warning",
     priority: CRITICAL_DEAL_BANNER_PRIORITY,
     dismissible: true,
-    titlePl: "Deal wymaga uwagi",
+    titlePl: "Szansa wymaga uwagi",
     descriptionPl: `${deal.name} — ${formatDealAmount(deal)} · ${urgencySuffix} (${formatDatePl(deal.expectedCloseDate!)})`,
     href: `/pipeline/${deal.id}`,
-    actionLabelPl: "Przejdź do deala",
+    actionLabelPl: "Przejdź do szansy",
   }
 }
 

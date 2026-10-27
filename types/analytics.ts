@@ -50,6 +50,8 @@ export interface AnalyticsWidgetDefinition {
   allowedRoles?: UserRole[]
   /** @deprecated Preferuj allowedRoles + presety per rola. */
   restrictedRoles?: UserRole[]
+  /** Funkcja poza zakresem Quick Win według oferty (decyzja D1) — badge „Etap 2”. */
+  stageTwo?: boolean
 }
 
 export interface AnalyticsPanelPreset {

@@ -7,8 +7,12 @@
     "ownerId": "user-anna",
     "lastActivityAt": "2026-05-28T10:00:00.000Z",
     "regionId": "mazowsze",
-    "phones": [],
-    "emails": [],
+    "phones": [
+      "+48 22 507 11 23"
+    ],
+    "emails": [
+      "biuro@polskalogistyka.pl"
+    ],
     "contactIds": [
       "contact-001",
       "contact-002"
@@ -17,7 +21,7 @@
     "source": "rm_initiative",
     "companyType": "active_client",
     "address": "ul. Biznesowa 10, 00-100 Warszawa",
-    "website": "",
+    "website": "https://www.polskalogistyka.pl",
     "socialMedia": ""
   },
   {
@@ -77,13 +81,15 @@
     "phones": [
       "+48 22 103 203"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@greenbuilddevelopment.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "partner",
     "companyType": "active_client",
     "address": "",
-    "website": "",
+    "website": "https://www.greenbuilddevelopment.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -94,7 +100,9 @@
     "ownerId": "user-anna",
     "lastActivityAt": "2026-04-10T08:00:00.000Z",
     "regionId": "mazowsze",
-    "phones": [],
+    "phones": [
+      "+48 22 535 15 75"
+    ],
     "emails": [
       "kontakt05@mazurchemspz.pl"
     ],
@@ -142,13 +150,15 @@
     "phones": [
       "+48 22 106 206"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@agronovapolska.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "industry_event",
     "companyType": "active_client",
     "address": "ul. Biznesowa 16, 00-106 Warszawa",
-    "website": "",
+    "website": "https://www.agronovapolska.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -181,7 +191,9 @@
     "ownerId": "user-anna",
     "regionId": "mazowsze",
     "lastActivityAt": "2026-05-12T13:20:00.000Z",
-    "phones": [],
+    "phones": [
+      "+48 22 563 19 37"
+    ],
     "emails": [
       "kontakt09@freshmarketd.pl"
     ],
@@ -204,13 +216,15 @@
     "phones": [
       "+48 22 109 209"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@steelformmazowsze.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "client_referral",
     "companyType": "active_client",
     "address": "",
-    "website": "",
+    "website": "https://www.steelformmazowsze.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -265,14 +279,18 @@
     "ownerId": "user-anna",
     "regionId": "mazowsze",
     "lastActivityAt": "2026-05-15T11:30:00.000Z",
-    "phones": [],
-    "emails": [],
+    "phones": [
+      "+48 22 591 23 89"
+    ],
+    "emails": [
+      "biuro@urbanbuddevelopment.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "client_request",
     "companyType": "active_client",
     "address": "ul. Biznesowa 22, 00-112 Warszawa",
-    "website": "",
+    "website": "https://www.urbanbuddevelopment.pl",
     "socialMedia": ""
   },
   {
@@ -330,13 +348,15 @@
     "phones": [
       "+48 22 115 215"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@novaprint.pl"
+    ],
     "contactIds": [],
     "comments": "Kluczowy klient strategiczny — priorytet Q2.",
     "source": "rm_initiative",
     "companyType": "potential_client",
     "address": "",
-    "website": "",
+    "website": "https://www.novaprint.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -347,7 +367,9 @@
     "ownerId": "user-piotr",
     "regionId": "mazowsze",
     "lastActivityAt": "2026-05-29T10:30:00.000Z",
-    "phones": [],
+    "phones": [
+      "+48 22 619 27 51"
+    ],
     "emails": [
       "kontakt17@cloudscalesy.pl"
     ],
@@ -392,13 +414,15 @@
     "phones": [
       "+48 22 118 218"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@mazovialeasing.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "partner",
     "companyType": "active_client",
     "address": "ul. Biznesowa 28, 00-118 Warszawa",
-    "website": "",
+    "website": "https://www.mazovialeasing.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -431,7 +455,9 @@
     "ownerId": "user-piotr",
     "regionId": "mazowsze",
     "lastActivityAt": "2026-05-19T14:30:00.000Z",
-    "phones": [],
+    "phones": [
+      "+48 22 647 31 13"
+    ],
     "emails": [
       "kontakt21@solargridene.pl"
     ],
@@ -454,13 +480,15 @@
     "phones": [
       "+48 22 121 221"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@pharmapackexport.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "industry_event",
     "companyType": "potential_client",
     "address": "",
-    "website": "",
+    "website": "https://www.pharmapackexport.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -515,14 +543,18 @@
     "ownerId": "user-piotr",
     "regionId": "mazowsze",
     "lastActivityAt": "2026-04-20T08:30:00.000Z",
-    "phones": [],
-    "emails": [],
+    "phones": [
+      "+48 22 675 35 65"
+    ],
+    "emails": [
+      "biuro@bioresearchlabs.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "client_referral",
     "companyType": "active_client",
     "address": "ul. Biznesowa 34, 00-124 Warszawa",
-    "website": "",
+    "website": "https://www.bioresearchlabs.pl",
     "socialMedia": ""
   },
   {
@@ -580,13 +612,15 @@
     "phones": [
       "+48 22 127 227"
     ],
-    "emails": [],
+    "emails": [
+      "biuro@vistulatowarzystwoubezpieczen.pl"
+    ],
     "contactIds": [],
     "comments": "",
     "source": "client_request",
     "companyType": "active_client",
     "address": "",
-    "website": "",
+    "website": "https://www.vistulatowarzystwoubezpieczen.pl",
     "socialMedia": "linkedin.com/company/demo"
   },
   {
@@ -630,7 +664,7 @@
     "source": "rm_initiative",
     "companyType": "potential_client",
     "address": "ul. Magazynowa 5, 32-020 Wieliczka",
-    "website": "",
+    "website": "https://www.beskidlogistics.pl",
     "socialMedia": ""
   },
   {
@@ -718,7 +752,7 @@
     "source": "industry_event",
     "companyType": "potential_client",
     "address": "ul. Fabryczna 2, 34-400 Nowy Targ",
-    "website": "",
+    "website": "https://www.podhalemeble.pl",
     "socialMedia": ""
   },
   {
@@ -762,7 +796,7 @@
     "source": "rm_initiative",
     "companyType": "potential_client",
     "address": "ul. Portowa 15, 78-100 Kołobrzeg",
-    "website": "",
+    "website": "https://www.porthandlowykolobrzeg.pl",
     "socialMedia": ""
   },
   {
@@ -806,7 +840,7 @@
     "source": "client_referral",
     "companyType": "active_client",
     "address": "ul. Energetyczna 3, 80-244 Gdańsk",
-    "website": "",
+    "website": "https://www.pomorskiewindenergy.pl",
     "socialMedia": "linkedin.com/company/demo"
   }
 ]

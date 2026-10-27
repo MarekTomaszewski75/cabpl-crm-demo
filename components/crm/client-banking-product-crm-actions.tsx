@@ -89,7 +89,7 @@ export function ClientBankingProductCrmActions({
         <div className="grid gap-2">
           <Button type="button" onClick={() => setDealOpen(true)}>
             <BriefcaseIcon data-icon="inline-start" />
-            Utwórz deal
+            Utwórz szansę
           </Button>
           <Button
             type="button"
@@ -118,7 +118,7 @@ export function ClientBankingProductCrmActions({
           <Button type="button" variant="outline" asChild>
             <Link href={`/clients/${client.id}?related=deale`}>
               <SparklesIcon data-icon="inline-start" />
-              Deale firmy
+              Szanse firmy
             </Link>
           </Button>
         </div>

@@ -39,9 +39,9 @@ export function RegionScorecardTableWidget({
             <TableHead className="text-right">Plan</TableHead>
             <TableHead className="text-right">Realizacja</TableHead>
             <TableHead className="text-right">%</TableHead>
-            <TableHead className="text-right">Forecast</TableHead>
+            <TableHead className="text-right">Prognoza</TableHead>
             <TableHead className="text-right">Luka</TableHead>
-            <TableHead className="text-right">Otwarte deale</TableHead>
+            <TableHead className="text-right">Otwarte szanse</TableHead>
             <TableHead className="min-w-28">Trend</TableHead>
           </TableRow>
         </TableHeader>

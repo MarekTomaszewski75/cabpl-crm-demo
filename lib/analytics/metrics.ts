@@ -220,7 +220,7 @@ type AnalyticsData = {
 
 const ADVISOR_RADAR_DIMENSIONS: readonly AdvisorRadarDimension[] = [
   { key: "leads", label: "Leady" },
-  { key: "openDeals", label: "Otwarte deale" },
+  { key: "openDeals", label: "Otwarte szanse" },
   { key: "wonDeals", label: "Wygrane" },
   { key: "tasksDone", label: "Zadania zamknięte" },
   { key: "meetings", label: "Spotkania" },

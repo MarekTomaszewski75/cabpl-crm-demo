@@ -17,7 +17,7 @@ export default function LoginPage() {
   return (
     <CrmAuthShell
       headerAction={
-        <p className="text-sm text-ca-foreground-muted-on-shell">Demo CRM</p>
+        <p className="text-sm text-ca-foreground-muted-on-shell">CRM Bankowości Korporacyjnej</p>
       }
     >
       <div className="flex w-full max-w-lg flex-col gap-6">

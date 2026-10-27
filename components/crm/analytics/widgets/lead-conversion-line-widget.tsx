@@ -4,7 +4,7 @@ import { AnalyticsLineChart } from "@/components/crm/analytics/charts/analytics-
 import { AnalyticsWidgetEmpty } from "@/components/crm/analytics/widgets/analytics-widget-empty"
 import type { LeadConversionTrendRow } from "@/lib/analytics/metrics"
 
-const SERIES = [{ key: "conversionPercent", label: "Konwersja lead → deal" }] as const
+const SERIES = [{ key: "conversionPercent", label: "Konwersja lead → szansa" }] as const
 
 type LeadConversionLineWidgetProps = {
   rows: LeadConversionTrendRow[]

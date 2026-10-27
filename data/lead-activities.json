@@ -17,7 +17,7 @@
     "type": "phone",
     "occurredAt": "2026-04-08T14:00:00.000Z",
     "titlePl": "Połączenie",
-    "note": "Ustalono zakres i przekazano sprawę do deala. Historia zostaje przy leadzie.",
+    "note": "Ustalono zakres i przekazano sprawę do szansy. Historia zostaje przy leadzie.",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -347,7 +347,7 @@
     "type": "lead_won",
     "occurredAt": "2026-04-02T18:00:00.000Z",
     "titlePl": "Lead wygrany",
-    "note": "Utworzono deal w pipeline.",
+    "note": "Utworzono szansę w lejku.",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },

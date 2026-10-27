@@ -170,16 +170,16 @@ export function createTasksColumns(
   columns.push(
     {
       accessorKey: "opportunityTitle",
-      meta: { title: "Deal" },
+      meta: { title: "Szansa" },
       header: ({ column }) => (
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="w-fit">
-              <DataTableColumnHeader column={column} title="Deal" />
+              <DataTableColumnHeader column={column} title="Szansa" />
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            Deal sprzedażowy powiązany z zadaniem
+            Szansa sprzedażowa powiązana z zadaniem
           </TooltipContent>
         </Tooltip>
       ),

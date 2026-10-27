@@ -265,8 +265,8 @@ export function TaskFormDialog({
           <DialogTitle>{isEdit ? "Edytuj zadanie" : "Nowe zadanie"}</DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Zmień tytuł, termin, priorytet, wykonawcę lub powiązania z klientem i dealem."
-              : "Tytuł, termin, priorytet, wykonawca i opcjonalne powiązanie z klientem lub dealem."}
+              ? "Zmień tytuł, termin, priorytet, wykonawcę lub powiązania z klientem i szansą."
+              : "Tytuł, termin, priorytet, wykonawca i opcjonalne powiązanie z klientem lub szansą."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -347,7 +347,7 @@ export function TaskFormDialog({
               </Select>
             </Field>
             <Field>
-              <FieldLabel htmlFor="task-opportunity">Deal</FieldLabel>
+              <FieldLabel htmlFor="task-opportunity">Szansa</FieldLabel>
               <Select
                 value={opportunityId}
                 onValueChange={setOpportunityId}

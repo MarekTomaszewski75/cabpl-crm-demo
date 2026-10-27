@@ -20,7 +20,7 @@ const CHART_COLORS = [
 ] as const
 
 const chartConfig = {
-  count: { label: "Liczba dealów", color: "var(--chart-2)" },
+  count: { label: "Liczba szans", color: "var(--chart-2)" },
 } satisfies ChartConfig
 
 type DealFunnelWidgetProps = {

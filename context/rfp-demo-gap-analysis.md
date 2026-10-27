@@ -170,7 +170,7 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
 | D3 | „Porównanie prognoz” (Appendix B #6) a wyłączenie ważonej prognozy w QW-08 | Prosty przełącznik ważony/nieważony liczony z deali × prawdopodobieństwo. Korekty i snapshoty jako „Etap 2”. |
 | D4 | „Deal” czy „Szansa”? US-47 wybrało „Deal”, a Bank i oferta piszą „Szansa” | **Decyzja (2026-10-27): „Szansa”** w UI. Kod i typy (`Deal`, `/pipeline`) zostają bez zmian. |
 | D7 | Skąd realizacja planu w analityce? | **Decyzja (2026-10-27): z wygranych deali.** Plan zostaje w `kpi.json`, realizacja to suma wygranych w okresie, a prognoza to realizacja plus ważony lejek. Kwoty otwartych deali zmniejszamy do ok. 3× planu. Zmienia to zasadę „nie wyliczać KPI z opportunities” w `reuse-and-conventions.md`. |
-| D5 | Nazwy ekranów według oferty | „Centrum działań” lub „Pulpit Opiekuna” zamiast „Dziś”. „Plan i realizacja” zamiast „Plan i cele”. „Administracja biznesowa” zamiast `/sales-rules`. Nazwa produktu: „CRM Bankowości Korporacyjnej”. |
+| D5 | Nazwy ekranów według oferty | **Wdrożone w US-61:** „Centrum działań” zamiast „Dziś”. „Plan i realizacja” zamiast „Plan i cele”. „Administracja biznesowa” zamiast `/sales-rules`. Nazwa produktu: „CRM Bankowości Korporacyjnej”. |
 | D6 | Termin demo nie występuje w żadnym dokumencie | Zakładam okno do 20.12.2026. Daty działają też później (US-54). |
 
 ---
@@ -185,7 +185,7 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
 | US-58 | **Done** — **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo; stabilny baner bez przesuwania układu (§5 pkt 8–9) | P1 |
 | US-59 | **Done** — **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
 | US-60 | **Done** — **Scenariusz 7 i QW-05:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala; deale w EUR z przeliczeniem w analityce | P1 |
-| US-61 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka; AI nie proponuje produktów, które klient ma); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
+| US-61 | **Done** — **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka; AI nie proponuje produktów, które klient ma); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
 | US-62+ | P2: nagłówek Customer 360 Lite (REGON, KRS, grupa, KYC); kwalifikacja leada; bramki w innych lejkach; statusy cancelled/deferred (§4.2 specyfikacji); zakładka „Raporty” (5 raportów); ekran Audyt; raport importu; pulpit adopcji (s.72) | P2 |
 | — | P3: widok grupy kapitałowej, przepływ wieloetapowy z SLA, panel statusu integracji, @wzmianki (QW-20 Should) | P3 |
 

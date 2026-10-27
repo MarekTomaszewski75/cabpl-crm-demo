@@ -247,11 +247,11 @@ export function DealForm({
         note: created.name,
         occurredAt: created.createdAt,
       })
-      toast.success("Deal został dodany")
+      toast.success("Szansa została dodana")
       onSuccess(created)
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Nie udało się zapisać deala"
+        error instanceof Error ? error.message : "Nie udało się zapisać szansy"
       toast.error(message)
     }
   }
@@ -439,7 +439,7 @@ export function DealForm({
         </Select>
       </Field>
       <Field>
-        <FieldLabel htmlFor="deal-type">Typ dealu</FieldLabel>
+        <FieldLabel htmlFor="deal-type">Typ szansy</FieldLabel>
         <Select value={dealType ?? DEAL_TYPE_NONE} onValueChange={(v) => setDealType(v === DEAL_TYPE_NONE ? null : (v as DealType))}>
           <SelectTrigger id="deal-type" className="w-full"><SelectValue placeholder="Brak" /></SelectTrigger>
           <SelectContent><SelectGroup><SelectItem value={DEAL_TYPE_NONE}>Brak</SelectItem>{DEAL_TYPE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectGroup></SelectContent>

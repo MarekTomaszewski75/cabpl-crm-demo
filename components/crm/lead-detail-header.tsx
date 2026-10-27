@@ -76,7 +76,7 @@ export function LeadDetailHeader({
             <UserPlusIcon />
           </div>
           <div className="flex min-w-0 flex-col gap-1">
-            <h1 className="truncate text-xl font-semibold tracking-tight">
+            <h1 className="text-xl font-semibold tracking-tight sm:truncate">
               {lead.name}
             </h1>
             {owner ? (
@@ -142,7 +142,7 @@ export function LeadDetailHeader({
             <AlertDialogDescription>
               Lead „{lead.name}” zostanie trwale usunięty.
               {showDealWarning
-                ? " Powiązany deal pozostanie w pipeline — lead zostanie odłączony."
+                ? " Powiązana szansa pozostanie w lejku — lead zostanie odłączony."
                 : null}
             </AlertDialogDescription>
           </AlertDialogHeader>

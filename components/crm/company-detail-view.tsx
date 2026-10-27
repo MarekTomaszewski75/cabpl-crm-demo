@@ -231,7 +231,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <TabsList>
                 <TabsTrigger value="leady">Leady</TabsTrigger>
-                <TabsTrigger value="deale">Deale</TabsTrigger>
+                <TabsTrigger value="deale">Szanse</TabsTrigger>
                 <TabsTrigger value="produkty">Produkty</TabsTrigger>
                 <TabsTrigger value="rachunki">Rachunki</TabsTrigger>
                 <TabsTrigger value="kontakty">Kontakty</TabsTrigger>
@@ -257,7 +257,7 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
                   trigger={
                     <Button>
                       <PlusIcon />
-                      Nowy deal
+                      Nowa szansa
                     </Button>
                   }
                 />

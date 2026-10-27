@@ -11,7 +11,7 @@ const SERIES = [
   },
   {
     key: "wonDealsCount",
-    label: "Wygrane deale",
+    label: "Wygrane szanse",
     color: "var(--chart-2)",
   },
 ] as const
