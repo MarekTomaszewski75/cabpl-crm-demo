@@ -2,7 +2,7 @@ import type { AnalyticsDomainTag, AnalyticsTimePeriod } from "@/types/analytics"
 
 export const ANALYTICS_DOMAIN_LABELS: Record<AnalyticsDomainTag, string> = {
   leads: "Leady",
-  deals: "Deale",
+  deals: "Szanse",
   tasks: "Zadania",
   plan: "Plan",
   team: "Zespół",

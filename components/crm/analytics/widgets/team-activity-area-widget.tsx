@@ -6,7 +6,7 @@ import type { TeamActivityTimelineRow } from "@/lib/analytics/metrics"
 
 const SERIES = [
   { key: "leads", label: "Nowe leady", stackId: "activity" },
-  { key: "dealsWon", label: "Wygrane deale", stackId: "activity" },
+  { key: "dealsWon", label: "Wygrane szanse", stackId: "activity" },
   { key: "tasksDone", label: "Zamknięte zadania", stackId: "activity" },
 ] as const
 

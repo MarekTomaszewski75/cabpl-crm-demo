@@ -119,18 +119,18 @@ function ManagerHeroRow({
         }
       />
       <HeroKpiCard
-        title="Wygrane deale (kwota)"
+        title="Wygrane szanse (kwota)"
         description={`Suma wygranych · ${timeLabel.toLowerCase()}`}
         value={formatCurrencyPln(wonAmount || wonFromAdvisors)}
       />
       <HeroKpiCard
         title="Otwarty lejek (kwota)"
-        description="Deale w toku w scope"
+        description="Szanse w toku w Twoim zakresie"
         value={formatCurrencyPln(openPipeline)}
       />
       <HeroKpiCard
         title="Zadania po terminie"
-        description="Zespół w scope"
+        description="Zespół w Twoim zakresie"
         value={String(overdueTasks)}
         badge={
           overdueTasks > 0 ? (
@@ -175,14 +175,14 @@ function ExecutiveHeroRow({
         }
       />
       <HeroKpiCard
-        title="Forecast YTD"
-        description="Scenariusz bazowy"
+        title="Prognoza YTD"
+        description="Wygrane + lejek × prawdopodobieństwo"
         value={formatCurrencyPln(totals.forecastPln)}
         badge={<Badge variant="secondary">{timeLabel}</Badge>}
       />
       <HeroKpiCard
-        title="Otwarty pipeline"
-        description="Bank-wide w scope"
+        title="Otwarty lejek"
+        description="Cały bank w Twoim zakresie"
         value={formatCurrencyPln(openPipeline)}
       />
     </>

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { BriefcaseIcon, UserPlusIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { formatDealAmount } from "@/lib/crm/currency"
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ import {
   getDealsRequiringAttention,
   getLeadsRequiringAttention,
 } from "@/lib/crm/today-pipeline-summary"
-import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDatePl } from "@/lib/format/pl"
 import type { Client, Deal, Lead, LeadActivity } from "@/types/crm"
 
 const MAX_ITEMS = 5
@@ -60,7 +61,7 @@ export function TodayPipelineSummary({
         <CardHeader>
           <CardTitle className="flex flex-wrap items-center gap-2">
             <BriefcaseIcon className="text-primary" />
-            Deale wymagające uwagi
+            Szanse wymagające uwagi
             <Badge variant="secondary">{dealsAttention.length}</Badge>
           </CardTitle>
           <CardDescription>
@@ -74,9 +75,9 @@ export function TodayPipelineSummary({
                 <EmptyMedia variant="icon">
                   <BriefcaseIcon />
                 </EmptyMedia>
-                <EmptyTitle>Brak pilnych deali</EmptyTitle>
+                <EmptyTitle>Brak pilnych szans</EmptyTitle>
                 <EmptyDescription>
-                  Żaden deal w ostatnich etapach nie ma terminu w najbliższym
+                  Żadna szansa w ostatnich etapach nie ma terminu w najbliższym
                   tygodniu.
                 </EmptyDescription>
               </EmptyHeader>
@@ -113,7 +114,7 @@ export function TodayPipelineSummary({
                       ) : null}
                       {deal.amount != null ? (
                         <span className="tabular-nums">
-                          {formatCurrencyPln(deal.amount)}
+                          {formatDealAmount(deal)}
                         </span>
                       ) : null}
                     </div>

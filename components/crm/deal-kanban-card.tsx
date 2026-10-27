@@ -24,11 +24,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { formatDealAmount } from "@/lib/crm/currency"
 import { DEAL_SOURCE_LABELS, isTerminalDealStatus } from "@/lib/crm/deal-labels"
 import { getDealKanbanThemeForStatus } from "@/lib/crm/deal-kanban"
 import type { DealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
-import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDatePl } from "@/lib/format/pl"
 import { cn } from "@/lib/utils"
 import type { Client, DemoUser, Deal, DealStatus, Product } from "@/types/crm"
 
@@ -77,7 +78,7 @@ export function DealKanbanCard({
         {!dragDisabled ? (
           <KanbanItemHandle
             className="mt-0.5 shrink-0 rounded-sm p-0.5 text-muted-foreground hover:bg-muted"
-            aria-label="Przeciągnij deal"
+            aria-label="Przeciągnij szansę"
             onClick={(event) => event.stopPropagation()}
             onDoubleClick={(event) => event.stopPropagation()}
           >
@@ -95,7 +96,7 @@ export function DealKanbanCard({
                   variant="ghost"
                   size="icon-sm"
                   className="shrink-0"
-                  aria-label="Menu deala"
+                  aria-label="Menu szansy"
                   onClick={(event) => event.stopPropagation()}
                   onDoubleClick={(event) => event.stopPropagation()}
                 >
@@ -108,7 +109,7 @@ export function DealKanbanCard({
               >
                 <DropdownMenuGroup>
                   <DropdownMenuItem onSelect={handleOpen}>
-                    Otwórz deal
+                    Otwórz szansę
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -135,7 +136,7 @@ export function DealKanbanCard({
         ) : null}
         {deal.amount !== null ? (
           <span className="font-medium tabular-nums text-foreground">
-            {formatCurrencyPln(deal.amount)}
+            {formatDealAmount(deal)}
           </span>
         ) : null}
       </div>

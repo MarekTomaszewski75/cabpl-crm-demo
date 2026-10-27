@@ -19,6 +19,19 @@ export function formatCurrencyPln(value: number) {
   return currencyFormatter.format(value)
 }
 
+const compactCurrencyFormatter = new Intl.NumberFormat("pl-PL", {
+  style: "currency",
+  currency: "PLN",
+  notation: "compact",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 1,
+})
+
+/** Kwoty w tabelach zarządczych — np. „446,9 mln zł”, „950 tys. zł” (US-59). */
+export function formatCurrencyPlnCompact(value: number) {
+  return compactCurrencyFormatter.format(value)
+}
+
 export function formatCurrency(
   value: number,
   currency: string,
@@ -43,6 +56,21 @@ export function formatDatePl(value: string | Date) {
 export function formatTimePl(value: string | Date) {
   const date = typeof value === "string" ? new Date(value) : value
   return timeFormatter.format(date)
+}
+
+/** Odmiana rzeczownika po liczebniku: 1 prospekt, 2 prospekty, 5 prospektów. */
+export function pluralPl(
+  count: number,
+  one: string,
+  few: string,
+  many: string,
+): string {
+  const abs = Math.abs(count)
+  if (abs === 1) return one
+  const lastTwo = abs % 100
+  const last = abs % 10
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return few
+  return many
 }
 
 /** Prosty czas względny PL — np. „2 godz. temu”, „za 3 dni”. */

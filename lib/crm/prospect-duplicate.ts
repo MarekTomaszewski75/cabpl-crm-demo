@@ -1,4 +1,4 @@
-import type { Client, Lead } from "@/types/crm"
+import type { Client, DemoUser, Lead } from "@/types/crm"
 
 export type ProspectDuplicate = {
   kind: "firma" | "lead"
@@ -21,6 +21,21 @@ export function formatNipPl(value: string): string {
   const digits = normalizeNip(value)
   if (digits.length !== 10) return value.trim()
   return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 8)}-${digits.slice(8)}`
+}
+
+/** Opis dopasowań do okna „Możliwy duplikat” (lead, firma, import). */
+export function formatProspectDuplicateSummary(
+  duplicates: readonly ProspectDuplicate[],
+  users: readonly DemoUser[],
+): string {
+  return duplicates
+    .map((match) => {
+      const owner = users.find((user) => user.id === match.ownerId)
+      const nip = match.nip ? `, NIP ${formatNipPl(match.nip)}` : ""
+      const ownerLabel = owner ? `, opiekun ${owner.displayName}` : ""
+      return `${match.kind === "firma" ? "Firma" : "Lead"} „${match.name}” (${match.reasonPl}${nip}${ownerLabel})`
+    })
+    .join(" ")
 }
 
 export function findProspectDuplicates(input: {

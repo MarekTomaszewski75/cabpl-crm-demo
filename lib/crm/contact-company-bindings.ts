@@ -12,7 +12,7 @@ import type {
   Lead,
 } from "@/types/crm"
 
-export const CONTACT_BINDING_DEAL_FALLBACK_LABEL = "Kontakt deala"
+export const CONTACT_BINDING_DEAL_FALLBACK_LABEL = "Kontakt szansy"
 
 export type ContactBindingsData = {
   clients: readonly Client[]

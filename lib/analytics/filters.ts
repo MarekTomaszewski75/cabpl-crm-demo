@@ -1,7 +1,20 @@
+import { getToday } from "@/lib/crm/local-date"
 import type { AnalyticsTimePeriod } from "@/types/analytics"
 
-/** Stała data referencyjna demo (czerwiec 2026). */
-export const DEMO_REFERENCE_DATE = new Date("2026-06-05T12:00:00.000Z")
+/** Data referencyjna analityki — bieżący dzień (seed jest przesuwany na „dziś”, US-54). */
+export function getDemoReferenceDate(): Date {
+  const today = getToday()
+  return new Date(
+    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), 12),
+  )
+}
+
+/** Bieżący kwartał (1–4) względem daty referencyjnej. */
+export function getCurrentQuarter(
+  referenceDate: Date = getDemoReferenceDate(),
+): number {
+  return Math.floor(referenceDate.getUTCMonth() / 3) + 1
+}
 
 export type PeriodBounds = {
   start: Date
@@ -10,7 +23,7 @@ export type PeriodBounds = {
 
 export function getPeriodBounds(
   period: AnalyticsTimePeriod,
-  referenceDate: Date = DEMO_REFERENCE_DATE,
+  referenceDate: Date = getDemoReferenceDate(),
 ): PeriodBounds {
   const year = referenceDate.getUTCFullYear()
   const month = referenceDate.getUTCMonth()
@@ -43,7 +56,7 @@ export function getPeriodBounds(
 export function isDateInPeriod(
   dateValue: string | Date,
   period: AnalyticsTimePeriod,
-  referenceDate: Date = DEMO_REFERENCE_DATE,
+  referenceDate: Date = getDemoReferenceDate(),
 ): boolean {
   const date =
     typeof dateValue === "string" ? new Date(dateValue) : dateValue
@@ -53,7 +66,7 @@ export function isDateInPeriod(
 
 export function isBeforeReferenceDay(
   dateValue: string,
-  referenceDate: Date = DEMO_REFERENCE_DATE,
+  referenceDate: Date = getDemoReferenceDate(),
 ): boolean {
   const date = new Date(dateValue)
   const dayStart = new Date(

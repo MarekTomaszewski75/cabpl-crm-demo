@@ -114,7 +114,7 @@ export function CrmGlobalSearch({ className }: CrmGlobalSearchProps) {
             <SearchIcon />
           </InputGroupAddon>
           <InputGroupText className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
-            Szukaj stron, klientów, deali…
+            Szukaj stron, klientów, szans…
           </InputGroupText>
           <InputGroupAddon align="inline-end" className="hidden lg:flex">
             <kbd className="pointer-events-none rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
@@ -142,7 +142,7 @@ export function CrmGlobalSearch({ className }: CrmGlobalSearchProps) {
       >
         <Command shouldFilter>
           <CommandInput
-            placeholder="Szukaj stron, klientów, deali, leadów, zadań…"
+            placeholder="Szukaj stron, klientów, szans, leadów, zadań…"
             className="text-sm"
           />
           <CommandList>

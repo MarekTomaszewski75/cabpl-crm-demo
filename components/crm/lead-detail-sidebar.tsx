@@ -265,22 +265,6 @@ export function LeadDetailSidebar({
             onSave={(emails) => patch({ emails })}
             disabled={readOnly}
           />
-
-          <InlineEditableField
-            label="Media społecznościowe"
-            value={lead.socialMedia}
-            onSave={(socialMedia) => patch({ socialMedia })}
-          >
-            {(props) => (
-              <Input
-                value={props.value}
-                disabled={readOnly}
-                onChange={(e) => props.onChange(e.target.value)}
-                onBlur={props.onBlur}
-                onKeyDown={props.onKeyDown}
-              />
-            )}
-          </InlineEditableField>
         </CardContent>
       </Card>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { deriveKpiSnapshot } from "@/lib/analytics/kpi-snapshot"
 import { loadSeedData, type DemoDataState } from "@/lib/data/seed"
 import { createNextLeadActivityId } from "@/lib/crm/lead-activity-id"
 import { createNextLeadDocumentId } from "@/lib/crm/lead-document-id"
@@ -12,6 +13,8 @@ import { createNextDealFileId } from "@/lib/crm/deal-file-id"
 import { toast } from "sonner"
 import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
+import { createNextMeetingId } from "@/lib/crm/meeting-id"
+import { canDecideSalesDictionaryChange } from "@/lib/crm/sales-dictionary-rules"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
 import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
 import {
@@ -78,6 +81,7 @@ import type {
   DealLostReason,
   DealStatus,
   DealSystemActivityType,
+  KpiSnapshot,
   Meeting,
   Product,
   ProductCategory,
@@ -118,6 +122,41 @@ function syncContactClientLinks(
   return nextLinks
 }
 
+const ACTIVITY_MEETING_DEFAULT_MS = 60 * 60 * 1000
+
+/** Aktywność „Spotkanie” z firmą trafia też do kalendarza (US-57). */
+function appendMeetingFromActivity(
+  meetings: Meeting[],
+  input: AddCompanyActivityInput,
+  link: {
+    clientId: string | null | undefined
+    leadId?: string
+    opportunityId?: string
+    ownerId: string
+    regionId: string
+  },
+): Meeting[] {
+  if (input.type !== "meeting" || !link.clientId) return meetings
+  const endsAt =
+    input.endsAt ??
+    new Date(
+      new Date(input.occurredAt).getTime() + ACTIVITY_MEETING_DEFAULT_MS,
+    ).toISOString()
+  const meeting: Meeting = {
+    id: createNextMeetingId(meetings),
+    title: input.title,
+    clientId: link.clientId,
+    startsAt: input.occurredAt,
+    endsAt,
+    note: input.note,
+    ownerId: link.ownerId,
+    regionId: link.regionId,
+    ...(link.leadId ? { leadId: link.leadId } : {}),
+    ...(link.opportunityId ? { opportunityId: link.opportunityId } : {}),
+  }
+  return [...meetings, meeting]
+}
+
 function buildCompanyCreatedEvent(
   client: Client,
   user: DemoUser,
@@ -138,6 +177,8 @@ function buildCompanyCreatedEvent(
 }
 
 type DemoDataContextValue = DemoDataState & {
+  /** KPI liczone z planu i deali (US-55). */
+  kpi: KpiSnapshot
   deals: Deal[]
   addDeal: (input: AddDealInput) => Deal
   updateDeal: (
@@ -257,9 +298,11 @@ type DemoDataContextValue = DemoDataState & {
   proposeSalesDictionaryLabel: (
     sourceId: LeadSource,
     proposedLabel: string,
+    justification: string,
     user: DemoUser,
   ) => void
   approveSalesDictionaryLabel: (sourceId: LeadSource, user: DemoUser) => void
+  rejectSalesDictionaryLabel: (sourceId: LeadSource, user: DemoUser) => void
   appendAuditEntry: (input: Omit<AuditEntry, "id">) => void
 }
 
@@ -339,6 +382,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           name: input.name.trim(),
           amount: input.amount,
           currency: input.currency,
+          ...(input.probability != null ? { probability: input.probability } : {}),
           contactId: input.contactId,
           productId: input.productId,
           pipelineCategoryId,
@@ -636,6 +680,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           contactEvents: [...prev.contactEvents, event],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId,
+            ownerId: event.ownerId,
+            regionId,
+          }),
           clients: prev.clients.map((c) =>
             c.id === clientId ? { ...c, lastActivityAt: occurredAt } : c,
           ),
@@ -688,7 +737,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       const deal = prev.opportunities.find((item) => item.id === dealId)
       const regionId = user.regionId ?? deal?.regionId
       if (!regionId) {
-        throw new Error("Użytkownik bez regionu nie może dodać aktywności deala.")
+        throw new Error("Użytkownik bez regionu nie może dodać aktywności szansy.")
       }
       return {
         id: createNextDealActivityId(prev.dealActivities),
@@ -833,11 +882,11 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       options?: { note?: string; occurredAt?: string },
     ) => {
       const titles: Record<DealSystemActivityType, string> = {
-        deal_created: "Utworzono deal",
-        deal_status_changed: "Zmiana statusu deala",
+        deal_created: "Utworzono szansę",
+        deal_status_changed: "Zmiana statusu szansy",
         deal_expected_close_changed: "Zmieniono planowaną datę zamknięcia",
-        deal_won: "Deal wygrany",
-        deal_lost: "Deal utracony",
+        deal_won: "Szansa wygrana",
+        deal_lost: "Szansa utracona",
         deal_note: "Notatka",
         deal_document_added: "Dodano dokument",
         deal_task_created: "Utworzono zadanie",
@@ -900,6 +949,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           dealActivities: [...prev.dealActivities, activity],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId: deal?.clientId,
+            opportunityId: dealId,
+            ownerId: activity.ownerId,
+            regionId,
+          }),
         }
       })
     },
@@ -937,6 +992,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         return {
           ...prev,
           leadActivities: [...prev.leadActivities, activity],
+          meetings: appendMeetingFromActivity(prev.meetings, input, {
+            clientId: lead?.clientId,
+            leadId,
+            ownerId: activity.ownerId,
+            regionId,
+          }),
         }
       })
     },
@@ -1226,6 +1287,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
+          ...(input.repository ? { repository: input.repository } : {}),
           uploadedAt: new Date().toISOString(),
           ownerId: user.id,
           regionId,
@@ -1276,6 +1338,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
+          ...(input.repository ? { repository: input.repository } : {}),
           uploadedAt: new Date().toISOString(),
           ownerId: user.id,
           regionId,
@@ -1326,6 +1389,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           ...(description ? { description } : {}),
           fileSize: input.fileSize,
           mimeType: input.mimeType,
+          ...(input.repository ? { repository: input.repository } : {}),
           uploadedAt: new Date().toISOString(),
           ownerId: user.id,
           regionId,
@@ -1458,7 +1522,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
         id,
         user,
         "deal_won",
-        "Deal wygrany",
+        "Szansa wygrana",
         deal.name,
         now,
       )
@@ -1491,7 +1555,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           id,
           user,
           "deal_lost",
-          "Deal utracony",
+          "Szansa utracona",
           DEAL_LOST_REASON_LABELS[reason],
           now,
         )
@@ -1574,9 +1638,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const proposeSalesDictionaryLabel = React.useCallback(
-    (sourceId: LeadSource, proposedLabel: string, user: DemoUser) => {
+    (
+      sourceId: LeadSource,
+      proposedLabel: string,
+      justification: string,
+      user: DemoUser,
+    ) => {
       const trimmed = proposedLabel.trim()
-      if (!trimmed) return
+      const reason = justification.trim()
+      if (!trimmed || !reason) return
       setState((prev) => {
         const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
         if (!item || item.labelPl === trimmed) return prev
@@ -1586,7 +1656,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           actorUserId: user.id,
           areaPl: "Słownik",
           actionPl: "Zgłoszono zmianę",
-          detailPl: `Źródło „${item.labelPl}” → „${trimmed}” (do zatwierdzenia)`,
+          detailPl: `Źródło: przed „${item.labelPl}”, po „${trimmed}”. Uzasadnienie: ${reason}`,
         }
         return {
           ...prev,
@@ -1595,6 +1665,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
               ? {
                   ...entryItem,
                   proposedLabelPl: trimmed,
+                  proposedByUserId: user.id,
+                  proposedJustificationPl: reason,
                   status: "pending",
                 }
               : entryItem,
@@ -1606,21 +1678,31 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
-  const approveSalesDictionaryLabel = React.useCallback(
-    (sourceId: LeadSource, user: DemoUser) => {
-      if (user.role !== "regional_manager") return
+  const decideSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser, decision: "approve" | "reject") => {
       setState((prev) => {
         const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
-        if (!item || item.status !== "pending" || !item.proposedLabelPl) {
+        if (
+          !item ||
+          item.status !== "pending" ||
+          !item.proposedLabelPl ||
+          !canDecideSalesDictionaryChange(user, item)
+        ) {
           return prev
         }
+        const proposer = prev.users.find(
+          (candidate) => candidate.id === item.proposedByUserId,
+        )
+        const approved = decision === "approve"
         const entry: AuditEntry = {
           id: createNextAuditId(prev.auditLog),
           occurredAt: new Date().toISOString(),
           actorUserId: user.id,
           areaPl: "Słownik",
-          actionPl: "Zatwierdzono zmianę",
-          detailPl: `Źródło „${item.labelPl}” → „${item.proposedLabelPl}”`,
+          actionPl: approved ? "Zatwierdzono zmianę" : "Odrzucono zmianę",
+          detailPl: `Źródło: przed „${item.labelPl}”, po „${
+            approved ? item.proposedLabelPl : item.labelPl
+          }”. Zgłosił(a): ${proposer?.displayName ?? "nieznany użytkownik"}.`,
         }
         return {
           ...prev,
@@ -1628,8 +1710,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
             entryItem.id === sourceId
               ? {
                   ...entryItem,
-                  labelPl: item.proposedLabelPl ?? entryItem.labelPl,
+                  labelPl: approved
+                    ? (item.proposedLabelPl ?? entryItem.labelPl)
+                    : entryItem.labelPl,
                   proposedLabelPl: null,
+                  proposedByUserId: null,
+                  proposedJustificationPl: null,
                   status: "approved",
                 }
               : entryItem,
@@ -1639,6 +1725,18 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       })
     },
     [],
+  )
+
+  const approveSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser) =>
+      decideSalesDictionaryLabel(sourceId, user, "approve"),
+    [decideSalesDictionaryLabel],
+  )
+
+  const rejectSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser) =>
+      decideSalesDictionaryLabel(sourceId, user, "reject"),
+    [decideSalesDictionaryLabel],
   )
 
   const appendAuditEntry = React.useCallback(
@@ -1654,9 +1752,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const kpi = React.useMemo(
+    () => deriveKpiSnapshot(state.kpiPlan, state.opportunities, state.clients),
+    [state.kpiPlan, state.opportunities, state.clients],
+  )
+
   const value = React.useMemo(
     () => ({
       ...state,
+      kpi,
       deals: state.opportunities,
       addDeal,
       updateDeal,
@@ -1704,10 +1808,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       removeDepartment,
       proposeSalesDictionaryLabel,
       approveSalesDictionaryLabel,
+      rejectSalesDictionaryLabel,
       appendAuditEntry,
     }),
     [
       state,
+      kpi,
       addDeal,
       updateDeal,
       winDeal,
@@ -1754,6 +1860,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       removeDepartment,
       proposeSalesDictionaryLabel,
       approveSalesDictionaryLabel,
+      rejectSalesDictionaryLabel,
       appendAuditEntry,
     ],
   )

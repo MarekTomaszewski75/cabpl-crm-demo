@@ -1,4 +1,9 @@
-export type UserRole = "advisor" | "regional_manager" | "executive"
+export type UserRole =
+  | "advisor"
+  | "regional_manager"
+  | "executive"
+  /** Słowniki, reguły i audyt — bez dostępu do danych klientów (US-58). */
+  | "business_admin"
 
 export type OpportunityStage =
   | "lead"
@@ -40,12 +45,12 @@ export type DealStatus =
 export type DealCurrency = "PLN" | "EUR" | "USD" | "CHF" | "GBP"
 
 export type DealSource =
-  | "phone_call"
-  | "link"
-  | "email"
-  | "advertising"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type DealType =
   | "unknown"
@@ -65,12 +70,12 @@ export type DealLostReason =
 export type LeadStatus = "new" | "in_progress" | "won" | "lost"
 
 export type LeadSource =
-  | "phone_call"
-  | "link"
-  | "email"
-  | "advertising"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type LeadType =
   | "unknown"
@@ -121,21 +126,18 @@ export interface LeadActivity {
 export type TaskPriority = "low" | "medium" | "high"
 
 export type CompanySource =
-  | "phone_call"
-  | "link"
-  | "email"
+  | "rm_initiative"
+  | "client_referral"
+  | "ca_group"
   | "partner"
-  | "recommendation"
+  | "industry_event"
+  | "client_request"
 
 export type CompanyType =
   | "unknown"
   | "active_client"
   | "potential_client"
   | "former_client"
-  | "partner"
-  | "contractor"
-  | "competitor"
-  | "spam"
 
 export type ContactEventKind = "channel" | "system" | "note"
 
@@ -143,7 +145,7 @@ export type ChannelContactEventType =
   | "activity"
   | "phone"
   | "meeting"
-  | "chat"
+  | "video_call"
   | "email"
 
 export type CompanyActivityPriority =
@@ -157,6 +159,8 @@ export type AddCompanyActivityInput = {
   title: string
   type: ChannelContactEventType
   occurredAt: string
+  /** Koniec — używany, gdy aktywność „Spotkanie” trafia do kalendarza (US-57). */
+  endsAt?: string
   note: string
   priority?: CompanyActivityPriority
   responsibleUserId?: string | null
@@ -185,7 +189,21 @@ export interface DemoUser {
   role: UserRole
   roleLabelPl: string
   regionId: string | null
+  /** Zespół sprzedażowy RM w `data/sales-structure.json` (US-59). */
+  teamId?: string
   scopeDescriptionPl: string
+}
+
+/** Poziomy struktury sprzedaży: Pion → Departament → Region → Zespół (→ RM = użytkownik). */
+export type SalesOrgLevel = "division" | "department" | "region" | "team"
+
+export interface SalesOrgUnit {
+  id: string
+  name: string
+  level: SalesOrgLevel
+  parentId: string | null
+  /** Dla poziomu „region” — powiązanie z `regionId` encji i planem w `kpi.json`. */
+  regionId?: string
 }
 
 export interface CrmContact {
@@ -301,6 +319,8 @@ export type AddDealInput = {
   dealType: DealType | null
   expectedCloseDate?: string
   bankAccountId?: string | null
+  /** Wybierane przez opiekuna z listy (QW-05, US-60). */
+  probability?: number
   ownerId: string
   regionId: string
 }
@@ -367,6 +387,9 @@ export interface SalesDictionaryItem {
   id: LeadSource
   labelPl: string
   proposedLabelPl: string | null
+  /** Autor zgłoszenia — nie może go zatwierdzić (zasada czterech oczu, US-58). */
+  proposedByUserId: string | null
+  proposedJustificationPl: string | null
   status: SalesDictionaryStatus
 }
 
@@ -442,6 +465,15 @@ export type AddClientDocumentInput = {
   name: string
 }
 
+/** Repozytoria dokumentów Banku — CRM trzyma tylko odnośnik i metadane (US-60, §6.2 specyfikacji). */
+export type DocumentRepositoryId = "aida" | "sharepoint" | "drive_s" | "case_pro"
+
+export interface DocumentRepositoryLink {
+  repositoryId: DocumentRepositoryId
+  /** Sygnatura lub ścieżka dokumentu w repozytorium. */
+  externalRef: string
+}
+
 export interface ClientFile extends ScopedEntity {
   id: string
   clientId: string
@@ -452,6 +484,8 @@ export interface ClientFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -461,6 +495,7 @@ export type AddClientFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface LeadFile extends ScopedEntity {
@@ -471,6 +506,8 @@ export interface LeadFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -480,6 +517,7 @@ export type AddLeadFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface DealFile extends ScopedEntity {
@@ -490,6 +528,8 @@ export interface DealFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -499,6 +539,7 @@ export type AddDealFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface ContactEvent extends ScopedEntity {
@@ -550,6 +591,18 @@ export interface KpiMonthlyTrendRow {
   forecastPln: number
   forecastOptimisticPln: number
   forecastPessimisticPln: number
+}
+
+/** Roczny plan sprzedaży z `data/kpi.json` — realizacja i prognoza liczone z deali (US-55). */
+export interface KpiPlanSeed {
+  monthlyPlan: { monthLabel: string; quarter: number; planPln: number }[]
+  byRegion: { regionId: string; regionName: string; planPln: number }[]
+  bySegment: { segmentId: string; segmentName: string; planPln: number }[]
+  byCategory: {
+    pipelineCategoryId: string
+    categoryName: string
+    planPln: number
+  }[]
 }
 
 export interface KpiSnapshot {
@@ -624,6 +677,7 @@ export const USER_ROLE_LABELS: Record<UserRole, string> = {
   advisor: "Doradca korporacyjny",
   regional_manager: "Regionalny menedżer",
   executive: "Członek Zarządu",
+  business_admin: "Administrator biznesowy",
 }
 
 export const EMPLOYEE_STATUS_LABELS: Record<EmployeeStatus, string> = {

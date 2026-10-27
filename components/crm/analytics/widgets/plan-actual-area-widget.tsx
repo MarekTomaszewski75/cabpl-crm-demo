@@ -14,7 +14,7 @@ function formatAxisPln(value: number) {
 const SERIES = [
   { key: "planPln", label: "Plan", color: "var(--chart-5)" },
   { key: "actualPln", label: "Realizacja", color: "var(--chart-2)" },
-  { key: "forecastPln", label: "Forecast", color: "var(--chart-1)" },
+  { key: "forecastPln", label: "Prognoza", color: "var(--chart-1)" },
 ] as const
 
 type PlanActualAreaWidgetProps = {

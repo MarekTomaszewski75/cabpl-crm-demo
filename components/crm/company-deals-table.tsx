@@ -55,6 +55,7 @@ import type {
   Product,
   BankAccount,
 } from "@/types/crm"
+import { pluralPl } from "@/lib/format/pl"
 
 type CompanyDealsTableProps = {
   deals: Deal[]
@@ -327,22 +328,20 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
 
   const resultCountLabel = React.useMemo(() => {
     const n = filteredDeals.length
-    if (n === 1) return "1 wynik"
-    if (n >= 2 && n <= 4) return `${n} wyniki`
-    return `${n} wyników`
+    return `${n} ${pluralPl(n, "wynik", "wyniki", "wyników")}`
   }, [filteredDeals.length])
 
   return (
     <Card size="sm" id="company-deals-section">
       <CardHeader className="flex flex-col gap-3 pb-2">
-        <CardTitle className="text-base">Deale</CardTitle>
+        <CardTitle className="text-base">Szanse</CardTitle>
         <InputGroup className="max-w-md">
           <InputGroupInput
             type="search"
-            placeholder="Szukaj deali"
+            placeholder="Szukaj szans"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            aria-label="Szukaj deali"
+            aria-label="Szukaj szans"
           />
           <InputGroupAddon>
             <SearchIcon />
@@ -380,7 +379,7 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
               />
             ) : null}
             <DataTableFacetedFilter
-              title="Typ deala"
+              title="Typ szansy"
               options={dealTypeFacetedOptions}
               selectedValues={dealTypeFilters}
               onSelectedValuesChange={setDealTypeFilters}
@@ -400,9 +399,9 @@ export function CompanyDealsTable({ deals }: CompanyDealsTableProps) {
               <EmptyMedia variant="icon">
                 <BriefcaseIcon />
               </EmptyMedia>
-              <EmptyTitle>Brak deali</EmptyTitle>
+              <EmptyTitle>Brak szans</EmptyTitle>
               <EmptyDescription>
-                Brak deali powiązanych z tą firmą.
+                Brak szans powiązanych z tą firmą.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

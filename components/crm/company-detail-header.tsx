@@ -75,7 +75,7 @@ export function CompanyDetailHeader({
             <Building2Icon />
           </div>
           <div className="flex min-w-0 flex-col gap-1">
-            <h1 className="truncate text-xl font-semibold tracking-tight">
+            <h1 className="text-xl font-semibold tracking-tight sm:truncate">
               {client.name}
             </h1>
             {owner ? (
@@ -126,7 +126,7 @@ export function CompanyDetailHeader({
             <AlertDialogDescription>
               Firma „{client.name}” zostanie trwale usunięta.
               {relatedDeals.length > 0
-                ? ` Powiązane deale (${relatedDeals.length}) pozostaną w pipeline — zostaną odłączone od firmy.`
+                ? ` Powiązane szanse (${relatedDeals.length}) pozostaną w lejku — zostaną odłączone od firmy.`
                 : null}
               {openTasks.length > 0
                 ? ` Otwarte zadania (${openTasks.length}) pozostaną bez przypisania do firmy.`

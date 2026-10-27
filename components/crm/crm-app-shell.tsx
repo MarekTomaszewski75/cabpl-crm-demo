@@ -152,7 +152,7 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
         <SidebarHeader className="gap-3 p-4">
           <CreditAgricoleLogo />
           <p className="text-xs leading-snug text-sidebar-foreground/90">
-            CRM Korporacyjny — Demo
+            CRM Bankowości Korporacyjnej
           </p>
         </SidebarHeader>
         <SidebarContent>

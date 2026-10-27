@@ -17,7 +17,7 @@
     "type": "phone",
     "occurredAt": "2026-04-08T14:00:00.000Z",
     "titlePl": "Połączenie",
-    "note": "Ustalono zakres i przekazano sprawę do deala. Historia zostaje przy leadzie.",
+    "note": "Ustalono zakres i przekazano sprawę do szansy. Historia zostaje przy leadzie.",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -72,7 +72,7 @@
     "type": "lead_note",
     "occurredAt": "2026-05-10T13:00:00.000Z",
     "titlePl": "Notatka",
-    "note": "Klient prosi o przypomnienie w czerwcu.",
+    "note": "Klient prosi o przypomnienie za miesiąc.",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -347,7 +347,7 @@
     "type": "lead_won",
     "occurredAt": "2026-04-02T18:00:00.000Z",
     "titlePl": "Lead wygrany",
-    "note": "Utworzono deal w pipeline.",
+    "note": "Utworzono szansę w lejku.",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
   },
@@ -466,7 +466,7 @@
     "leadId": "lead-004",
     "kind": "system",
     "type": "lead_task_completed",
-    "occurredAt": "2026-06-07T16:00:00.000Z",
+    "occurredAt": "2026-06-04T16:00:00.000Z",
     "titlePl": "Zadanie wykonane",
     "note": "Weryfikacja zabezpieczeń inwestycji",
     "ownerId": "user-piotr",

@@ -1,8 +1,8 @@
 import {
   CalendarIcon,
   MailIcon,
-  MessageSquareIcon,
   PhoneIcon,
+  VideoIcon,
   ZapIcon,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -29,7 +29,7 @@ const EVENT_ICONS: Record<ChannelContactEventType, LucideIcon> = {
   activity: ZapIcon,
   phone: PhoneIcon,
   meeting: CalendarIcon,
-  chat: MessageSquareIcon,
+  video_call: VideoIcon,
   email: MailIcon,
 }
 

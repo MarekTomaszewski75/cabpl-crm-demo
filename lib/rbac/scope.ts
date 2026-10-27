@@ -7,6 +7,7 @@ import type { DemoUser, ScopedEntity } from "@/types/crm"
  * - advisor: `entity.ownerId === user.id`
  * - regional_manager: `entity.regionId === user.regionId` (wymaga `user.regionId`)
  * - executive: pełny dostęp
+ * - business_admin: brak dostępu do danych klientów (need-to-know) — tylko słowniki i audyt
  *
  * Przykłady na seed `data/clients.json` (28 klientów):
  * - user-anna (advisor) → 14 rekordów (m.in. client-001, 002, 005)
@@ -23,6 +24,8 @@ function isInScope(entity: ScopedEntity, user: DemoUser): boolean {
       return user.regionId !== null && entity.regionId === user.regionId
     case "advisor":
       return entity.ownerId === user.id
+    case "business_admin":
+      return false
     default: {
       const _exhaustive: never = user.role
       return _exhaustive

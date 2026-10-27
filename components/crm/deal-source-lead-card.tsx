@@ -30,7 +30,7 @@ export function DealSourceLeadCard({ dealId }: { dealId: string }) {
         <CardTitle>Powstał z leada</CardTitle>
         <CardDescription>
           Historia leada zostaje przy rekordzie źródłowym i jest widoczna na
-          dealu.
+          szansie.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">

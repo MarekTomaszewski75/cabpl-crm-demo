@@ -131,7 +131,7 @@
     "id": "meeting-013",
     "title": "Spotkanie — UrbanBud",
     "clientId": "client-013",
-    "startsAt": "2026-06-03T9:00:00.000Z",
+    "startsAt": "2026-06-03T09:00:00.000Z",
     "endsAt": "2026-06-03T12:30:00.000Z",
     "note": "Siedziba klienta, Warszawa",
     "ownerId": "user-anna",
@@ -415,7 +415,7 @@
   },
   {
     "id": "meeting-mgr-001",
-    "title": "Przegląd pipeline — zespół Mazowsze",
+    "title": "Przegląd lejka — zespół Mazowsze",
     "clientId": "client-002",
     "startsAt": "2026-06-04T08:00:00.000Z",
     "endsAt": "2026-06-04T09:00:00.000Z",

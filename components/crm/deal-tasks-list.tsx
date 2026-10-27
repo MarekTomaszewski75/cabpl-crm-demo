@@ -29,7 +29,7 @@ function DealTasksListBody({ tasks }: { tasks: Task[] }) {
         <EmptyHeader>
           <EmptyTitle>Brak zadań</EmptyTitle>
           <EmptyDescription>
-            Brak zadań powiązanych z tym dealem.
+            Brak zadań powiązanych z tą szansą.
           </EmptyDescription>
         </EmptyHeader>
       </Empty>

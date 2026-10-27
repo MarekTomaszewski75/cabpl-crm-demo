@@ -54,7 +54,7 @@ export function DealStatusBar({
   return (
     <div
       className="flex flex-col gap-3 rounded-lg border border-border bg-card px-3 py-3 sm:flex-row sm:items-center"
-      aria-label="Status deala"
+      aria-label="Status szansy"
     >
       <Stepper
         key={deal.status}

@@ -11,8 +11,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useSession } from "@/lib/auth/demo-session"
+import { formatDealAmount } from "@/lib/crm/currency"
 import { getScopedDealEngagementCounts } from "@/lib/crm/deal-engagement-counts"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
+import { DEAL_PROBABILITY_OPTIONS, formatDealProbability } from "@/lib/crm/deal-probability"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
 import {
@@ -111,7 +113,7 @@ export function DealDetailSidebar({
     <div className="flex w-full max-w-sm shrink-0 flex-col gap-4">
       <Card size="sm">
         <CardHeader>
-          <CardTitle className="text-base">O dealu</CardTitle>
+          <CardTitle className="text-base">O szansie</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
@@ -168,8 +170,32 @@ export function DealDetailSidebar({
               />
             )}
           </div>
-          <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
+          <InlineEditableField label="Kwota" value={deal.amount?.toString() ?? ""} displayValue={formatDealAmount(deal)} onSave={(v) => updateDeal(deal.id, { amount: v ? Number(v) : null })}>{(props) => <Input type="number" value={props.value} disabled={readOnly} onChange={(e) => props.onChange(e.target.value)} onBlur={props.onBlur} onKeyDown={props.onKeyDown} />}</InlineEditableField>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Waluta</span><Select value={deal.currency} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { currency: v as DealCurrency })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Prawdopodobieństwo wygranej</span>
+            {readOnly || deal.status === "won" || deal.status === "lost" ? (
+              <span className="text-sm">{formatDealProbability(deal.probability)}</span>
+            ) : (
+              <Select
+                value={deal.probability != null ? String(deal.probability) : undefined}
+                onValueChange={(v) => updateDeal(deal.id, { probability: Number(v) })}
+              >
+                <SelectTrigger aria-label="Prawdopodobieństwo wygranej">
+                  <SelectValue placeholder="Wybierz" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {DEAL_PROBABILITY_OPTIONS.map((value) => (
+                      <SelectItem key={value} value={String(value)}>
+                        {formatDealProbability(value)}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          </div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Kontakty</span><ContactComboboxField value={deal.contactId ? [deal.contactId] : []} onChange={(ids) => updateDeal(deal.id, { contactId: ids[0] ?? null })} disabled={readOnly} /></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Firmy</span><Select value={deal.clientId ?? "__none__"} disabled={readOnly} onValueChange={(v) => {
             const nextClientId = v === "__none__" ? null : v
@@ -198,7 +224,7 @@ export function DealDetailSidebar({
         <CardContent className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Komentarze</span><Textarea value={deal.comments} disabled={readOnly} onChange={(e) => updateDeal(deal.id, { comments: e.target.value })} /></div>
           <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Źródło</span><Select value={deal.source ?? "recommendation"} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { source: v as DealSource })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectGroup>{DEAL_SOURCE_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
-          <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Typ dealu</span><Select value={deal.dealType ?? DEAL_TYPE_NONE} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { dealType: v === DEAL_TYPE_NONE ? null : (v as DealType) })}><SelectTrigger><SelectValue placeholder="Brak" /></SelectTrigger><SelectContent><SelectGroup><SelectItem value={DEAL_TYPE_NONE}>Brak</SelectItem>{DEAL_TYPE_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
+          <div className="flex flex-col gap-1.5"><span className="text-xs text-muted-foreground">Typ szansy</span><Select value={deal.dealType ?? DEAL_TYPE_NONE} disabled={readOnly} onValueChange={(v) => updateDeal(deal.id, { dealType: v === DEAL_TYPE_NONE ? null : (v as DealType) })}><SelectTrigger><SelectValue placeholder="Brak" /></SelectTrigger><SelectContent><SelectGroup><SelectItem value={DEAL_TYPE_NONE}>Brak</SelectItem>{DEAL_TYPE_OPTIONS.map((opt) => <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>)}</SelectGroup></SelectContent></Select></div>
         </CardContent>
       </Card>
       <Card size="sm">

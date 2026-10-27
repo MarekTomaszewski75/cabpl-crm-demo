@@ -31,13 +31,13 @@ const KPI_VISUALS: Record<string, KpiVisualConfig> = {
     icon: CheckCircle2Icon,
     iconWrap: "bg-primary/15 text-primary",
     sparkColor: "var(--chart-2)",
-    caption: "Deale wygrane w okresie",
+    caption: "Szanse wygrane w okresie",
   },
   "open-deals": {
     icon: BriefcaseIcon,
     iconWrap: "bg-chart-3/15 text-chart-3",
     sparkColor: "var(--chart-3)",
-    caption: "Aktywne deale w okresie",
+    caption: "Aktywne szanse w okresie",
   },
   "overdue-tasks": {
     icon: AlertTriangleIcon,

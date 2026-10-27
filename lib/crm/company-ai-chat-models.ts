@@ -10,38 +10,41 @@ export type DemoChatModel = {
   description: string
 }
 
+/** Etykieta grupy: modele OpenAI w Azure po zatwierdzeniu przez Bank (TR-12, oferta s. 86). */
+export const DEMO_CHAT_MODEL_GROUP = "Azure OpenAI · po zatwierdzeniu przez Bank"
+
 export const DEMO_CHAT_MODELS: DemoChatModel[] = [
   {
     id: "cabpl-assistant",
     name: "Asystent CRM",
-    provider: "synthetic",
+    provider: "azure-openai",
     maxTokens: 32_000,
-    group: "CA On-premise (demo)",
-    description: "Ogólna analiza firmy i rekomendacje",
+    group: DEMO_CHAT_MODEL_GROUP,
+    description: "Ogólna analiza firmy i kolejne kroki",
   },
   {
-    id: "cabpl-risk",
-    name: "Analityk ryzyka",
-    provider: "synthetic",
+    id: "cabpl-signals",
+    name: "Sygnały w relacji",
+    provider: "azure-openai",
     maxTokens: 16_000,
-    group: "CA On-premise (demo)",
-    description: "Scoring, płatności i sygnały ostrzegawcze",
+    group: DEMO_CHAT_MODEL_GROUP,
+    description: "Fakty z CRM do weryfikacji przez opiekuna, bez oceny ryzyka",
   },
   {
     id: "cabpl-products",
-    name: "Doradca produktowy",
-    provider: "synthetic",
+    name: "Tematy produktowe",
+    provider: "azure-openai",
     maxTokens: 24_000,
-    group: "CA On-premise (demo)",
-    description: "Cross-sell i dopasowanie oferty bankowej",
+    group: DEMO_CHAT_MODEL_GROUP,
+    description: "Produkty z katalogu, których firma jeszcze nie ma",
   },
   {
     id: "cabpl-pipeline",
-    name: "Coach pipeline",
-    provider: "synthetic",
+    name: "Coach sprzedaży",
+    provider: "azure-openai",
     maxTokens: 20_000,
-    group: "CA On-premise (demo)",
-    description: "Deale, szanse i kolejne kroki sprzedaży",
+    group: DEMO_CHAT_MODEL_GROUP,
+    description: "Szanse w lejku i kolejne kroki sprzedaży",
   },
 ]
 

@@ -23,7 +23,13 @@ import productsSeed from "@/data/products.json"
 import clientBankingProductsSeed from "@/data/client-banking-products.json"
 import bankAccountsSeed from "@/data/bank-accounts.json"
 import auditLogSeed from "@/data/audit-log.json"
+import salesStructureSeed from "@/data/sales-structure.json"
 import { LEAD_SOURCE_LABELS } from "@/lib/crm/lead-labels"
+import {
+  moveMeetingsOffWeekend,
+  moveTasksOffWeekend,
+  rebaseSeedDates,
+} from "@/lib/data/seed-dates"
 import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineSteps,
@@ -42,7 +48,7 @@ import type {
   DemoUser,
   Department,
   Employee,
-  KpiSnapshot,
+  KpiPlanSeed,
   Lead,
   LeadActivity,
   LeadDocument,
@@ -62,15 +68,16 @@ import type {
   AuditEntry,
   LeadSource,
   SalesDictionaryItem,
+  SalesOrgUnit,
 } from "@/types/crm"
 
 const DEAL_SOURCES: readonly DealSource[] = [
-  "phone_call",
-  "link",
-  "email",
-  "advertising",
+  "rm_initiative",
+  "client_request",
+  "client_referral",
+  "ca_group",
   "partner",
-  "recommendation",
+  "industry_event",
 ]
 
 function normalizeDealSource(value: unknown): DealSource {
@@ -80,7 +87,7 @@ function normalizeDealSource(value: unknown): DealSource {
   ) {
     return value as DealSource
   }
-  return "recommendation"
+  return "client_referral"
 }
 
 function normalizeEntityFile<
@@ -282,7 +289,17 @@ function normalizeDeals(
   })
 }
 
+/** Seed z datami przesuniętymi na bieżący kalendarz (US-54). */
 export function loadSeedData() {
+  const seed = rebaseSeedDates(buildSeedData())
+  return {
+    ...seed,
+    tasks: moveTasksOffWeekend(seed.tasks),
+    meetings: moveMeetingsOffWeekend(seed.meetings),
+  }
+}
+
+function buildSeedData() {
   const bankAccounts = bankAccountsSeed as BankAccount[]
   return {
     users: usersSeed as DemoUser[],
@@ -304,7 +321,7 @@ export function loadSeedData() {
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],
-    kpi: kpiSeed as KpiSnapshot,
+    kpiPlan: kpiSeed as KpiPlanSeed,
     productCategories: productCategoriesSeed as ProductCategory[],
     products: productsSeed as Product[],
     clientBankingProducts: clientBankingProductsSeed as ClientBankingProduct[],
@@ -316,10 +333,13 @@ export function loadSeedData() {
         id,
         labelPl,
         proposedLabelPl: null,
+        proposedByUserId: null,
+        proposedJustificationPl: null,
         status: "approved",
       }),
     ),
     auditLog: auditLogSeed as AuditEntry[],
+    salesStructure: salesStructureSeed as SalesOrgUnit[],
   }
 }
 

@@ -7,6 +7,7 @@ import {
   type CompanyEngagementData,
 } from "@/lib/crm/company-engagement-counts"
 import { isTerminalDealStatus } from "@/lib/crm/deal-pipeline"
+import { filterByScope } from "@/lib/rbac/scope"
 import {
   getChatSuggestions,
   matchChatIntent,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/crm/company-ai-chat-templates"
 import type {
   Client,
+  ClientBankingProduct,
   Deal,
   DemoUser,
   Lead,
@@ -62,6 +64,7 @@ export type CompanyChatDataSource = CompanyEngagementData & {
   leads: readonly Lead[]
   deals: readonly Deal[]
   products: readonly Product[]
+  clientBankingProducts: readonly ClientBankingProduct[]
   users: readonly DemoUser[]
 }
 
@@ -99,6 +102,9 @@ export function buildCompanyChatContext(
   const products = productIds
     .map((id) => data.products.find((product) => product.id === id))
     .filter((product): product is Product => product !== undefined)
+  const clientProducts = filterByScope(data.clientBankingProducts, user).filter(
+    (item) => item.clientId === clientId,
+  )
 
   return {
     client,
@@ -106,6 +112,8 @@ export function buildCompanyChatContext(
     leads,
     openTasks,
     products,
+    clientProducts,
+    catalog: [...data.products],
     contacts,
     meetings,
     ownerName: owner?.displayName,

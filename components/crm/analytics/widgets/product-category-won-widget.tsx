@@ -40,7 +40,7 @@ type ProductCategoryWonWidgetProps = {
 export function ProductCategoryWonWidget({ rows }: ProductCategoryWonWidgetProps) {
   if (rows.length === 0) {
     return (
-      <AnalyticsWidgetEmpty message="Brak wygranych dealów wg kategorii w okresie" />
+      <AnalyticsWidgetEmpty message="Brak wygranych szans wg kategorii w okresie" />
     )
   }
 

@@ -4,6 +4,16 @@ import * as React from "react"
 import { PlusIcon, Trash2Icon } from "lucide-react"
 import { toast } from "sonner"
 import { ContactComboboxField } from "@/components/crm/contact-combobox"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { SheetFooter } from "@/components/ui/sheet"
 import {
@@ -29,6 +39,11 @@ import {
   COMPANY_TYPE_OPTIONS,
 } from "@/lib/crm/company-labels"
 import { useSession } from "@/lib/auth/demo-session"
+import {
+  findProspectDuplicates,
+  formatProspectDuplicateSummary,
+  type ProspectDuplicate,
+} from "@/lib/crm/prospect-duplicate"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { AddClientInput, Client, CompanySource, CompanyType } from "@/types/crm"
 
@@ -100,9 +115,10 @@ export function CompanyForm({
   layout = "page",
 }: CompanyFormProps) {
   const { user } = useSession()
-  const { addClient } = useDemoData()
+  const { addClient, clients, leads, users } = useDemoData()
   const [form, setForm] = React.useState(() => emptyFormState())
   const [errors, setErrors] = React.useState<CompanyFormErrors>({})
+  const [duplicates, setDuplicates] = React.useState<ProspectDuplicate[]>([])
 
   function updateListItem(key: "phones" | "emails", index: number, value: string) {
     setForm((prev) => {
@@ -132,10 +148,49 @@ export function CompanyForm({
       return
     }
     setErrors({})
+    // US-60: ten sam NIP lub nazwa w całym banku — ostrzeżenie przed utworzeniem drugiej firmy
+    const found = findProspectDuplicates({
+      companyName: form.name,
+      nip: form.nip,
+      clients,
+      leads,
+    })
+    if (found.length > 0) {
+      setDuplicates(found)
+      return
+    }
+    saveClient()
+  }
+
+  function saveClient() {
+    if (!user) return
     const created = addClient(buildInput(form), user)
     toast.success("Firma została dodana")
     onSuccess(created)
   }
+
+  const duplicateDialog = (
+    <AlertDialog
+      open={duplicates.length > 0}
+      onOpenChange={(open) => {
+        if (!open) setDuplicates([])
+      }}
+    >
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Możliwy duplikat</AlertDialogTitle>
+          <AlertDialogDescription>
+            {formatProspectDuplicateSummary(duplicates, users)} Sprawdź istniejący
+            rekord — firma może mieć już opiekuna.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Anuluj</AlertDialogCancel>
+          <AlertDialogAction onClick={saveClient}>Zapisz mimo to</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
 
   const fields = (
     <FieldGroup>
@@ -336,6 +391,7 @@ export function CompanyForm({
             Zapisz firmę
           </Button>
         </SheetFooter>
+        {duplicateDialog}
       </form>
     )
   }
@@ -344,6 +400,7 @@ export function CompanyForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {fields}
       <Button type="submit">Zapisz firmę</Button>
+      {duplicateDialog}
     </form>
   )
 }

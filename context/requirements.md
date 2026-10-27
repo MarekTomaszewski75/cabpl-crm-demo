@@ -125,9 +125,9 @@ Pokazać, że rozumiemy **pilną potrzebę szybkiego efektu** i że w **3–6 mi
 
 ## 6. Scenariusz prezentacji (15–20 min)
 
-1. **Logowanie jako Członek Zarządu** (2 min) — dashboard, plan vs wykonanie, forecast  
+1. **Logowanie jako Członek Zarządu** (2 min) — Analityka, plan i realizacja, prognoza  
 2. **Przełączenie na Regionalnego Menedżera** (4 min) — lejek zespołu, weighted pipeline, luka do planu  
-3. **Przełączenie na Doradcę** (5 min) — widok **Dziś** z podsumowaniem deali i leadów wymagających uwagi, moje deale (`/pipeline` **kanban** — domyślny widok), drag & drop między etapami, karta deala ze zmianą statusu i finalizacją, zadanie, spotkanie w kalendarzu  
+3. **Przełączenie na Doradcę** (5 min) — **Centrum działań** (`/today`) z podsumowaniem szans i leadów wymagających uwagi, moje szanse (`/pipeline` **kanban** — domyślny widok), drag & drop między etapami, karta szansy ze zmianą statusu i finalizacją, zadanie, spotkanie w kalendarzu  
 4. **Karta klienta** (3 min) — historia kontaktów, next best action, nowa szansa z leada; **asystent AI „Sprawdź firmę”** na **Polska Logistyka S.A.**:
    - Klik **Sprawdź firmę** → puste okno + 5 sugestii
    - Sugestia o produktach → reasoning + odpowiedź ze źródłami

@@ -1,7 +1,7 @@
 import type { ChannelContactEventType } from "@/types/crm"
 
-/** Typy kanału dostępne w formularzu nowej aktywności (bez E-mail). */
-export type ActivityChannelType = Exclude<ChannelContactEventType, "email">
+/** Typy kanału w formularzu nowej aktywności; e-mail tylko jako rejestracja ręczna (QW-18). */
+export type ActivityChannelType = ChannelContactEventType
 
 export type ActivityChannelTypeOption = {
   id: ActivityChannelType
@@ -12,7 +12,8 @@ export const ACTIVITY_CHANNEL_TYPE_OPTIONS: ActivityChannelTypeOption[] = [
   { id: "activity", label: "Aktywność" },
   { id: "phone", label: "Połączenie" },
   { id: "meeting", label: "Spotkanie" },
-  { id: "chat", label: "Czat" },
+  { id: "video_call", label: "Wideokonferencja" },
+  { id: "email", label: "E-mail (rejestracja ręczna)" },
 ]
 
 export function activityChannelTypeLabel(type: ChannelContactEventType): string {

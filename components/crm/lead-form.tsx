@@ -42,11 +42,11 @@ import { createNextLeadId } from "@/lib/crm/lead-id"
 import { LEAD_TYPE_OPTIONS } from "@/lib/crm/lead-labels"
 import {
   findProspectDuplicates,
-  formatNipPl,
+  formatProspectDuplicateSummary,
   type ProspectDuplicate,
 } from "@/lib/crm/prospect-duplicate"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import type { DemoUser, Lead, LeadSource, LeadType } from "@/types/crm"
+import type { Lead, LeadSource, LeadType } from "@/types/crm"
 
 const LEAD_TYPE_NONE = "__none__"
 
@@ -76,7 +76,7 @@ function emptyFormState(ownerId = ""): LeadFormState {
     phone: "",
     contactId: null,
     comments: "",
-    source: "recommendation",
+    source: "rm_initiative",
     leadType: null,
     ownerId,
   }
@@ -109,20 +109,6 @@ function emptyLeadFields(): Pick<
     opportunityId: null,
     clientId: null,
   }
-}
-
-function duplicateSummary(
-  duplicates: readonly ProspectDuplicate[],
-  users: readonly DemoUser[],
-): string {
-  return duplicates
-    .map((match) => {
-      const owner = users.find((user) => user.id === match.ownerId)
-      const nip = match.nip ? `, NIP ${formatNipPl(match.nip)}` : ""
-      const ownerLabel = owner ? `, opiekun ${owner.displayName}` : ""
-      return `${match.kind === "firma" ? "Firma" : "Lead"} „${match.name}” (${match.reasonPl}${nip}${ownerLabel})`
-    })
-    .join(" ")
 }
 
 type LeadFormProps = {
@@ -418,7 +404,7 @@ export function LeadForm({
         <AlertDialogHeader>
           <AlertDialogTitle>Możliwy duplikat</AlertDialogTitle>
           <AlertDialogDescription>
-            {duplicateSummary(duplicates, users)} Możesz przerwać zapis albo
+            {formatProspectDuplicateSummary(duplicates, users)} Możesz przerwać zapis albo
             dodać lead mimo podobnego rekordu.
           </AlertDialogDescription>
         </AlertDialogHeader>

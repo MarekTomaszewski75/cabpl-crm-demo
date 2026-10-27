@@ -58,6 +58,7 @@ import type {
   ProductCondition,
   ProductType,
 } from "@/types/crm"
+import { pluralPl } from "@/lib/format/pl"
 
 type ProductsViewMode = "list" | "tree"
 
@@ -249,9 +250,7 @@ export function ProductsTable() {
 
   const resultCountLabel = React.useMemo(() => {
     const n = filteredProducts.length
-    if (n === 1) return "1 wynik"
-    if (n >= 2 && n <= 4) return `${n} wyniki`
-    return `${n} wyników`
+    return `${n} ${pluralPl(n, "wynik", "wyniki", "wyników")}`
   }, [filteredProducts.length])
 
   if (!isReady) {
@@ -363,7 +362,7 @@ export function ProductsTable() {
     <div className="flex flex-col gap-4">
       <Card size="sm" className="gap-3">
         <CardHeader className="flex flex-col gap-2 pb-0">
-          <div className="flex w-full min-w-0 items-center gap-2">
+          <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
             <CardTitle className="shrink-0 text-xl">Produkty</CardTitle>
             <div
               className="flex shrink-0 items-center rounded-md border border-border p-0.5"
@@ -391,7 +390,7 @@ export function ProductsTable() {
                 <Rows2Icon />
               </Button>
             </div>
-            <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">
+            <InputGroup className="order-last h-9 min-h-9 min-w-0 basis-full sm:order-none sm:flex-1 sm:basis-0">
               <InputGroupInput
                 type="search"
                 placeholder="Szukaj"

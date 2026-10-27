@@ -229,20 +229,6 @@ export function CompanyDetailSidebar({
             )}
           </InlineEditableField>
 
-          <InlineEditableField
-            label="Media społecznościowe"
-            value={client.socialMedia}
-            onSave={(socialMedia) => patch({ socialMedia })}
-          >
-            {(props) => (
-              <Input
-                value={props.value}
-                onChange={(e) => props.onChange(e.target.value)}
-                onBlur={props.onBlur}
-                onKeyDown={props.onKeyDown}
-              />
-            )}
-          </InlineEditableField>
 
           <StringListEditor
             label="Telefon"
@@ -259,7 +245,7 @@ export function CompanyDetailSidebar({
           />
 
           <InlineEditableField
-            label="Link"
+            label="Strona www"
             value={client.website}
             onSave={(website) => patch({ website })}
           >

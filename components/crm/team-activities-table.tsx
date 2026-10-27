@@ -157,7 +157,7 @@ export function TeamActivitiesTable() {
         </h1>
         <p className="text-sm text-muted-foreground">
           Aktywności i notatki doradców w regionie — kliknij wiersz, aby przejść
-          do szczegółów na karcie firmy, leada lub deala
+          do szczegółów na karcie firmy, leada lub szansy
         </p>
       </div>
 

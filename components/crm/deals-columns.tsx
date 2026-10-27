@@ -4,6 +4,8 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 import { DealCloseDateUrgencyIcon } from "@/components/crm/deal-close-date-urgency-icon"
 import { DealStatusBadge } from "@/components/crm/deal-status-badge"
+import { formatDealAmount, getDealAmountPln } from "@/lib/crm/currency"
+import { formatDealProbability } from "@/lib/crm/deal-probability"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { createFilterSearchColumn } from "@/lib/crm/data-table-filter-column"
 import {
@@ -19,7 +21,7 @@ import {
   isPipelineCategoryId,
   type PipelineCategoryId,
 } from "@/lib/crm/deal-pipeline"
-import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDatePl } from "@/lib/format/pl"
 import {
   formatBankAccountLabel,
   resolveBankAccount,
@@ -57,9 +59,9 @@ export function createDealsColumns(
     createFilterSearchColumn<DealTableRow>(),
     {
       accessorKey: "name",
-      meta: { title: "Deal" },
+      meta: { title: "Szansa" },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Deal" />
+        <DataTableColumnHeader column={column} title="Szansa" />
       ),
       cell: ({ row }) => (
         <span className="max-w-56 truncate font-medium">
@@ -138,15 +140,22 @@ export function createDealsColumns(
     },
     {
       id: "amount",
-      accessorFn: (row) => row.amount ?? 0,
+      accessorFn: (row) => getDealAmountPln(row),
       meta: { title: "Kwota" },
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Kwota" />
       ),
       cell: ({ row }) =>
-        row.original.amount === null
-          ? "—"
-          : formatCurrencyPln(row.original.amount),
+        formatDealAmount(row.original),
+    },
+    {
+      id: "probability",
+      accessorFn: (row) => row.probability ?? 0,
+      meta: { title: "Prawdopodobieństwo" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Prawdop." />
+      ),
+      cell: ({ row }) => formatDealProbability(row.original.probability),
     },
     {
       id: "source",

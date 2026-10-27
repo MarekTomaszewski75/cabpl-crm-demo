@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { pluralPl } from "@/lib/format/pl"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -31,7 +32,7 @@ export function DataTablePagination<TData>({
     <div className="flex flex-col gap-3 px-2 py-3 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-muted-foreground">
         {filteredCount}{" "}
-        {filteredCount === 1 ? "rekord" : "rekordów"}
+        {pluralPl(filteredCount, "rekord", "rekordy", "rekordów")}
         {filteredCount > 0
           ? ` · strona ${pageIndex + 1} z ${table.getPageCount()}`
           : null}

@@ -77,6 +77,7 @@ import type {
   Product,
   BankAccount,
 } from "@/types/crm"
+import { pluralPl } from "@/lib/format/pl"
 
 type DealsViewMode = "table" | "kanban"
 
@@ -369,9 +370,7 @@ export function DealsTable() {
 
   const resultCountLabel = React.useMemo(() => {
     const n = filteredDeals.length
-    if (n === 1) return "1 wynik"
-    if (n >= 2 && n <= 4) return `${n} wyniki`
-    return `${n} wyników`
+    return `${n} ${pluralPl(n, "wynik", "wyniki", "wyników")}`
   }, [filteredDeals.length])
 
   if (!isReady || !user) {
@@ -382,12 +381,12 @@ export function DealsTable() {
     <div className="flex flex-col gap-4">
       <Card size="sm" className="gap-3">
         <CardHeader className="flex flex-col gap-2 pb-3">
-          <div className="flex w-full min-w-0 items-center gap-2">
-            <CardTitle className="shrink-0 text-xl">Deale</CardTitle>
+          <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
+            <CardTitle className="shrink-0 text-xl">Szanse</CardTitle>
             <div
               className="flex shrink-0 items-center rounded-md border border-border p-0.5"
               role="group"
-              aria-label="Widok listy deali"
+              aria-label="Widok listy szans"
             >
               <Button
                 type="button"
@@ -410,13 +409,13 @@ export function DealsTable() {
                 <Rows2Icon />
               </Button>
             </div>
-            <InputGroup className="h-9 min-h-9 min-w-0 flex-1 basis-0">
+            <InputGroup className="order-last h-9 min-h-9 min-w-0 basis-full sm:order-none sm:flex-1 sm:basis-0">
               <InputGroupInput
                 type="search"
-                placeholder="Szukaj deali"
+                placeholder="Szukaj szans"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Szukaj deali"
+                aria-label="Szukaj szans"
               />
               <InputGroupAddon>
                 <SearchIcon />
@@ -433,7 +432,7 @@ export function DealsTable() {
                 trigger={
                   <Button size="lg" onClick={() => setCreateSheetOpen(true)}>
                     <PlusIcon />
-                    Nowy deal
+                    Nowa szansa
                   </Button>
                 }
               />
@@ -496,7 +495,7 @@ export function DealsTable() {
               />
             ) : null}
             <DataTableFacetedFilter
-              title="Typ deala"
+              title="Typ szansy"
               options={dealTypeFacetedOptions}
               selectedValues={dealTypeFilters}
               onSelectedValuesChange={setDealTypeFilters}
@@ -519,9 +518,9 @@ export function DealsTable() {
                 <EmptyMedia variant="icon">
                   <BriefcaseIcon />
                 </EmptyMedia>
-                <EmptyTitle>Brak deali</EmptyTitle>
+                <EmptyTitle>Brak szans</EmptyTitle>
                 <EmptyDescription>
-                  Dodaj pierwszy deal przyciskiem „Nowy deal”.
+                  Dodaj pierwszą szansę przyciskiem „Nowa szansa”.
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
@@ -533,7 +532,7 @@ export function DealsTable() {
             <EmptyHeader>
               <EmptyTitle>Brak wyników</EmptyTitle>
               <EmptyDescription>
-                Zmień filtry lub wyszukiwanie, aby zobaczyć deale na tablicy.
+                Zmień filtry lub wyszukiwanie, aby zobaczyć szanse na tablicy.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

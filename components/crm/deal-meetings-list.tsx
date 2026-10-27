@@ -42,7 +42,7 @@ export function DealMeetingsList({ meetings }: DealMeetingsListProps) {
             <EmptyHeader>
               <EmptyTitle>Brak spotkań</EmptyTitle>
               <EmptyDescription>
-                Brak spotkań powiązanych z tym dealem.
+                Brak spotkań powiązanych z tą szansą.
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

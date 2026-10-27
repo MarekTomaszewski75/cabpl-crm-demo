@@ -52,16 +52,40 @@
 - **US-51** — **Done** — scalenie zakładek Pliki/Dokumenty: `displayName`/`description` na `*File`, `entity-documents.ts`, `CrmDocumentList` + `CrmDocumentUploadForm`, jedna zakładka Dokumenty na firmie/leadzie/dealu. [US-51](./stories/US-51-merge-files-documents/story.md).
 - **US-52** — **Done** — asystent AI „Sprawdź firmę” (symulacja) na karcie firmy: AI Elements + lokalny simulator, bez `useChat`/API. [US-52](./stories/US-52-company-ai-chat/story.md).
 - **US-53** — **Done** — przebieg demo: duplikat i import prospectu, historia leada na dealu, bramka etapu kredytowego, follow-up ze spotkania, słownik źródeł z zatwierdzeniem i audytem, błąd synchronizacji katalogu z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
+- **US-54** — **Done** — daty seedu przesuwane na „dziś” przy ładowaniu (`lib/data/seed-dates.ts`), analityka liczy od bieżącej daty i kwartału, KPI mają 12 miesięcy, poprawki jakości dat w seedzie. [US-54](./stories/US-54-seed-dates-rolling/story.md).
+- **US-55** — **Done** — KPI liczone z deali: plan z `kpi.json` (`KpiPlanSeed`), realizacja z wygranych, prognoza z ważonego lejka; seed: 44 wygrane, lejek 3,4 × plan. [US-55](./stories/US-55-consistent-amounts/story.md).
+- **US-56** — **Done** — słowniki korporacyjne (źródła, typy firm, wideokonferencja, powody utraty), segmenty Banku + instytucje finansowe, unikalne nazwy deali, kontakty i leady Polskiej Logistyki, bez śladów demo, `pluralPl`, poprawna polszczyzna w AI. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
+- **US-57** — **Done** — spotkanie z aktywności w kalendarzu, follow-up z deala, „Nowe zadanie” z wykonawcą, „Dziś → Wymaga uwagi” (zaległe, bez postępu, odnowienia), e-mail jako rejestracja ręczna, czas lokalny w formularzach, historia aktywności deali w seedzie. [US-57](./stories/US-57-activities-and-today-attention/story.md).
+- **US-58** — **Done** — rola `business_admin` (Ewa Sadowska, bez danych klientów), słownik z uzasadnieniem i czterema oczami, audyt przed/po, „Brak dostępu” z wpisem w audycie, stabilne banery, reset demo na logowaniu. [US-58](./stories/US-58-business-admin-four-eyes/story.md).
+- **US-59** — **Done** — struktura sprzedaży Pion → Departament → Region → Zespół → RM (`data/sales-structure.json`), zakładka Analityki „Lejek wg struktury” z drill-down, filtrami i porównaniem prognozy ważonej i nieważonej. [US-59](./stories/US-59-org-structure-pipeline/story.md).
+- **US-60** — **Done** — odnośniki do AIDA / SharePoint / dysku S / CASE PRO przy dokumentach, duplikat przy „Nowa firma”, prawdopodobieństwo z listy, szanse w EUR/USD z przeliczeniem na PLN. [US-60](./stories/US-60-documents-duplicates-money/story.md).
+- **US-61** — **Done** — AI w Azure OpenAI bez oceny ryzyka i bez proponowania posiadanych produktów, „Szansa” w UI, Centrum działań / Plan i realizacja / Administracja biznesowa, „Etap 2” przy scenariuszach prognozy, widoki na telefonie. [US-61](./stories/US-61-offer-signals/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-53 domknięte na branchu `demo/scenario-prep`)
+- (brak — P1 z analizy RFP domknięte na branchu `demo/rfp-alignment` (US-54 … US-61))
 
 ---
 
 ## Recently completed
+
+- **US-61** (story **Done**) — `TemplateContext.clientProducts` + `catalog` (tematy produktowe bez posiadanych, sygnały zamiast ryzyka); `DEMO_CHAT_MODEL_GROUP`; `AnalyticsWidgetDefinition.stageTwo`; `InlineEditableField.displayValue`; `pluralPl` w licznikach. [US-61](./stories/US-61-offer-signals/story.md).
+
+- **US-60** (story **Done**) — `DocumentRepositoryLink` w `*File`, `CrmDocumentLinkForm`, `lib/crm/document-repositories.ts`; `formatProspectDuplicateSummary` w `CompanyForm`; `lib/crm/deal-probability.ts`; `lib/crm/currency.ts` (`getDealAmountPln`, `formatDealAmount`). [US-60](./stories/US-60-documents-duplicates-money/story.md).
+
+- **US-59** (story **Done**) — `SalesOrgUnit` + `DemoUser.teamId`; `lib/analytics/org-pipeline.ts` (`buildOrgPipelineTree`); `components/crm/analytics/org-pipeline-view.tsx`; `formatCurrencyPlnCompact`. [US-59](./stories/US-59-org-structure-pipeline/story.md).
+
+- **US-58** (story **Done**) — `UserRole` + `business_admin`; `lib/crm/sales-dictionary-rules.ts`; `decideSalesDictionaryLabel` (zatwierdź/odrzuć); `useAccessDeniedAudit` + `AccessDeniedAlert`; `CrmBannerController` z `useEffectEvent`; `resetDemoSession`. [US-58](./stories/US-58-business-admin-four-eyes/story.md).
+
+- **US-57** (story **Done**) — `appendMeetingFromActivity` w `DemoDataContext`; `applyActivityType` / `buildActivityEndsAt` (czas lokalny); `TaskFormDialog` (`defaultOpportunityId`, Wykonawca); `lib/crm/today-attention.ts` + `TodayAttentionCard`; `data/deal-activities.json` (561). [US-57](./stories/US-57-activities-and-today-attention/story.md).
+
+- **US-56** (story **Done**) — migracja seedu (źródła, segmenty, nazwy deali, leady, kontakty); etykiety w `*-labels.ts`; usunięte pola detaliczne w UI; `pluralPl`; szablony AI. EUR → US-60, baner → US-58, AI → US-61. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
+
+- **US-55** (story **Done**) — `deriveKpiSnapshot` w `lib/analytics/kpi-snapshot.ts` + `useMemo` w `DemoDataContext`; `data/kpi.json` → plan roczny; migracja seedu dealów (kwoty, daty wygranych, daty zamknięcia lejka). [US-55](./stories/US-55-consistent-amounts/story.md).
+
+- **US-54** (story **Done**) — `createSeedDateRebaser` / `rebaseSeedDates` / `rebaseKpiSnapshot` w `loadSeedData()` i `NotificationProvider`; `getDemoReferenceDate()` + `getCurrentQuarter()` zamiast `DEMO_REFERENCE_DATE` / Q2; analiza dokumentów RFP: [`rfp-demo-gap-analysis.md`](./rfp-demo-gap-analysis.md). [US-54](./stories/US-54-seed-dates-rolling/story.md).
 
 - **US-53** (story **Done**) — import prospectów z ostrzeżeniem duplikatu i wyborem opiekuna; karta deala „Powstał z leada”; bramka `new` → dalszy etap w lejku kredytowym; zadanie follow-up ze spotkania; `/sales-rules` (słownik + audyt); baner błędu katalogu produktów z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 
@@ -107,7 +131,7 @@
 
 ## Next up
 
-1. (brak zaplanowanej story — patrz [`stories/README.md`](./stories/README.md))
+1. P2 (US-62+) tylko na prośbę — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). P1 przed pokazem zamknięte (US-54 … US-61); D5 wdrożone według rekomendacji („Centrum działań”).
 
 ---
 
@@ -121,7 +145,7 @@
 
 | Temat | Plik |
 | ----- | ---- |
-| Appendix B (scenariusz demo wymagany przez Bank) — brak w repo; plan fal US-54+ po Q&A RFP | [`rfp-qa-gap-analysis.md`](./rfp-qa-gap-analysis.md) |
+| Decyzje D1–D6: zakres oferty vs specyfikacja, scenariusze 4/8, porównanie prognoz, „Deal” vs „Szansa”, nazwy ekranów, termin demo. Appendix B jest w specyfikacji. | [`rfp-demo-gap-analysis.md` §6](./rfp-demo-gap-analysis.md) |
 
 ---
 

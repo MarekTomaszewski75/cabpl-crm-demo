@@ -109,7 +109,7 @@ export function buildGlobalSearchItems(
     kind: "opportunity",
     id: opp.id,
     label: opp.name,
-    keywords: `${opp.name} deal deale pipeline`,
+    keywords: `${opp.name} szansa szanse deal lejek pipeline`,
     href: `/pipeline/${opp.id}`,
   }))
 

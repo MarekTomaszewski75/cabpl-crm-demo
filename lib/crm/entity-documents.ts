@@ -5,6 +5,7 @@ import type {
   DealDocument,
   DealFile,
   DemoUser,
+  DocumentRepositoryLink,
   LeadDocument,
   LeadFile,
 } from "@/types/crm"
@@ -19,6 +20,8 @@ export type CrmDocumentListItem = {
   fileName?: string
   fileSize?: number
   mimeType?: string
+  /** Odnośnik do repozytorium Banku zamiast pliku (US-60). */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
   ownerId: string
 }
@@ -45,6 +48,7 @@ function fileToListItem(
     fileName: file.fileName,
     fileSize: file.fileSize,
     mimeType: file.mimeType,
+    ...(file.repository ? { repository: file.repository } : {}),
     uploadedAt: file.uploadedAt,
     ownerId: file.ownerId,
   }

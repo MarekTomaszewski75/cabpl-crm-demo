@@ -29,6 +29,7 @@ import { filterByScope } from "@/lib/rbac/scope"
 import type { Client, DemoUser, Meeting } from "@/types/crm"
 
 import "@/app/crm-big-calendar.css"
+import { pluralPl } from "@/lib/format/pl"
 
 export type MeetingCalendarEvent = {
   id: string
@@ -256,7 +257,7 @@ export function CalendarWeekView() {
           <h1 className="text-xl font-semibold tracking-tight">Kalendarz</h1>
           <p className="text-sm text-muted-foreground">
             Tydzień {weekRangeLabel} · {meetingsThisWeek.length}{" "}
-            {meetingsThisWeek.length === 1 ? "spotkanie" : "spotkań"} w{" "}
+            {pluralPl(meetingsThisWeek.length, "spotkanie", "spotkania", "spotkań")} w{" "}
             {scopeLabel}
           </p>
         </div>

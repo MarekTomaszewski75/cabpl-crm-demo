@@ -6,5 +6,29 @@
     "areaPl": "Integracje",
     "actionPl": "Ponowienie synchronizacji",
     "detailPl": "Katalog produktów — poprzednia próba zakończona sukcesem po błędzie timeout."
+  },
+  {
+    "id": "audit-002",
+    "occurredAt": "2026-05-12T08:40:00.000Z",
+    "actorUserId": "user-marek",
+    "areaPl": "Słownik",
+    "actionPl": "Zgłoszono zmianę",
+    "detailPl": "Źródło: przed „Targi i konferencje”, po „Wydarzenie branżowe”. Uzasadnienie: ujednolicenie z nazewnictwem w raportach MIS."
+  },
+  {
+    "id": "audit-003",
+    "occurredAt": "2026-05-13T10:15:00.000Z",
+    "actorUserId": "user-ewa",
+    "areaPl": "Słownik",
+    "actionPl": "Zatwierdzono zmianę",
+    "detailPl": "Źródło: przed „Targi i konferencje”, po „Wydarzenie branżowe”. Zgłosił(a): Marek Wiśniewski."
+  },
+  {
+    "id": "audit-004",
+    "occurredAt": "2026-05-28T13:05:00.000Z",
+    "actorUserId": "user-kasia",
+    "areaPl": "Uprawnienia",
+    "actionPl": "Odmowa dostępu",
+    "detailPl": "Firma „Polska Logistyka S.A.” — poza zakresem roli „Doradca korporacyjny”."
   }
 ]

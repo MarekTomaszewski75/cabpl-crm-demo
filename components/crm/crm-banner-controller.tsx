@@ -16,6 +16,7 @@ import {
 } from "@/lib/crm/banner-rules"
 import { getToday } from "@/lib/crm/local-date"
 import { useDemoData } from "@/lib/data/demo-data-context"
+import type { DemoUser } from "@/types/crm"
 
 function scheduleBanner(
   payload: BannerPayload,
@@ -37,11 +38,8 @@ export function CrmBannerController() {
   const { opportunities, tasks, meetings, clients } = useDemoData()
   const { onBannerAdd, onBannersClear } = useBanners()
 
-  React.useEffect(() => {
-    if (!isReady || !user || !shouldShowCrmBannersForUser(user)) return
-
-    onBannersClear()
-
+  /** Dane czytane w chwili logowania — zmiana danych nie losuje banerów od nowa (US-58). */
+  const scheduleDemoBanners = React.useEffectEvent((user: DemoUser) => {
     const timeouts: ReturnType<typeof setTimeout>[] = []
     const asOfDate = getToday()
 
@@ -87,22 +85,22 @@ export function CrmBannerController() {
       }
     }
 
+    return timeouts
+  })
+
+  React.useEffect(() => {
+    if (!isReady || !user || !shouldShowCrmBannersForUser(user)) return
+
+    onBannersClear()
+    const timeouts = scheduleDemoBanners(user)
+
     return () => {
       for (const timeoutId of timeouts) {
         clearTimeout(timeoutId)
       }
       onBannersClear()
     }
-  }, [
-    isReady,
-    user,
-    opportunities,
-    tasks,
-    meetings,
-    clients,
-    onBannerAdd,
-    onBannersClear,
-  ])
+  }, [isReady, user, onBannersClear])
 
   return null
 }

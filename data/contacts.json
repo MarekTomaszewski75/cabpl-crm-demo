@@ -1,16 +1,16 @@
 [
   {
     "id": "contact-001",
-    "firstName": "Anna",
-    "lastName": "Kowalska",
-    "emails": ["anna.kowalska@polskalogistyka.pl"],
+    "firstName": "Magdalena",
+    "lastName": "Szulc",
+    "emails": ["magdalena.szulc@polskalogistyka.pl"],
     "phones": ["+48 22 123 45 01"]
   },
   {
     "id": "contact-002",
-    "firstName": "Piotr",
-    "lastName": "Nowak",
-    "emails": ["p.nowak@polskalogistyka.pl"],
+    "firstName": "Krzysztof",
+    "lastName": "Bielecki",
+    "emails": ["k.bielecki@polskalogistyka.pl"],
     "phones": ["+48 22 123 45 02"]
   },
   {
@@ -29,8 +29,8 @@
   },
   {
     "id": "contact-005",
-    "firstName": "Katarzyna",
-    "lastName": "Lewandowska",
+    "firstName": "Joanna",
+    "lastName": "Pawlak",
     "emails": [],
     "phones": ["+48 22 555 10 05"]
   },

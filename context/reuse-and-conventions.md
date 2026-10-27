@@ -255,7 +255,11 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ### Executive dashboard / Plan i cele (US-07, zakładka US-20)
 - **Komponenty:** `executive-dashboard.tsx`, `kpi-card.tsx`
-- **Dane:** seed `data/kpi.json` (agregaty bank-wide + `byRegion` / `bySegment` / `monthlyTrend`); **nie** wyliczać KPI z opportunities w runtime
+- **Dane (US-55):** `data/kpi.json` to tylko **plan roczny** (`KpiPlanSeed`): `monthlyPlan` dla banku oraz roczne `planPln` per region, segment i kategoria. `KpiSnapshot` liczy `deriveKpiSnapshot` w `lib/analytics/kpi-snapshot.ts` (`useMemo` w `DemoDataContext`, przelicza się po zmianie deali):
+  - plan YTD = od stycznia do końca bieżącego miesiąca, kwartał = pełny bieżący kwartał, plan wiersza = udział w planie rocznym,
+  - realizacja = suma wygranych z `finishedAt` w okresie,
+  - prognoza = realizacja + ważony lejek (kwota × prawdopodobieństwo) z `expectedCloseDate` do końca okresu, łącznie z przeterminowanymi; scenariusze to ×1,25 i ×0,7.
+  - Nie wpisuj realizacji ani prognozy do JSON-a.
 - **Metryki:** `lib/dashboard/executive-metrics.ts` — `getExecutiveTotals`, `getExecutiveChartRows`, filtry `ExecutiveDashboardFilters`
 - **UI:** shadcn `Chart` + recharts (`ComposedChart`), `Tabs` (YTD / kwartał), `Select` (region, segment)
 - **Guard (alias):** `executive-role-guard.tsx` → re-eksport `AnalyticsRoleGuard`
@@ -267,7 +271,8 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### filterByScope / canAccessEntity
 - **Plik:** `lib/rbac/scope.ts`
 - **Użycie list:** `const visible = filterByScope(clients, sessionUser)`
-- **Użycie szczegółów:** `if (!canAccessEntity(client, sessionUser)) notFound()` (lub komunikat „Brak dostępu”)
+- **Użycie szczegółów:** `const denied = useAccessDeniedAudit(entity, user, "Firma „…”")` (`lib/rbac/use-access-denied-audit.ts`) + `<AccessDeniedAlert />`. Zamiast przekierowania jest komunikat i jeden wpis audytu „Odmowa dostępu” (US-58).
+- **`business_admin`:** `isInScope` → `false` (need-to-know). Menu: Produkty, Reguły sprzedaży. Nie dodawaj mu dostępu do klientów, leadów ani deali.
 - **Nie duplikować** warunków `ownerId` / `regionId` na stronach — zawsze przez te funkcje
 
 ### canSeeNavItem / CRM_NAV_ITEMS
@@ -284,6 +289,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### formatCurrencyPln / formatDatePl / formatTimePl / formatRelativeTimePl
 - **Plik:** `lib/format/pl.ts`
 - **`formatRelativeTimePl`** — czas względny PL w powiadomieniach (np. „2 godz. temu”, „za 3 dni”); baza: `getToday()`.
+- **`pluralPl(count, one, few, many)`** (US-56) — odmiana po liczebniku: „1 prospekt / 2 prospekty / 5 prospektów”. Używaj zawsze, gdy liczba stoi przed rzeczownikiem w copy.
 
 ---
 
@@ -340,10 +346,10 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **API:** `useBanners()` → `onBannerAdd`, `onBannerRemove`, `onBannersClear`.
 
 ### Reguły banerów
-- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
+- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; pierwszy baner od razu (`BANNER_INITIAL_DELAY_MS = 0`), drugi w kolejce po 11 s; wybór raz na logowanie (`useEffectEvent` w kontrolerze — zmiana danych nie losuje od nowa, US-58); `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
 - **Treść banera:** `components/crm/crm-banner-payload-content.tsx` — współdzielony layout tytułu/opisu/akcji.
 - **Kontroler:** `components/crm/crm-banner-controller.tsx` — losuje 2 banery z puli wygenerowanej z `DemoDataContext`.
-- **Seed:** terminy spotkań/zadań/deali rozłożone względem bieżącej daty (prezentacja na żywo — bez zamrożonej daty demo).
+- **Seed:** terminy spotkań, zadań i deali leżą wokół 2026-06-05 i są przesuwane na bieżącą datę przy ładowaniu (US-54, `lib/data/seed-dates.ts`).
 
 ---
 
@@ -404,8 +410,80 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Bramka etapu kredytowego (`new` → dalszy etap): `requiresCreditStageGate` + `DealStageGateDialog`.
 - Historia po konwersji: `DealSourceLeadCard` szuka leada po `opportunityId`.
 - Follow-up: `MeetingFormDialog` tworzy `Task` powiązany z firmą.
-- Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
+- Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`.
+  - US-58: zgłoszenie wymaga uzasadnienia; zatwierdza lub odrzuca `business_admin` albo `regional_manager`, **nie autor** (`canDecideSalesDictionaryChange` w `lib/crm/sales-dictionary-rules.ts`).
+  - Audyt zapisuje stan przed i po oraz autora; karta audytu jest widoczna dla ról zatwierdzających i zarządu.
+- Reset pokazu: `resetDemoSession()` (`lib/auth/reset-demo.ts`) czyści `sessionStorage` i przeładowuje seed. Przycisk jest na ekranie logowania.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
+
+## Nazewnictwo oferty, AI i „Etap 2” (US-61)
+
+- **Copy UI:** „Szansa” (nie „Deal”), „lejek” (nie „pipeline”), „prognoza” (nie „forecast”). Ekrany: **Centrum działań** (`/today`), **Plan i realizacja** (zakładka Analityki), **Administracja biznesowa** (`/sales-rules`), produkt **CRM Bankowości Korporacyjnej**. Kod, typy i trasy zostają przy `deal` / `pipeline`.
+- **Liczebniki:** zawsze `pluralPl(n, "zadanie", "zadania", "zadań")` albo „rzeczownik: liczba”; nie pisz `n === 1 ? … : …`.
+- **AI (szablony w `company-ai-chat-templates.ts`):**
+  - nie oceniaj ryzyka, nie podawaj scoringu ani limitów — pytania o ryzyko trafiają do sygnałów z CRM (`getRelationshipSignals`),
+  - produkty proponuj tylko przez `getProductTopics` / `getCategoryTopics`: katalog dostępny w ofercie, bez umów firmy (`clientProducts`: active / expiring / blocked) i bez produktów z otwartych szans,
+  - modele: `DEMO_CHAT_MODEL_GROUP` (Azure OpenAI po zatwierdzeniu przez Bank).
+- **Poza Quick Win:** widżet z `stageTwo: true` dostaje badge „Etap 2”; w innych miejscach `<Badge variant="outline">Etap 2</Badge>` przy funkcji.
+- **Telefon:** w nagłówkach list wyszukiwarka ma `order-last basis-full sm:order-none sm:flex-1 sm:basis-0` (osobny wiersz na wąskim ekranie). Pole edytowane w miejscu pokazuje sformatowaną wartość przez `InlineEditableField.displayValue`.
+
+## Dokumenty z repozytoriów, duplikaty, prawdopodobieństwo, waluty (US-60)
+
+- **Odnośnik do repozytorium:** rekord `ClientFile` / `LeadFile` / `DealFile` z `repository` (`aida` | `sharepoint` | `drive_s` | `case_pro` + `externalRef`, MIME `REPOSITORY_LINK_MIME`).
+  - Dodawanie: `CrmDocumentLinkForm` + `toRepositoryFileInput` → `add*File`.
+  - Lista: `CrmDocumentList` pokazuje plakietkę i „Otwórz w …”.
+  - Nie kopiuj dokumentów Banku do CRM.
+- **Duplikaty:** `findProspectDuplicates` + `formatProspectDuplicateSummary` (`lib/crm/prospect-duplicate.ts`), używane w `LeadForm`, `CompanyForm` i imporcie.
+- **Prawdopodobieństwo:** tylko z `DEAL_PROBABILITY_OPTIONS` (10–90%, `lib/crm/deal-probability.ts`). System go nie wylicza; zmiana etapu nie zmienia prawdopodobieństwa.
+- **Waluty:**
+  - kwotę szansy zawsze wyświetlaj przez `formatDealAmount(deal)`,
+  - sumy, sortowania i progi licz przez `getDealAmountPln(deal)` (`lib/crm/currency.ts`, kursy `DEMO_FX_RATES_PLN`),
+  - nie używaj `formatCurrencyPln(deal.amount)`.
+
+## Struktura sprzedaży i lejek wg struktury (US-59)
+
+- **Seed:** `data/sales-structure.json` (`SalesOrgUnit`: division → department → region → team). RM = doradca z `teamId`, a `regionId` węzła regionu łączy go z encjami i planem.
+- **Logika:** `buildOrgPipelineTree` w `lib/analytics/org-pipeline.ts`:
+  - metryki liczone na RM i sumowane w górę,
+  - zakres: zarząd widzi pion, menedżer swój region,
+  - plan RM = plan regionu / liczba doradców.
+- **UI:** `OrgPipelineView`, zakładka Analityki „Lejek wg struktury”.
+- **Kwoty w tabelach zarządczych:** `formatCurrencyPlnCompact` („446,9 mln zł”).
+
+## Aktywności, zadania i „Dziś → Wymaga uwagi” (US-57)
+
+- **Spotkanie z aktywności:** `addCompanyActivity`, `addLeadChannelActivity` i `addDealChannelActivity` przy `type: "meeting"` dopisują `Meeting` (`appendMeetingFromActivity`; lead tylko z `clientId`). Kalendarz i „Dziś” widzą je bez dodatkowego kodu.
+- **Formularz aktywności:** `applyActivityType` (spotkanie domyślnie 10:00–11:00), `buildActivityOccurredAt` i `buildActivityEndsAt` liczą **czas lokalny**. Nie składaj ISO z `T${time}:00.000Z`.
+- **Follow-up z deala:** checkbox w `DealActivityForm` przy spotkaniu tworzy `Task` z terminem +3 dni.
+- **Zadanie z kontekstu:** `TaskFormDialog` z `defaultClientId` i `defaultOpportunityId`. Pole **Wykonawca** (`ownerId`) domyślnie bierze opiekuna klienta lub deala, a po ręcznej zmianie trzyma wybór.
+- **Wymaga uwagi:** `lib/crm/today-attention.ts`:
+  - `getOverdueTasks`,
+  - `getStaleDeals` (ostatni kontakt = aktywność deala, spotkanie lub utworzenie; próg `STALE_DEAL_DAYS` = 14),
+  - `getUpcomingRenewals` (`RENEWAL_HORIZON_DAYS` = 90).
+  - UI: `TodayAttentionCard`.
+- **Kanał e-mail:** w formularzach jako „E-mail (rejestracja ręczna)” (QW-18).
+
+## Słowniki i copy korporacyjne (US-56)
+
+- **Źródła** (`LeadSource` = `DealSource` = `CompanySource`): `rm_initiative`, `client_request`, `client_referral`, `ca_group`, `partner`, `industry_event`. Etykiety są w `lead-labels.ts`, `deal-labels.ts` i `company-labels.ts`. Nie dodawaj kanałów detalicznych (Link, Reklama, social media).
+- **Typy firm:** `active_client` / `potential_client` (Prospekt) / `former_client` / `unknown`. **Kanał aktywności** `video_call` („Wideokonferencja”) zamiast czatu.
+- **Segmenty Banku** (tekst w `Client.segment`, łączony z `kpi.json` po nazwie): „Mid Corporate”, „Large Corporate”, „Instytucje finansowe”.
+- **Nazwy deali:** „cel — klient”, unikalne. Lead z inną firmą w nazwie nie jest podpinany pod klienta (prospekt); cross-sell ma `companyName` = nazwa klienta.
+- **Szablony AI:** nie wstawiaj imion, branż ani nazw firm w miejsca wymagające odmiany. Używaj form „sektora „{{industryLabel}}””, „opiekuna ({{ownerName}})”, „firmy „{{companyName}}”” i „rzeczownik: liczba”.
+
+## Daty seedu „od dziś” (US-54)
+
+- **Plik:** `lib/data/seed-dates.ts`. Seed w `data/*.json` jest pisany względem dnia `SEED_REFERENCE_DATE_KEY` (**2026-06-05**). `loadSeedData()` przesuwa daty przy starcie sesji tak, żeby ten dzień wypadał na `getToday()`. **Nie przepisuj** JSON-ów na nową datę.
+- **Mapowanie:**
+  - Ostatnie 42 dni przed dniem referencyjnym i cała przyszłość przesuwają się 1:1, z zachowaniem godziny lokalnej.
+  - Historia od 1 stycznia 2026 jest rozciągana do początku bieżącego roku, żeby YTD nie miało dziur.
+  - Starsze daty (rachunki, produkty) przesuwają się o tyle co początek historii.
+  - `dateOfBirth` się nie zmienia.
+- **Weekend:** `moveMeetingsOffWeekend` / `moveTasksOffWeekend` przenoszą sobotę na piątek, a niedzielę na poniedziałek.
+- **KPI:** miesiące do bieżącego i YTD liczy `deriveKpiSnapshot` (US-55) względem `getDemoReferenceDate()`.
+- **Powiadomienia:** `NotificationProvider` używa `rebaseSeedDates` dla `data/notifications.json`.
+- **Analityka:** `getDemoReferenceDate()` i `getCurrentQuarter()` w `lib/analytics/filters.ts`. Nie wprowadzaj stałych dat ani kwartałów.
+- **Nowe rekordy seedu:** wpisuj daty względem 2026-06-05, np. „wczoraj” to `2026-06-04`. Nie wpisuj dat w treści (np. „w czerwcu”), bo się nie przesuną.
 
 ## Otwarte
 

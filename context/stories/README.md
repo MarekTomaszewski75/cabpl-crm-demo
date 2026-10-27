@@ -73,6 +73,14 @@ Brak warstwy **epików** — tylko user stories (`US-xx`) i taski (`T-xx-yy`).
 | 51  | [US-51 Merge files and documents](./US-51-merge-files-documents/story.md)               | P0        | US-42, US-33, US-34, US-35                      |
 | 52  | [US-52 Company AI chat (simulation)](./US-52-company-ai-chat/story.md)                  | P1        | US-35, US-45, US-49                             |
 | 53  | [US-53 Demo scenario prep](./US-53-demo-scenario-prep/story.md)                         | P0        | US-11, US-17, US-18, US-34, US-43               |
+| 54  | [US-54 Seed dates rolling](./US-54-seed-dates-rolling/story.md)                         | P0        | US-21, US-36, US-40, US-53                      |
+| 55  | [US-55 Consistent amounts](./US-55-consistent-amounts/story.md)                         | P0        | US-07, US-36, US-38, US-54                      |
+| 56  | [US-56 Corporate data and copy](./US-56-corporate-data-and-copy/story.md)               | P0        | US-17, US-35, US-52, US-53, US-55               |
+| 57  | [US-57 Activities and Today attention](./US-57-activities-and-today-attention/story.md) | P0        | US-21, US-34, US-45, US-53                      |
+| 58  | [US-58 Business admin and four eyes](./US-58-business-admin-four-eyes/story.md)         | P0        | US-03, US-04, US-23, US-53                      |
+| 59  | [US-59 Org structure pipeline](./US-59-org-structure-pipeline/story.md)                 | P0        | US-36, US-37, US-38, US-55                      |
+| 60  | [US-60 Documents, duplicates, money](./US-60-documents-duplicates-money/story.md)       | P0        | US-16, US-32, US-51, US-53, US-55               |
+| 61  | [US-61 Offer signals](./US-61-offer-signals/story.md)                                   | P0        | US-20, US-52, US-56, US-58                      |
 
 **Rozbudowa demo (po US-13):** backlog w [`../demo-expansion.md`](../demo-expansion.md) → EXP → US-xx.  
 **Uwagi specjalistów CRM (2026-06-09):** [`../crm-specialists-feedback-spec.md`](../crm-specialists-feedback-spec.md) → US-21 … US-26.  

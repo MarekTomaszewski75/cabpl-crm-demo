@@ -170,7 +170,7 @@ export function AnalyticsFiltersBar({
             <SelectContent>
               <SelectGroup>
                 <SelectItem value={ANALYTICS_REGION_ALL}>
-                  Wszyscy regiony
+                  Wszystkie regiony
                 </SelectItem>
                 {kpi.byRegion.map((region) => (
                   <SelectItem key={region.regionId} value={region.regionId}>
@@ -196,7 +196,7 @@ export function AnalyticsFiltersBar({
             <SelectContent>
               <SelectGroup>
                 <SelectItem value={ANALYTICS_SEGMENT_ALL}>
-                  Wszyscy segmenty
+                  Wszystkie segmenty
                 </SelectItem>
                 {kpi.bySegment.map((segment) => (
                   <SelectItem key={segment.segmentId} value={segment.segmentId}>

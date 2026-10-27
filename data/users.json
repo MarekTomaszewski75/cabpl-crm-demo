@@ -6,6 +6,7 @@
     "role": "advisor",
     "roleLabelPl": "Doradca korporacyjny",
     "regionId": "mazowsze",
+    "teamId": "org-team-waw-1",
     "scopeDescriptionPl": "Własni klienci i szanse w regionie Mazowsze"
   },
   {
@@ -15,6 +16,7 @@
     "role": "advisor",
     "roleLabelPl": "Doradca korporacyjny",
     "regionId": "mazowsze",
+    "teamId": "org-team-waw-2",
     "scopeDescriptionPl": "Własni klienci i szanse w regionie Mazowsze"
   },
   {
@@ -42,6 +44,7 @@
     "role": "advisor",
     "roleLabelPl": "Doradca korporacyjny",
     "regionId": "malopolska",
+    "teamId": "org-team-krk",
     "scopeDescriptionPl": "Własni klienci i szanse w regionie Małopolska"
   },
   {
@@ -51,6 +54,16 @@
     "role": "advisor",
     "roleLabelPl": "Doradca korporacyjny",
     "regionId": "pomorze",
+    "teamId": "org-team-trojmiasto",
     "scopeDescriptionPl": "Własni klienci i szanse w regionie Pomorze"
+  },
+  {
+    "id": "user-ewa",
+    "displayName": "Ewa Sadowska",
+    "email": "ewa.sadowska@demo.cabpl",
+    "role": "business_admin",
+    "roleLabelPl": "Administrator biznesowy",
+    "regionId": null,
+    "scopeDescriptionPl": "Słowniki, reguły sprzedaży i audyt — bez dostępu do danych klientów"
   }
 ]

@@ -1,13 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { toast } from "sonner"
-import { ShieldAlertIcon } from "lucide-react"
 import {
   DealActivityPanel,
   type DealComposerTab,
 } from "@/components/crm/deal-activity-panel"
+import { AccessDeniedAlert } from "@/components/crm/access-denied-alert"
 import { DealDetailHeader } from "@/components/crm/deal-detail-header"
 import { DealDetailSidebar } from "@/components/crm/deal-detail-sidebar"
 import { DealFinishDialog } from "@/components/crm/deal-finish-dialog"
@@ -24,13 +24,12 @@ import { isDealWorkflowStatusChange } from "@/lib/crm/deal-status-transition"
 import { getDealStatusLabel } from "@/lib/crm/deal-pipeline-labels"
 import { isPipelineCategoryId } from "@/lib/crm/deal-pipeline"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import { canAccessEntity } from "@/lib/rbac/scope"
+import { useAccessDeniedAudit } from "@/lib/rbac/use-access-denied-audit"
 import type { DealStatus } from "@/types/crm"
 
 export type DealEngagementSection = "meetings" | null
 
 export function DealDetailView({ dealId }: { dealId: string }) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const highlightActivityId = searchParams.get("activityId")
   const { user, isReady } = useSession()
@@ -45,30 +44,30 @@ export function DealDetailView({ dealId }: { dealId: string }) {
   const deal = deals.find((d) => d.id === dealId)
   const owner = users.find((u) => u.id === deal?.ownerId)
 
-  React.useEffect(() => {
-    if (isReady && user && deal && !canAccessEntity(deal, user)) {
-      router.replace("/pipeline")
-    }
-  }, [isReady, user, deal, router])
+  const accessDenied = useAccessDeniedAudit(
+    deal,
+    user,
+    `Szansa „${deal?.name ?? dealId}”`,
+  )
 
   if (!isReady || !user) return null
 
   if (!deal) {
     return (
       <Alert variant="destructive">
-        <AlertTitle>Nie znaleziono deala</AlertTitle>
-        <AlertDescription>Brak deala o podanym identyfikatorze.</AlertDescription>
+        <AlertTitle>Nie znaleziono szansy</AlertTitle>
+        <AlertDescription>Brak szansy o podanym identyfikatorze.</AlertDescription>
       </Alert>
     )
   }
 
-  if (!canAccessEntity(deal, user)) {
+  if (accessDenied) {
     return (
-      <Alert variant="destructive">
-        <ShieldAlertIcon />
-        <AlertTitle>Brak dostępu</AlertTitle>
-        <AlertDescription>Ten deal nie należy do Twojego zakresu.</AlertDescription>
-      </Alert>
+      <AccessDeniedAlert
+        subjectPl="Ta szansa należy"
+        backHref="/pipeline"
+        backLabelPl="Wróć do listy szans"
+      />
     )
   }
 
@@ -104,7 +103,7 @@ export function DealDetailView({ dealId }: { dealId: string }) {
           ) {
             toast.message("Nie można zmienić statusu", {
               description:
-                "Ten etap nie jest dostępny w lejku tego deala.",
+                "Ten etap nie jest dostępny w lejku tej szansy.",
             })
             return
           }

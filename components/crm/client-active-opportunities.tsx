@@ -1,5 +1,6 @@
 import { OpportunityNbaHint } from "@/components/crm/opportunity-nba-hint"
 import { Badge } from "@/components/ui/badge"
+import { formatDealAmount } from "@/lib/crm/currency"
 import { getOpportunityNbaSuggestions } from "@/lib/crm/nba-rules"
 import type { Client, ContactEvent } from "@/types/crm"
 import {
@@ -15,7 +16,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDatePl } from "@/lib/format/pl"
 import {
   getProbabilityBand,
 } from "@/lib/pipeline/stage-theme"
@@ -84,7 +85,7 @@ export function ClientActiveOpportunities({
                       </p>
                     </div>
                     <p className="shrink-0 text-sm font-semibold tabular-nums">
-                      {opp.amount ? formatCurrencyPln(opp.amount) : "—"}
+                      {formatDealAmount(opp)}
                     </p>
                   </div>
                   <Badge variant={band.variant}>

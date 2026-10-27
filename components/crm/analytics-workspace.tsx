@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { AnalyticsHeroKpiRow } from "@/components/crm/analytics/analytics-hero-kpi-row"
+import { OrgPipelineView } from "@/components/crm/analytics/org-pipeline-view"
 import { AnalyticsFiltersBar } from "@/components/crm/analytics-filters-bar"
 import { AnalyticsPanelGrid } from "@/components/crm/analytics/analytics-panel-grid"
 import { ExecutiveDashboard } from "@/components/crm/executive-dashboard"
@@ -152,7 +153,8 @@ export function AnalyticsWorkspace() {
       <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList>
           <TabsTrigger value="panels">Panel główny</TabsTrigger>
-          <TabsTrigger value="plan">Plan i cele</TabsTrigger>
+          <TabsTrigger value="structure">Lejek wg struktury</TabsTrigger>
+          <TabsTrigger value="plan">Plan i realizacja</TabsTrigger>
         </TabsList>
 
         <TabsContent value="panels" className="mt-4 flex flex-col gap-4">
@@ -180,6 +182,10 @@ export function AnalyticsWorkspace() {
             onRegionSelect={handleRegionSelect}
             onSegmentSelect={handleSegmentSelect}
           />
+        </TabsContent>
+
+        <TabsContent value="structure" className="mt-4">
+          <OrgPipelineView user={user} />
         </TabsContent>
 
         <TabsContent value="plan" className="mt-4">

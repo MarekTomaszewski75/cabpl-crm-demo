@@ -91,7 +91,7 @@ export function getClientNbaSuggestions({
       id: `${opportunity.id}-stale`,
       kind: "stale_opportunity",
       priority: "medium",
-      message: `Deal „${opportunity.name}” (${stageLabel}) — brak aktualizacji kontaktu od ${daysSinceContact} dni.`,
+      message: `Szansa „${opportunity.name}” (${stageLabel}) — brak aktualizacji kontaktu od ${daysSinceContact} dni.`,
     })
     if (suggestions.length >= MAX_SUGGESTIONS) {
       break

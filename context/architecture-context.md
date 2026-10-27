@@ -71,13 +71,13 @@ types/
 - `canAccessEntity(entity, user)` — szczegóły / 404.
 - `canSeeNavItem(item, user)` — menu boczne.
 
-Role: `advisor` | `regional_manager` | `executive` (nazwy w kodzie mogą być enum).
+Role: `advisor` | `regional_manager` | `executive` | `business_admin` (US-58: słowniki, reguły i audyt, **bez dostępu do danych klientów**).
 
 ### 5. Routing
 
 - `(auth)` — publiczny login.
 - `(dashboard)` — layout z `CrmAppShell`; jeśli brak sesji → redirect `/login`.
-- Strona główna po logowaniu zależna od roli (np. executive → `/dashboard`, advisor → `/pipeline`).
+- Strona główna po logowaniu zależna od roli (`getPostLoginPath`): executive → `/dashboard`, advisor → `/today`, regional_manager → `/pipeline`, business_admin → `/sales-rules`.
 
 ## RSC vs Client Components
 

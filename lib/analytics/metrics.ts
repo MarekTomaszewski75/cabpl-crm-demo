@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import {
   EXECUTIVE_FILTER_ALL,
   getExecutiveChartRows,
@@ -11,7 +12,8 @@ import {
 import { getPipelineCategoryLabel } from "@/lib/crm/deal-pipeline-labels"
 import { TASK_PRIORITY_LABELS, TASK_PRIORITY_OPTIONS } from "@/lib/crm/task-labels"
 import {
-  DEMO_REFERENCE_DATE,
+  getCurrentQuarter,
+  getDemoReferenceDate,
   getPeriodBounds,
   isBeforeReferenceDay,
   isDateInPeriod,
@@ -218,7 +220,7 @@ type AnalyticsData = {
 
 const ADVISOR_RADAR_DIMENSIONS: readonly AdvisorRadarDimension[] = [
   { key: "leads", label: "Leady" },
-  { key: "openDeals", label: "Otwarte deale" },
+  { key: "openDeals", label: "Otwarte szanse" },
   { key: "wonDeals", label: "Wygrane" },
   { key: "tasksDone", label: "Zadania zamknięte" },
   { key: "meetings", label: "Spotkania" },
@@ -231,8 +233,6 @@ const REGION_RADAR_DIMENSIONS: readonly RegionRadarDimension[] = [
   { key: "activity", label: "Aktywność" },
   { key: "newLeads", label: "Nowi klienci" },
 ] as const
-
-const DEMO_CURRENT_QUARTER = 2
 
 function scopedMeetings(
   data: AnalyticsData,
@@ -264,7 +264,7 @@ function getLastWeeklyBuckets(weekCount: number): {
   start: Date
   end: Date
 }[] {
-  const end = DEMO_REFERENCE_DATE
+  const end = getDemoReferenceDate()
   const buckets: { label: string; start: Date; end: Date }[] = []
   let cursorEnd = new Date(end)
   for (let week = weekCount; week >= 1; week -= 1) {
@@ -286,10 +286,6 @@ function getLastWeeklyBuckets(weekCount: number): {
 function normalizeScores(values: number[]): number[] {
   const max = Math.max(...values, 1)
   return values.map((value) => Math.round((value / max) * 100))
-}
-
-function getDealAmountPln(deal: Deal): number {
-  return deal.amount ?? 0
 }
 
 /** Data zamknięcia deala — finishedAt, inaczej expectedCloseDate. */
@@ -418,7 +414,7 @@ export function getOverdueTasksCount(
   return scopedTasks(data, user, filters).filter(
     (task) =>
       !task.completed &&
-      isBeforeReferenceDay(task.dueDate, DEMO_REFERENCE_DATE) &&
+      isBeforeReferenceDay(task.dueDate) &&
       isDateInPeriod(task.dueDate, filters.timePeriod),
   ).length
 }
@@ -514,7 +510,7 @@ export function getOverdueTasksByOwner(
   const overdue = scopedTasks(data, user, filters).filter(
     (task) =>
       !task.completed &&
-      isBeforeReferenceDay(task.dueDate, DEMO_REFERENCE_DATE) &&
+      isBeforeReferenceDay(task.dueDate) &&
       isDateInPeriod(task.dueDate, filters.timePeriod),
   )
 
@@ -833,7 +829,7 @@ export function getPlanActualTrendRows(
         const month = kpi.monthlyTrend.find(
           (entry) => entry.monthLabel === row.label,
         )
-        return month?.quarter === DEMO_CURRENT_QUARTER
+        return month?.quarter === getCurrentQuarter()
       })
       .map((row) => ({
         label: row.label,
@@ -874,7 +870,7 @@ export function getForecastScenariosTrendRows(
         const month = kpi.monthlyTrend.find(
           (entry) => entry.monthLabel === row.label,
         )
-        return month?.quarter === DEMO_CURRENT_QUARTER
+        return month?.quarter === getCurrentQuarter()
       })
       .map(mapRow)
   }
@@ -1022,9 +1018,11 @@ export function getLeadsVsWonTrendRows(
   filters: AnalyticsGlobalFilters,
   kpi: KpiSnapshot,
 ): LeadsVsWonTrendRow[] {
+  const currentQuarter = getCurrentQuarter()
+  const year = getDemoReferenceDate().getUTCFullYear()
   const months =
     filters.timePeriod === "quarter"
-      ? kpi.monthlyTrend.filter((row) => row.quarter === DEMO_CURRENT_QUARTER)
+      ? kpi.monthlyTrend.filter((row) => row.quarter === currentQuarter)
       : filters.timePeriod === "month"
         ? kpi.monthlyTrend.slice(-1)
         : kpi.monthlyTrend
@@ -1034,9 +1032,9 @@ export function getLeadsVsWonTrendRows(
 
   return months.map((month) => {
     const monthIndex = kpi.monthlyTrend.indexOf(month)
-    const monthStart = new Date(Date.UTC(2026, monthIndex, 1))
+    const monthStart = new Date(Date.UTC(year, monthIndex, 1))
     const monthEnd = new Date(
-      Date.UTC(2026, monthIndex + 1, 0, 23, 59, 59, 999),
+      Date.UTC(year, monthIndex + 1, 0, 23, 59, 59, 999),
     )
 
     return {
@@ -1233,7 +1231,7 @@ export function getAdvisorRankingRows(
         (task) =>
           task.ownerId === advisor.id &&
           !task.completed &&
-          isBeforeReferenceDay(task.dueDate, DEMO_REFERENCE_DATE) &&
+          isBeforeReferenceDay(task.dueDate) &&
           isDateInPeriod(task.dueDate, filters.timePeriod),
       )
       const advisorMeetings = meetings.filter((meeting) => {

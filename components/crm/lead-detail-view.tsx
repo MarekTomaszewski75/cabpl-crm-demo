@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { ShieldAlertIcon } from "lucide-react"
+import { useSearchParams } from "next/navigation"
 import {
   LeadActivityPanel,
   type LeadComposerTab,
 } from "@/components/crm/lead-activity-panel"
+import { AccessDeniedAlert } from "@/components/crm/access-denied-alert"
 import { LeadDetailHeader } from "@/components/crm/lead-detail-header"
 import { LeadDetailSidebar } from "@/components/crm/lead-detail-sidebar"
 import { LeadFinishDialog } from "@/components/crm/lead-finish-dialog"
@@ -16,7 +16,7 @@ import { useSession } from "@/lib/auth/demo-session"
 import { leadStatusChangeNote } from "@/lib/crm/lead-activity"
 import { LEAD_LOST_REASON_LABELS } from "@/lib/crm/lead-labels"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import { canAccessEntity } from "@/lib/rbac/scope"
+import { useAccessDeniedAudit } from "@/lib/rbac/use-access-denied-audit"
 import type { LeadStatus } from "@/types/crm"
 
 type LeadDetailViewProps = {
@@ -26,7 +26,6 @@ type LeadDetailViewProps = {
 export type LeadEngagementSection = "meetings" | null
 
 export function LeadDetailView({ leadId }: LeadDetailViewProps) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const highlightActivityId = searchParams.get("activityId")
   const { user, isReady } = useSession()
@@ -42,11 +41,11 @@ export function LeadDetailView({ leadId }: LeadDetailViewProps) {
   const lead = leads.find((l) => l.id === leadId)
   const owner = users.find((u) => u.id === lead?.ownerId)
 
-  React.useEffect(() => {
-    if (isReady && user && lead && !canAccessEntity(lead, user)) {
-      router.replace("/leads")
-    }
-  }, [isReady, user, lead, router])
+  const accessDenied = useAccessDeniedAudit(
+    lead,
+    user,
+    `Lead „${lead?.name ?? leadId}”`,
+  )
 
   function openFinish(tab?: "won" | "lost") {
     setFinishTab(tab)
@@ -77,15 +76,13 @@ export function LeadDetailView({ leadId }: LeadDetailViewProps) {
     )
   }
 
-  if (!canAccessEntity(lead, user)) {
+  if (accessDenied) {
     return (
-      <Alert variant="destructive">
-        <ShieldAlertIcon />
-        <AlertTitle>Brak dostępu</AlertTitle>
-        <AlertDescription>
-          Ten lead nie należy do Twojego zakresu (RBAC).
-        </AlertDescription>
-      </Alert>
+      <AccessDeniedAlert
+        subjectPl="Ten lead należy"
+        backHref="/leads"
+        backLabelPl="Wróć do listy leadów"
+      />
     )
   }
 

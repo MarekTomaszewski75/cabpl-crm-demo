@@ -23,5 +23,5 @@ export function getAnalyticsWorkspaceSubtitle(
     return `Region ${region?.regionName ?? "—"} · zespół ${advisorCount} doradców · okres: ${periodLabel}`
   }
 
-  return "Panele operacyjne i plan sprzedaży — demo BK."
+  return "Panele operacyjne i plan sprzedaży bankowości korporacyjnej."
 }

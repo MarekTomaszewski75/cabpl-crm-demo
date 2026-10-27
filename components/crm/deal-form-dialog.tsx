@@ -32,12 +32,12 @@ export function DealFormDialog({
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       {open === undefined ? (
-        <SheetTrigger asChild>{trigger ?? <Button size="lg"><PlusIcon />Nowy deal</Button>}</SheetTrigger>
+        <SheetTrigger asChild>{trigger ?? <Button size="lg"><PlusIcon />Nowa szansa</Button>}</SheetTrigger>
       ) : trigger}
       {isOpen ? (
         <SheetContent className="flex w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-5xl data-[side=right]:sm:max-w-5xl">
           <SheetHeader className="shrink-0 border-b border-border px-6 py-4 pr-12">
-            <SheetTitle>Nowy deal</SheetTitle>
+            <SheetTitle>Nowa szansa</SheetTitle>
           </SheetHeader>
           <DealForm
             key={`new-${defaultClientId ?? "none"}-${defaultProductId ?? "none"}-${defaultBankAccountId ?? "none"}`}

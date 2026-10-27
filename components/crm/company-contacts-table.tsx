@@ -97,7 +97,7 @@ export function CompanyContactsTable({
                 </EmptyMedia>
                 <EmptyTitle>Brak kontaktów</EmptyTitle>
                 <EmptyDescription>
-                  Brak kontaktów powiązanych z tą firmą przez firmę, deal lub
+                  Brak kontaktów powiązanych z tą firmą przez firmę, szansę lub
                   lead.
                 </EmptyDescription>
               </EmptyHeader>

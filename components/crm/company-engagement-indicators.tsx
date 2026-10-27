@@ -46,7 +46,7 @@ const INDICATORS = [
   {
     key: "deals" as const,
     icon: BriefcaseIcon,
-    label: "Deale",
+    label: "Szanse",
   },
   {
     key: "leads" as const,
