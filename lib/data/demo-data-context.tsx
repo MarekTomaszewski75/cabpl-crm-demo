@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { deriveKpiSnapshot } from "@/lib/analytics/kpi-snapshot"
 import { loadSeedData, type DemoDataState } from "@/lib/data/seed"
 import { createNextLeadActivityId } from "@/lib/crm/lead-activity-id"
 import { createNextLeadDocumentId } from "@/lib/crm/lead-document-id"
@@ -78,6 +79,7 @@ import type {
   DealLostReason,
   DealStatus,
   DealSystemActivityType,
+  KpiSnapshot,
   Meeting,
   Product,
   ProductCategory,
@@ -138,6 +140,8 @@ function buildCompanyCreatedEvent(
 }
 
 type DemoDataContextValue = DemoDataState & {
+  /** KPI liczone z planu i deali (US-55). */
+  kpi: KpiSnapshot
   deals: Deal[]
   addDeal: (input: AddDealInput) => Deal
   updateDeal: (
@@ -1654,9 +1658,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const kpi = React.useMemo(
+    () => deriveKpiSnapshot(state.kpiPlan, state.opportunities, state.clients),
+    [state.kpiPlan, state.opportunities, state.clients],
+  )
+
   const value = React.useMemo(
     () => ({
       ...state,
+      kpi,
       deals: state.opportunities,
       addDeal,
       updateDeal,
@@ -1708,6 +1718,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       state,
+      kpi,
       addDeal,
       updateDeal,
       winDeal,

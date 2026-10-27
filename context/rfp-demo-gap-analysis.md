@@ -131,7 +131,7 @@ Zgłoszenie przez Katarzynę i zatwierdzenie przez Marka (albo przez nowego admi
 | NBA i sugestie cross-sell w AI | TR-04 = N (sales automation) | Sformułować jako „Następny krok” bez rekomendacji produktów. AI nie powinno proponować produktów, które klient już ma. |
 | Duplikat po nazwie firmy | QW-01/16: duplikaty po NIP, REGON, PESEL | Zostawić nazwę jako „podobna nazwa” (ostrzeżenie miękkie). |
 
-**Plan fal w `rfp-qa-gap-analysis.md`** (US-58 oferty, US-61 korekty i snapshoty, US-63 NBI i budżet, US-66 alerty, US-67 konsola integracji, PL/EN, „Scal”) w dużej części **wykracza poza ofertę**. Dalej traktuję go jako P3 albo slajd „Etap 2”, chyba że zapadnie decyzja D1.
+**Plan fal w `rfp-qa-gap-analysis.md`** (numeracja tamtego dokumentu, nieaktualna: US-58 oferty, US-61 korekty i snapshoty, US-63 NBI i budżet, US-66 alerty, US-67 konsola integracji, PL/EN, „Scal”) w dużej części **wykracza poza ofertę**. Dalej traktuję go jako P3 albo slajd „Etap 2”, chyba że zapadnie decyzja D1.
 
 ---
 
@@ -139,7 +139,7 @@ Zgłoszenie przez Katarzynę i zatwierdzenie przez Marka (albo przez nowego admi
 
 Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**, każdy tani.
 
-1. **Spójne liczby:**
+1. **Spójne liczby** (**zrobione w US-55**):
    - Realizacja raz ma 6,8, raz 15,3, a raz 20,5 mln zł.
    - Lejek Mazowsza to 708 mln zł przy planie 28 mln zł.
    - Do wyboru: albo realizację liczyć z wygranych deali (tak obiecuje QW-08), albo przeskalować kwoty deali do planu.
@@ -179,13 +179,14 @@ Według oceny z 23.10 to obecnie największe ryzyko. Wszystkie punkty to **P1**,
 
 | Story | Zakres | Priorytet |
 | --- | --- | --- |
-| US-55 | **Spójność danych i copy:** kwoty, słowniki korporacyjne, nazwy deali, kontakty, ślady demo, literówki, segment FI, kilka deali w EUR (§5 i §4a) | P1 |
-| US-56 | **Scenariusze 4 i 5:** spotkanie z deala w kalendarzu i na „Dziś”; dialog zadania z kontekstem i wykonawcą; „Dziś” z sekcjami Zaległe, Bez postępu i Odnowienia 90 dni; E-mail jako rejestracja ręczna | P1 |
-| US-57 | **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo | P1 |
-| US-58 | **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
-| US-59 | **Scenariusz 7:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala | P1 |
-| US-60 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
-| US-61+ | P2: nagłówek Customer 360 Lite (REGON, KRS, grupa, KYC); kwalifikacja leada; bramki w innych lejkach; statusy cancelled/deferred (§4.2 specyfikacji); zakładka „Raporty” (5 raportów); ekran Audyt; raport importu; pulpit adopcji (s.72) | P2 |
+| US-55 | **Spójne kwoty:** realizacja z wygranych, prognoza z ważonego lejka, lejek ok. 3,4× planu rocznego (§5 pkt 1) — **Done** | P1 |
+| US-56 | **Dane i copy korporacyjne:** słowniki, nazwy deali, kontakty, ślady demo, literówki, segment FI, kilka deali w EUR (§5 pkt 2–9, §4a) | P1 |
+| US-57 | **Scenariusze 4 i 5:** spotkanie z deala w kalendarzu i na „Dziś”; dialog zadania z kontekstem i wykonawcą; „Dziś” z sekcjami Zaległe, Bez postępu i Odnowienia 90 dni; E-mail jako rejestracja ręczna | P1 |
+| US-58 | **Scenariusze 8 i 9:** konto administratora biznesowego; zakaz samozatwierdzenia (autor ≠ zatwierdzający); „Brak dostępu” z audytem; reset demo | P1 |
+| US-59 | **Scenariusz 6:** struktura Pion → Departament → Region → Zespół → RM w seedzie i w filtrach analityki z drill-down; przełącznik prognozy ważonej/nieważonej (po D3) | P1 |
+| US-60 | **Scenariusz 7:** odnośniki do repozytoriów dokumentów; duplikat NIP przy „Nowa firma”; prawdopodobieństwo z listy w formularzu deala | P1 |
+| US-61 | **Sygnały oferty:** etykiety AI (Azure OpenAI, bez scoringu ryzyka); badge „Etap 2”; nazewnictwo po D4 i D5; przegląd widoków na telefonie (QW-19) | P1 |
+| US-62+ | P2: nagłówek Customer 360 Lite (REGON, KRS, grupa, KYC); kwalifikacja leada; bramki w innych lejkach; statusy cancelled/deferred (§4.2 specyfikacji); zakładka „Raporty” (5 raportów); ekran Audyt; raport importu; pulpit adopcji (s.72) | P2 |
 | — | P3: widok grupy kapitałowej, przepływ wieloetapowy z SLA, panel statusu integracji, @wzmianki (QW-20 Should) | P3 |
 
 ---

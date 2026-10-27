@@ -552,6 +552,18 @@ export interface KpiMonthlyTrendRow {
   forecastPessimisticPln: number
 }
 
+/** Roczny plan sprzedaży z `data/kpi.json` — realizacja i prognoza liczone z deali (US-55). */
+export interface KpiPlanSeed {
+  monthlyPlan: { monthLabel: string; quarter: number; planPln: number }[]
+  byRegion: { regionId: string; regionName: string; planPln: number }[]
+  bySegment: { segmentId: string; segmentName: string; planPln: number }[]
+  byCategory: {
+    pipelineCategoryId: string
+    categoryName: string
+    planPln: number
+  }[]
+}
+
 export interface KpiSnapshot {
   planYtdPln: number
   actualYtdPln: number

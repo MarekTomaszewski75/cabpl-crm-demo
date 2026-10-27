@@ -1,5 +1,5 @@
 import { getToday } from "@/lib/crm/local-date"
-import type { KpiSnapshot, Meeting, Task } from "@/types/crm"
+import type { Meeting, Task } from "@/types/crm"
 
 /**
  * „Dziś” seedu — wokół tego dnia ułożone są dane w `data/*.json`.
@@ -148,47 +148,4 @@ export function moveTasksOffWeekend(tasks: Task[]): Task[] {
     if (days === 0) return task
     return { ...task, dueDate: shiftDateValue(task.dueDate, days) }
   })
-}
-
-function scaleYtdAmount(value: number, scale: number): number {
-  return Math.round((value * scale) / 100_000) * 100_000
-}
-
-/**
- * KPI seedu opisują YTD do czerwca. Trend miesięczny obcinamy do bieżącego miesiąca,
- * a kwoty YTD skalujemy proporcjonalnie do planu narastającego.
- */
-export function rebaseKpiSnapshot(
-  kpi: KpiSnapshot,
-  today: Date = getToday(),
-): KpiSnapshot {
-  const seedMonth = Number(SEED_REFERENCE_DATE_KEY.slice(5, 7)) - 1
-  const monthlyTrend = kpi.monthlyTrend.slice(0, today.getMonth() + 1)
-  const sumPlan = (rows: KpiSnapshot["monthlyTrend"]) =>
-    rows.reduce((total, row) => total + row.planPln, 0)
-  const seedPlan = sumPlan(kpi.monthlyTrend.slice(0, seedMonth + 1))
-  const scale = seedPlan > 0 ? sumPlan(monthlyTrend) / seedPlan : 1
-  const scaleRow = <
-    T extends { planPln: number; actualPln: number; forecastPln: number },
-  >(
-    row: T,
-  ): T => ({
-    ...row,
-    planPln: scaleYtdAmount(row.planPln, scale),
-    actualPln: scaleYtdAmount(row.actualPln, scale),
-    forecastPln: scaleYtdAmount(row.forecastPln, scale),
-  })
-
-  return {
-    ...kpi,
-    planYtdPln: scaleYtdAmount(kpi.planYtdPln, scale),
-    actualYtdPln: scaleYtdAmount(kpi.actualYtdPln, scale),
-    forecastYtdPln: scaleYtdAmount(kpi.forecastYtdPln, scale),
-    forecastOptimisticPln: scaleYtdAmount(kpi.forecastOptimisticPln, scale),
-    forecastPessimisticPln: scaleYtdAmount(kpi.forecastPessimisticPln, scale),
-    byRegion: kpi.byRegion.map(scaleRow),
-    bySegment: kpi.bySegment.map(scaleRow),
-    byCategory: kpi.byCategory.map(scaleRow),
-    monthlyTrend,
-  }
 }

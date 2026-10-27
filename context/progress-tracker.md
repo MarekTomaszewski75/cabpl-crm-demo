@@ -53,16 +53,19 @@
 - **US-52** — **Done** — asystent AI „Sprawdź firmę” (symulacja) na karcie firmy: AI Elements + lokalny simulator, bez `useChat`/API. [US-52](./stories/US-52-company-ai-chat/story.md).
 - **US-53** — **Done** — przebieg demo: duplikat i import prospectu, historia leada na dealu, bramka etapu kredytowego, follow-up ze spotkania, słownik źródeł z zatwierdzeniem i audytem, błąd synchronizacji katalogu z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 - **US-54** — **Done** — daty seedu przesuwane na „dziś” przy ładowaniu (`lib/data/seed-dates.ts`), analityka liczy od bieżącej daty i kwartału, KPI mają 12 miesięcy, poprawki jakości dat w seedzie. [US-54](./stories/US-54-seed-dates-rolling/story.md).
+- **US-55** — **Done** — KPI liczone z deali: plan z `kpi.json` (`KpiPlanSeed`), realizacja z wygranych, prognoza z ważonego lejka; seed: 44 wygrane, lejek 3,4 × plan. [US-55](./stories/US-55-consistent-amounts/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-54 domknięte na branchu `demo/rfp-alignment`)
+- (brak — US-55 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-55** (story **Done**) — `deriveKpiSnapshot` w `lib/analytics/kpi-snapshot.ts` + `useMemo` w `DemoDataContext`; `data/kpi.json` → plan roczny; migracja seedu dealów (kwoty, daty wygranych, daty zamknięcia lejka). [US-55](./stories/US-55-consistent-amounts/story.md).
 
 - **US-54** (story **Done**) — `createSeedDateRebaser` / `rebaseSeedDates` / `rebaseKpiSnapshot` w `loadSeedData()` i `NotificationProvider`; `getDemoReferenceDate()` + `getCurrentQuarter()` zamiast `DEMO_REFERENCE_DATE` / Q2; analiza dokumentów RFP: [`rfp-demo-gap-analysis.md`](./rfp-demo-gap-analysis.md). [US-54](./stories/US-54-seed-dates-rolling/story.md).
 
@@ -110,7 +113,7 @@
 
 ## Next up
 
-1. US-55 … US-60 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md), po decyzjach D1–D5
+1. US-56 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
 
 ---
 

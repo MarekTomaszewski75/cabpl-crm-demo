@@ -255,7 +255,11 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ### Executive dashboard / Plan i cele (US-07, zakładka US-20)
 - **Komponenty:** `executive-dashboard.tsx`, `kpi-card.tsx`
-- **Dane:** seed `data/kpi.json` (agregaty bank-wide, `byRegion`, `bySegment`, `monthlyTrend` sty–gru). Miesiące i YTD są dopasowywane do bieżącej daty przez `rebaseKpiSnapshot` (US-54). KPI **nie** są wyliczane z opportunities w runtime.
+- **Dane (US-55):** `data/kpi.json` to tylko **plan roczny** (`KpiPlanSeed`): `monthlyPlan` dla banku oraz roczne `planPln` per region, segment i kategoria. `KpiSnapshot` liczy `deriveKpiSnapshot` w `lib/analytics/kpi-snapshot.ts` (`useMemo` w `DemoDataContext`, przelicza się po zmianie deali):
+  - plan YTD = od stycznia do końca bieżącego miesiąca, kwartał = pełny bieżący kwartał, plan wiersza = udział w planie rocznym,
+  - realizacja = suma wygranych z `finishedAt` w okresie,
+  - prognoza = realizacja + ważony lejek (kwota × prawdopodobieństwo) z `expectedCloseDate` do końca okresu, łącznie z przeterminowanymi; scenariusze to ×1,25 i ×0,7.
+  - Nie wpisuj realizacji ani prognozy do JSON-a.
 - **Metryki:** `lib/dashboard/executive-metrics.ts` — `getExecutiveTotals`, `getExecutiveChartRows`, filtry `ExecutiveDashboardFilters`
 - **UI:** shadcn `Chart` + recharts (`ComposedChart`), `Tabs` (YTD / kwartał), `Select` (region, segment)
 - **Guard (alias):** `executive-role-guard.tsx` → re-eksport `AnalyticsRoleGuard`
@@ -416,7 +420,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
   - Starsze daty (rachunki, produkty) przesuwają się o tyle co początek historii.
   - `dateOfBirth` się nie zmienia.
 - **Weekend:** `moveMeetingsOffWeekend` / `moveTasksOffWeekend` przenoszą sobotę na piątek, a niedzielę na poniedziałek.
-- **KPI:** `rebaseKpiSnapshot` obcina `monthlyTrend` (12 miesięcy w seedzie) do bieżącego miesiąca i skaluje kwoty YTD.
+- **KPI:** miesiące do bieżącego i YTD liczy `deriveKpiSnapshot` (US-55) względem `getDemoReferenceDate()`.
 - **Powiadomienia:** `NotificationProvider` używa `rebaseSeedDates` dla `data/notifications.json`.
 - **Analityka:** `getDemoReferenceDate()` i `getCurrentQuarter()` w `lib/analytics/filters.ts`. Nie wprowadzaj stałych dat ani kwartałów.
 - **Nowe rekordy seedu:** wpisuj daty względem 2026-06-05, np. „wczoraj” to `2026-06-04`. Nie wpisuj dat w treści (np. „w czerwcu”), bo się nie przesuną.

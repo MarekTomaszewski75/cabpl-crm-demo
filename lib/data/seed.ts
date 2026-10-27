@@ -27,7 +27,6 @@ import { LEAD_SOURCE_LABELS } from "@/lib/crm/lead-labels"
 import {
   moveMeetingsOffWeekend,
   moveTasksOffWeekend,
-  rebaseKpiSnapshot,
   rebaseSeedDates,
 } from "@/lib/data/seed-dates"
 import {
@@ -48,7 +47,7 @@ import type {
   DemoUser,
   Department,
   Employee,
-  KpiSnapshot,
+  KpiPlanSeed,
   Lead,
   LeadActivity,
   LeadDocument,
@@ -295,7 +294,6 @@ export function loadSeedData() {
     ...seed,
     tasks: moveTasksOffWeekend(seed.tasks),
     meetings: moveMeetingsOffWeekend(seed.meetings),
-    kpi: rebaseKpiSnapshot(seed.kpi),
   }
 }
 
@@ -321,7 +319,7 @@ function buildSeedData() {
     tasks: tasksSeed as Task[],
     meetings: meetingsSeed as Meeting[],
     contactEvents: contactEventsSeed as ContactEvent[],
-    kpi: kpiSeed as KpiSnapshot,
+    kpiPlan: kpiSeed as KpiPlanSeed,
     productCategories: productCategoriesSeed as ProductCategory[],
     products: productsSeed as Product[],
     clientBankingProducts: clientBankingProductsSeed as ClientBankingProduct[],
