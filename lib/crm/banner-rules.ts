@@ -23,13 +23,14 @@ export const CRITICAL_DEAL_BANNER_PRIORITY = 10
 export const SYSTEM_DEMO_BANNER_PRIORITY = 0
 
 /** Opóźnienie przed pierwszym banerem — symuluje push z systemu w tle. */
-export const BANNER_INITIAL_DELAY_MS = 4_000
+/** Pierwszy baner od razu — bez przesuwania układu w trakcie pokazu (US-58). */
+export const BANNER_INITIAL_DELAY_MS = 0
 /** Drugi baner — po tym czasie trafia do kolejki (widoczny dopiero gdy pierwszy zniknie). */
 export const BANNER_FOLLOW_UP_DELAY_MS = 11_000
 
-/** Członek zarządu nie dostaje symulowanych alertów w demo. */
+/** Zarząd i administrator biznesowy nie dostają symulowanych alertów portfela. */
 export function shouldShowCrmBannersForUser(user: DemoUser): boolean {
-  return user.role !== "executive"
+  return user.role !== "executive" && user.role !== "business_admin"
 }
 
 /** Horyzont spotkań w banerze (dni od dziś). */

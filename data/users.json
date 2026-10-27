@@ -52,5 +52,14 @@
     "roleLabelPl": "Doradca korporacyjny",
     "regionId": "pomorze",
     "scopeDescriptionPl": "Własni klienci i szanse w regionie Pomorze"
+  },
+  {
+    "id": "user-ewa",
+    "displayName": "Ewa Sadowska",
+    "email": "ewa.sadowska@demo.cabpl",
+    "role": "business_admin",
+    "roleLabelPl": "Administrator biznesowy",
+    "regionId": null,
+    "scopeDescriptionPl": "Słowniki, reguły sprzedaży i audyt — bez dostępu do danych klientów"
   }
 ]

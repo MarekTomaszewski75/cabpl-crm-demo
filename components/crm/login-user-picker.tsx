@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils"
 import { useSession } from "@/lib/auth/demo-session"
 import { getPostLoginPath } from "@/lib/auth/post-login-path"
+import { resetDemoSession } from "@/lib/auth/reset-demo"
 import type { DemoUser } from "@/types/crm"
 
 function userInitials(displayName: string): string {
@@ -104,6 +105,14 @@ export function LoginUserPicker({ users }: LoginUserPickerProps) {
           onClick={() => selectedId && handleLogin(selectedId)}
         >
           Zaloguj
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="self-center text-muted-foreground"
+          onClick={resetDemoSession}
+        >
+          Zacznij pokaz od nowa (reset danych demo)
         </Button>
       </CardContent>
     </Card>

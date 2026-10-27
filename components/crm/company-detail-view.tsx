@@ -2,11 +2,12 @@
 
 import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { PlusIcon, ShieldAlertIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 import {
   CompanyActivityPanel,
   type CompanyComposerTab,
 } from "@/components/crm/company-activity-panel"
+import { AccessDeniedAlert } from "@/components/crm/access-denied-alert"
 import { CompanyBankAccountsTable } from "@/components/crm/company-bank-accounts-table"
 import { CompanyBankingProductsTable } from "@/components/crm/company-banking-products-table"
 import { CompanyContactsTable } from "@/components/crm/company-contacts-table"
@@ -32,7 +33,7 @@ import {
   getCompanyTasks,
 } from "@/lib/crm/company-engagement-counts"
 import { useDemoData } from "@/lib/data/demo-data-context"
-import { canAccessEntity } from "@/lib/rbac/scope"
+import { useAccessDeniedAudit } from "@/lib/rbac/use-access-denied-audit"
 
 type CompanyDetailViewProps = {
   clientId: string
@@ -131,11 +132,11 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
     }
   }, [relatedFromUrl])
 
-  React.useEffect(() => {
-    if (isReady && user && client && !canAccessEntity(client, user)) {
-      router.replace("/clients")
-    }
-  }, [isReady, user, client, router])
+  const accessDenied = useAccessDeniedAudit(
+    client,
+    user,
+    `Firma „${client?.name ?? clientId}”`,
+  )
 
   if (!isReady || !user) {
     return null
@@ -152,15 +153,13 @@ export function CompanyDetailView({ clientId }: CompanyDetailViewProps) {
     )
   }
 
-  if (!canAccessEntity(client, user)) {
+  if (accessDenied) {
     return (
-      <Alert variant="destructive">
-        <ShieldAlertIcon />
-        <AlertTitle>Brak dostępu</AlertTitle>
-        <AlertDescription>
-          Ta firma nie należy do Twojego zakresu (RBAC).
-        </AlertDescription>
-      </Alert>
+      <AccessDeniedAlert
+        subjectPl="Ta firma należy"
+        backHref="/clients"
+        backLabelPl="Wróć do listy firm"
+      />
     )
   }
 

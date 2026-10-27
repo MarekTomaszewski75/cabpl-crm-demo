@@ -331,6 +331,8 @@ function buildSeedData() {
         id,
         labelPl,
         proposedLabelPl: null,
+        proposedByUserId: null,
+        proposedJustificationPl: null,
         status: "approved",
       }),
     ),

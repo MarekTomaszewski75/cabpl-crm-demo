@@ -1,4 +1,9 @@
-export type UserRole = "advisor" | "regional_manager" | "executive"
+export type UserRole =
+  | "advisor"
+  | "regional_manager"
+  | "executive"
+  /** Słowniki, reguły i audyt — bez dostępu do danych klientów (US-58). */
+  | "business_admin"
 
 export type OpportunityStage =
   | "lead"
@@ -366,6 +371,9 @@ export interface SalesDictionaryItem {
   id: LeadSource
   labelPl: string
   proposedLabelPl: string | null
+  /** Autor zgłoszenia — nie może go zatwierdzić (zasada czterech oczu, US-58). */
+  proposedByUserId: string | null
+  proposedJustificationPl: string | null
   status: SalesDictionaryStatus
 }
 
@@ -635,6 +643,7 @@ export const USER_ROLE_LABELS: Record<UserRole, string> = {
   advisor: "Doradca korporacyjny",
   regional_manager: "Regionalny menedżer",
   executive: "Członek Zarządu",
+  business_admin: "Administrator biznesowy",
 }
 
 export const EMPLOYEE_STATUS_LABELS: Record<EmployeeStatus, string> = {

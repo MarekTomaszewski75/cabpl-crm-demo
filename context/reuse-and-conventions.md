@@ -271,7 +271,8 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 ### filterByScope / canAccessEntity
 - **Plik:** `lib/rbac/scope.ts`
 - **Użycie list:** `const visible = filterByScope(clients, sessionUser)`
-- **Użycie szczegółów:** `if (!canAccessEntity(client, sessionUser)) notFound()` (lub komunikat „Brak dostępu”)
+- **Użycie szczegółów:** `const denied = useAccessDeniedAudit(entity, user, "Firma „…”")` (`lib/rbac/use-access-denied-audit.ts`) + `<AccessDeniedAlert />`. Zamiast przekierowania jest komunikat i jeden wpis audytu „Odmowa dostępu” (US-58).
+- **`business_admin`:** `isInScope` → `false` (need-to-know). Menu: Produkty, Reguły sprzedaży. Nie dodawaj mu dostępu do klientów, leadów ani deali.
 - **Nie duplikować** warunków `ownerId` / `regionId` na stronach — zawsze przez te funkcje
 
 ### canSeeNavItem / CRM_NAV_ITEMS
@@ -345,7 +346,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **API:** `useBanners()` → `onBannerAdd`, `onBannerRemove`, `onBannersClear`.
 
 ### Reguły banerów
-- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
+- **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; pierwszy baner od razu (`BANNER_INITIAL_DELAY_MS = 0`), drugi w kolejce po 11 s; wybór raz na logowanie (`useEffectEvent` w kontrolerze — zmiana danych nie losuje od nowa, US-58); `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
 - **Treść banera:** `components/crm/crm-banner-payload-content.tsx` — współdzielony layout tytułu/opisu/akcji.
 - **Kontroler:** `components/crm/crm-banner-controller.tsx` — losuje 2 banery z puli wygenerowanej z `DemoDataContext`.
 - **Seed:** terminy spotkań, zadań i deali leżą wokół 2026-06-05 i są przesuwane na bieżącą datę przy ładowaniu (US-54, `lib/data/seed-dates.ts`).
@@ -409,7 +410,10 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Bramka etapu kredytowego (`new` → dalszy etap): `requiresCreditStageGate` + `DealStageGateDialog`.
 - Historia po konwersji: `DealSourceLeadCard` szuka leada po `opportunityId`.
 - Follow-up: `MeetingFormDialog` tworzy `Task` powiązany z firmą.
-- Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
+- Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`.
+  - US-58: zgłoszenie wymaga uzasadnienia; zatwierdza lub odrzuca `business_admin` albo `regional_manager`, **nie autor** (`canDecideSalesDictionaryChange` w `lib/crm/sales-dictionary-rules.ts`).
+  - Audyt zapisuje stan przed i po oraz autora; karta audytu jest widoczna dla ról zatwierdzających i zarządu.
+- Reset pokazu: `resetDemoSession()` (`lib/auth/reset-demo.ts`) czyści `sessionStorage` i przeładowuje seed. Przycisk jest na ekranie logowania.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
 
 ## Aktywności, zadania i „Dziś → Wymaga uwagi” (US-57)

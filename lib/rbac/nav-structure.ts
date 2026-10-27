@@ -17,7 +17,9 @@ export type NavItemId =
   | "compliance"
   | "salesRules"
 
-const ALL_ROLES: UserRole[] = ["advisor", "regional_manager", "executive"]
+/** Role pracujące na danych klientów (bez administratora biznesowego). */
+const SALES_ROLES: UserRole[] = ["advisor", "regional_manager", "executive"]
+const ALL_ROLES: UserRole[] = [...SALES_ROLES, "business_admin"]
 
 export interface CrmNavItem {
   id: NavItemId
@@ -69,14 +71,14 @@ defineNavItem({
   id: "employees",
   labelPl: "Pracownicy",
   href: "/employees",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 defineNavItem({
   id: "companyStructure",
   labelPl: "Struktura firmy",
   href: "/company-structure",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 const tasks = defineNavItem({
@@ -90,28 +92,28 @@ const leads = defineNavItem({
   id: "leads",
   labelPl: "Leady",
   href: "/leads",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 const pipeline = defineNavItem({
   id: "pipeline",
   labelPl: "Deale",
   href: "/pipeline",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 const contacts = defineNavItem({
   id: "contacts",
   labelPl: "Kontakty",
   href: "/contacts",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 const clients = defineNavItem({
   id: "clients",
   labelPl: "Firmy",
   href: "/clients",
-  roles: ALL_ROLES,
+  roles: SALES_ROLES,
 })
 
 const products = defineNavItem({

@@ -56,16 +56,19 @@
 - **US-55** — **Done** — KPI liczone z deali: plan z `kpi.json` (`KpiPlanSeed`), realizacja z wygranych, prognoza z ważonego lejka; seed: 44 wygrane, lejek 3,4 × plan. [US-55](./stories/US-55-consistent-amounts/story.md).
 - **US-56** — **Done** — słowniki korporacyjne (źródła, typy firm, wideokonferencja, powody utraty), segmenty Banku + instytucje finansowe, unikalne nazwy deali, kontakty i leady Polskiej Logistyki, bez śladów demo, `pluralPl`, poprawna polszczyzna w AI. [US-56](./stories/US-56-corporate-data-and-copy/story.md).
 - **US-57** — **Done** — spotkanie z aktywności w kalendarzu, follow-up z deala, „Nowe zadanie” z wykonawcą, „Dziś → Wymaga uwagi” (zaległe, bez postępu, odnowienia), e-mail jako rejestracja ręczna, czas lokalny w formularzach, historia aktywności deali w seedzie. [US-57](./stories/US-57-activities-and-today-attention/story.md).
+- **US-58** — **Done** — rola `business_admin` (Ewa Sadowska, bez danych klientów), słownik z uzasadnieniem i czterema oczami, audyt przed/po, „Brak dostępu” z wpisem w audycie, stabilne banery, reset demo na logowaniu. [US-58](./stories/US-58-business-admin-four-eyes/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-57 domknięte na branchu `demo/rfp-alignment`)
+- (brak — US-58 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-58** (story **Done**) — `UserRole` + `business_admin`; `lib/crm/sales-dictionary-rules.ts`; `decideSalesDictionaryLabel` (zatwierdź/odrzuć); `useAccessDeniedAudit` + `AccessDeniedAlert`; `CrmBannerController` z `useEffectEvent`; `resetDemoSession`. [US-58](./stories/US-58-business-admin-four-eyes/story.md).
 
 - **US-57** (story **Done**) — `appendMeetingFromActivity` w `DemoDataContext`; `applyActivityType` / `buildActivityEndsAt` (czas lokalny); `TaskFormDialog` (`defaultOpportunityId`, Wykonawca); `lib/crm/today-attention.ts` + `TodayAttentionCard`; `data/deal-activities.json` (561). [US-57](./stories/US-57-activities-and-today-attention/story.md).
 
@@ -119,7 +122,7 @@
 
 ## Next up
 
-1. US-58 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
+1. US-59 … US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
 
 ---
 

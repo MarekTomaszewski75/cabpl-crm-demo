@@ -14,6 +14,7 @@ import { toast } from "sonner"
 import { resolveLeadActivityKind } from "@/lib/crm/lead-activity"
 import { createNextDealActivityId } from "@/lib/crm/deal-activity-id"
 import { createNextMeetingId } from "@/lib/crm/meeting-id"
+import { canDecideSalesDictionaryChange } from "@/lib/crm/sales-dictionary-rules"
 import { resolveDealActivityKind } from "@/lib/crm/deal-activity"
 import { formatDealExpectedCloseDateChangeNote } from "@/lib/crm/deal-close-date-urgency"
 import {
@@ -297,9 +298,11 @@ type DemoDataContextValue = DemoDataState & {
   proposeSalesDictionaryLabel: (
     sourceId: LeadSource,
     proposedLabel: string,
+    justification: string,
     user: DemoUser,
   ) => void
   approveSalesDictionaryLabel: (sourceId: LeadSource, user: DemoUser) => void
+  rejectSalesDictionaryLabel: (sourceId: LeadSource, user: DemoUser) => void
   appendAuditEntry: (input: Omit<AuditEntry, "id">) => void
 }
 
@@ -1631,9 +1634,15 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const proposeSalesDictionaryLabel = React.useCallback(
-    (sourceId: LeadSource, proposedLabel: string, user: DemoUser) => {
+    (
+      sourceId: LeadSource,
+      proposedLabel: string,
+      justification: string,
+      user: DemoUser,
+    ) => {
       const trimmed = proposedLabel.trim()
-      if (!trimmed) return
+      const reason = justification.trim()
+      if (!trimmed || !reason) return
       setState((prev) => {
         const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
         if (!item || item.labelPl === trimmed) return prev
@@ -1643,7 +1652,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
           actorUserId: user.id,
           areaPl: "Słownik",
           actionPl: "Zgłoszono zmianę",
-          detailPl: `Źródło „${item.labelPl}” → „${trimmed}” (do zatwierdzenia)`,
+          detailPl: `Źródło: przed „${item.labelPl}”, po „${trimmed}”. Uzasadnienie: ${reason}`,
         }
         return {
           ...prev,
@@ -1652,6 +1661,8 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
               ? {
                   ...entryItem,
                   proposedLabelPl: trimmed,
+                  proposedByUserId: user.id,
+                  proposedJustificationPl: reason,
                   status: "pending",
                 }
               : entryItem,
@@ -1663,21 +1674,31 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
-  const approveSalesDictionaryLabel = React.useCallback(
-    (sourceId: LeadSource, user: DemoUser) => {
-      if (user.role !== "regional_manager") return
+  const decideSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser, decision: "approve" | "reject") => {
       setState((prev) => {
         const item = prev.salesDictionary.find((entry) => entry.id === sourceId)
-        if (!item || item.status !== "pending" || !item.proposedLabelPl) {
+        if (
+          !item ||
+          item.status !== "pending" ||
+          !item.proposedLabelPl ||
+          !canDecideSalesDictionaryChange(user, item)
+        ) {
           return prev
         }
+        const proposer = prev.users.find(
+          (candidate) => candidate.id === item.proposedByUserId,
+        )
+        const approved = decision === "approve"
         const entry: AuditEntry = {
           id: createNextAuditId(prev.auditLog),
           occurredAt: new Date().toISOString(),
           actorUserId: user.id,
           areaPl: "Słownik",
-          actionPl: "Zatwierdzono zmianę",
-          detailPl: `Źródło „${item.labelPl}” → „${item.proposedLabelPl}”`,
+          actionPl: approved ? "Zatwierdzono zmianę" : "Odrzucono zmianę",
+          detailPl: `Źródło: przed „${item.labelPl}”, po „${
+            approved ? item.proposedLabelPl : item.labelPl
+          }”. Zgłosił(a): ${proposer?.displayName ?? "nieznany użytkownik"}.`,
         }
         return {
           ...prev,
@@ -1685,8 +1706,12 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
             entryItem.id === sourceId
               ? {
                   ...entryItem,
-                  labelPl: item.proposedLabelPl ?? entryItem.labelPl,
+                  labelPl: approved
+                    ? (item.proposedLabelPl ?? entryItem.labelPl)
+                    : entryItem.labelPl,
                   proposedLabelPl: null,
+                  proposedByUserId: null,
+                  proposedJustificationPl: null,
                   status: "approved",
                 }
               : entryItem,
@@ -1696,6 +1721,18 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       })
     },
     [],
+  )
+
+  const approveSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser) =>
+      decideSalesDictionaryLabel(sourceId, user, "approve"),
+    [decideSalesDictionaryLabel],
+  )
+
+  const rejectSalesDictionaryLabel = React.useCallback(
+    (sourceId: LeadSource, user: DemoUser) =>
+      decideSalesDictionaryLabel(sourceId, user, "reject"),
+    [decideSalesDictionaryLabel],
   )
 
   const appendAuditEntry = React.useCallback(
@@ -1767,6 +1804,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       removeDepartment,
       proposeSalesDictionaryLabel,
       approveSalesDictionaryLabel,
+      rejectSalesDictionaryLabel,
       appendAuditEntry,
     }),
     [
@@ -1818,6 +1856,7 @@ export function DemoDataProvider({ children }: { children: React.ReactNode }) {
       removeDepartment,
       proposeSalesDictionaryLabel,
       approveSalesDictionaryLabel,
+      rejectSalesDictionaryLabel,
       appendAuditEntry,
     ],
   )
