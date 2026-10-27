@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# client documents (RFP Q&A etc.) — keep out of repo
+/context/*.xlsx
