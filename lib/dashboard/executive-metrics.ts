@@ -1,3 +1,4 @@
+import { getCurrentQuarter } from "@/lib/analytics/filters"
 import type {
   KpiBreakdownRow,
   KpiMonthlyTrendRow,
@@ -203,9 +204,6 @@ function scaleMonthlyRow(
   }
 }
 
-/** Bieżący kwartał demo (czerwiec 2026 → Q2). */
-const DEMO_CURRENT_QUARTER = 2
-
 export function getExecutiveChartRows(
   kpi: KpiSnapshot,
   filters: ExecutiveDashboardFilters
@@ -213,7 +211,7 @@ export function getExecutiveChartRows(
   const scale = getFilterScale(kpi, filters)
   const months =
     filters.timePeriod === "quarter"
-      ? kpi.monthlyTrend.filter((row) => row.quarter === DEMO_CURRENT_QUARTER)
+      ? kpi.monthlyTrend.filter((row) => row.quarter === getCurrentQuarter())
       : kpi.monthlyTrend
 
   return months.map((row) => scaleMonthlyRow(row, scale))
@@ -222,5 +220,5 @@ export function getExecutiveChartRows(
 export function getExecutiveTimePeriodLabel(
   timePeriod: ExecutiveTimePeriod
 ): string {
-  return timePeriod === "ytd" ? "YTD" : "Bieżący kwartał (Q2)"
+  return timePeriod === "ytd" ? "YTD" : `Bieżący kwartał (Q${getCurrentQuarter()})`
 }

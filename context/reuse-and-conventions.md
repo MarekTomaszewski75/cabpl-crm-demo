@@ -255,7 +255,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ### Executive dashboard / Plan i cele (US-07, zakładka US-20)
 - **Komponenty:** `executive-dashboard.tsx`, `kpi-card.tsx`
-- **Dane:** seed `data/kpi.json` (agregaty bank-wide + `byRegion` / `bySegment` / `monthlyTrend`); **nie** wyliczać KPI z opportunities w runtime
+- **Dane:** seed `data/kpi.json` (agregaty bank-wide, `byRegion`, `bySegment`, `monthlyTrend` sty–gru). Miesiące i YTD są dopasowywane do bieżącej daty przez `rebaseKpiSnapshot` (US-54). KPI **nie** są wyliczane z opportunities w runtime.
 - **Metryki:** `lib/dashboard/executive-metrics.ts` — `getExecutiveTotals`, `getExecutiveChartRows`, filtry `ExecutiveDashboardFilters`
 - **UI:** shadcn `Chart` + recharts (`ComposedChart`), `Tabs` (YTD / kwartał), `Select` (region, segment)
 - **Guard (alias):** `executive-role-guard.tsx` → re-eksport `AnalyticsRoleGuard`
@@ -343,7 +343,7 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - **Plik:** `lib/crm/banner-rules.ts` — `generateDemoBannersForUser` (spotkania, zadania, deale, KYC, sync klientów z seedu + `filterByScope`); `pickRandomDemoBanners`; opóźnienia 4 s / 11 s; `getCriticalDealBanner` — **auto wyłączone**; sync katalogu produktów (US-43): `shouldShowProductCatalogSyncBanner` + `createProductCatalogSyncBanner`.
 - **Treść banera:** `components/crm/crm-banner-payload-content.tsx` — współdzielony layout tytułu/opisu/akcji.
 - **Kontroler:** `components/crm/crm-banner-controller.tsx` — losuje 2 banery z puli wygenerowanej z `DemoDataContext`.
-- **Seed:** terminy spotkań/zadań/deali rozłożone względem bieżącej daty (prezentacja na żywo — bez zamrożonej daty demo).
+- **Seed:** terminy spotkań, zadań i deali leżą wokół 2026-06-05 i są przesuwane na bieżącą datę przy ładowaniu (US-54, `lib/data/seed-dates.ts`).
 
 ---
 
@@ -406,6 +406,20 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Follow-up: `MeetingFormDialog` tworzy `Task` powiązany z firmą.
 - Słownik źródeł i audyt: stan w `DemoDataContext` (`salesDictionary`, `auditLog`), ekran `/sales-rules`. Zatwierdza `regional_manager`.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
+
+## Daty seedu „od dziś” (US-54)
+
+- **Plik:** `lib/data/seed-dates.ts`. Seed w `data/*.json` jest pisany względem dnia `SEED_REFERENCE_DATE_KEY` (**2026-06-05**). `loadSeedData()` przesuwa daty przy starcie sesji tak, żeby ten dzień wypadał na `getToday()`. **Nie przepisuj** JSON-ów na nową datę.
+- **Mapowanie:**
+  - Ostatnie 42 dni przed dniem referencyjnym i cała przyszłość przesuwają się 1:1, z zachowaniem godziny lokalnej.
+  - Historia od 1 stycznia 2026 jest rozciągana do początku bieżącego roku, żeby YTD nie miało dziur.
+  - Starsze daty (rachunki, produkty) przesuwają się o tyle co początek historii.
+  - `dateOfBirth` się nie zmienia.
+- **Weekend:** `moveMeetingsOffWeekend` / `moveTasksOffWeekend` przenoszą sobotę na piątek, a niedzielę na poniedziałek.
+- **KPI:** `rebaseKpiSnapshot` obcina `monthlyTrend` (12 miesięcy w seedzie) do bieżącego miesiąca i skaluje kwoty YTD.
+- **Powiadomienia:** `NotificationProvider` używa `rebaseSeedDates` dla `data/notifications.json`.
+- **Analityka:** `getDemoReferenceDate()` i `getCurrentQuarter()` w `lib/analytics/filters.ts`. Nie wprowadzaj stałych dat ani kwartałów.
+- **Nowe rekordy seedu:** wpisuj daty względem 2026-06-05, np. „wczoraj” to `2026-06-04`. Nie wpisuj dat w treści (np. „w czerwcu”), bo się nie przesuną.
 
 ## Otwarte
 

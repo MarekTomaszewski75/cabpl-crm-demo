@@ -72,7 +72,7 @@
     "type": "lead_note",
     "occurredAt": "2026-05-10T13:00:00.000Z",
     "titlePl": "Notatka",
-    "note": "Klient prosi o przypomnienie w czerwcu.",
+    "note": "Klient prosi o przypomnienie za miesiąc.",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
   },
@@ -466,7 +466,7 @@
     "leadId": "lead-004",
     "kind": "system",
     "type": "lead_task_completed",
-    "occurredAt": "2026-06-07T16:00:00.000Z",
+    "occurredAt": "2026-06-04T16:00:00.000Z",
     "titlePl": "Zadanie wykonane",
     "note": "Weryfikacja zabezpieczeń inwestycji",
     "ownerId": "user-piotr",

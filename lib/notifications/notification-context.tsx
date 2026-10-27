@@ -9,6 +9,7 @@ import {
 } from "@/lib/crm/notification-rules"
 import { useSession } from "@/lib/auth/demo-session"
 import { useDemoData } from "@/lib/data/demo-data-context"
+import { rebaseSeedDates } from "@/lib/data/seed-dates"
 import type { Notification } from "@/types/crm"
 
 type NotificationContextValue = {
@@ -39,8 +40,10 @@ export function NotificationProvider({
       return
     }
 
-    const seed = (notificationsSeed as Notification[]).filter(
-      (notification) => notification.userId === user.id,
+    const seed = rebaseSeedDates(
+      (notificationsSeed as Notification[]).filter(
+        (notification) => notification.userId === user.id,
+      ),
     )
     const generated = generateNotificationsForUser(
       user,

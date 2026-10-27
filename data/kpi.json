@@ -201,6 +201,60 @@
       "forecastPln": 4500000,
       "forecastOptimisticPln": 5100000,
       "forecastPessimisticPln": 4100000
+    },
+    {
+      "monthLabel": "Lip",
+      "quarter": 3,
+      "planPln": 5000000,
+      "actualPln": 3700000,
+      "forecastPln": 4600000,
+      "forecastOptimisticPln": 5100000,
+      "forecastPessimisticPln": 4200000
+    },
+    {
+      "monthLabel": "Sie",
+      "quarter": 3,
+      "planPln": 5000000,
+      "actualPln": 3500000,
+      "forecastPln": 4500000,
+      "forecastOptimisticPln": 5000000,
+      "forecastPessimisticPln": 4000000
+    },
+    {
+      "monthLabel": "Wrz",
+      "quarter": 3,
+      "planPln": 5000000,
+      "actualPln": 4300000,
+      "forecastPln": 4900000,
+      "forecastOptimisticPln": 5400000,
+      "forecastPessimisticPln": 4400000
+    },
+    {
+      "monthLabel": "Paź",
+      "quarter": 4,
+      "planPln": 6000000,
+      "actualPln": 4700000,
+      "forecastPln": 5700000,
+      "forecastOptimisticPln": 6300000,
+      "forecastPessimisticPln": 5100000
+    },
+    {
+      "monthLabel": "Lis",
+      "quarter": 4,
+      "planPln": 6000000,
+      "actualPln": 4900000,
+      "forecastPln": 5900000,
+      "forecastOptimisticPln": 6500000,
+      "forecastPessimisticPln": 5300000
+    },
+    {
+      "monthLabel": "Gru",
+      "quarter": 4,
+      "planPln": 6000000,
+      "actualPln": 5200000,
+      "forecastPln": 6100000,
+      "forecastOptimisticPln": 6800000,
+      "forecastPessimisticPln": 5500000
     }
   ]
 }

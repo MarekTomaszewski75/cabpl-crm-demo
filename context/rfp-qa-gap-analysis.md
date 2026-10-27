@@ -1,5 +1,7 @@
 # Q&A z RFP (28459 Corpo CRM Quick Win) — analiza względem mocka
 
+> **Częściowo nieaktualne (2026-10-27).** Appendix B jest w specyfikacji Banku. Plan fal US-54+ częściowo wykracza poza naszą ofertę. Aktualny stan i priorytety: [`rfp-demo-gap-analysis.md`](./rfp-demo-gap-analysis.md).
+
 **Źródło:** [`28459 Corpo CRM Quick Win - Questions Answers 20262012.xlsx`](./28459%20Corpo%20CRM%20Quick%20Win%20-%20Questions%20Answers%2020262012.xlsx) — 220 pytań oferentów i odpowiedzi Banku.
 **Stan mocka:** branch `demo/scenario-prep`, US-01 … US-53 Done.
 **Założenie:** mock to **PoC na danych syntetycznych** (`npm run dev`, JSON + React Context). Nie budujemy integracji, SSO, bazy ani infrastruktury. Pokazujemy je w UI tylko jako **sygnał** (badge źródła, status synchronizacji, link „Otwórz w źródle”).

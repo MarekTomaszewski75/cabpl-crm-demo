@@ -131,7 +131,7 @@
     "id": "meeting-013",
     "title": "Spotkanie — UrbanBud",
     "clientId": "client-013",
-    "startsAt": "2026-06-03T9:00:00.000Z",
+    "startsAt": "2026-06-03T09:00:00.000Z",
     "endsAt": "2026-06-03T12:30:00.000Z",
     "note": "Siedziba klienta, Warszawa",
     "ownerId": "user-anna",

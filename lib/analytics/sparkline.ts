@@ -1,4 +1,8 @@
-import { DEMO_REFERENCE_DATE, getPeriodBounds } from "@/lib/analytics/filters"
+import {
+  getDemoReferenceDate,
+  getPeriodBounds,
+  isBeforeReferenceDay,
+} from "@/lib/analytics/filters"
 import {
   applyPipelineCategoryFilter,
   filterAnalyticsEntities,
@@ -40,7 +44,7 @@ function isInBucket(dateValue: string, bucket: TimeBucket): boolean {
 
 export function getSparklineBuckets(
   period: AnalyticsTimePeriod,
-  referenceDate: Date = DEMO_REFERENCE_DATE,
+  referenceDate: Date = getDemoReferenceDate(),
 ): TimeBucket[] {
   const { start, end } = getPeriodBounds(period, referenceDate)
 
@@ -184,14 +188,7 @@ export function getMetricSparkline(
               (task) =>
                 !task.completed &&
                 isInBucket(task.dueDate, bucket) &&
-                new Date(task.dueDate) <
-                  new Date(
-                    Date.UTC(
-                      DEMO_REFERENCE_DATE.getUTCFullYear(),
-                      DEMO_REFERENCE_DATE.getUTCMonth(),
-                      DEMO_REFERENCE_DATE.getUTCDate(),
-                    ),
-                  ),
+                isBeforeReferenceDay(task.dueDate),
             ).length,
         ),
       )

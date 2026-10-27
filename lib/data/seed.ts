@@ -25,6 +25,12 @@ import bankAccountsSeed from "@/data/bank-accounts.json"
 import auditLogSeed from "@/data/audit-log.json"
 import { LEAD_SOURCE_LABELS } from "@/lib/crm/lead-labels"
 import {
+  moveMeetingsOffWeekend,
+  moveTasksOffWeekend,
+  rebaseKpiSnapshot,
+  rebaseSeedDates,
+} from "@/lib/data/seed-dates"
+import {
   DEFAULT_PIPELINE_CATEGORY_ID,
   getPipelineSteps,
   isPipelineCategoryId,
@@ -282,7 +288,18 @@ function normalizeDeals(
   })
 }
 
+/** Seed z datami przesuniętymi na bieżący kalendarz (US-54). */
 export function loadSeedData() {
+  const seed = rebaseSeedDates(buildSeedData())
+  return {
+    ...seed,
+    tasks: moveTasksOffWeekend(seed.tasks),
+    meetings: moveMeetingsOffWeekend(seed.meetings),
+    kpi: rebaseKpiSnapshot(seed.kpi),
+  }
+}
+
+function buildSeedData() {
   const bankAccounts = bankAccountsSeed as BankAccount[]
   return {
     users: usersSeed as DemoUser[],

@@ -52,16 +52,19 @@
 - **US-51** — **Done** — scalenie zakładek Pliki/Dokumenty: `displayName`/`description` na `*File`, `entity-documents.ts`, `CrmDocumentList` + `CrmDocumentUploadForm`, jedna zakładka Dokumenty na firmie/leadzie/dealu. [US-51](./stories/US-51-merge-files-documents/story.md).
 - **US-52** — **Done** — asystent AI „Sprawdź firmę” (symulacja) na karcie firmy: AI Elements + lokalny simulator, bez `useChat`/API. [US-52](./stories/US-52-company-ai-chat/story.md).
 - **US-53** — **Done** — przebieg demo: duplikat i import prospectu, historia leada na dealu, bramka etapu kredytowego, follow-up ze spotkania, słownik źródeł z zatwierdzeniem i audytem, błąd synchronizacji katalogu z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
+- **US-54** — **Done** — daty seedu przesuwane na „dziś” przy ładowaniu (`lib/data/seed-dates.ts`), analityka liczy od bieżącej daty i kwartału, KPI mają 12 miesięcy, poprawki jakości dat w seedzie. [US-54](./stories/US-54-seed-dates-rolling/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-53 domknięte na branchu `demo/scenario-prep`)
+- (brak — US-54 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-54** (story **Done**) — `createSeedDateRebaser` / `rebaseSeedDates` / `rebaseKpiSnapshot` w `loadSeedData()` i `NotificationProvider`; `getDemoReferenceDate()` + `getCurrentQuarter()` zamiast `DEMO_REFERENCE_DATE` / Q2; analiza dokumentów RFP: [`rfp-demo-gap-analysis.md`](./rfp-demo-gap-analysis.md). [US-54](./stories/US-54-seed-dates-rolling/story.md).
 
 - **US-53** (story **Done**) — import prospectów z ostrzeżeniem duplikatu i wyborem opiekuna; karta deala „Powstał z leada”; bramka `new` → dalszy etap w lejku kredytowym; zadanie follow-up ze spotkania; `/sales-rules` (słownik + audyt); baner błędu katalogu produktów z **Ponów**. [US-53](./stories/US-53-demo-scenario-prep/story.md).
 
@@ -107,7 +110,7 @@
 
 ## Next up
 
-1. (brak zaplanowanej story — patrz [`stories/README.md`](./stories/README.md))
+1. US-55 … US-60 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md), po decyzjach D1–D5
 
 ---
 
@@ -121,7 +124,7 @@
 
 | Temat | Plik |
 | ----- | ---- |
-| Appendix B (scenariusz demo wymagany przez Bank) — brak w repo; plan fal US-54+ po Q&A RFP | [`rfp-qa-gap-analysis.md`](./rfp-qa-gap-analysis.md) |
+| Decyzje D1–D6: zakres oferty vs specyfikacja, scenariusze 4/8, porównanie prognoz, „Deal” vs „Szansa”, nazwy ekranów, termin demo. Appendix B jest w specyfikacji. | [`rfp-demo-gap-analysis.md` §6](./rfp-demo-gap-analysis.md) |
 
 ---
 
