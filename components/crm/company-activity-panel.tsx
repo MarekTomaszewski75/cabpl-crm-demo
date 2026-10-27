@@ -10,6 +10,7 @@ import { CompanyActivityForm } from "@/components/crm/company-activity-form"
 import { CompanyMeetingsList } from "@/components/crm/company-meetings-list"
 import { CompanyTasksTable } from "@/components/crm/company-tasks-table"
 import { CrmDocumentList } from "@/components/crm/crm-document-list"
+import { CrmDocumentLinkForm } from "@/components/crm/crm-document-link-form"
 import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +31,10 @@ import {
 import { getMergedDocumentsForClient } from "@/lib/crm/entity-documents"
 import { getClientFilesForClient } from "@/lib/crm/entity-files"
 import { useSession } from "@/lib/auth/demo-session"
+import {
+  toRepositoryFileInput,
+  type CrmDocumentLinkInput,
+} from "@/lib/crm/document-repositories"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Client } from "@/types/crm"
 
@@ -201,6 +206,15 @@ export function CompanyActivityPanel({
     return created !== null
   }
 
+  function handleAddDocumentLink(input: CrmDocumentLinkInput) {
+    if (!user) return false
+    const created = addClientFile(client.id, toRepositoryFileInput(input), user)
+    if (created) {
+      toast.success("Odnośnik do dokumentu został dodany")
+    }
+    return created !== null
+  }
+
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-4">
       <Card size="sm">
@@ -246,6 +260,10 @@ export function CompanyActivityPanel({
                 storedFiles={clientUploadedFiles}
                 disabled={!user}
                 onSubmit={handleUploadDocument}
+              />
+              <CrmDocumentLinkForm
+                disabled={!user}
+                onSubmit={handleAddDocumentLink}
               />
             </TabsContent>
           </Tabs>

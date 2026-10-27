@@ -29,6 +29,11 @@ import { formatContactName } from "@/lib/crm/contact-display"
 import { DEAL_EXPECTED_CLOSE_DATE_LABEL } from "@/lib/crm/deal-close-date-urgency"
 import { DealBankAccountSelect } from "@/components/crm/deal-bank-account-select"
 import { DEAL_CURRENCY_OPTIONS, DEAL_SOURCE_OPTIONS, DEAL_TYPE_OPTIONS } from "@/lib/crm/deal-labels"
+import {
+  DEAL_PROBABILITY_OPTIONS,
+  DEFAULT_DEAL_PROBABILITY,
+  formatDealProbability,
+} from "@/lib/crm/deal-probability"
 import { DEAL_PIPELINE_CATEGORY_LABELS } from "@/lib/crm/deal-pipeline-labels"
 import {
   getPipelineCategoryIds,
@@ -86,6 +91,9 @@ export function DealForm({
   const [nameManuallyEdited, setNameManuallyEdited] = React.useState(false)
   const [amount, setAmount] = React.useState("")
   const [currency, setCurrency] = React.useState<DealCurrency>("PLN")
+  const [probability, setProbability] = React.useState<number>(
+    DEFAULT_DEAL_PROBABILITY,
+  )
   const [contactId, setContactId] = React.useState<string | null>(
     defaultContactId,
   )
@@ -223,6 +231,7 @@ export function DealForm({
         name,
         amount: amount ? Number(amount) : null,
         currency,
+        probability,
         contactId,
         clientId,
         productId: productId!,
@@ -338,8 +347,8 @@ export function DealForm({
           id="deal-amount"
           mask="currency"
           locale="pl-PL"
-          currency="PLN"
-          placeholder="Kwota w PLN"
+          currency={currency}
+          placeholder={`Kwota w ${currency}`}
           value={amount}
           aria-invalid={errors.amount ? true : undefined}
           onValueChange={(_masked, unmasked) => {
@@ -358,6 +367,26 @@ export function DealForm({
         <Select value={currency} onValueChange={(v) => setCurrency(v as DealCurrency)}>
           <SelectTrigger id="deal-currency" className="w-full"><SelectValue /></SelectTrigger>
           <SelectContent><SelectGroup>{DEAL_CURRENCY_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectGroup></SelectContent>
+        </Select>
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="deal-probability">Prawdopodobieństwo wygranej</FieldLabel>
+        <Select
+          value={String(probability)}
+          onValueChange={(v) => setProbability(Number(v))}
+        >
+          <SelectTrigger id="deal-probability" className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {DEAL_PROBABILITY_OPTIONS.map((value) => (
+                <SelectItem key={value} value={String(value)}>
+                  {formatDealProbability(value)}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
         </Select>
       </Field>
       <Field>

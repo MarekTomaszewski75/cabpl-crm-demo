@@ -319,6 +319,8 @@ export type AddDealInput = {
   dealType: DealType | null
   expectedCloseDate?: string
   bankAccountId?: string | null
+  /** Wybierane przez opiekuna z listy (QW-05, US-60). */
+  probability?: number
   ownerId: string
   regionId: string
 }
@@ -463,6 +465,15 @@ export type AddClientDocumentInput = {
   name: string
 }
 
+/** Repozytoria dokumentów Banku — CRM trzyma tylko odnośnik i metadane (US-60, §6.2 specyfikacji). */
+export type DocumentRepositoryId = "aida" | "sharepoint" | "drive_s" | "case_pro"
+
+export interface DocumentRepositoryLink {
+  repositoryId: DocumentRepositoryId
+  /** Sygnatura lub ścieżka dokumentu w repozytorium. */
+  externalRef: string
+}
+
 export interface ClientFile extends ScopedEntity {
   id: string
   clientId: string
@@ -473,6 +484,8 @@ export interface ClientFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -482,6 +495,7 @@ export type AddClientFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface LeadFile extends ScopedEntity {
@@ -492,6 +506,8 @@ export interface LeadFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -501,6 +517,7 @@ export type AddLeadFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface DealFile extends ScopedEntity {
@@ -511,6 +528,8 @@ export interface DealFile extends ScopedEntity {
   description?: string
   fileSize: number
   mimeType: string
+  /** Odnośnik do repozytorium zamiast pliku w CRM. */
+  repository?: DocumentRepositoryLink
   uploadedAt: string
 }
 
@@ -520,6 +539,7 @@ export type AddDealFileInput = {
   description?: string
   fileSize: number
   mimeType: string
+  repository?: DocumentRepositoryLink
 }
 
 export interface ContactEvent extends ScopedEntity {

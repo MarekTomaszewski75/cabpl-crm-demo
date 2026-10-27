@@ -1,9 +1,10 @@
+import { formatDealAmount, getDealAmountPln } from "@/lib/crm/currency"
 import { getToday, toLocalDateKey } from "@/lib/crm/local-date"
 import {
   getDealsRequiringAttention,
   TODAY_PIPELINE_HORIZON_DAYS,
 } from "@/lib/crm/today-pipeline-summary"
-import { formatCurrencyPln, formatDatePl, formatTimePl } from "@/lib/format/pl"
+import { formatDatePl, formatTimePl } from "@/lib/format/pl"
 import { filterByScope } from "@/lib/rbac/scope"
 import type {
   Client,
@@ -306,8 +307,8 @@ function buildPipelineBanners(
       ? "Deal w zespole z bliskim terminem"
       : "Termin zamknięcia deala",
     descriptionPl: teamMode
-      ? `${top.deal.name} w portfelu regionu — ${formatCurrencyPln(top.deal.amount ?? 0)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`
-      : `${top.deal.name} — ${formatCurrencyPln(top.deal.amount ?? 0)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`,
+      ? `${top.deal.name} w portfelu regionu — ${formatDealAmount(top.deal)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`
+      : `${top.deal.name} — ${formatDealAmount(top.deal)} · ${daysLabel} (${formatDatePl(top.deal.expectedCloseDate!)})`,
     href: `/pipeline/${top.deal.id}`,
     actionLabelPl: teamMode ? "Sprawdź deal w zespole" : "Przejdź do deala",
   })
@@ -429,7 +430,7 @@ function hoursUntilClose(expectedCloseDate: string, asOfDate: Date): number {
 function isCriticalDeal(deal: Deal, user: DemoUser, asOfDate: Date): boolean {
   if (deal.ownerId !== user.id) return false
   if (deal.status === "won" || deal.status === "lost") return false
-  if (deal.amount == null || deal.amount < CRITICAL_DEAL_AMOUNT_PLN) return false
+  if (deal.amount == null || getDealAmountPln(deal) < CRITICAL_DEAL_AMOUNT_PLN) return false
   if (!deal.expectedCloseDate) return false
 
   const hours = hoursUntilClose(deal.expectedCloseDate, asOfDate)
@@ -457,7 +458,7 @@ function buildCriticalDealPayload(deal: Deal, asOfDate: Date): BannerPayload {
     priority: CRITICAL_DEAL_BANNER_PRIORITY,
     dismissible: true,
     titlePl: "Deal wymaga uwagi",
-    descriptionPl: `${deal.name} — ${formatCurrencyPln(deal.amount!)} · ${urgencySuffix} (${formatDatePl(deal.expectedCloseDate!)})`,
+    descriptionPl: `${deal.name} — ${formatDealAmount(deal)} · ${urgencySuffix} (${formatDatePl(deal.expectedCloseDate!)})`,
     href: `/pipeline/${deal.id}`,
     actionLabelPl: "Przejdź do deala",
   }

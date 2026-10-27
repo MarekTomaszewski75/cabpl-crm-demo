@@ -58,16 +58,19 @@
 - **US-57** — **Done** — spotkanie z aktywności w kalendarzu, follow-up z deala, „Nowe zadanie” z wykonawcą, „Dziś → Wymaga uwagi” (zaległe, bez postępu, odnowienia), e-mail jako rejestracja ręczna, czas lokalny w formularzach, historia aktywności deali w seedzie. [US-57](./stories/US-57-activities-and-today-attention/story.md).
 - **US-58** — **Done** — rola `business_admin` (Ewa Sadowska, bez danych klientów), słownik z uzasadnieniem i czterema oczami, audyt przed/po, „Brak dostępu” z wpisem w audycie, stabilne banery, reset demo na logowaniu. [US-58](./stories/US-58-business-admin-four-eyes/story.md).
 - **US-59** — **Done** — struktura sprzedaży Pion → Departament → Region → Zespół → RM (`data/sales-structure.json`), zakładka Analityki „Lejek wg struktury” z drill-down, filtrami i porównaniem prognozy ważonej i nieważonej. [US-59](./stories/US-59-org-structure-pipeline/story.md).
+- **US-60** — **Done** — odnośniki do AIDA / SharePoint / dysku S / CASE PRO przy dokumentach, duplikat przy „Nowa firma”, prawdopodobieństwo z listy, szanse w EUR/USD z przeliczeniem na PLN. [US-60](./stories/US-60-documents-duplicates-money/story.md).
 
 ---
 
 ## Active work
 
-- (brak — US-59 domknięte na branchu `demo/rfp-alignment`)
+- (brak — US-60 domknięte na branchu `demo/rfp-alignment`)
 
 ---
 
 ## Recently completed
+
+- **US-60** (story **Done**) — `DocumentRepositoryLink` w `*File`, `CrmDocumentLinkForm`, `lib/crm/document-repositories.ts`; `formatProspectDuplicateSummary` w `CompanyForm`; `lib/crm/deal-probability.ts`; `lib/crm/currency.ts` (`getDealAmountPln`, `formatDealAmount`). [US-60](./stories/US-60-documents-duplicates-money/story.md).
 
 - **US-59** (story **Done**) — `SalesOrgUnit` + `DemoUser.teamId`; `lib/analytics/org-pipeline.ts` (`buildOrgPipelineTree`); `components/crm/analytics/org-pipeline-view.tsx`; `formatCurrencyPlnCompact`. [US-59](./stories/US-59-org-structure-pipeline/story.md).
 
@@ -125,7 +128,7 @@
 
 ## Next up
 
-1. US-60, US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
+1. US-61 (P1 przed pokazem) — [`rfp-demo-gap-analysis.md` §7](./rfp-demo-gap-analysis.md). Decyzje D1, D4 i D7 podjęte; D2, D3 i D5 według rekomendacji, o ile nie będzie zmian.
 
 ---
 

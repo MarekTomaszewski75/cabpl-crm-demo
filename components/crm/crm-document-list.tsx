@@ -1,6 +1,14 @@
 "use client"
 
-import { FileIcon, FileTextIcon, Trash2Icon } from "lucide-react"
+import {
+  ExternalLinkIcon,
+  FileIcon,
+  FileTextIcon,
+  Link2Icon,
+  Trash2Icon,
+} from "lucide-react"
+import { toast } from "sonner"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -8,6 +16,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { DOCUMENT_REPOSITORY_LABELS } from "@/lib/crm/document-repositories"
 import type { CrmDocumentListItem } from "@/lib/crm/entity-documents"
 import { formatFileSize } from "@/lib/crm/file-upload-validation"
 import { formatDatePl } from "@/lib/format/pl"
@@ -29,6 +38,9 @@ const PREVIEW_CLASS =
   "flex size-10 shrink-0 items-center justify-center overflow-hidden rounded border bg-accent/50 text-muted-foreground [&>svg]:size-5"
 
 function getDocumentIcon(item: CrmDocumentListItem) {
+  if (item.repository) {
+    return <Link2Icon />
+  }
   if (item.source === "legacy-document") {
     return <FileTextIcon />
   }
@@ -49,6 +61,9 @@ function getDocumentIcon(item: CrmDocumentListItem) {
 }
 
 function formatFileMeta(item: CrmDocumentListItem): string {
+  if (item.repository) {
+    return `${DOCUMENT_REPOSITORY_LABELS[item.repository.repositoryId]} · ${item.repository.externalRef}`
+  }
   if (item.source === "legacy-document") {
     return "Dokument tekstowy"
   }
@@ -61,6 +76,15 @@ function formatFileMeta(item: CrmDocumentListItem): string {
     parts.push(formatFileSize(item.fileSize))
   }
   return parts.join(" · ")
+}
+
+/** Deep-link do repozytorium Banku — w demo bez połączenia z systemem źródłowym. */
+function openRepositoryLink(item: CrmDocumentListItem) {
+  if (!item.repository) return
+  const label = DOCUMENT_REPOSITORY_LABELS[item.repository.repositoryId]
+  toast.info(`Otwieranie „${item.displayName}” w ${label}`, {
+    description: `Sygnatura ${item.repository.externalRef}. Dokument zostaje w ${label}; CRM przechowuje tylko odnośnik.`,
+  })
 }
 
 export function CrmDocumentList({
@@ -93,8 +117,15 @@ export function CrmDocumentList({
                 {getDocumentIcon(item)}
               </div>
               <div className="flex min-w-0 flex-1 flex-col gap-1">
-                <span className="truncate font-medium text-sm">
-                  {item.displayName}
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="truncate font-medium text-sm">
+                    {item.displayName}
+                  </span>
+                  {item.repository ? (
+                    <Badge variant="secondary" className="shrink-0 font-normal">
+                      {DOCUMENT_REPOSITORY_LABELS[item.repository.repositoryId]}
+                    </Badge>
+                  ) : null}
                 </span>
                 <span className="text-muted-foreground text-xs">
                   Opis: {item.description?.trim() || "—"}
@@ -104,6 +135,18 @@ export function CrmDocumentList({
                   {" · "}Dodano {formatDatePl(item.uploadedAt)}
                   {author ? ` · ${author.displayName}` : null}
                 </span>
+                {item.repository ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-1 w-fit"
+                    onClick={() => openRepositoryLink(item)}
+                  >
+                    <ExternalLinkIcon data-icon="inline-start" />
+                    Otwórz w {DOCUMENT_REPOSITORY_LABELS[item.repository.repositoryId]}
+                  </Button>
+                ) : null}
               </div>
               {item.source === "file" && onRemoveFile ? (
                 <Button

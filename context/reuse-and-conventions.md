@@ -416,6 +416,19 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 - Reset pokazu: `resetDemoSession()` (`lib/auth/reset-demo.ts`) czyści `sessionStorage` i przeładowuje seed. Przycisk jest na ekranie logowania.
 - Błąd synchronizacji katalogu: `ProductsCatalogSyncBanner` + wpis audytu po **Ponów**.
 
+## Dokumenty z repozytoriów, duplikaty, prawdopodobieństwo, waluty (US-60)
+
+- **Odnośnik do repozytorium:** rekord `ClientFile` / `LeadFile` / `DealFile` z `repository` (`aida` | `sharepoint` | `drive_s` | `case_pro` + `externalRef`, MIME `REPOSITORY_LINK_MIME`).
+  - Dodawanie: `CrmDocumentLinkForm` + `toRepositoryFileInput` → `add*File`.
+  - Lista: `CrmDocumentList` pokazuje plakietkę i „Otwórz w …”.
+  - Nie kopiuj dokumentów Banku do CRM.
+- **Duplikaty:** `findProspectDuplicates` + `formatProspectDuplicateSummary` (`lib/crm/prospect-duplicate.ts`), używane w `LeadForm`, `CompanyForm` i imporcie.
+- **Prawdopodobieństwo:** tylko z `DEAL_PROBABILITY_OPTIONS` (10–90%, `lib/crm/deal-probability.ts`). System go nie wylicza; zmiana etapu nie zmienia prawdopodobieństwa.
+- **Waluty:**
+  - kwotę szansy zawsze wyświetlaj przez `formatDealAmount(deal)`,
+  - sumy, sortowania i progi licz przez `getDealAmountPln(deal)` (`lib/crm/currency.ts`, kursy `DEMO_FX_RATES_PLN`),
+  - nie używaj `formatCurrencyPln(deal.amount)`.
+
 ## Struktura sprzedaży i lejek wg struktury (US-59)
 
 - **Seed:** `data/sales-structure.json` (`SalesOrgUnit`: division → department → region → team). RM = doradca z `teamId`, a `regionId` węzła regionu łączy go z encjami i planem.

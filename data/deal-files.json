@@ -21,5 +21,935 @@
     "uploadedAt": "2026-01-18T16:00:00.000Z",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-003",
+    "dealId": "opp-001",
+    "fileName": "CP/KR/2026/63523",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/63523"
+    },
+    "uploadedAt": "2026-05-23T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-004",
+    "dealId": "opp-001",
+    "fileName": "AIDA-2026-331434",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-331434"
+    },
+    "uploadedAt": "2026-05-13T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-005",
+    "dealId": "opp-015",
+    "fileName": "CP/KR/2026/26538",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/26538"
+    },
+    "uploadedAt": "2026-05-24T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-006",
+    "dealId": "opp-015",
+    "fileName": "AIDA-2026-610829",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-610829"
+    },
+    "uploadedAt": "2026-05-09T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-007",
+    "dealId": "opp-030",
+    "fileName": "CP/KR/2026/97382",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/97382"
+    },
+    "uploadedAt": "2026-05-26T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-008",
+    "dealId": "opp-030",
+    "fileName": "AIDA-2026-485335",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-485335"
+    },
+    "uploadedAt": "2026-05-07T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-009",
+    "dealId": "opp-045",
+    "fileName": "CP/KR/2026/58453",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/58453"
+    },
+    "uploadedAt": "2026-05-04T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-010",
+    "dealId": "opp-045",
+    "fileName": "AIDA-2026-410881",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-410881"
+    },
+    "uploadedAt": "2026-05-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-011",
+    "dealId": "opp-051",
+    "fileName": "CP/KR/2026/22742",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/22742"
+    },
+    "uploadedAt": "2026-05-18T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "deal-file-012",
+    "dealId": "opp-051",
+    "fileName": "AIDA-2026-616899",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-616899"
+    },
+    "uploadedAt": "2026-05-29T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "deal-file-013",
+    "dealId": "opp-093",
+    "fileName": "CP/KR/2026/11765",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/11765"
+    },
+    "uploadedAt": "2026-05-15T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-014",
+    "dealId": "opp-093",
+    "fileName": "AIDA-2026-476935",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-476935"
+    },
+    "uploadedAt": "2026-05-29T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-015",
+    "dealId": "opp-094",
+    "fileName": "CP/KR/2026/92187",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/92187"
+    },
+    "uploadedAt": "2026-05-29T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-016",
+    "dealId": "opp-094",
+    "fileName": "AIDA-2026-568041",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-568041"
+    },
+    "uploadedAt": "2026-05-11T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-017",
+    "dealId": "opp-095",
+    "fileName": "CP/KR/2026/26818",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/26818"
+    },
+    "uploadedAt": "2026-06-01T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-018",
+    "dealId": "opp-095",
+    "fileName": "AIDA-2026-803980",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-803980"
+    },
+    "uploadedAt": "2026-05-05T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-019",
+    "dealId": "opp-096",
+    "fileName": "CP/KR/2026/79765",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/79765"
+    },
+    "uploadedAt": "2026-06-02T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-020",
+    "dealId": "opp-096",
+    "fileName": "AIDA-2026-430082",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-430082"
+    },
+    "uploadedAt": "2026-05-25T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-021",
+    "dealId": "opp-097",
+    "fileName": "CP/KR/2026/51881",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/51881"
+    },
+    "uploadedAt": "2026-05-04T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-022",
+    "dealId": "opp-097",
+    "fileName": "AIDA-2026-673293",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-673293"
+    },
+    "uploadedAt": "2026-05-05T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-023",
+    "dealId": "opp-098",
+    "fileName": "CP/KR/2026/49914",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/49914"
+    },
+    "uploadedAt": "2026-05-19T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-024",
+    "dealId": "opp-098",
+    "fileName": "AIDA-2026-462517",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-462517"
+    },
+    "uploadedAt": "2026-05-06T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-025",
+    "dealId": "opp-099",
+    "fileName": "CP/KR/2026/57130",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/57130"
+    },
+    "uploadedAt": "2026-06-01T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-026",
+    "dealId": "opp-099",
+    "fileName": "AIDA-2026-678406",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-678406"
+    },
+    "uploadedAt": "2026-05-07T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-027",
+    "dealId": "opp-100",
+    "fileName": "CP/KR/2026/98957",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/98957"
+    },
+    "uploadedAt": "2026-05-09T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-028",
+    "dealId": "opp-100",
+    "fileName": "AIDA-2026-145215",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-145215"
+    },
+    "uploadedAt": "2026-06-02T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-029",
+    "dealId": "opp-101",
+    "fileName": "CP/KR/2026/64643",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/64643"
+    },
+    "uploadedAt": "2026-05-26T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-030",
+    "dealId": "opp-101",
+    "fileName": "AIDA-2026-869013",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-869013"
+    },
+    "uploadedAt": "2026-05-17T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-031",
+    "dealId": "opp-102",
+    "fileName": "CP/KR/2026/47406",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/47406"
+    },
+    "uploadedAt": "2026-06-02T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-032",
+    "dealId": "opp-102",
+    "fileName": "AIDA-2026-651038",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-651038"
+    },
+    "uploadedAt": "2026-05-13T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-033",
+    "dealId": "opp-103",
+    "fileName": "CP/KR/2026/40365",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/40365"
+    },
+    "uploadedAt": "2026-05-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-034",
+    "dealId": "opp-103",
+    "fileName": "AIDA-2026-899599",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-899599"
+    },
+    "uploadedAt": "2026-05-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-035",
+    "dealId": "opp-104",
+    "fileName": "CP/KR/2026/50207",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/50207"
+    },
+    "uploadedAt": "2026-05-20T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-036",
+    "dealId": "opp-104",
+    "fileName": "AIDA-2026-591370",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-591370"
+    },
+    "uploadedAt": "2026-05-20T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-037",
+    "dealId": "opp-105",
+    "fileName": "CP/KR/2026/75946",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/75946"
+    },
+    "uploadedAt": "2026-05-16T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-038",
+    "dealId": "opp-105",
+    "fileName": "AIDA-2026-628920",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-628920"
+    },
+    "uploadedAt": "2026-05-10T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-039",
+    "dealId": "opp-106",
+    "fileName": "CP/KR/2026/41436",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/41436"
+    },
+    "uploadedAt": "2026-05-30T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-040",
+    "dealId": "opp-106",
+    "fileName": "AIDA-2026-162757",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-162757"
+    },
+    "uploadedAt": "2026-05-21T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-041",
+    "dealId": "opp-107",
+    "fileName": "CP/KR/2026/34113",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/34113"
+    },
+    "uploadedAt": "2026-05-28T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-042",
+    "dealId": "opp-107",
+    "fileName": "AIDA-2026-816176",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-816176"
+    },
+    "uploadedAt": "2026-05-22T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-043",
+    "dealId": "opp-108",
+    "fileName": "CP/KR/2026/89752",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/89752"
+    },
+    "uploadedAt": "2026-05-10T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-044",
+    "dealId": "opp-108",
+    "fileName": "AIDA-2026-506534",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-506534"
+    },
+    "uploadedAt": "2026-05-15T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-045",
+    "dealId": "opp-109",
+    "fileName": "CP/KR/2026/12920",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/12920"
+    },
+    "uploadedAt": "2026-05-06T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-046",
+    "dealId": "opp-109",
+    "fileName": "AIDA-2026-764983",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-764983"
+    },
+    "uploadedAt": "2026-05-13T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-047",
+    "dealId": "opp-110",
+    "fileName": "CP/KR/2026/69365",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/69365"
+    },
+    "uploadedAt": "2026-05-04T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-048",
+    "dealId": "opp-110",
+    "fileName": "AIDA-2026-637263",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-637263"
+    },
+    "uploadedAt": "2026-05-09T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-049",
+    "dealId": "opp-111",
+    "fileName": "CP/KR/2026/64181",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/64181"
+    },
+    "uploadedAt": "2026-05-10T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-050",
+    "dealId": "opp-111",
+    "fileName": "AIDA-2026-283075",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-283075"
+    },
+    "uploadedAt": "2026-05-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-051",
+    "dealId": "opp-112",
+    "fileName": "CP/KR/2026/89710",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/89710"
+    },
+    "uploadedAt": "2026-05-19T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-052",
+    "dealId": "opp-112",
+    "fileName": "AIDA-2026-576362",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-576362"
+    },
+    "uploadedAt": "2026-05-20T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-053",
+    "dealId": "opp-113",
+    "fileName": "CP/KR/2026/42210",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/42210"
+    },
+    "uploadedAt": "2026-05-27T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-054",
+    "dealId": "opp-113",
+    "fileName": "AIDA-2026-461634",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-461634"
+    },
+    "uploadedAt": "2026-05-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-055",
+    "dealId": "opp-114",
+    "fileName": "CP/KR/2026/13307",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/13307"
+    },
+    "uploadedAt": "2026-05-22T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-056",
+    "dealId": "opp-114",
+    "fileName": "AIDA-2026-334720",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-334720"
+    },
+    "uploadedAt": "2026-05-05T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-057",
+    "dealId": "opp-115",
+    "fileName": "CP/KR/2026/77824",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/77824"
+    },
+    "uploadedAt": "2026-05-07T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-058",
+    "dealId": "opp-115",
+    "fileName": "AIDA-2026-162343",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-162343"
+    },
+    "uploadedAt": "2026-05-14T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-059",
+    "dealId": "opp-116",
+    "fileName": "CP/KR/2026/31968",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/31968"
+    },
+    "uploadedAt": "2026-05-21T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-060",
+    "dealId": "opp-116",
+    "fileName": "AIDA-2026-123795",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-123795"
+    },
+    "uploadedAt": "2026-05-30T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-061",
+    "dealId": "opp-117",
+    "fileName": "CP/KR/2026/79297",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/79297"
+    },
+    "uploadedAt": "2026-05-18T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-062",
+    "dealId": "opp-117",
+    "fileName": "AIDA-2026-281128",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-281128"
+    },
+    "uploadedAt": "2026-05-24T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-063",
+    "dealId": "opp-118",
+    "fileName": "CP/KR/2026/18424",
+    "displayName": "Wniosek kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/18424"
+    },
+    "uploadedAt": "2026-06-01T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "deal-file-064",
+    "dealId": "opp-118",
+    "fileName": "AIDA-2026-620915",
+    "displayName": "Analiza kredytowa",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-620915"
+    },
+    "uploadedAt": "2026-05-16T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
   }
 ]

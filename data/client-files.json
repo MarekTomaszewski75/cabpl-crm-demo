@@ -21,5 +21,947 @@
     "uploadedAt": "2026-05-18T11:30:00.000Z",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-003",
+    "clientId": "client-001",
+    "fileName": "AIDA-2026-406282",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-406282"
+    },
+    "uploadedAt": "2026-05-19T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-004",
+    "clientId": "client-001",
+    "fileName": "CP/KR/2026/595256",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/595256"
+    },
+    "uploadedAt": "2026-05-27T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-005",
+    "clientId": "client-001",
+    "fileName": "/sites/BK-Klienci/PolskaLogistyka/Notatki/komitet-154998.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/PolskaLogistyka/Notatki/komitet-154998.docx"
+    },
+    "uploadedAt": "2026-03-25T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-006",
+    "clientId": "client-001",
+    "fileName": "S:\\BK\\Klienci\\PolskaLogistyka\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\PolskaLogistyka\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-04-15T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-007",
+    "clientId": "client-002",
+    "fileName": "/sites/BK-Klienci/BalticFoods/Notatki/komitet-916973.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/BalticFoods/Notatki/komitet-916973.docx"
+    },
+    "uploadedAt": "2026-03-24T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-008",
+    "clientId": "client-003",
+    "fileName": "S:\\BK\\Klienci\\TechVenturesPoland\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\TechVenturesPoland\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-28T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-009",
+    "clientId": "client-004",
+    "fileName": "CP/KR/2026/896876",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/896876"
+    },
+    "uploadedAt": "2026-03-26T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-010",
+    "clientId": "client-004",
+    "fileName": "S:\\BK\\Klienci\\GreenBuildDevelopment\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\GreenBuildDevelopment\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-14T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-011",
+    "clientId": "client-005",
+    "fileName": "/sites/BK-Klienci/MazurChem/Notatki/komitet-403795.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/MazurChem/Notatki/komitet-403795.docx"
+    },
+    "uploadedAt": "2026-05-25T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-012",
+    "clientId": "client-005",
+    "fileName": "CP/KR/2026/744840",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/744840"
+    },
+    "uploadedAt": "2026-03-17T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-013",
+    "clientId": "client-006",
+    "fileName": "/sites/BK-Klienci/TransEuropaCargo/Notatki/komitet-153254.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/TransEuropaCargo/Notatki/komitet-153254.docx"
+    },
+    "uploadedAt": "2026-03-16T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-014",
+    "clientId": "client-006",
+    "fileName": "S:\\BK\\Klienci\\TransEuropaCargo\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\TransEuropaCargo\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-04-23T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-015",
+    "clientId": "client-007",
+    "fileName": "/sites/BK-Klienci/AgroNovaPolska/Notatki/komitet-698208.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/AgroNovaPolska/Notatki/komitet-698208.docx"
+    },
+    "uploadedAt": "2026-03-13T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-016",
+    "clientId": "client-007",
+    "fileName": "S:\\BK\\Klienci\\AgroNovaPolska\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\AgroNovaPolska\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-04-28T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-017",
+    "clientId": "client-008",
+    "fileName": "/sites/BK-Klienci/PackMasterPoland/Notatki/komitet-853103.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/PackMasterPoland/Notatki/komitet-853103.docx"
+    },
+    "uploadedAt": "2026-03-30T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-018",
+    "clientId": "client-009",
+    "fileName": "CP/KR/2026/173529",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/173529"
+    },
+    "uploadedAt": "2026-05-03T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-019",
+    "clientId": "client-010",
+    "fileName": "AIDA-2026-471711",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-471711"
+    },
+    "uploadedAt": "2026-03-26T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-020",
+    "clientId": "client-011",
+    "fileName": "/sites/BK-Klienci/EcoPaperRecycling/Notatki/komitet-303878.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/EcoPaperRecycling/Notatki/komitet-303878.docx"
+    },
+    "uploadedAt": "2026-05-22T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-021",
+    "clientId": "client-012",
+    "fileName": "S:\\BK\\Klienci\\MedDeviceComponents\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\MedDeviceComponents\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-05-12T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-022",
+    "clientId": "client-012",
+    "fileName": "AIDA-2026-980857",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-980857"
+    },
+    "uploadedAt": "2026-05-09T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-023",
+    "clientId": "client-013",
+    "fileName": "CP/KR/2026/948198",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/948198"
+    },
+    "uploadedAt": "2026-04-29T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-024",
+    "clientId": "client-014",
+    "fileName": "AIDA-2026-822719",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-822719"
+    },
+    "uploadedAt": "2026-03-23T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-025",
+    "clientId": "client-015",
+    "fileName": "CP/KR/2026/910681",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/910681"
+    },
+    "uploadedAt": "2026-04-05T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-026",
+    "clientId": "client-015",
+    "fileName": "/sites/BK-Klienci/ChemLabPolska/Notatki/komitet-135453.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/ChemLabPolska/Notatki/komitet-135453.docx"
+    },
+    "uploadedAt": "2026-04-15T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-027",
+    "clientId": "client-016",
+    "fileName": "S:\\BK\\Klienci\\NovaPrint\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\NovaPrint\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-05-03T09:00:00.000Z",
+    "ownerId": "user-anna",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-028",
+    "clientId": "client-017",
+    "fileName": "CP/KR/2026/234282",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/234282"
+    },
+    "uploadedAt": "2026-05-12T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-029",
+    "clientId": "client-017",
+    "fileName": "/sites/BK-Klienci/CloudScaleSystems/Notatki/komitet-840550.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/CloudScaleSystems/Notatki/komitet-840550.docx"
+    },
+    "uploadedAt": "2026-04-04T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-030",
+    "clientId": "client-018",
+    "fileName": "/sites/BK-Klienci/FinTechSolutionsPL/Notatki/komitet-548411.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/FinTechSolutionsPL/Notatki/komitet-548411.docx"
+    },
+    "uploadedAt": "2026-05-13T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-031",
+    "clientId": "client-018",
+    "fileName": "CP/KR/2026/932021",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/932021"
+    },
+    "uploadedAt": "2026-05-07T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-032",
+    "clientId": "client-019",
+    "fileName": "S:\\BK\\Klienci\\MazoviaLeasing\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\MazoviaLeasing\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-13T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-033",
+    "clientId": "client-019",
+    "fileName": "CP/KR/2026/543541",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/543541"
+    },
+    "uploadedAt": "2026-05-16T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-034",
+    "clientId": "client-020",
+    "fileName": "/sites/BK-Klienci/RoboAssemblyIndustries/Notatki/komitet-449210.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/RoboAssemblyIndustries/Notatki/komitet-449210.docx"
+    },
+    "uploadedAt": "2026-03-25T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-035",
+    "clientId": "client-021",
+    "fileName": "S:\\BK\\Klienci\\SolarGridEnergia\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\SolarGridEnergia\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-04-08T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-036",
+    "clientId": "client-021",
+    "fileName": "/sites/BK-Klienci/SolarGridEnergia/Notatki/komitet-691820.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/SolarGridEnergia/Notatki/komitet-691820.docx"
+    },
+    "uploadedAt": "2026-03-16T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-037",
+    "clientId": "client-022",
+    "fileName": "AIDA-2026-125742",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-125742"
+    },
+    "uploadedAt": "2026-03-21T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-038",
+    "clientId": "client-023",
+    "fileName": "/sites/BK-Klienci/AutoComponentsPoland/Notatki/komitet-117109.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/AutoComponentsPoland/Notatki/komitet-117109.docx"
+    },
+    "uploadedAt": "2026-05-12T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-039",
+    "clientId": "client-024",
+    "fileName": "AIDA-2026-936043",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-936043"
+    },
+    "uploadedAt": "2026-03-27T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-040",
+    "clientId": "client-024",
+    "fileName": "CP/KR/2026/922928",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/922928"
+    },
+    "uploadedAt": "2026-04-23T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-041",
+    "clientId": "client-025",
+    "fileName": "S:\\BK\\Klienci\\BioResearchLabs\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\BioResearchLabs\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-05-20T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-042",
+    "clientId": "client-026",
+    "fileName": "CP/KR/2026/245977",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/245977"
+    },
+    "uploadedAt": "2026-05-09T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-043",
+    "clientId": "client-026",
+    "fileName": "S:\\BK\\Klienci\\HotelChainCentral\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\HotelChainCentral\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-22T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-044",
+    "clientId": "client-027",
+    "fileName": "AIDA-2026-365691",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-365691"
+    },
+    "uploadedAt": "2026-05-21T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-045",
+    "clientId": "client-027",
+    "fileName": "CP/KR/2026/969892",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/969892"
+    },
+    "uploadedAt": "2026-05-27T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-046",
+    "clientId": "client-028",
+    "fileName": "CP/KR/2026/957868",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/957868"
+    },
+    "uploadedAt": "2026-04-02T09:00:00.000Z",
+    "ownerId": "user-piotr",
+    "regionId": "mazowsze"
+  },
+  {
+    "id": "client-file-047",
+    "clientId": "client-029",
+    "fileName": "CP/KR/2026/650901",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/650901"
+    },
+    "uploadedAt": "2026-03-15T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-048",
+    "clientId": "client-029",
+    "fileName": "AIDA-2026-947291",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-947291"
+    },
+    "uploadedAt": "2026-03-26T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-049",
+    "clientId": "client-030",
+    "fileName": "/sites/BK-Klienci/BeskidLogistics/Notatki/komitet-594648.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/BeskidLogistics/Notatki/komitet-594648.docx"
+    },
+    "uploadedAt": "2026-04-12T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-050",
+    "clientId": "client-030",
+    "fileName": "S:\\BK\\Klienci\\BeskidLogistics\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\BeskidLogistics\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-18T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-051",
+    "clientId": "client-031",
+    "fileName": "/sites/BK-Klienci/ZakopaneResortsGroup/Notatki/komitet-250152.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/ZakopaneResortsGroup/Notatki/komitet-250152.docx"
+    },
+    "uploadedAt": "2026-03-16T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-052",
+    "clientId": "client-032",
+    "fileName": "AIDA-2026-369483",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-369483"
+    },
+    "uploadedAt": "2026-04-18T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-053",
+    "clientId": "client-033",
+    "fileName": "AIDA-2026-518661",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-518661"
+    },
+    "uploadedAt": "2026-04-05T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-054",
+    "clientId": "client-033",
+    "fileName": "/sites/BK-Klienci/TriCityMarineExport/Notatki/komitet-234666.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/TriCityMarineExport/Notatki/komitet-234666.docx"
+    },
+    "uploadedAt": "2026-05-31T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-055",
+    "clientId": "client-035",
+    "fileName": "S:\\BK\\Klienci\\PodhaleMeble\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\PodhaleMeble\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-29T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-056",
+    "clientId": "client-035",
+    "fileName": "/sites/BK-Klienci/PodhaleMeble/Notatki/komitet-525960.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/PodhaleMeble/Notatki/komitet-525960.docx"
+    },
+    "uploadedAt": "2026-03-19T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-057",
+    "clientId": "client-036",
+    "fileName": "CP/KR/2026/297931",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/297931"
+    },
+    "uploadedAt": "2026-05-24T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-058",
+    "clientId": "client-036",
+    "fileName": "AIDA-2026-745959",
+    "displayName": "Sprawozdanie finansowe 2025",
+    "description": "Bilans i RZiS po badaniu biegłego rewidenta.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "aida",
+      "externalRef": "AIDA-2026-745959"
+    },
+    "uploadedAt": "2026-05-01T09:00:00.000Z",
+    "ownerId": "user-kasia",
+    "regionId": "malopolska"
+  },
+  {
+    "id": "client-file-059",
+    "clientId": "client-037",
+    "fileName": "S:\\BK\\Klienci\\PortHandlowyKołobrzeg\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\PortHandlowyKołobrzeg\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-03-20T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-060",
+    "clientId": "client-038",
+    "fileName": "CP/KR/2026/238135",
+    "displayName": "Wniosek kredytowy z załącznikami",
+    "description": "Teczka wniosku w procesie kredytowym.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "case_pro",
+      "externalRef": "CP/KR/2026/238135"
+    },
+    "uploadedAt": "2026-04-05T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-061",
+    "clientId": "client-038",
+    "fileName": "/sites/BK-Klienci/OffshoreServiceSopot/Notatki/komitet-693731.docx",
+    "displayName": "Notatka na komitet kredytowy",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "sharepoint",
+      "externalRef": "/sites/BK-Klienci/OffshoreServiceSopot/Notatki/komitet-693731.docx"
+    },
+    "uploadedAt": "2026-05-31T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
+  },
+  {
+    "id": "client-file-062",
+    "clientId": "client-034",
+    "fileName": "S:\\BK\\Klienci\\PomorskieWindEnergy\\Pelnomocnictwa.pdf",
+    "displayName": "Pełnomocnictwa i KRS",
+    "description": "Aktualny odpis i pełnomocnictwa zarządu.",
+    "fileSize": 0,
+    "mimeType": "application/x-repository-link",
+    "repository": {
+      "repositoryId": "drive_s",
+      "externalRef": "S:\\BK\\Klienci\\PomorskieWindEnergy\\Pelnomocnictwa.pdf"
+    },
+    "uploadedAt": "2026-05-19T09:00:00.000Z",
+    "ownerId": "user-tomek",
+    "regionId": "pomorze"
   }
 ]

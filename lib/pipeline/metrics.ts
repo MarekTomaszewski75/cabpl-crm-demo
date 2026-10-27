@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import type { Deal, DemoUser, KpiSnapshot } from "@/types/crm"
 
 export type PipelineMetrics = {
@@ -12,9 +13,9 @@ export function computePipelineMetrics(
   const active = opportunities.filter(
     (opp) => opp.status !== "won" && opp.status !== "lost"
   )
-  const totalPln = active.reduce((sum, opp) => sum + (opp.amount ?? 0), 0)
+  const totalPln = active.reduce((sum, opp) => sum + getDealAmountPln(opp), 0)
   const weightedPln = active.reduce(
-    (sum, opp) => sum + (opp.amount ?? 0) * ((opp.probability ?? 0) / 100),
+    (sum, opp) => sum + getDealAmountPln(opp) * ((opp.probability ?? 0) / 100),
     0
   )
   return {

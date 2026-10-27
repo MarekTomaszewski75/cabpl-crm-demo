@@ -110,7 +110,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 15,
+    "probability": 20,
     "expectedCloseDate": "2027-02-11",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -156,7 +156,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 25,
+    "probability": 30,
     "expectedCloseDate": "2026-05-12",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -217,15 +217,15 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 2000000,
-    "currency": "PLN",
+    "amount": 470000,
+    "currency": "EUR",
     "status": "credit_qualification",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 35,
+    "probability": 40,
     "expectedCloseDate": "2027-01-29",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -248,7 +248,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 55,
+    "probability": 60,
     "expectedCloseDate": "2026-06-04",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -294,7 +294,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 18,
+    "probability": 20,
     "expectedCloseDate": "2027-03-03",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -432,7 +432,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 15,
+    "probability": 20,
     "expectedCloseDate": "2026-10-22",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -478,7 +478,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-16",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -493,15 +493,15 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 280000,
-    "currency": "PLN",
+    "amount": 70000,
+    "currency": "USD",
     "status": "guarantee_contract",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 25,
+    "probability": 30,
     "expectedCloseDate": "2026-10-02",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -570,7 +570,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 35,
+    "probability": 40,
     "expectedCloseDate": "2026-11-17",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -593,7 +593,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 55,
+    "probability": 60,
     "expectedCloseDate": "2026-10-15",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -639,7 +639,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 18,
+    "probability": 20,
     "expectedCloseDate": "2027-05-09",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -777,7 +777,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 15,
+    "probability": 20,
     "expectedCloseDate": "2027-01-27",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -823,7 +823,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-06-06",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -846,7 +846,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 25,
+    "probability": 30,
     "expectedCloseDate": "2026-10-02",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -915,7 +915,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 35,
+    "probability": 40,
     "expectedCloseDate": "2026-10-10",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -938,7 +938,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 55,
+    "probability": 60,
     "expectedCloseDate": "2026-12-02",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -984,7 +984,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 18,
+    "probability": 20,
     "expectedCloseDate": "2026-11-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -1122,7 +1122,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 15,
+    "probability": 20,
     "expectedCloseDate": "2026-12-20",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -1168,7 +1168,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-15T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-10",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -1191,7 +1191,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-10T08:00:00.000Z",
-    "probability": 65,
+    "probability": 70,
     "expectedCloseDate": "2026-05-28",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -1283,7 +1283,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-15T08:00:00.000Z",
-    "probability": 35,
+    "probability": 40,
     "expectedCloseDate": "2026-05-22",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -1306,7 +1306,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-12T08:00:00.000Z",
-    "probability": 25,
+    "probability": 30,
     "expectedCloseDate": "2026-08-22",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -1482,8 +1482,8 @@
     "comments": "",
     "source": "client_request",
     "dealType": null,
-    "amount": 1400000,
-    "currency": "PLN",
+    "amount": 330000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -1689,8 +1689,8 @@
     "comments": "",
     "source": "client_request",
     "dealType": null,
-    "amount": 810000,
-    "currency": "PLN",
+    "amount": 190000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -1835,7 +1835,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-22T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-12",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1858,7 +1858,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-23T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-10",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1881,7 +1881,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-24T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-17",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1904,7 +1904,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-25T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-27",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1927,7 +1927,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-26T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-27",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1950,7 +1950,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-27T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-15",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1973,7 +1973,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-22",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -1996,7 +1996,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-03",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2019,7 +2019,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-31",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2042,7 +2042,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-07",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2065,7 +2065,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-04",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2088,7 +2088,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-02",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2111,7 +2111,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-12",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2134,7 +2134,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-29",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2157,7 +2157,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-12",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -2180,7 +2180,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-19",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2203,7 +2203,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2226,7 +2226,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-07-20",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2241,15 +2241,15 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 1250000,
-    "currency": "PLN",
+    "amount": 290000,
+    "currency": "EUR",
     "status": "credit_analysis",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-17",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2272,7 +2272,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-06-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2295,7 +2295,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-02",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2310,15 +2310,15 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 1550000,
-    "currency": "PLN",
+    "amount": 360000,
+    "currency": "EUR",
     "status": "credit_analysis",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-10",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2341,7 +2341,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-31",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2364,7 +2364,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-13",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2433,7 +2433,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-11",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2448,15 +2448,15 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 530000,
-    "currency": "PLN",
+    "amount": 120000,
+    "currency": "EUR",
     "status": "credit_offer",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2479,7 +2479,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-11",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2502,7 +2502,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-30",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2525,7 +2525,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-30",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -2655,8 +2655,8 @@
     "comments": "",
     "source": "client_request",
     "dealType": null,
-    "amount": 5550000,
-    "currency": "PLN",
+    "amount": 1300000,
+    "currency": "EUR",
     "status": "won",
     "lostReason": null,
     "finishedByUserId": "user-piotr",
@@ -2724,8 +2724,8 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 8850000,
-    "currency": "PLN",
+    "amount": 2050000,
+    "currency": "EUR",
     "status": "won",
     "lostReason": null,
     "finishedByUserId": "user-piotr",
@@ -2793,8 +2793,8 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 998750,
-    "currency": "PLN",
+    "amount": 230000,
+    "currency": "EUR",
     "status": "lost",
     "lostReason": "competitor_chosen",
     "finishedByUserId": "user-piotr",
@@ -3307,7 +3307,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-13",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -3330,7 +3330,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-01",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3353,7 +3353,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-26",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3376,7 +3376,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-23",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3399,7 +3399,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-16",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3422,7 +3422,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-07",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3445,7 +3445,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-21",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3468,7 +3468,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-23",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3491,7 +3491,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-27",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3514,7 +3514,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-26",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3537,7 +3537,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-08",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3560,7 +3560,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-02",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3583,7 +3583,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-14",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -3652,7 +3652,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-03",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3675,7 +3675,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-28",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3698,7 +3698,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-02",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3721,7 +3721,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-01",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3744,7 +3744,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-09",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3767,7 +3767,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-26",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3790,7 +3790,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-13",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3813,7 +3813,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-07-29",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3836,7 +3836,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-15",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3859,7 +3859,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-06",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3882,7 +3882,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-25",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3905,7 +3905,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-04",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3928,7 +3928,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-31",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3951,7 +3951,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-30",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -3974,7 +3974,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-19",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -4380,8 +4380,8 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 210000,
-    "currency": "PLN",
+    "amount": 50000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -4472,8 +4472,8 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 850000,
-    "currency": "PLN",
+    "amount": 200000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -4564,8 +4564,8 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 1750000,
-    "currency": "PLN",
+    "amount": 410000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -4733,7 +4733,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4756,7 +4756,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-07-21",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4779,7 +4779,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4802,7 +4802,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-07-31",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4825,7 +4825,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4848,7 +4848,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-18",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4871,7 +4871,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-13",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4894,7 +4894,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-15",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4917,7 +4917,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4932,15 +4932,15 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 320000,
-    "currency": "PLN",
+    "amount": 70000,
+    "currency": "EUR",
     "status": "factoring_buyers",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4963,7 +4963,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-18",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -4986,7 +4986,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5009,7 +5009,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-30",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5032,7 +5032,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-06-11",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5055,7 +5055,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-06",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5078,7 +5078,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5101,7 +5101,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-28",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5124,7 +5124,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-14",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5147,7 +5147,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5162,15 +5162,15 @@
     "comments": "",
     "source": "partner",
     "dealType": null,
-    "amount": 2200000,
-    "currency": "PLN",
+    "amount": 510000,
+    "currency": "EUR",
     "status": "factoring_portfolio",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-20",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5193,7 +5193,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-16",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5216,7 +5216,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-06",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5239,7 +5239,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-17",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5262,7 +5262,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5285,7 +5285,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -5308,7 +5308,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-07",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5331,7 +5331,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-10",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5354,7 +5354,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-06-22",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5377,7 +5377,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-01",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5400,7 +5400,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-19",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5423,7 +5423,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-11",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -5484,8 +5484,8 @@
     "comments": "",
     "source": "partner",
     "dealType": null,
-    "amount": 530000,
-    "currency": "PLN",
+    "amount": 120000,
+    "currency": "EUR",
     "status": "factoring_signing",
     "lostReason": null,
     "finishedByUserId": null,
@@ -5760,8 +5760,8 @@
     "comments": "",
     "source": "rm_initiative",
     "dealType": null,
-    "amount": 430000,
-    "currency": "PLN",
+    "amount": 110000,
+    "currency": "USD",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -6182,7 +6182,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-07",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6205,7 +6205,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-25",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6228,7 +6228,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-24",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6251,7 +6251,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-06",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6274,7 +6274,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-14",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6297,7 +6297,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-01",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6320,7 +6320,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-28",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6343,7 +6343,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-03",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6366,7 +6366,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-10",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6389,7 +6389,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-21",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6412,7 +6412,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-15",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6435,7 +6435,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-19",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6458,7 +6458,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-27",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6481,7 +6481,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-05",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6504,7 +6504,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-07-30",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6527,7 +6527,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-17",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6550,7 +6550,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-08",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6573,7 +6573,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-02",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6596,7 +6596,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-30",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6619,7 +6619,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-24",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6642,7 +6642,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-28",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6657,15 +6657,15 @@
     "comments": "",
     "source": "ca_group",
     "dealType": null,
-    "amount": 770000,
-    "currency": "PLN",
+    "amount": 190000,
+    "currency": "USD",
     "status": "guarantee_pricing",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-21",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6688,7 +6688,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-19",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6711,7 +6711,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-11",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6734,7 +6734,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-30",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6757,7 +6757,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-20",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -6780,7 +6780,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-22",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -6803,7 +6803,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -6826,7 +6826,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-14",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -6849,7 +6849,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-13",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -6872,7 +6872,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-01T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-28",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -7232,8 +7232,8 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 810000,
-    "currency": "PLN",
+    "amount": 190000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -7278,8 +7278,8 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 1300000,
-    "currency": "PLN",
+    "amount": 300000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -7370,8 +7370,8 @@
     "comments": "",
     "source": "client_referral",
     "dealType": null,
-    "amount": 1950000,
-    "currency": "PLN",
+    "amount": 450000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -7462,8 +7462,8 @@
     "comments": "",
     "source": "partner",
     "dealType": null,
-    "amount": 600000,
-    "currency": "PLN",
+    "amount": 140000,
+    "currency": "EUR",
     "status": "new",
     "lostReason": null,
     "finishedByUserId": null,
@@ -7646,15 +7646,15 @@
     "comments": "",
     "source": "partner",
     "dealType": null,
-    "amount": 6150000,
-    "currency": "PLN",
+    "amount": 1450000,
+    "currency": "EUR",
     "status": "accounts_qualification",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-03",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7677,7 +7677,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-11",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7700,7 +7700,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-06-02",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7723,7 +7723,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-21",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7738,15 +7738,15 @@
     "comments": "",
     "source": "partner",
     "dealType": null,
-    "amount": 2250000,
-    "currency": "PLN",
+    "amount": 520000,
+    "currency": "EUR",
     "status": "accounts_qualification",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-15",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7769,7 +7769,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-12",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7792,7 +7792,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-06-06",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7815,7 +7815,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-29",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7838,7 +7838,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-27",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7861,7 +7861,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2027-01-10",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7884,7 +7884,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-11-22",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7907,7 +7907,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-11",
     "ownerId": "user-kasia",
     "regionId": "malopolska"
@@ -7930,7 +7930,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-30",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -7953,7 +7953,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2027-01-28",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -7976,7 +7976,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-03",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -7999,7 +7999,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-16",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8022,7 +8022,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-12",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8045,7 +8045,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-11",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8068,7 +8068,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-21",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8091,7 +8091,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-13",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8114,7 +8114,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-24",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8137,7 +8137,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-29",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8152,15 +8152,15 @@
     "comments": "",
     "source": "rm_initiative",
     "dealType": null,
-    "amount": 3350000,
-    "currency": "PLN",
+    "amount": 780000,
+    "currency": "EUR",
     "status": "accounts_proposal",
     "lostReason": null,
     "finishedByUserId": null,
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-20",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8229,7 +8229,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-28",
     "ownerId": "user-tomek",
     "regionId": "pomorze"
@@ -8252,7 +8252,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-06-01",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -8275,7 +8275,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-16",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -8298,7 +8298,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-26",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -8321,7 +8321,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-12",
     "ownerId": "user-anna",
     "regionId": "mazowsze"
@@ -8428,8 +8428,8 @@
     "comments": "",
     "source": "client_request",
     "dealType": null,
-    "amount": 2050000,
-    "currency": "PLN",
+    "amount": 480000,
+    "currency": "EUR",
     "status": "accounts_activation",
     "lostReason": null,
     "finishedByUserId": null,
@@ -9080,7 +9080,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-06-12",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9103,7 +9103,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-15",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9126,7 +9126,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-27",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9149,7 +9149,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-19",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9172,7 +9172,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-31",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9195,7 +9195,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-09",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9218,7 +9218,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-02",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9241,7 +9241,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-20",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9264,7 +9264,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-10",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9287,7 +9287,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-26",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9310,7 +9310,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-09-10",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9333,7 +9333,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-12-17",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9356,7 +9356,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-08-18",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9379,7 +9379,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 28,
+    "probability": 30,
     "expectedCloseDate": "2026-10-17",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9402,7 +9402,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9425,7 +9425,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-15",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9448,7 +9448,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-06-03",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9471,7 +9471,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-08-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9494,7 +9494,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-11",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9517,7 +9517,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-12-18",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9540,7 +9540,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-09-04",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9563,7 +9563,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-19",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9586,7 +9586,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-11-05",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9609,7 +9609,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-28T08:00:00.000Z",
-    "probability": 45,
+    "probability": 50,
     "expectedCloseDate": "2026-10-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9632,7 +9632,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-01T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-09",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9655,7 +9655,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-02T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-08-14",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9678,7 +9678,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-03T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-30",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9701,7 +9701,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-04-04T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-09-18",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9724,7 +9724,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-01-05T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-06-15",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9747,7 +9747,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-02-06T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-10-19",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"
@@ -9770,7 +9770,7 @@
     "finishedAt": null,
     "firstFinishedByUserId": null,
     "createdAt": "2026-03-07T08:00:00.000Z",
-    "probability": 63,
+    "probability": 60,
     "expectedCloseDate": "2026-07-08",
     "ownerId": "user-piotr",
     "regionId": "mazowsze"

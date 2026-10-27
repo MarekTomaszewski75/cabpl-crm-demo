@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import {
   getPipelineWorkflowSteps,
   isPipelineCategoryId,
@@ -125,7 +126,7 @@ export function getDealsRequiringAttention(
         toComparableDateKey(b.deal.expectedCloseDate!),
       )
       if (dateDiff !== 0) return dateDiff
-      return (b.deal.amount ?? 0) - (a.deal.amount ?? 0)
+      return getDealAmountPln(b.deal) - getDealAmountPln(a.deal)
     })
 }
 

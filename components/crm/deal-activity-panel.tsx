@@ -10,6 +10,7 @@ import { DealMeetingsList } from "@/components/crm/deal-meetings-list"
 import { DealTasksList } from "@/components/crm/deal-tasks-list"
 import { TaskFormDialog } from "@/components/crm/task-form-dialog"
 import { CrmDocumentList } from "@/components/crm/crm-document-list"
+import { CrmDocumentLinkForm } from "@/components/crm/crm-document-link-form"
 import { CrmDocumentUploadForm } from "@/components/crm/crm-document-upload-form"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,6 +31,10 @@ import {
 } from "@/lib/crm/deal-engagement-counts"
 import { getMergedDocumentsForDeal } from "@/lib/crm/entity-documents"
 import { getDealFilesForDeal } from "@/lib/crm/entity-files"
+import {
+  toRepositoryFileInput,
+  type CrmDocumentLinkInput,
+} from "@/lib/crm/document-repositories"
 import { useDemoData } from "@/lib/data/demo-data-context"
 import type { Deal } from "@/types/crm"
 
@@ -200,6 +205,15 @@ export function DealActivityPanel({
     return created !== null
   }
 
+  function handleAddDocumentLink(input: CrmDocumentLinkInput) {
+    if (!user) return false
+    const created = addDealFile(deal.id, toRepositoryFileInput(input), user)
+    if (created) {
+      toast.success("Odnośnik do dokumentu został dodany")
+    }
+    return created !== null
+  }
+
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-4">
       <Card size="sm">
@@ -246,6 +260,10 @@ export function DealActivityPanel({
                 storedFiles={dealUploadedFiles}
                 disabled={!user}
                 onSubmit={handleUploadDocument}
+              />
+              <CrmDocumentLinkForm
+                disabled={!user}
+                onSubmit={handleAddDocumentLink}
               />
             </TabsContent>
 

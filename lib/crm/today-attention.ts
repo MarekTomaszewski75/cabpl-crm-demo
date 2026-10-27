@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import { isTerminalDealStatus } from "@/lib/crm/deal-pipeline"
 import { toLocalDateKey } from "@/lib/crm/local-date"
 import type {
@@ -77,7 +78,7 @@ export function getStaleDeals(
       }
     })
     .filter((item) => item.daysWithoutActivity > staleDays)
-    .sort((a, b) => (b.deal.amount ?? 0) - (a.deal.amount ?? 0))
+    .sort((a, b) => getDealAmountPln(b.deal) - getDealAmountPln(a.deal))
 }
 
 export type UpcomingRenewal = {

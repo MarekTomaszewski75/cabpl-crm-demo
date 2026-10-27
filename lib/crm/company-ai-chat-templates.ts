@@ -1,3 +1,4 @@
+import { formatDealAmount, getDealAmountPln } from "@/lib/crm/currency"
 import { COMPANY_TYPE_LABELS } from "@/lib/crm/company-labels"
 import { getDealStatusLabel } from "@/lib/crm/deal-labels"
 import { LEAD_STATUS_LABELS } from "@/lib/crm/lead-labels"
@@ -206,7 +207,7 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
   )
   const wonDeals = deals.filter((deal) => deal.status === "won")
   const pipelineValue = openDeals.reduce(
-    (sum, deal) => sum + (deal.amount ?? 0),
+    (sum, deal) => sum + getDealAmountPln(deal),
     0,
   )
 
@@ -214,7 +215,7 @@ export function buildTemplateVars(ctx: TemplateContext): TemplateVars {
     .slice(0, 6)
     .map(
       (deal) =>
-        `- **${deal.name}** — ${getDealStatusLabel(deal.status)}${deal.amount ? ` · ${formatCurrencyPln(deal.amount)}` : ""}`,
+        `- **${deal.name}** — ${getDealStatusLabel(deal.status)}${deal.amount ? ` · ${formatDealAmount(deal)}` : ""}`,
     )
     .join("\n")
 

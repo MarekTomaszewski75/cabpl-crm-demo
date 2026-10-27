@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import { getCurrentQuarter, getDemoReferenceDate } from "@/lib/analytics/filters"
 import { isTerminalDealStatus } from "@/lib/crm/deal-pipeline"
 import type {
@@ -42,7 +43,7 @@ function computePeriodTotals(
   let actualPln = 0
   let weightedPln = 0
   for (const deal of deals) {
-    const amount = deal.amount ?? 0
+    const amount = getDealAmountPln(deal)
     if (deal.status === "won") {
       if (!deal.finishedAt) continue
       const finishedAt = new Date(deal.finishedAt)

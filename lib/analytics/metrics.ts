@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import {
   EXECUTIVE_FILTER_ALL,
   getExecutiveChartRows,
@@ -285,10 +286,6 @@ function getLastWeeklyBuckets(weekCount: number): {
 function normalizeScores(values: number[]): number[] {
   const max = Math.max(...values, 1)
   return values.map((value) => Math.round((value / max) * 100))
-}
-
-function getDealAmountPln(deal: Deal): number {
-  return deal.amount ?? 0
 }
 
 /** Data zamknięcia deala — finishedAt, inaczej expectedCloseDate. */

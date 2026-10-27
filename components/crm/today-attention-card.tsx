@@ -24,7 +24,8 @@ import {
   type StaleDeal,
   type UpcomingRenewal,
 } from "@/lib/crm/today-attention"
-import { formatCurrencyPln, formatDatePl, pluralPl } from "@/lib/format/pl"
+import { formatDealAmount } from "@/lib/crm/currency"
+import { formatDatePl, pluralPl } from "@/lib/format/pl"
 import type { LucideIcon } from "lucide-react"
 
 const MAX_ITEMS = 5
@@ -154,7 +155,7 @@ export function TodayAttentionCard({
                 {deal.name}
               </Link>
               <span className="text-xs text-muted-foreground">
-                {deal.amount ? `${formatCurrencyPln(deal.amount)} · ` : null}
+                {deal.amount ? `${formatDealAmount(deal)} · ` : null}
                 bez aktywności od {daysLabel(daysWithoutActivity)}
               </span>
             </li>

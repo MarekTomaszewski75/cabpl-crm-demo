@@ -4,6 +4,7 @@ import Link from "next/link"
 import { BriefcaseIcon, UserPlusIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { formatDealAmount } from "@/lib/crm/currency"
 import {
   Card,
   CardContent,
@@ -24,7 +25,7 @@ import {
   getDealsRequiringAttention,
   getLeadsRequiringAttention,
 } from "@/lib/crm/today-pipeline-summary"
-import { formatCurrencyPln, formatDatePl } from "@/lib/format/pl"
+import { formatDatePl } from "@/lib/format/pl"
 import type { Client, Deal, Lead, LeadActivity } from "@/types/crm"
 
 const MAX_ITEMS = 5
@@ -113,7 +114,7 @@ export function TodayPipelineSummary({
                       ) : null}
                       {deal.amount != null ? (
                         <span className="tabular-nums">
-                          {formatCurrencyPln(deal.amount)}
+                          {formatDealAmount(deal)}
                         </span>
                       ) : null}
                     </div>

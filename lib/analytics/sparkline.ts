@@ -1,3 +1,4 @@
+import { getDealAmountPln } from "@/lib/crm/currency"
 import {
   getDemoReferenceDate,
   getPeriodBounds,
@@ -203,7 +204,7 @@ export function getMetricSparkline(
           )
           if (bucketDeals.length === 0) return 0
           const total = bucketDeals.reduce(
-            (sum, deal) => sum + (deal.amount ?? 0),
+            (sum, deal) => sum + getDealAmountPln(deal),
             0,
           )
           return Math.round(total / bucketDeals.length / 1000)
