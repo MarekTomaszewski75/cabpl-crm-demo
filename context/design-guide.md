@@ -101,7 +101,7 @@ Odniesienie: **screen.png**.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ [Logo CA białe]                    Nie masz konta? [link]   │  ← header na --ca-shell
+│ [Logo apreel białe]                Nie masz konta? [link]   │  ← header na --ca-shell
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐     Hero: Zarządzaj. Rozwijaj.            │
 │  │ Biała karta  │     Korzystaj. + opis                    │
@@ -131,7 +131,7 @@ Zamiast pola „Identyfikator”:
 | CTA | `Button` → `bg-primary` (limonka), `text-primary-foreground`, `rounded-full`, `size="lg"` |
 | Link pomocy | `Button variant="link"` lub `<a className="text-[var(--ca-link)]">` |
 | Banery | `Alert` — wariant destructive (czerwony akcent) + custom pasek na `--ca-shell-muted` |
-| Logo | [`credit-agricole-logo-inline.svg`](./assets/credit-agricole-logo-inline.svg) — białe `fill-white` na shell |
+| Logo | `ApreelLogo` (`public/brand/apreel-logo.svg`) — białe na shell (invert). Logo CA zostawione w repo, nieużywane. |
 
 ### Klasy pomocnicze (propozycja)
 
@@ -150,7 +150,7 @@ Zamiast pola „Identyfikator”:
 | **Primary actions** | Limonkowy przycisk, ciemny tekst |
 | **Tabele** | Białe tło, nagłówek `muted`, gęstość **comfortable** |
 
-Logo w sidebar: wersja **biała** inline SVG, wys. ~28px.
+Logo w sidebar: `ApreelLogo` w wersji **białej**, wys. 32px (`h-8`), wyrównane do lewej (`self-start`).
 
 ---
 

@@ -22,7 +22,7 @@ Implementacja tokenów: `app/globals.css` (zadanie T-01-02).
 
 | Obszar | Zawartość |
 |--------|-----------|
-| **Sidebar** (~240px), tło **shell** | Logo CA (białe), nawigacja, badge „Demo” |
+| **Sidebar** (~240px), tło **shell** | Logo apreel (białe, do lewej), nawigacja, badge „Demo” |
 | **Header** | Breadcrumb, tytuł, avatar + rola + wyloguj (jasny pasek) |
 | **Main** | Tło jasne (`--background`), moduły w `Card` / tabelach |
 
@@ -78,7 +78,8 @@ Wzorowany na **screen.png**, z uproszczeniem funkcjonalnym:
 
 ## Logo
 
-- [`credit-agricole-logo-inline.svg`](./assets/credit-agricole-logo-inline.svg) — na shell: `className="h-8 w-auto fill-white"` (lub `text-white` + currentColor)
+- **W aplikacji:** logo **apreel** — `ApreelLogo` (`public/brand/apreel-logo.svg`), białe na shell (login + sidebar).
+- Logo Credit Agricole (`CreditAgricoleLogo`, [`credit-agricole-logo-inline.svg`](./assets/credit-agricole-logo-inline.svg)) — zostawione w repo, obecnie nieużywane.
 
 ## Tryb prezentacji
 

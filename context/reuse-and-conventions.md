@@ -94,10 +94,17 @@ Wzorzec docelowy (referencja: **Pracownicy** `/employees`, **Firmy** `/clients`)
 
 ## Brand & layout
 
+### ApreelLogo
+- **Plik:** `components/crm/apreel-logo.tsx`
+- **Asset:** `public/brand/apreel-logo.svg` (z apreel.com, kolor `#ff5367`, viewBox `0 0 133 32`)
+- **Props:** `variant="on-dark" | "on-light"` — `on-dark` (domyślnie) białe przez invert, `on-light` w kolorze marki
+- **Użycie:** `CrmAuthShell` (header `/login`) i `CrmAppShell` (sidebar). W kolumnie flex dodaj `self-start`, bo inaczej `<img>` rozciąga się na całą szerokość, a SVG centruje logo.
+
 ### CreditAgricoleLogo
 - **Plik:** `components/crm/credit-agricole-logo.tsx`
 - **Asset:** `public/brand/credit-agricole-logo.svg`
 - **Props:** `variant="on-dark" | "on-light"` (invert na ciemnym tle)
+- **Status:** obecnie nieużywany — zastąpiony przez `ApreelLogo`; zostawiony do szybkiego powrotu.
 
 ### CrmAuthShell
 - **Plik:** `components/crm/crm-auth-shell.tsx`

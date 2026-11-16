@@ -71,6 +71,8 @@
 
 ## Recently completed
 
+- **Branding (bez story)** — logo **apreel** zamiast Credit Agricole na `/login` i w sidebarze (`ApreelLogo`, `public/brand/apreel-logo.svg`); logo CA zostaje w repo, nieużywane. [reuse](./reuse-and-conventions.md#apreellogo).
+
 - **US-61** (story **Done**) — `TemplateContext.clientProducts` + `catalog` (tematy produktowe bez posiadanych, sygnały zamiast ryzyka); `DEMO_CHAT_MODEL_GROUP`; `AnalyticsWidgetDefinition.stageTwo`; `InlineEditableField.displayValue`; `pluralPl` w licznikach. [US-61](./stories/US-61-offer-signals/story.md).
 
 - **US-60** (story **Done**) — `DocumentRepositoryLink` w `*File`, `CrmDocumentLinkForm`, `lib/crm/document-repositories.ts`; `formatProspectDuplicateSummary` w `CompanyForm`; `lib/crm/deal-probability.ts`; `lib/crm/currency.ts` (`getDealAmountPln`, `formatDealAmount`). [US-60](./stories/US-60-documents-duplicates-money/story.md).
