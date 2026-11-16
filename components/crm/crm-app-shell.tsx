@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { CrmBannerController } from "@/components/crm/crm-banner-controller"
-import { CreditAgricoleLogo } from "@/components/crm/credit-agricole-logo"
+import { ApreelLogo } from "@/components/crm/apreel-logo"
 import { CrmGlobalSearch } from "@/components/crm/crm-global-search"
 import { CrmNotificationsBell } from "@/components/crm/crm-notifications-bell"
 import { CrmSidebarNav } from "@/components/crm/crm-sidebar-nav"
@@ -150,7 +150,7 @@ export function CrmAppShell({ children }: CrmAppShellProps) {
     <SidebarProvider className="h-svh max-h-svh overflow-hidden">
       <Sidebar collapsible="offcanvas" className="border-sidebar-border">
         <SidebarHeader className="gap-3 p-4">
-          <CreditAgricoleLogo />
+          <ApreelLogo className="self-start" />
           <p className="text-xs leading-snug text-sidebar-foreground/90">
             CRM Bankowości Korporacyjnej
           </p>
